@@ -11,10 +11,12 @@ finished. Re-read this file each time; Claude may change it.
 | 3 | `tasks/meadow-lake.md` | `area/meadow-lake` | done |
 | 4 | `tasks/crystal-mine.md` | `area/crystal-mine` | done |
 | 5 | `tasks/pond-polish.md` | `area/pond-polish` | done |
-| 6 | `tasks/shots-polish.md` | `area/shots-polish` | queued (next, from Claude's review) |
-| 7 | `tasks/kids-presets.md` | `area/kids-presets` | queued |
-| 8 | `tasks/watercolor.md` | `area/watercolor` | queued |
-| 9 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | queued |
+| 6 | `tasks/shots-polish.md` | `area/shots-polish` | done |
+| 7 | `tasks/kid-cleanup.md` | `area/kid-cleanup` | queued (top priority after 6) |
+| 7b | `tasks/crystal-polish.md` | `area/crystal-polish` | queued |
+| 8 | `tasks/watercolor.md` | `area/watercolor` | queued (preview only: the user decides before it is used widely) |
+| — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
+| — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
 Shot and preset slots, in this order (append at the end, never renumber): ghost town, forest,
 meadow & lake, crystal mine & balloon.

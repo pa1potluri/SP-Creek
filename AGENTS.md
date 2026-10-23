@@ -53,7 +53,18 @@ Browser tests: `node world/tests/run-browser.cjs <suites…>` (see existing suit
    is enough; no long test suites, frame captures or repeated previews unless the task asks.
    Claude does the deeper review later. Tests must never start sound (sound only starts on a
    real user click).
-7. **Finish with a result file** `tasks/<area>.result.md` in plain words: what was built, what was
+7. **Review before every merge (Claude, never skipped).** "Build first, check light" only works
+   because this review always happens before a branch is merged:
+   1. The page loads with no errors.
+   2. Walk through the area (and anything else on the branch) in day and night.
+   3. Nothing scary or unsafe for children: no sharp or harsh shapes, no dark jump-scare spots,
+      nothing threatening; water and edges are safe (no wading into deep water).
+   4. One screenshot in the oil-paint style, compared with what the task asked for.
+   5. Run the full test suite once (`node world/tests/run-browser.cjs` with all suites). Anything
+      failing is fixed before merging.
+   Then the user sees a screenshot or description and decides. The clean starting point is the
+   Git tag `baseline`.
+8. **Finish with a result file** `tasks/<area>.result.md` in plain words: what was built, what was
    checked (test counts), anything unfinished, and preview screenshots in `world/tests/`.
 
 ## Project map (short)

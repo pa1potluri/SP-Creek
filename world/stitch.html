@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backdrop Stitcher</title>
+<style>
+  :root { --bg: #1c1612; --card: #2a2019; --line: #4a3a2c; --ink: #efe3cc; --muted: #b9a68a; --accent: #e2a24a; --accent-ink: #2a1a08; --good: #8fbf6a; --ok: #e2c14a; --bad: #e06a4a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 Georgia, "Times New Roman", serif; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { margin: 0; color: var(--accent); font-size: 26px; }
+  h2 { font-size: 17px; color: var(--accent); margin: 26px 0 8px; font-weight: normal; }
+  p { color: var(--muted); margin: 4px 0 10px; }
+  a { color: var(--accent); }
+  #drop { display: block; margin-top: 16px; border: 2px dashed var(--line); border-radius: 10px; padding: 26px; text-align: center; color: var(--muted); cursor: pointer; }
+  #drop.over { border-color: var(--accent); color: var(--ink); }
+  #drop input { display: none; }
+  #tiles { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px; width: 210px; }
+  .tile img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 4px; display: block; }
+  .tile .name { font-size: 12px; color: var(--muted); margin: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .n { color: var(--accent); font-weight: bold; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  button, .btn { font: inherit; font-size: 13px; color: var(--ink); background: #2c221a; border: 1px solid var(--line); border-radius: 6px; padding: 7px 12px; cursor: pointer; text-decoration: none; }
+  button:hover, .btn:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button:disabled { opacity: 0.45; cursor: default; }
+  .tile button { padding: 3px 8px; }
+  .opts { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin: 10px 0; color: var(--muted); }
+  .opts input[type=range] { accent-color: var(--accent); vertical-align: middle; }
+  table { border-collapse: collapse; width: 100%; max-width: 720px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: normal; font-size: 12px; }
+  td input { width: 80px; font: inherit; background: #2c221a; color: var(--ink); border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; }
+  .badge { padding: 2px 8px; border-radius: 10px; font-size: 12px; color: #1c1612; }
+  .good { background: var(--good); } .ok { background: var(--ok); } .bad { background: var(--bad); } .manual { background: var(--muted); }
+  .preview { width: 100%; background: #000; border-radius: 6px; display: block; }
+  #loopWrap { position: relative; max-width: 720px; }
+  #loopWrap::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed rgba(255,255,255,0.5); }
+  #status { color: var(--ink); min-height: 1.4em; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Backdrop Stitcher</h1>
+  <p>Joins your ChatGPT backdrop tiles into one seamless 360° painting for <a href="index.html">Dusty Hollow</a>. It finds where each tile continues the last, cuts along the least-visible line (no doubled objects, no cross-fade ghosts), evens out the colour, and makes the last tile run straight into the first.</p>
+
+  <label id="drop">Drop your tiles here, or click to choose (PNG/JPG, 2 or more, in order left → right)
+    <input type="file" id="files" accept="image/*" multiple>
+  </label>
+  <div id="tiles"></div>
+
+  <div class="opts">
+    <label><input type="checkbox" id="optLoop" checked> Close the 360° loop</label>
+    <label><input type="checkbox" id="optSeam" checked> Smart seam</label>
+    <label><input type="checkbox" id="optColor" checked> Match colours</label>
+    <label>Seam softness <input type="range" id="optFeather" min="2" max="60" value="12"> <span id="featherVal">12</span> px</label>
+  </div>
+  <div class="row">
+    <button class="primary" id="stitchBtn" disabled>Stitch</button>
+    <span id="status"></span>
+  </div>
+
+  <section id="result" class="hidden">
+    <h2>How the tiles joined</h2>
+    <p>Overlap = how many pixels of the next tile repeat the previous one. Shift = how far the next tile sits lower (+) or higher (−). If a join looks wrong, type your own numbers and press <b>Re-stitch</b>.</p>
+    <table>
+      <thead><tr><th>Join</th><th>Overlap (px)</th><th>Shift (px)</th><th>Match</th></tr></thead>
+      <tbody id="pairs"></tbody>
+    </table>
+    <div class="row" style="margin-top:10px">
+      <button id="restitchBtn">Re-stitch with my numbers</button>
+      <button id="autoBtn">Back to automatic</button>
+    </div>
+
+    <h2>Full strip</h2>
+    <p id="size"></p>
+    <canvas id="strip" class="preview"></canvas>
+
+    <h2>Loop check</h2>
+    <p>End of the strip (left) running into the start (right). The dashed line is where it wraps; there should be no visible join.</p>
+    <div id="loopWrap"><canvas id="loopCheck" class="preview"></canvas></div>
+
+    <div class="row" style="margin-top:18px">
+      <button class="primary" id="useBtn">Use as backdrop in Dusty Hollow</button>
+      <button id="downloadBtn">Download PNG</button>
+    </div>
+  </section>
+</main>
+<script type="module" src="src/stitch-ui.js"></script>
+</body>
+</html>

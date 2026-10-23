@@ -116,7 +116,11 @@ function makeShots() {
     [G(125,4.5,26),G(125,3,-7)],[G(124,3.5,8),G(135,3,-14)],
     [G(124,3.5,-16),G(115,3,-35)],[G(125,4,-31),G(133,7,-45)],
   ], 100), group:'Ghost town', clearance:2.5 }];
-  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown];
+  const forest = [{...pathShot('Forest Trail',[
+    [G(-67,3,-176),G(-78,2,-190)],[G(-76,3,-186),G(-88,2,-201)],
+    [G(-85,4,-196),G(-90,2,-207)],[G(-88,4,-199),G(-89,3,-212)],
+  ],100),group:'Forest',clearance:2.5}];
+  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

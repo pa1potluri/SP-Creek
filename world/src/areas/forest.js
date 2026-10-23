@@ -7,6 +7,14 @@ export const FOREST = { x:CAMP.x-28, z:CAMP.z-32 };
 export function buildForest(world) {
   const root=new THREE.Group();root.name='Firefly forest';world.root.add(root);
   const pad=world.registerAreaPad({...FOREST,hx:10,hz:10,blend:8}),y=pad.y,r=rng(307);
+  const route=[[-72,-179],[-86,-179],[-108,-185],[-111,-202],[-99,-214],[FOREST.x,FOREST.z]];
+  const curve=new THREE.CatmullRomCurve3(route.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
+  const startY=terrainHeight(...route[0]),steps=Math.ceil(curve.getLength()/2);
+  const routeSamples=[];
+  for(let i=0;i<=steps;i++) {
+    const u=i/steps,p=curve.getPointAt(u),tangent=curve.getTangentAt(u);routeSamples.push(p);
+    world.registerAreaPad({x:p.x,z:p.z,y:startY+(y-startY)*u,yaw:Math.atan2(tangent.x,tangent.z),hx:6,hz:3.5,blend:3});
+  }
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color});
   const bark=m('#8c7056'),moss=m('#759b6f'),cream=m('#f5ebd5'),dark=m('#455c62'),pink=m('#e8b6cb');
   const glows=['#a4ded8','#e6b8d7','#f4dda1'].map(color=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.1}));
@@ -16,12 +24,12 @@ export function buildForest(world) {
   const ball=(radius,mat,x,h,z,g=root,scale=[1,1,1])=>solid(new THREE.SphereGeometry(radius,12,8).scale(...scale),mat,x,h,z,g);
   function group(x,h,z,parent=root){const g=new THREE.Group();g.position.set(x,h,z);parent.add(g);return g;}
   world.updateTerrain();
-  const trail=world._ribbon([[CAMP.x-4,CAMP.z-4],[-74,-179],[-79,-189],[-85,-197],[FOREST.x,FOREST.z]],2.4,world._pathMaterial(),{step:1});root.attach(trail);
+  const trail=world._ribbon(route,2.4,world._pathMaterial(),{step:1});root.attach(trail);
   // Copy the existing plant variants and sway materials so every art style keeps its own trees.
   const spots=[];
   for(let i=0;i<65;i++){
     const a=r()*Math.PI*2,d=13+r()*28,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d;
-    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||Math.abs(x-(-74+(z+179)*0.5))<4&&z>-200)continue;
+    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||routeSamples.some(p=>Math.hypot(x-p.x,z-p.z)<8))continue;
     spots.push([x,terrainHeight(x,z)-0.1,z,0.85+r()*0.5]);world.colliders.circles.push({x,z,r:0.45});
   }
   function instances(source,list,visibleSource){if(!source||!list.length)return;const im=new THREE.InstancedMesh(source.geometry,source.material,list.length),matrix=new THREE.Matrix4();list.forEach(([x,h,z,s],i)=>im.setMatrixAt(i,matrix.makeScale(s,s,s).setPosition(x,h,z)));im.castShadow=source.castShadow;im.receiveShadow=true;im.computeBoundingSphere();root.add(im);variants.push({im,source:visibleSource});}
@@ -38,7 +46,7 @@ export function buildForest(world) {
     const rock=new THREE.DodecahedronGeometry(0.7+r()*0.5,0).scale(1.5,0.5,1);solid(rock,moss,x,h+0.2,z);
     for(let k=0;k<5;k++){const angle=k*1.257;solid(new THREE.SphereGeometry(0.25,6,4).scale(0.4,0.17,2.1),moss,x+Math.cos(angle)*0.4,h+0.15,z+Math.sin(angle)*0.4,root,[0,-angle,0.25]);}
   }
-  for(const [x,z]of [[-72,-179],[-80,-192],[-85,-201]]){
+  for(const [x,z]of [[-88,-175],[-115,-190],[-105,-216]]){
     const g=group(x,terrainHeight(x,z),z);box(0.1,2.3,0.1,bark,0,1.15,0,g);box(0.25,0.4,0.25,world.mat.lantern,0,2.1,0,g);
     const halo=new THREE.Sprite(world.haloMat);halo.position.y=2.1;halo.scale.setScalar(2);g.add(halo);world.colliders.circles.push({x,z,r:0.15});
   }
@@ -61,7 +69,7 @@ export function buildForest(world) {
     for(let j=0;j<3;j++)ball(0.04,cream,x+Math.cos(j*2.094)*0.15*s,h+0.64*s,z+Math.sin(j*2.094)*0.15*s);
   }
   for(let i=0;i<3;i++){
-    const x=FOREST.x-8+i*8,z=FOREST.z-10,h=terrainHeight(x,z),perch=group(x,h,z);
+    const x=FOREST.x-8+i*8,z=FOREST.z-15,h=terrainHeight(x,z),perch=group(x,h,z);
     solid(new THREE.CylinderGeometry(0.22,0.35,4,8),bark,0,2,0,perch);box(2,0.15,0.2,bark,0.5,3.8,0,perch);
     const owl=group(0.65,4.15,0,perch);ball(0.38,bark,0,0.25,0,owl,[0.9,1.2,0.8]);ball(0.3,cream,0,0.25,0.19,owl,[0.8,1.1,0.4]);
     const head=group(0,0.67,0,owl),eyes=[];ball(0.38,bark,0,0,0,head,[1.1,1,0.9]);

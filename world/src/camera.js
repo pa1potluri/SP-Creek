@@ -49,7 +49,7 @@ function makeShots() {
   const town = [
     panShot('Town Square 360°', G(0, 1.7, 10), 90, Math.PI),
     pathShot('Arrival', [[G(3, 2.4, 125), G(1, 4, 40)], [G(0.8, 2.0, 82), G(0, 3.5, 30)], [G(0, 1.8, 48), G(0, 2.6, 0)]], 42),
-    pathShot('Saloon → Sheriff', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
+    pathShot('Honey Bun Café → Sheriff', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
     pathShot('Boardwalk Stroll', [[G(-6.2, 2.05, 46), G(-4.5, 2.1, 30)], [G(-6.2, 2.05, 10), G(-4.5, 2.2, -5)], [G(-6.2, 2.05, -28), G(-3, 2.6, -45)]], 55),
     pathShot('Church Approach', [[G(0, 1.7, -18), G(0, 3.5, -62)], [G(0.4, 1.6, -46), G(0, 10, -64)]], 30),
     pathShot('Crane Reveal', [[G(0, 1.8, 24), G(0, 2.5, -10)], [G(5, 14, 40), G(0, 4, -5)], [G(12, 42, 88), G(0, 0, -40)]], 36),
@@ -79,11 +79,11 @@ function makeShots() {
   // turned into the world: the saloon faces west from x = 7.5, z = 8.
   const S = (lx, y, lz) => V(7.5 - lz, y, 8 + lx);
   const saloon = [
-    // starts high and a little back so the room shows over the batwing doors, not just the doors
+    // starts high and a little back so the room shows, not just the doors
     pathShot('Through the Doors', [[S(0, 2.4, 3.2), S(-1.5, 1.3, -8)], [S(0, 2.1, -1.2), S(-2.5, 1.3, -9)], [S(-0.8, 1.9, -5), S(-4.5, 1.3, -11.2)]], 30),
-    pathShot('At the Bar', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
-    orbitShot('Card Game', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
-  ].map((s) => ({ ...s, group: 'Saloon' }));
+    pathShot('At the Counter', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
+    orbitShot('Board Games', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
+  ].map((s) => ({ ...s, group: 'Café' }));
   // the cast line-up stands across the street at z = 24 (Town life → Cast line-up)
   const cast = [
     pathShot('Meet the Cast', [[G(-3, 1.45, 27.3), G(-3.9, 1.15, 24)], [G(3, 1.45, 27.3), G(3.9, 1.15, 24)]], 40),
@@ -117,13 +117,18 @@ function makeShots() {
     [G(125,4.5,26),G(125,3,-7)],[G(124,3.5,8),G(135,3,-14)],
     [G(124,3.5,-16),G(115,3,-35)],[G(125,4,-31),G(133,7,-45)],
   ], 100), group:'Ghost town', clearance:2.5 }];
+  const fy=terrainHeight(-72,-179),cy=terrainHeight(-90,-204),mh=terrainHeight(-225,0);
   const forest = [{...pathShot('Forest Trail',[
-    [G(-67,3,-176),G(-78,2,-190)],[G(-76,3,-186),G(-88,2,-201)],
-    [G(-85,4,-196),G(-90,2,-207)],[G(-88,4,-199),G(-89,3,-212)],
+    [V(-77,fy+3.2,-179),V(-94,fy+(cy-fy)*0.3+1.8,-181)],
+    [V(-86,fy+(cy-fy)*0.18+3.2,-179),V(-107,fy+(cy-fy)*0.45+1.8,-186)],
+    [V(-108,fy+(cy-fy)*0.48+3.5,-185),V(-110,fy+(cy-fy)*0.7+1.8,-202)],
+    [V(-111,fy+(cy-fy)*0.68+3.5,-202),V(-99,cy+1.8,-212)],
+    [V(-101,cy+3.2,-214),V(-90,cy+1.8,-204)],
+    [V(-93,cy+3.2,-207),V(-86,cy+1.8,-207)],
   ],100),group:'Forest',clearance:2.5}];
   const meadow=[{...pathShot('Meadow and Waterfall',[
-    [G(-190,9,28),G(-225,3,-10)],[G(-209,7,12),G(-240,3,-18)],
-    [G(-221,6,1),G(-251,6,-23)],[G(-224,5,-9),G(-254,5,-23)],
+    [V(-207,mh+15,29),V(-240,mh+2,-18)],[V(-216,mh+14,16),V(-244,mh+3,-20)],
+    [V(-222,mh+13,5),V(-247,mh+4,-23)],[V(-223,mh+11,-7),V(-251,mh+5,-23)],
   ],100),group:'Meadow',clearance:3}];
   const crystalHill = [
     pathShot('Crystal Mine',[[V(173,3,-100),V(173,2.5,-115)],[V(173,2.6,-110),V(173,2,-119)],[V(173,2.3,-114),V(175,2,-118)]],75),

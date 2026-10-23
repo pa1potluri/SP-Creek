@@ -7,7 +7,7 @@ finished. Re-read this file each time; Claude may change it.
 | # | Task file | Branch | Status |
 |---|---|---|---|
 | 1 | `tasks/ghost-town.md` | `area/ghost-town` (from `main`) | done |
-| 2 | `tasks/forest.md` | `area/forest` | queued |
+| 2 | `tasks/forest.md` | `area/forest` | done |
 | 3 | `tasks/meadow-lake.md` | `area/meadow-lake` | queued |
 | 4 | `tasks/crystal-mine.md` | `area/crystal-mine` | queued |
 | 5 | `tasks/pond-polish.md` | `area/pond-polish` | queued |

@@ -33,7 +33,8 @@ export async function runHamletTests() {
     check(h.buildings.every(e => e.obj.parent && e.obj.visible), 'Project layout reload preserves hamlet');
     const oldNames = ['Town Square 360°','Arrival','Saloon → Sheriff','Boardwalk Stroll','Church Approach','Crane Reveal','Golden Orbit','Hilltop Vista','Mill Wheel','Bridge Crossing','River Drift','Station Platform','Trackside','Ranch Overlook','Corral Orbit','Forest Camp','Valley Journey','Through the Doors','At the Bar','Card Game','Meet the Cast'];
     check(oldNames.every((n,i) => a.director.shots[i].name === n), 'All original shot indices unchanged');
-    check(a.director.shots.slice(21).length === 3 && a.director.shots.slice(21).every(s => s.group === 'Willow Creek'), 'Three appended hamlet shots');
+    // later areas append their own shots after these, so only 21–23 are checked
+    check(a.director.shots.slice(21, 24).length === 3 && a.director.shots.slice(21, 24).every(s => s.group === 'Willow Creek'), 'Three appended hamlet shots');
     check(VIDEO_PRESETS.villageDusk.clips.reduce((n,c) => n+c.seconds,0) === 270, 'Village preset lasts four and a half minutes');
     // Synthetic click deliberately does not unlock audio.
     [...document.querySelectorAll('#videoPresets button')].find(b => b.textContent.includes('Village at dusk')).click();

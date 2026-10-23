@@ -25,7 +25,7 @@ export async function runFamilyTests() {
     check(room.adultProps.length>=20 && room.familyProps.some(o=>o.userData.boardGame),'Alcohol/cards/posters/spittoons tracked and board games built');
     for(const style of Object.keys(STYLES)) {
       console.log('Family mode:',style); a.applyStyle(style); toggle(true);
-      check(a.projectData().familyMode && JSON.parse(localStorage.getItem('dh.familyMode'))===true,`${style}: checkbox and saved setting on`);
+      check(a.projectData().familyMode && JSON.parse(localStorage.getItem('dh.familyChoice'))===true,`${style}: checkbox and saved setting on`);
       for(const {m,pixels} of normal) {
         check(m.userData.displaySign===names[m.userData.facadeSpec.sign],`${style}: ${m.userData.displaySign}`);
         check(pixel(m.map)!==pixels[w.textureSet],`${style}: rendered sign pixels changed`);
@@ -81,7 +81,7 @@ export async function runFamilyTests() {
     const preset=[...document.querySelectorAll('#videoPresets button')].find(b=>b.textContent.includes('Golden Spur'));
     preset.click();check(a.timeline.playing && a.projectData().familyMode && room.familyMode,'Golden Spur video preset plays and preserves family setting');a.timeline.stop();
     const old={...original};delete old.familyMode;a.loadProject(old);
-    check(!a.projectData().familyMode && !document.querySelector('#familyMode').checked,'Old projects default to original town');
+    check(a.projectData().familyMode && document.querySelector('#familyMode').checked,'Old projects open in the kid-friendly town (the default)');
     check(a.audio.ctx===null,'Tests never unlock audio');
     return {passed:results.length,results};
   } finally {

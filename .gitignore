@@ -17,3 +17,4 @@ world/showroom*
 *.mp4
 *.wav
 __pycache__/
+world/tests/*.log

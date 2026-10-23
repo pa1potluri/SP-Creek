@@ -111,7 +111,8 @@ export function buildTownCenter(world, life) {
   box(0.2, 0.65, 0.045, cream, -4.65, 4.8, 25, family);
 
   for (const z of [47, 19, -3, -24, -42]) for (const side of [-1, 1]) lamp(side * 4.95, z);
-  for (const [x, z] of [[-6,-50],[6,-50],[-6,-60],[6,-60]]) lamp(x, z, true);
+  // only two real lights: the shared pool must keep room for what the user builds (forges, lanterns)
+  for (const [x, z] of [[-6,-50],[6,-50],[-6,-60],[6,-60]]) lamp(x, z, z === -50);
   // Flower barrels at shop corners and the entrance.
   for (const [x, z] of [[-5.5,44],[5.5,44],[-5.5,-37],[5.5,-39],[-4.7,58],[4.7,58]]) {
     const barrel = world.placeProp('barrel', x, z, 0, false);

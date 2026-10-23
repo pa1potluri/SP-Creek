@@ -247,7 +247,7 @@ export class SaloonInterior {
       this.g.add(halo);
     }
     for (const [x, z] of [[-1.5, -4.5], [-0.5, -9.5]]) {
-      const l = new THREE.PointLight(0xffb060, 14, 11, 2);
+      const l = new THREE.PointLight(0xffb060, 30, 16, 2); // bright and cosy: the room is dark wood
       l.position.set(x, 3, z);
       this.g.add(l);
       this.lights.push(l);
@@ -326,7 +326,7 @@ export class SaloonInterior {
         p.upper.rotation.y = Math.sin(t * 0.4 + ph) * 0.2;
       }
     }
-    for (const l of this.lights) l.intensity = 12 + lanternLevel * 10 + Math.sin(t * 7) * 0.6;
+    for (const l of this.lights) l.intensity = 28 + lanternLevel * 12 + Math.sin(t * 7) * 0.6;
     // batwing doors: pushed open (inwards) by anyone close, then swing shut and settle
     const near = who.some((w) => w && Math.hypot(w.x - this.doorPos.x, w.z - this.doorPos.z) < 1.6);
     for (const d of this.doors) {

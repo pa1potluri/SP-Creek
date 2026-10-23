@@ -12,8 +12,10 @@ finished. Re-read this file each time; Claude may change it.
 | 4 | `tasks/crystal-mine.md` | `area/crystal-mine` | done |
 | 5 | `tasks/pond-polish.md` | `area/pond-polish` | done |
 | 6 | `tasks/shots-polish.md` | `area/shots-polish` | done |
-| 7 | `tasks/kid-cleanup.md` | `area/kid-cleanup` | queued (top priority after 6) |
-| 7b | `tasks/crystal-polish.md` | `area/crystal-polish` | queued |
+| 7 | `tasks/kid-cleanup.md` | `area/kid-cleanup` | done |
+| 7a | `tasks/names-tour-shots.md` | `area/names-tour-shots` | queued (right after kid-cleanup) |
+| 7b | `tasks/visual-fixes.md` | `area/visual-fixes` | queued |
+| 7c | `tasks/crystal-polish.md` | `area/crystal-polish` | queued |
 | 8 | `tasks/watercolor.md` | `area/watercolor` | queued (preview only: the user decides before it is used widely) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |

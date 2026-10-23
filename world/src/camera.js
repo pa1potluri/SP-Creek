@@ -124,7 +124,11 @@ function makeShots() {
     [G(-190,9,28),G(-225,3,-10)],[G(-209,7,12),G(-240,3,-18)],
     [G(-221,6,1),G(-251,6,-23)],[G(-224,5,-9),G(-254,5,-23)],
   ],100),group:'Meadow',clearance:3}];
-  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow];
+  const crystalHill = [
+    pathShot('Crystal Mine',[[V(173,3,-100),V(173,2.5,-115)],[V(173,2.6,-110),V(173,2,-119)],[V(173,2.3,-114),V(175,2,-118)]],75),
+    pathShot('Balloon Hilltop',[[V(202,4,-134),V(202,12,-145)],[V(209,5,-143),V(202,9,-145)],[V(203,5,-151),V(5,4,0)]],100),
+  ].map(s=>{const sample=s.sample;return {...s,group:'Crystal hill',clearance:2.2,sample(t,out){sample(t,out);out.pos.y+=terrainHeight(out.pos.x,out.pos.z);out.look.y+=terrainHeight(out.look.x,out.look.z);}};});
+  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

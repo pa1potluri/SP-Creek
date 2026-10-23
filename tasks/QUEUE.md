@@ -9,7 +9,7 @@ finished. Re-read this file each time; Claude may change it.
 | 1 | `tasks/ghost-town.md` | `area/ghost-town` (from `main`) | done |
 | 2 | `tasks/forest.md` | `area/forest` | done |
 | 3 | `tasks/meadow-lake.md` | `area/meadow-lake` | done |
-| 4 | `tasks/crystal-mine.md` | `area/crystal-mine` | queued |
+| 4 | `tasks/crystal-mine.md` | `area/crystal-mine` | done |
 | 5 | `tasks/pond-polish.md` | `area/pond-polish` | queued |
 | 6 | `tasks/kids-presets.md` | `area/kids-presets` | queued |
 | 7 | `tasks/watercolor.md` | `area/watercolor` | queued |

@@ -131,8 +131,8 @@ function makeShots() {
     [V(-222,mh+13,5),V(-247,mh+4,-23)],[V(-223,mh+11,-7),V(-251,mh+5,-23)],
   ],100),group:'Meadow',clearance:3}];
   const crystalHill = [
-    pathShot('Crystal Mine',[[V(173,3,-100),V(173,2.5,-115)],[V(173,2.6,-110),V(173,2,-119)],[V(173,2.3,-114),V(175,2,-118)]],75),
-    pathShot('Balloon Hilltop',[[V(202,4,-134),V(202,12,-145)],[V(209,5,-143),V(202,9,-145)],[V(203,5,-151),V(5,4,0)]],100),
+    pathShot('Crystal Mine',[[V(173,3,-100),V(173,2.5,-115)],[V(173,2.6,-110),V(173,2,-119)],[V(173,2.3,-114),V(173,2.1,-119)]],75),
+    pathShot('Balloon Hilltop',[[V(222,26,-122),V(202,8,-145)],[V(230,28,-143),V(202,8,-145)],[V(222,28,-166),V(202,8,-145)]],100),
   ].map(s=>{const sample=s.sample;return {...s,group:'Crystal hill',clearance:2.2,sample(t,out){sample(t,out);out.pos.y+=terrainHeight(out.pos.x,out.pos.z);out.look.y+=terrainHeight(out.look.x,out.look.z);}};});
   const grandTour = [
     pathShot('Old Hollow Tour', [[G(124,34,32),G(125,3,-12)],[G(145,34,24),G(125,3,-20)]],12),

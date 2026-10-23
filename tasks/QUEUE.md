@@ -15,7 +15,7 @@ finished. Re-read this file each time; Claude may change it.
 | 7 | `tasks/kid-cleanup.md` | `area/kid-cleanup` | done |
 | 7a | `tasks/names-tour-shots.md` | `area/names-tour-shots` | done |
 | 7b | `tasks/visual-fixes.md` | `area/visual-fixes` | done |
-| 7c | `tasks/crystal-polish.md` | `area/crystal-polish` | queued |
+| 7c | `tasks/crystal-polish.md` | `area/crystal-polish` | done |
 | 8 | `tasks/watercolor.md` | `area/watercolor` | queued (preview only: the user decides before it is used widely) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |

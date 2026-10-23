@@ -5,6 +5,8 @@
 // once per recorded frame on an OfflineAudioContext, so the render sounds exactly like the shot.
 import { riverZ } from './world.js';
 import { OLD_HOLLOW } from './areas/ghost-town.js';
+import { FOREST } from './areas/forest.js';
+import { LAKE } from './areas/meadow-lake.js';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const smooth = (a, b, x) => {
@@ -73,6 +75,10 @@ export class Ambience {
     this.birds = this._bus(false);
     this.oldHollow = this._bus(true);
     this.oldTimers = { chime:4, creak:7, hum:2, giggle:13 };
+    this.forestLeaves=this._bed(this.buf.pink,[['highpass',500],['lowpass',1800]],true);
+    this.forestOwl=this._bus(true);this.nextForestOwl=8;this.forestOwlIndex=0;
+    this.waterfall=this._bed(this.buf.pink,[['highpass',250],['lowpass',2200]],true);
+    this.meadowLife=this._bus(true);this.nextDuck=9;this.nextMeadowBird=5;
     this.nextBird = 0;
     this.nextOwl = 3;
     this.nextSplash = 0;
@@ -182,6 +188,15 @@ export class Ambience {
     set(this.oldHollow.g.gain,gg*0.18,0.8);
     set(this.oldHollow.pan.pan,this._panTo(s,OLD_HOLLOW.x,OLD_HOLLOW.z));
     if(gg>0.01)this._oldHollowSounds(when,dt);
+    const forestGain=near(Math.hypot(s.x-FOREST.x,s.z-FOREST.z),12,65)*roofed;
+    set(this.forestLeaves.g.gain,forestGain*0.07,0.7);set(this.forestLeaves.pan.pan,this._panTo(s,FOREST.x,FOREST.z));
+    set(this.forestOwl.g.gain,forestGain*s.night*0.4,0.7);
+    this.nextForestOwl-=dt;if(this.nextForestOwl<=0){this.nextForestOwl=19;const i=this.forestOwlIndex++%3;set(this.forestOwl.pan.pan,this._panTo(s,FOREST.x-8+i*8,FOREST.z-10));if(forestGain>0.01&&s.night>0.3)this._owl(when,0.065,this.forestOwl.g);}
+    const meadowGain=near(Math.hypot(s.x-LAKE.x,s.z-LAKE.z),10,75)*roofed;
+    set(this.waterfall.g.gain,meadowGain*0.22,0.7);set(this.waterfall.pan.pan,this._panTo(s,-250,-23));set(this.meadowLife.g.gain,meadowGain*0.3,0.7);set(this.meadowLife.pan.pan,this._panTo(s,LAKE.x,LAKE.z));
+    this.nextDuck-=dt;this.nextMeadowBird-=dt;
+    if(this.nextDuck<=0){this.nextDuck=21;if(meadowGain>0.01)for(let i=0;i<2;i++)this._tone('triangle',when+i*0.35,0.3,440,330,0.025,this.meadowLife.g,0.09);}
+    if(this.nextMeadowBird<=0){this.nextMeadowBird=14;if(meadowGain>0.01&&s.day>0.3)this._tone('sine',when,0.45,2400,3100,0.035,this.meadowLife.g,0.1);}
   }
 
   _oldHollowSounds(when,dt) {
@@ -243,10 +258,10 @@ export class Ambience {
     }
   }
 
-  _owl(when, gain) {
+  _owl(when, gain, dest = this.out) {
     const p = this.ctx.createStereoPanner();
     p.pan.value = Math.random() * 1.4 - 0.7;
-    p.connect(this.out);
+    p.connect(dest);
     for (const [dt, len] of [[0, 0.35], [0.55, 0.25], [0.95, 0.5]]) this._tone('sine', when + dt, len, 330, 300, gain, p, 0.06);
   }
 

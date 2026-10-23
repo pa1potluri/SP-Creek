@@ -14,7 +14,7 @@ finished. Re-read this file each time; Claude may change it.
 | 6 | `tasks/shots-polish.md` | `area/shots-polish` | done |
 | 7 | `tasks/kid-cleanup.md` | `area/kid-cleanup` | done |
 | 7a | `tasks/names-tour-shots.md` | `area/names-tour-shots` | done |
-| 7b | `tasks/visual-fixes.md` | `area/visual-fixes` | queued |
+| 7b | `tasks/visual-fixes.md` | `area/visual-fixes` | done |
 | 7c | `tasks/crystal-polish.md` | `area/crystal-polish` | queued |
 | 8 | `tasks/watercolor.md` | `area/watercolor` | queued (preview only: the user decides before it is used widely) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |

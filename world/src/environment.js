@@ -54,9 +54,9 @@ export function installCloudLighting() {
 }
 
 export function waterMaterial(kind, shared) {
-  const mat = new THREE.MeshPhongMaterial({color:0x8caab0,map:shared.map,shininess:75,specular:0x9ab8bb,transparent:true,opacity:0.96,depthWrite:false});
+  const mat = new THREE.MeshPhongMaterial({color:0x8caab0,map:shared.map,shininess:45,specular:0x345e68,transparent:true,opacity:0.96,depthWrite:false});
   const u = { ...shared.uniforms, uWaterKind:{value:kind} };
-  mat.userData.waterUniforms = u; mat.customProgramCacheKey = () => 'valley-water-v1';
+  mat.userData.waterUniforms = u; mat.customProgramCacheKey = () => 'valley-water-v2';
   mat.onBeforeCompile = shader => {
     cloudShader(shader); Object.assign(shader.uniforms,u);
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 vWaterUV;').replace('#include <project_vertex>','#include <project_vertex>\nvWaterUV = uv;');
@@ -70,7 +70,7 @@ export function waterMaterial(kind, shared) {
         return normalize(vec3((cos(p.x * 2.1 + p.y * 0.7 - t) * 0.08 + cos(p.y * 5.3 + t * 1.5) * 0.035) * uWaterDetail,
           1.0, (sin(p.y * 2.8 - p.x * 0.6 + t * 0.8) * 0.07 + sin(p.x * 6.1 - t) * 0.025) * uWaterDetail));
       }`)
-      .replace('#include <map_fragment>', THREE.ShaderChunk.map_fragment.replaceAll('vMapUv','(vMapUv - vec2(uWaterTime * mix(0.006,0.001,uWaterKind),0.0))') + '\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(0.299,0.587,0.114))), 0.6);')
+      .replace('#include <map_fragment>', THREE.ShaderChunk.map_fragment.replaceAll('vMapUv','(vMapUv - vec2(uWaterTime * mix(0.006,0.001,uWaterKind),0.0))') + '\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(0.299,0.587,0.114))), 0.15);')
       .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\n normal = normalize(mat3(viewMatrix) * waterNormal(vCloudWorld.xz));')
       .replace('#include <opaque_fragment>', `
         vec2 wp = vCloudWorld.xz;
@@ -80,7 +80,7 @@ export function waterMaterial(kind, shared) {
         float banks = smoothstep(0.40, 0.96, shore);
         float reflection = sin(wp.x * 0.63 + sin(wp.y * 0.38) * 2.0 + wn.x * 6.0) * 0.5 + 0.5;
         vec3 skyReflection = mix(uWaterHorizon, uWaterSky, clamp(eye.y * 0.75 + wn.z, 0.0, 1.0));
-        vec3 reflected = mix(vec3(0.018, 0.065, 0.075), skyReflection, 0.58 + fresnel * 0.30);
+        vec3 reflected = mix(diffuse * 0.9, skyReflection * vec3(0.45, 0.75, 0.9), 0.18 + fresnel * 0.25);
         reflected = mix(reflected, uWaterBank * (0.55 + reflection * 0.35), banks * 0.65);
         reflected += uWaterHorizon * pow(max(sin(wp.x * 0.8 + wp.y * 2.8 + uWaterTime * 0.8 + cos(wp.x * 2.0) * 0.4),0.0),14.0) * 0.035 * uWaterDetail;
         float broken = 0.45 + 0.55 * sin(wp.x * 1.7 + wp.y * 2.3 + uWaterTime * 0.6) * sin(wp.y * 4.1 - uWaterTime * 0.4);
@@ -89,9 +89,9 @@ export function waterMaterial(kind, shared) {
           float dist = length(wp - uWaterFoam[i].xy), r = uWaterFoam[i].z;
           if (r > 0.0) foam = max(foam, (1.0 - smoothstep(r, r + 0.8, dist)) * smoothstep(0.1, r * 0.6, dist) * (0.4 + broken * 0.45));
         }
-        outgoingLight = mix(outgoingLight, reflected, 0.50 + fresnel * 0.25);
+        outgoingLight = mix(outgoingLight, reflected, 0.90 + fresnel * 0.07);
         float glint = pow(max(dot(reflect(-normalize(uWaterSunDir), wn), eye), 0.0), 85.0);
-        outgoingLight += uWaterSun * glint * 0.7 * cloudLight(vCloudWorld);
+        outgoingLight += uWaterSun * glint * 0.22 * cloudLight(vCloudWorld);
         outgoingLight = mix(outgoingLight, uWaterFoamColor, clamp(foam * 0.65, 0.0, 0.7));
         diffuseColor.a *= mix(0.92, 1.0, banks);
         #include <opaque_fragment>`);

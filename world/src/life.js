@@ -34,7 +34,11 @@ function joint(parent, x, y, z) {
   return g;
 }
 
-const COAT = [[20, 55, 32], [25, 35, 18], [30, 10, 72], [35, 45, 48], [0, 0, 14]];
+const COAT = [[20, 52, 46], [25, 40, 38], [30, 10, 82], [35, 45, 58], [22, 38, 55]];
+function animalMat(hsl) {
+  const color=C(...hsl);
+  return new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.16});
+}
 
 // ---------- models (all face +z) ----------
 // People are the cartoon cast (characters.js): townsfolk are re-dressed copies of its roles.
@@ -44,16 +48,22 @@ export function makePerson(outfit = randomTownsfolk()) {
 }
 
 function makeHorse(saddled) {
-  const g = new THREE.Group(), coatHsl = pick(COAT), coat = mat(coatHsl), dark = mat([coatHsl[0], coatHsl[1], Math.max(8, coatHsl[2] - 14)]);
+  const g = new THREE.Group(), coatHsl = pick(COAT), coat = animalMat(coatHsl), dark = animalMat([24, 28, 24]), muzzle = animalMat([30, 30, 73]);
   const body = joint(g, 0, 0, 0);
   part(new THREE.BoxGeometry(0.55, 0.62, 1.55), coat, 0, 1.38, 0, body);
   part(new THREE.SphereGeometry(0.33, 10, 8), coat, 0, 1.4, 0.66, body).scale.set(0.85, 1, 0.9);
   part(new THREE.SphereGeometry(0.33, 10, 8), coat, 0, 1.42, -0.66, body).scale.set(0.9, 1, 0.9);
+  if (coatHsl === COAT[4]) for (const side of [-1,1]) for (const [z,r] of [[-0.45,0.23],[0.2,0.28]]) {
+    part(new THREE.SphereGeometry(r,10,8),animalMat([38,15,88]),side*0.275,1.4,z,body).scale.set(0.09,1,1.35);
+  }
   const neck = joint(body, 0, 1.58, 0.75);
   neck.rotation.x = 0.6;
   part(new THREE.BoxGeometry(0.26, 0.85, 0.32), coat, 0, 0.42, 0, neck);
-  part(new THREE.BoxGeometry(0.06, 0.8, 0.1), dark, 0, 0.42, -0.17, neck);
+  const mane = joint(neck,0,0.42,-0.17);
+  part(new THREE.BoxGeometry(0.07, 0.8, 0.12), dark, 0, 0, 0, mane);
   part(new THREE.BoxGeometry(0.22, 0.24, 0.55), coat, 0, 0.83, 0.22, neck).rotation.x = 0.1;
+  part(new THREE.SphereGeometry(0.13,10,8),muzzle,0,0.81,0.48,neck).scale.set(0.95,0.7,0.65);
+  for (const side of [-1,1]) part(new THREE.SphereGeometry(0.023,8,6),mat([25,25,12]),side*0.115,0.88,0.24,neck);
   for (const s of [-1, 1]) part(new THREE.BoxGeometry(0.05, 0.12, 0.05), dark, s * 0.07, 0.98, 0.04, neck);
   const tail = joint(body, 0, 1.55, -0.82);
   tail.rotation.x = 0.4;
@@ -68,7 +78,7 @@ function makeHorse(saddled) {
     part(new THREE.BoxGeometry(0.62, 0.04, 0.7), mat(pick([[0, 50, 35], [210, 40, 35], [40, 50, 45]])), 0, 1.7, 0.05, body);
     part(new THREE.BoxGeometry(0.5, 0.12, 0.55), mat([25, 45, 25]), 0, 1.76, 0.05, body);
   }
-  return { g, legs, neck, tail, body };
+  return { g, legs, neck, mane, tail, body };
 }
 export function animateHorse(h, phase, amt) {
   const s = Math.sin(phase) * 0.5 * amt;
@@ -77,6 +87,7 @@ export function animateHorse(h, phase, amt) {
   h.body.position.y = Math.abs(Math.cos(phase)) * 0.05 * amt;
   h.neck.rotation.x = 0.6 + Math.sin(phase * 2) * 0.05 * amt;
   h.tail.rotation.x = 0.4 + Math.sin(phase) * 0.12;
+  h.mane.rotation.z = Math.sin(phase * 0.7) * 0.045;
 }
 
 function makeRider() {
@@ -287,7 +298,7 @@ export class Grazer {
 }
 
 function makeChicken() {
-  const g = new THREE.Group(), feathers = mat(pick([[0, 0, 95], [25, 55, 40], [30, 30, 20], [38, 50, 62]]));
+  const g = new THREE.Group(), feathers = animalMat(pick([[38, 10, 93], [25, 45, 56], [30, 30, 46], [38, 45, 68]]));
   part(new THREE.SphereGeometry(0.16, 8, 6), feathers, 0, 0.28, 0, g).scale.set(0.9, 0.85, 1.2);
   part(new THREE.BoxGeometry(0.1, 0.14, 0.08), feathers, 0, 0.38, -0.17, g).rotation.x = -0.5;
   const head = joint(g, 0, 0.42, 0.13);

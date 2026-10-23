@@ -67,7 +67,7 @@ export function createSky() {
 
 // A seamless ring of ridged mountains; colour comes from the material (set per atmosphere).
 function ringGeometry(R, base, amp, seed) {
-  const segs = 320, rows = 5, pos = [], col = [], idx = [];
+  const segs = 320, rows = 5, pos = [], col = [], alpha = [], idx = [];
   for (let i = 0; i <= segs; i++) {
     const a = (i / segs) * Math.PI * 2, cx = Math.cos(a), sz = Math.sin(a);
     const n = fbm(cx * 6 + seed * 10, sz * 6 - seed * 7, 5);
@@ -78,6 +78,7 @@ function ringGeometry(R, base, amp, seed) {
       pos.push(cx * R, -30 + (top + 30) * t, sz * R);
       const shade = (0.72 + 0.32 * t) * (0.9 + 0.2 * fbm(cx * 9 + j, sz * 9 - j, 2));
       col.push(shade, shade, shade);
+      alpha.push(j === 0 || j === rows - 1 ? 0 : 1);
     }
   }
   for (let i = 0; i < segs; i++) {
@@ -89,6 +90,7 @@ function ringGeometry(R, base, amp, seed) {
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute('aHazeAlpha', new THREE.Float32BufferAttribute(alpha, 1));
   g.setIndex(idx);
   return g;
 }
@@ -100,7 +102,11 @@ export function createMountains() {
     { R: 520, base: 45, amp: 130, seed: 2, haze: 0.3 },
     { R: 720, base: 80, amp: 230, seed: 3, haze: 0.5 },
   ]) {
-    const mesh = new THREE.Mesh(ringGeometry(s.R, s.base, s.amp, s.seed), new THREE.MeshBasicMaterial({ vertexColors: true, fog: false, side: THREE.DoubleSide }));
+    const mesh = new THREE.Mesh(ringGeometry(s.R, s.base, s.amp, s.seed), new THREE.MeshBasicMaterial({ vertexColors: true, fog: true, transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+    mesh.material.onBeforeCompile = shader => {
+      shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nattribute float aHazeAlpha; varying float vHazeAlpha;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvHazeAlpha = aHazeAlpha;');
+      shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vHazeAlpha;').replace('#include <opaque_fragment>', 'diffuseColor.a *= smoothstep(0.0, 1.0, vHazeAlpha);\n#include <opaque_fragment>');
+    };
     group.add(mesh);
     layers.push({ mesh, haze: s.haze });
   }

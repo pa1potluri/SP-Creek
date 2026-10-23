@@ -121,7 +121,7 @@ export const VIDEO_PRESETS = {
       { shot: 1, seconds: 15, mood: 'golden', move: 'cut', natural: true }, // 0:00 Arrival
       { shot: 0, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:15 Town square
       { shot: 24, seconds: 15, mood: 'keep', move: 'cut', natural: true }, // 0:27 Town center
-      { shot: 19, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:42 Honey Bun Café (the room)
+      { shot: 17, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:42 Into the Honey Bun Café
       { shot: 8, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:54 Mill wheel
       { shot: 21, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 1:06 Willow Creek
       { shot: 25, seconds: 15, mood: 'villageDusk', move: 'cut', natural: true }, // 1:18 Old Hollow

@@ -9,15 +9,16 @@ export function buildCrystalMine(world) {
   const y=terrainHeight(173,-115),top=world.registerAreaPad({x:202,z:-145,y:y+12,hx:10,hz:10,blend:16});
   const pad=world.registerAreaPad({x:173,z:-115,y,hx:9,hz:10,blend:9});world.updateTerrain();
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),mat=(color,glow=0)=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:glow});
-  const wood=mat('#ae9070'),stone=mat('#b9c7c3',0.2),cream=mat('#fff0d4'),moss=mat('#91ae80');
-  const colors=['#edb5d5','#a6dce9','#c5b8e9','#b5e3cf'];const crystalMats=colors.map(c=>mat(c,0.55));
-  const buckets=new Map(),clusters=[],balloonMats=[],flags=[];
+  const wood=mat('#ae9070'),stone=world.paintedMaterial('stone',1,1,{color:'#938776'}) || mat('#938776'),cream=mat('#fff0d4'),moss=mat('#91ae80');
+  const colors=['#df63ad','#55b9e2','#9871db','#5ec9a1'];const crystalMats=colors.map(c=>mat(c,0.7));
+  const buckets=new Map(),clusters=[],balloonMats=[],flags=[],glows=[];
+  const glowMats=colors.map(color=>new THREE.SpriteMaterial({map:world.haloMat.map,color,transparent:true,opacity:0.15,depthWrite:false,blending:THREE.AdditiveBlending}));
   function solid(geo,m,x,h,z,parent=root,rot=null){if(rot)geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot)));geo.translate(x,h,z);const key=parent.uuid+m.uuid;if(!buckets.has(key))buckets.set(key,{parent,m,geos:[]});buckets.get(key).geos.push(geo.index?geo.toNonIndexed():geo);}
   const box=(w,h,d,m,x,py,z,g=root)=>solid(new THREE.BoxGeometry(w,h,d),m,x,py,z,g);
   const ball=(r,m,x,h,z,g=root,s=[1,1,1])=>solid(new THREE.SphereGeometry(r,12,8).scale(...s),m,x,h,z,g);
   function group(x,h,z,parent=root){const g=new THREE.Group();g.position.set(x,h,z);parent.add(g);return g;}
   function rect(cx,cz,hx,hz){world.colliders.rects.push({cx,cz,ax:1,az:0,bx:0,bz:1,hx,hz});}
-  function crystal(x,h,z,scale=1){for(let i=0;i<4;i++){const a=i*2.4;solid(new THREE.CylinderGeometry(0.15*scale,0.25*scale,(0.6+i*0.2)*scale,6),crystalMats[i],x+Math.cos(a)*0.28*scale,h+(0.3+i*0.1)*scale,z+Math.sin(a)*0.28*scale,root,[0.08*Math.sin(a),0,0.12*Math.cos(a)]);}clusters.push([x,z]);}
+  function crystal(x,h,z,scale=1){for(let i=0;i<4;i++){const a=i*2.4;solid(new THREE.CylinderGeometry(0.15*scale,0.25*scale,(0.6+i*0.2)*scale,6),crystalMats[i],x+Math.cos(a)*0.28*scale,h+(0.3+i*0.1)*scale,z+Math.sin(a)*0.28*scale,root,[0.08*Math.sin(a),0,0.12*Math.cos(a)]);}clusters.push([x,z]);if(scale>=0.55){const glow=new THREE.Sprite(glowMats[clusters.length%4]);glow.position.set(x,h+0.5*scale,z);glow.scale.setScalar(2.2*scale);root.add(glow);glows.push(glow);}}
   // A short, closed room built above the terrain, with softly lit walls and a level floor.
   box(6.6,0.12,8.3,stone,173,y+0.03,-116);
   box(0.45,4.2,8.3,stone,169.8,y+2.1,-116);box(0.45,4.2,8.3,stone,176.2,y+2.1,-116);
@@ -29,6 +30,7 @@ export function buildCrystalMine(world) {
   for(let i=0;i<7;i++){
     const a=i*Math.PI/6;ball(1.6,stone,173+Math.cos(a)*4.1,y+0.8+Math.sin(a)*4.5,-116,root,[1.1,1,2]);
   }
+  for(let i=0;i<7;i++){const a=i*Math.PI/6;ball(1.1,moss,173+Math.cos(a)*4.1,y+2.2+Math.sin(a)*4.5,-116,root,[1.2,0.18,1.6]);}
   solid(new THREE.BoxGeometry(5,0.9,0.15),new THREE.MeshLambertMaterial({map:signTexture('CRYSTAL MINE',768,192,[170,18,82],'#496467')}),173,y+5,-111.3);
   for(const z of [-118,-115,-112,-107])for(const x of [170.5,175.5])crystal(x,y+0.1,z,0.6+(z%2)*0.1);
   for(let i=0;i<5;i++){crystal(170.2,y+0.5+i*0.6,-119+i*1.4,0.55);crystal(175.8,y+0.7+i*0.55,-119+i*1.3,0.55);}
@@ -48,10 +50,12 @@ export function buildCrystalMine(world) {
   for(const x of [-0.7,0.7])box(0.12,0.45,0.45,wood,x,0.22,0,bench);
   for(const dx of [-0.4,0.4])world.benches.push({x:206+dx,y:top.y+0.65,z:-144,yaw:0,who:null});
   const balloon=group(202,top.y+4.5,-145);
-  box(1.9,1.25,1.6,wood,0,0.65,0,balloon);
+  const wicker=mat('#d8b77f');
+  box(1.9,1.25,1.6,wicker,0,0.65,0,balloon);
+  for(let i=0;i<10;i++){const x=-0.88+i*0.196;for(const z of [-0.81,0.81])box(0.035,1.15,0.025,cream,x,0.65,z,balloon);}
   for(let i=0;i<7;i++)box(1.98,0.05,1.68,cream,0,0.12+i*0.18,0,balloon);
-  const stripes=['#efbac6','#eed39b','#b9d9b1','#a8d9df','#b9c5e5','#d3b7dc','#f0c6b1','#b2d9cf'];
-  stripes.forEach((c,i)=>{const bm=mat(c,0.08);balloonMats.push(bm);solid(new THREE.SphereGeometry(4,6,20,i*Math.PI/4,Math.PI/4).scale(1,1.35,1),bm,0,8,0,balloon);});
+  const stripes=['#efbac6','#eed39b','#b9d9b1','#a8d9df','#b9c5e5','#d3b7dc','#f0c6b1','#b2d9cf','#efd5ba','#d6c5eb'];
+  stripes.forEach((c,i)=>{const bm=mat(c,0.08);balloonMats.push(bm);solid(new THREE.SphereGeometry(4,6,20,i*Math.PI*2/stripes.length,Math.PI*2/stripes.length).scale(1,1.35,1),bm,0,8,0,balloon);});
   for(const sx of [-1,1])for(const sz of [-1,1])solid(new THREE.CylinderGeometry(0.025,0.025,3.5,6),cream,sx*0.8,2.7,sz*0.65,balloon);
   const burner=new THREE.Mesh(new THREE.SphereGeometry(0.25,12,8),new THREE.MeshBasicMaterial({color:'#ffe3a6'}));burner.position.y=2.1;balloon.add(burner);
   const ropes=[];for(const sx of [-1,1])for(const sz of [-1,1]){const start=v(202+sx*4,top.y+0.6,-145+sz*3),geo=new THREE.BufferGeometry().setFromPoints([start,start.clone()]);const line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:'#b19c7d'}));root.add(line);box(0.14,1,0.14,wood,start.x,top.y+0.5,start.z);ropes.push({line,start,sx,sz});}
@@ -60,7 +64,8 @@ export function buildCrystalMine(world) {
   for(const {parent,m,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),m);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}root.updateMatrixWorld(true);
   return {root,pad,top,balloon,crystalMats,clusters,sparkles,ropes,update(t,atmos){
     const night=Math.max(atmos.stars,world.lanternLevel),wind=Math.min(1.5,Math.abs(world.wind??1));
-    crystalMats.forEach((m,i)=>m.emissiveIntensity=0.45+night*0.35+Math.sin(t*0.6+i)*0.08);
+    crystalMats.forEach((m,i)=>m.emissiveIntensity=0.65+night*0.2+Math.sin(t*0.6+i)*0.06);
+    glowMats.forEach((m,i)=>m.opacity=0.12+night*0.08+Math.sin(t*0.6+i)*0.015);
     balloon.position.set(202+Math.sin(t*0.19)*0.25*wind,top.y+4.5+Math.sin(t*0.35)*0.25,-145+Math.cos(t*0.17)*0.2*wind);balloon.rotation.z=Math.sin(t*0.2)*0.025*wind;
     const burn=Math.pow(0.5+0.5*Math.sin(t*0.28),8);burner.scale.setScalar(0.6+burn*0.8);balloonMats.forEach(m=>m.emissiveIntensity=0.06+night*0.12+burn*0.07);
     balloon.updateMatrixWorld(true);ropes.forEach(({line,start,sx,sz})=>{const end=balloon.localToWorld(v(sx*0.85,0.15,sz*0.7)),p=line.geometry.attributes.position;p.setXYZ(0,start.x,start.y,start.z);p.setXYZ(1,end.x,end.y,end.z);p.needsUpdate=true;line.geometry.computeBoundingSphere();});

@@ -916,11 +916,11 @@ export class World {
 
   updateWaterMood(c, sunDir) {
     const u=this.waterUniforms;
-    u.uWaterSky.value.copy(c.skyTop);u.uWaterHorizon.value.copy(c.skyHorizon);
+    u.uWaterSky.value.copy(c.skyTop);u.uWaterHorizon.value.copy(c.skyHorizon).lerp(new THREE.Color(0x448c9c),0.45);
     u.uWaterBank.value.copy(c.hemiGround).lerp(new THREE.Color(0x193a31),0.4).multiplyScalar(0.65);
     u.uWaterSun.value.copy(c.sunColor).multiplyScalar(c.sunIntensity * 0.35);u.uWaterSunDir.value.copy(sunDir);
     u.uWaterFoamColor.value.copy(c.hemiSky).lerp(c.sunColor,0.25).multiplyScalar(c.hemiIntensity*0.45+c.sunIntensity*0.12);
-    for (const mat of this.waterMats) mat.color.copy(c.skyTop).lerp(c.skyHorizon,0.40).multiplyScalar(0.55);
+    for (const mat of this.waterMats) mat.color.set(0x278b9c).lerp(c.skyTop,0.25).multiplyScalar((0.65 + c.sunIntensity * 0.08) * (1 - c.stars * 0.72));
   }
 
   inPond(x,z,margin=0) {

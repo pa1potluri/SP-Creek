@@ -29,8 +29,9 @@ Browser tests: `node world/tests/run-browser.cjs <suites…>` (see existing suit
 - "Spooky" places (the ghost town) are **mysterious but friendly**: smiling ghosts, soft fog,
   gentle sounds, nothing that chases, shouts or startles.
 - Soft colours, rounded friendly shapes, warm light, calm sounds. Cartoon characters only.
-- Family mode must stay ON by default for the kids' world; the old western details (saloon,
-  gunsmith…) only exist behind the Family-mode switch for the separate music-background videos.
+- **All content must be child-friendly: no weapons, gambling, alcohol or scary jump-scare themes.**
+  This applies in every area and every task. The café/bakery is the only version of the saloon
+  (the Honey Bun Café); there is no saloon, gunsmith, cards or drinks behind any switch.
 
 ## The two most important rules
 
@@ -39,7 +40,16 @@ Browser tests: `node world/tests/run-browser.cjs <suites…>` (see existing suit
 - **Don't get stuck.** If something doesn't work after a few tries, write it down in
   `tasks/STUCK.md` (what, where, what was tried) and move on to the next thing. It gets fixed later.
 
-## The queue (Codex never sits idle)
+## Effort
+
+Use the light setting for small tasks; save full effort for architecture and tricky bugs.
+
+## The queue (Codex never sits idle, but reviews keep up)
+
+No more than **2–3 finished areas may wait unreviewed**. Claude reviews in batches as they finish;
+fixes, polish and cleanup tasks go into the queue between new areas so Codex keeps working while
+reviews catch up.
+
 
 `tasks/QUEUE.md` lists the tasks in order. When Codex finishes a task (result file written and
 committed), it **immediately starts the next one in the queue without waiting**, on a new branch
@@ -66,9 +76,12 @@ the next task.
 6. **Build first, check light.** Usage is limited, so spend it on building the area and its
    atmosphere, not on polishing. Fine detail matters little: the oil-paint (and later watercolour)
    filters soften it. One quick smoke test (the page loads, no console errors, the area appears)
-   is enough; no long test suites, frame captures or repeated previews unless the task asks.
-   Claude does the deeper review later. Tests must never start sound (sound only starts on a
-   real user click).
+   is enough while building. **Before marking a task done**, Codex also (because Claude's usage is
+   the scarcer one): runs the full suite once (`node world/tests/run-browser.cjs` with every suite in
+   `world/tests/`) and puts the counts in the result file, and saves a **day and a night screenshot**
+   of each new or changed camera shot (Animated film style) as `world/tests/<task>-<shot>-day.png` /
+   `-night.png`. Claude then reviews those numbers and pictures instead of redoing them. Tests must
+   never start sound (sound only starts on a real user click).
 7. **Review before every merge (Claude, never skipped).** "Build first, check light" only works
    because this review always happens before a branch is merged:
    1. The page loads with no errors.

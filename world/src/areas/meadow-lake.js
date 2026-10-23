@@ -12,7 +12,7 @@ export async function buildMeadowLake(world) {
   const names=['flowers_blue','flowers_purple','flowers_pink','flowers_yellow','bush','grass','tree_blossom','tree_wisteria'];
   const imgs=Object.fromEntries(await Promise.all([...names,'meadow'].map(name=>new Promise(resolve=>{const img=new Image();img.onload=()=>resolve([name,img]);img.onerror=()=>resolve([name,null]);img.src=name==='meadow'?'assets/textures/dream/meadow.png':`assets/foliage/dream/${name}.png`;}))));
   const r=rng(471),v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide});
-  const stone=m('#b4b6a4'),moss=m('#7b9b76'),wood=world.mat.darkWood,cream=m('#fff5d4'),gold=m('#e5bf6e');
+  const stone=world.paintedMaterial('stone',1,1,{color:'#b2ac92'}) || m('#9b9784'),moss=m('#7b9b76'),wood=world.mat.darkWood,cream=m('#fff5d4'),gold=m('#e5bf6e');
   const buckets=new Map(),plants=[],ducks=[],butterflies=[],birds=[],dragonflies=[];
   function solid(geo,mat,x,h,z,parent=root,rot=null){if(rot)geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot)));geo.translate(x,h,z);const key=parent.uuid+mat.uuid;if(!buckets.has(key))buckets.set(key,{parent,mat,geos:[]});buckets.get(key).geos.push(geo.index?geo.toNonIndexed():geo);}
   const box=(w,h,d,mat,x,py,z,g=root)=>solid(new THREE.BoxGeometry(w,h,d),mat,x,py,z,g);
@@ -20,7 +20,7 @@ export async function buildMeadowLake(world) {
   function group(x,h,z){const g=new THREE.Group();g.position.set(x,h,z);root.add(g);return g;}
   const groundGeo=new THREE.PlaneGeometry(104,74,78,56);groundGeo.rotateX(-Math.PI/2);groundGeo.translate(MEADOW.x,0,MEADOW.z);
   const gp=groundGeo.attributes.position,cols=[];for(let i=0;i<gp.count;i++){const x=gp.getX(i),z=gp.getZ(i);gp.setY(i,terrainHeight(x,z)+0.045);const a=1-smoothstep(0.72,1,Math.max(Math.abs(x-MEADOW.x)/52,Math.abs(z)/37));cols.push(1,1,1,a);}groundGeo.setAttribute('color',new THREE.Float32BufferAttribute(cols,4));groundGeo.computeVertexNormals();
-  const groundMat=new THREE.MeshLambertMaterial({map:imgs.meadow?imageTexture(imgs.meadow,6,4):null,color:'#d5e3b6',vertexColors:true,transparent:true,depthWrite:false});const ground=new THREE.Mesh(groundGeo,groundMat);ground.receiveShadow=true;root.add(ground);
+  const groundMat=new THREE.MeshLambertMaterial({map:imgs.meadow?imageTexture(imgs.meadow,3,2):null,color:'#d5edbd',vertexColors:true,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});const ground=new THREE.Mesh(groundGeo,groundMat);ground.receiveShadow=true;root.add(ground);
   const points=[0,0,0],uv=[0.5,0.5],idx=[];for(let i=0;i<=96;i++){const a=i/96*Math.PI*2,rr=1+0.06*Math.sin(a*3+0.5)+0.035*Math.cos(a*5);points.push(Math.cos(a)*lake.rx*rr,0,Math.sin(a)*lake.rz*rr);uv.push(0.5+Math.cos(a)*0.5,0.5+Math.sin(a)*0.5);if(i)idx.push(0,i,i+1);}
   const wg=new THREE.BufferGeometry();wg.setAttribute('position',new THREE.Float32BufferAttribute(points,3));wg.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));wg.setIndex(idx);wg.computeVertexNormals();
   // The fan faces up; the shared water shader supplies the same reflections as the river.

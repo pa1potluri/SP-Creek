@@ -359,9 +359,23 @@ export class Atmosphere {
     u.uSunSize.value = c.sunSize;
     this.sky.position.copy(camera.position);
 
-    this.scene.fog.color.copy(c.fogColor);
-    this.scene.fog.near = c.fogNear / m.fog;
-    this.scene.fog.far = c.fogFar / m.fog;
+    // Match the distant ground to the sky instead of making a white silhouette.
+    this.scene.fog.color.copy(c.fogColor).lerp(c.skyHorizon, 0.55);
+    const highView = THREE.MathUtils.smoothstep(camera.position.y, 12, 65);
+    const vista = 1 + highView * 0.75 + THREE.MathUtils.smoothstep(Math.hypot(camera.position.x,camera.position.z),80,180) * 0.6;
+    const backdrop = this.scene.children.find(o => o.geometry?.type === 'CylinderGeometry' && o.material?.map && !o.material.fog);
+    if (backdrop && !backdrop.material.userData.softHorizon) {
+      const material = backdrop.material;
+      material.userData.softHorizon = { value: this.scene.fog.color };
+      material.onBeforeCompile = shader => {
+        shader.uniforms.uBackdropMist = material.userData.softHorizon;
+        shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nvarying float vBackdropHeight;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvBackdropHeight = position.y;');
+        shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uBackdropMist; varying float vBackdropHeight;').replace('#include <opaque_fragment>', 'outgoingLight = mix(outgoingLight, uBackdropMist, (1.0 - smoothstep(-35.0, 180.0, vBackdropHeight)) * 0.9);\n#include <opaque_fragment>');
+      };
+      material.needsUpdate = true;
+    }
+    this.scene.fog.near = c.fogNear * vista / m.fog;
+    this.scene.fog.far = c.fogFar * vista / m.fog;
     for (const L of this.mountains.layers) L.mesh.material.color.copy(c.mountain).lerp(c.fogColor, Math.min(1, L.haze * Math.sqrt(m.fog)));
     const smooth = (a,b,x) => { const v=THREE.MathUtils.clamp((x-a)/(b-a),0,1);return v*v*(3-2*v); };
     cloudUniforms.uCloudTime.value=time;cloudUniforms.uCloudWind.value=this.world.wind ?? 1;

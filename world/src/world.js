@@ -788,7 +788,15 @@ export class World {
   }
 
   // Places kept clear of trees, grass and rocks.
+  registerAreaPad(spec) {
+    const p = { yaw: 0, blend: 12, ...spec };
+    p.y ??= terrainHeight(p.x, p.z);
+    (this.areaPads ??= []).push(p); userPads.push(p);
+    return p;
+  }
+
   _reserved(x, z, pad = 0) {
+    if (this.areaPads?.some(p => padDistance(p, x, z) < pad)) return true;
     if (this.hamlet?.visible && pondRadius(x,z) < 1.18 + pad / HAMLET.pond.rz) return true;
     if (Math.abs(z - riverZ(x)) < 14 + pad) return true;
     if (Math.abs(x - RAIL_X) < 9 + pad) return true;

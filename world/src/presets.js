@@ -11,8 +11,8 @@ export const VIDEO_PRESETS = {
     life: { people: 14, riders: 2 },
     clips: [
       { shot: 3, seconds: 70, mood: 'golden', move: 'cut' }, // Boardwalk Stroll
-      { shot: 0, seconds: 50, mood: 'keep', move: 'fly' }, // Town Square 360Â°
-      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Saloon â†’ Sheriff
+      { shot: 0, seconds: 50, mood: 'keep', move: 'fly' }, // Town Square 360°
+      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Saloon → Sheriff
       { shot: 6, seconds: 60, mood: 'keep', move: 'fly' }, // Golden Orbit
       { shot: 1, seconds: 55, mood: 'keep', move: 'fly' }, // Arrival
     ],
@@ -24,7 +24,7 @@ export const VIDEO_PRESETS = {
     life: { people: 3, riders: 0, coach: 0, chickens: 0, tumbleweeds: 0, wind: 1.3 },
     clips: [
       { shot: 3, seconds: 70, mood: 'night', move: 'cut' }, // Boardwalk Stroll
-      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Saloon â†’ Sheriff
+      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Saloon → Sheriff
       { shot: 17, seconds: 40, mood: 'keep', move: 'cut' }, // Through the Doors
       { shot: 18, seconds: 45, mood: 'keep', move: 'cut' }, // At the Bar
       { shot: 19, seconds: 55, mood: 'keep', move: 'cut' }, // Card Game
@@ -111,17 +111,17 @@ export const VIDEO_PRESETS = {
   },
   dreamyMeadow:{label:'Dreamy meadow',about:'Dreamland flower colours, butterflies and a soft rainbow over a sparkling waterfall lake.',style: 'film',rain:0,wind:0.2,ambience:0.65,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:27,seconds:100,mood:'morning',move:'cut'},{shot:27,seconds:100,mood:'golden',move:'fly'}]},
   magicCrystalHill:{label:'Magic crystal hill',about:'A bright crystal room and a softly glowing rainbow balloon above the valley.',style: 'film',rain:0,wind:0.2,ambience:0.55,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:28,seconds:90,mood:'golden',move:'cut'},{shot:29,seconds:110,mood:'villageDusk',move:'fly'}]},
-  // 2:30 YouTube tour: every area once, 9â€“15 s each at the shots' own calm pace (natural), joined by cuts
+  // 2:30 YouTube tour: every area once, 9–15 s each at the shots' own calm pace (natural), joined by cuts
   grandTour: {
     label: 'Grand tour of Dusty Hollow (2:30)',
-    about: 'Every corner of the valley in two and a half minutes: the town, the cafÃ©, the mill, Willow Creek, Old Hollow, the forest, the meadow and the crystal hill.',
+    about: 'Every corner of the valley in two and a half minutes: the town, the café, the mill, Willow Creek, Old Hollow, the forest, the meadow and the crystal hill.',
     style: 'film', rain: 0, wind: 0.25, ambience: 0.8,
     life: { people: 14, riders: 2 },
     clips: [
       { shot: 1, seconds: 15, mood: 'golden', move: 'cut', natural: true }, // 0:00 Arrival
       { shot: 0, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:15 Town square
       { shot: 24, seconds: 15, mood: 'keep', move: 'cut', natural: true }, // 0:27 Town center
-      { shot: 19, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:42 Honey Bun CafÃ© (the room)
+      { shot: 19, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:42 Honey Bun Café (the room)
       { shot: 8, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 0:54 Mill wheel
       { shot: 21, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 1:06 Willow Creek
       { shot: 25, seconds: 15, mood: 'villageDusk', move: 'cut', natural: true }, // 1:18 Old Hollow
@@ -129,7 +129,7 @@ export const VIDEO_PRESETS = {
       { shot: 27, seconds: 12, mood: 'golden', move: 'cut', natural: true }, // 1:45 Meadow and lake
       { shot: 28, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 1:57 Crystal mine
       { shot: 29, seconds: 12, mood: 'keep', move: 'cut', natural: true }, // 2:09 Balloon hilltop
-      { shot: 6, seconds: 9, mood: 'keep', move: 'cut', natural: true }, // 2:21 Golden orbit over the town â†’ 2:30
+      { shot: 6, seconds: 9, mood: 'keep', move: 'cut', natural: true }, // 2:21 Golden orbit over the town → 2:30
     ],
   },
 };

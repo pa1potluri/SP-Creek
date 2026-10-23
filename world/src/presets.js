@@ -88,4 +88,14 @@ export const VIDEO_PRESETS = {
       { shot: 23, seconds: 90, mood: 'villageDusk', move: 'fly' },
     ],
   },
+  cozyTownCenter: {
+    label: 'Cozy town center',
+    about: 'Flower-filled boardwalks and a little market, then warm lanterns around the fountain as evening settles.',
+    style: 'oil', rain: 0, wind: 0.2, ambience: 0.65,
+    life: { people: 10, riders: 0, coach: 0, wind: 0.3 },
+    clips: [
+      { shot: 24, seconds: 100, mood: 'golden', move: 'cut' },
+      { shot: 24, seconds: 100, mood: 'villageDusk', move: 'fly' },
+    ],
+  },
 };

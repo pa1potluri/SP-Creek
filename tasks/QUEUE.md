@@ -10,10 +10,11 @@ finished. Re-read this file each time; Claude may change it.
 | 2 | `tasks/forest.md` | `area/forest` | done |
 | 3 | `tasks/meadow-lake.md` | `area/meadow-lake` | done |
 | 4 | `tasks/crystal-mine.md` | `area/crystal-mine` | done |
-| 5 | `tasks/pond-polish.md` | `area/pond-polish` | queued |
-| 6 | `tasks/kids-presets.md` | `area/kids-presets` | queued |
-| 7 | `tasks/watercolor.md` | `area/watercolor` | queued |
-| 8 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | queued |
+| 5 | `tasks/pond-polish.md` | `area/pond-polish` | done |
+| 6 | `tasks/shots-polish.md` | `area/shots-polish` | queued (next, from Claude's review) |
+| 7 | `tasks/kids-presets.md` | `area/kids-presets` | queued |
+| 8 | `tasks/watercolor.md` | `area/watercolor` | queued |
+| 9 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | queued |
 
 Shot and preset slots, in this order (append at the end, never renumber): ghost town, forest,
 meadow & lake, crystal mine & balloon.

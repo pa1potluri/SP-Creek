@@ -1,6 +1,7 @@
 # Polish: Willow Creek pond and houses (later, not a blocker)
 
-Read `AGENTS.md` first. Branch: `area/pond-polish`. Light checks only.
+Read `AGENTS.md` and `tasks/QUEUE.md` first. Branch: `area/pond-polish`, made from the tip of
+`area/crystal-mine`. Light checks only; when done, mark it in `QUEUE.md`.
 
 ## The area
 

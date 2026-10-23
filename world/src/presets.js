@@ -98,4 +98,10 @@ export const VIDEO_PRESETS = {
       { shot: 24, seconds: 100, mood: 'villageDusk', move: 'fly' },
     ],
   },
+  friendlyGhostTown: {
+    label: 'Friendly ghost town', about: 'Smiling neighbours, silver mist and gentle bells in sleepy Old Hollow, from warm dusk to soft moonlight.',
+    style:'oil', rain:0, wind:0.15, ambience:0.5,
+    life:{people:6,riders:0,coach:0,wind:0.25},
+    clips:[{shot:25,seconds:100,mood:'villageDusk',move:'cut'},{shot:25,seconds:100,mood:'night',move:'fly'}],
+  },
 };

@@ -4,6 +4,7 @@
 // update(state, when, dt) is called every frame: live with the AudioContext clock, or, for a video,
 // once per recorded frame on an OfflineAudioContext, so the render sounds exactly like the shot.
 import { riverZ } from './world.js';
+import { OLD_HOLLOW } from './areas/ghost-town.js';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const smooth = (a, b, x) => {
@@ -70,6 +71,8 @@ export class Ambience {
     this.train = this._bus(true);
     this.mill = this._bus(true);
     this.birds = this._bus(false);
+    this.oldHollow = this._bus(true);
+    this.oldTimers = { chime:4, creak:7, hum:2, giggle:13 };
     this.nextBird = 0;
     this.nextOwl = 3;
     this.nextSplash = 0;
@@ -175,6 +178,19 @@ export class Ambience {
 
     // steam train
     this._train(s, when, dt, set, roofed);
+    const gd = Math.hypot(s.x-OLD_HOLLOW.x,s.z-OLD_HOLLOW.z), gg = near(gd,10,42)*roofed;
+    set(this.oldHollow.g.gain,gg*0.18,0.8);
+    set(this.oldHollow.pan.pan,this._panTo(s,OLD_HOLLOW.x,OLD_HOLLOW.z));
+    if(gg>0.01)this._oldHollowSounds(when,dt);
+  }
+
+  _oldHollowSounds(when,dt) {
+    const bus=this.oldHollow.g;
+    for(const key of Object.keys(this.oldTimers))this.oldTimers[key]-=dt;
+    if(this.oldTimers.chime<=0){this.oldTimers.chime=12;[660,880,990].forEach((f,i)=>this._tone('sine',when+i*0.4,1.8,f,f,0.035,bus,0.12));}
+    if(this.oldTimers.creak<=0){this.oldTimers.creak=17;this._tone('triangle',when,1.4,210,245,0.018,bus,0.35);}
+    if(this.oldTimers.hum<=0){this.oldTimers.hum=23;[392,494].forEach(f=>this._tone('sine',when,2.8,f,f*1.01,0.025,bus,0.7));}
+    if(this.oldTimers.giggle<=0){this.oldTimers.giggle=29;[660,784,740].forEach((f,i)=>this._tone('sine',when+i*0.28,0.35,f,f*1.08,0.022,bus,0.1));}
   }
 
   // ---------- one-off sounds ----------

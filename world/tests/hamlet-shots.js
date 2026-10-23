@@ -58,7 +58,8 @@ export async function runHamletShotTests() {
     const preset=VIDEO_PRESETS.villageDusk;
     check(preset.clips.length===3 && preset.clips.reduce((n,c)=>n+c.seconds,0)===270 && preset.clips[0].move==='cut','Village preset retains indices, duration and first cut');
     check(preset.clips.every(c=>c.mood==='villageDusk'),'Every village clip explicitly keeps the same warm dusk');
-    check(PRESETS.dusk.sunIntensity===0.7 && PRESETS.dusk.hemiIntensity===0.7,'Original dusk mood preserved for other videos');
+    // dusk was deliberately lifted for young viewers (review batch 1); it must stay a dusk, and stay readable
+    check(PRESETS.dusk.sunElev<0 && PRESETS.dusk.lanterns===1 && PRESETS.dusk.hemiIntensity>=1.2,'Dusk mood stays dusk and readable');
     a.atmos.setPreset('night',true);
     [...document.querySelectorAll('#videoPresets button')].find(b=>b.textContent.includes('Village at dusk')).click();
     check(a.atmos.key==='villageDusk' && a.atmos.cur.hemiIntensity>=1.7 && a.atmos.cur.lanterns===1,'Preset immediately replaces night with readable dusk and lit windows');

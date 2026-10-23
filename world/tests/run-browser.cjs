@@ -6,7 +6,7 @@ const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-r
   page.on('console', m => { if (m.type() === 'log') console.log(m.text()); });
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !m.text().includes('404')) errors.push(m.text()); });
-  await page.goto('http://localhost:8810');
+  await page.goto(process.env.DH_URL || 'http://localhost:8810'); // DH_URL: test another checkout (reviews)
   await page.waitForFunction(() => window.__app, { timeout: 120000 });
   for (const suite of process.argv.slice(2).filter(a => !a.startsWith('--'))) {
     const result = await page.evaluate(async name => {

@@ -79,7 +79,8 @@ function makeShots() {
   // turned into the world: the saloon faces west from x = 7.5, z = 8.
   const S = (lx, y, lz) => V(7.5 - lz, y, 8 + lx);
   const saloon = [
-    pathShot('Through the Doors', [[S(0, 1.9, 2.2), S(-1.5, 1.5, -8)], [S(0, 1.95, -1.2), S(-2.5, 1.4, -9)], [S(-0.8, 1.9, -5), S(-4.5, 1.3, -11.2)]], 30),
+    // starts high and a little back so the room shows, not just the doors
+    pathShot('Through the Doors', [[S(0, 2.4, 3.2), S(-1.5, 1.3, -8)], [S(0, 2.1, -1.2), S(-2.5, 1.3, -9)], [S(-0.8, 1.9, -5), S(-4.5, 1.3, -11.2)]], 30),
     pathShot('At the Counter', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
     orbitShot('Board Games', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
   ].map((s) => ({ ...s, group: 'Café' }));

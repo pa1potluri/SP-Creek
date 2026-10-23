@@ -1,5 +1,4 @@
-// Inside the Golden Spur: bar and back bar, upright piano, card tables, oil lamps, rug, pictures,
-// a bartender polishing glasses, a pianist, card players, and batwing doors that swing open.
+// Honey Bun Café: cakes, tea, checkers, an upright piano and gently swinging glass doors.
 // Everything is placed in the saloon's own frame: x across the room, z from the door (0) inwards (−),
 // floor top at y = 0.35.
 import * as THREE from 'three';
@@ -45,13 +44,12 @@ export class SaloonInterior {
       return m;
     };
     this.m = {
-      varnish: wood(3, {}, [18, 45, 22]),
-      top: wood(4, { color: C(30, 30, 80) }, [22, 50, 32]),
+      varnish: wood(3, {color:C(32,28,72),emissive:C(35,30,48),emissiveIntensity:0.32}, [32,30,65]),
+      top: wood(4, { color:C(35,30,88),emissive:C(38,35,65),emissiveIntensity:0.35 }, [35,30,80]),
       brass: lambert([42, 70, 52]),
-      ivory: lambert([45, 30, 88]),
+      ivory: lambert([45,30,88],{emissive:C(40,25,65),emissiveIntensity:0.2}),
       black: lambert([0, 0, 8]),
-      felt: lambert([140, 40, 22]),
-      glass: lambert([35, 70, 45], { emissive: C(35, 90, 45), emissiveIntensity: 0.4 }),
+      cloth: this._gingham(),
       mirror: new THREE.MeshLambertMaterial({ map: T.mirrorTexture(), emissive: C(35, 30, 40), emissiveMap: T.mirrorTexture(), emissiveIntensity: 0.25 }),
       lamp: lambert([40, 60, 60], { emissive: C(36, 100, 60), emissiveIntensity: 2.4 }),
     };
@@ -72,13 +70,27 @@ export class SaloonInterior {
     this.g.add(m);
     return m;
   }
-  _adult(obj) { obj.userData.familyRole = 'adult'; this.adultProps.push(obj); return obj; }
   _family(obj) { obj.userData.familyRole = 'family'; this.familyProps.push(obj); return obj; }
 
   setFamilyMode(on) {
     this.familyMode = !!on;
-    for (const obj of this.adultProps) obj.visible = !on;
-    for (const obj of this.familyProps) obj.visible = !!on;
+    for (const obj of this.familyProps) obj.visible = true;
+  }
+
+  _gingham() {
+    const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');x.fillStyle='#fff3d7';x.fillRect(0,0,128,128);
+    for(let i=0;i<8;i++)for(let j=0;j<8;j++)if((i+j)%2){x.fillStyle='#eab9c5';x.fillRect(i*16,j*16,16,16);}
+    return new THREE.MeshLambertMaterial({map:new THREE.CanvasTexture(c),emissive:'#dfc3b5',emissiveIntensity:0.18});
+  }
+
+  _teapot(x,y,z) {
+    const g=new THREE.Group(),ivory=this.m.ivory;
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.17,16,10).scale(1,0.8,1),ivory));
+    const lid=new THREE.Mesh(new THREE.SphereGeometry(0.13,12,8).scale(1,0.3,1),ivory);lid.position.y=0.13;g.add(lid);
+    const knob=new THREE.Mesh(new THREE.SphereGeometry(0.035,8,6),this.m.brass);knob.position.y=0.18;g.add(knob);
+    const handle=new THREE.Mesh(new THREE.TorusGeometry(0.11,0.025,6,12),ivory);handle.position.x=-0.18;g.add(handle);
+    const spout=new THREE.Mesh(new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(V(0.1,0,0),V(0.25,0,0),V(0.26,0.13,0)),8,0.04,6,false),ivory);g.add(spout);
+    g.position.set(x,y+0.13,z);this.g.add(g);this._family(g);
   }
 
   _cup(x, y, z) {
@@ -103,6 +115,27 @@ export class SaloonInterior {
     this._family(this._add(cylGeo(0.17, 0.17, 0.04, 4.3, FLOOR + 1.33, -7.6), cream, false));
     const cherry = this._add(new THREE.SphereGeometry(0.035, 8, 6), lambert([0,65,45]), false);
     cherry.position.set(4.3, FLOOR + 1.385, -7.6); this._family(cherry);
+    this._teapot(4.3,FLOOR+1.18,-5);
+    const cakeGlass=new THREE.MeshPhongMaterial({color:'#e8f4ee',transparent:true,opacity:0.15,depthWrite:false,shininess:60});
+    this._family(this._add(boxGeo(0.82,0.72,2.1,4.3,FLOOR+1.58,-8.5),cakeGlass,false));
+    const icing=lambert([330,40,78]),bread=lambert([33,50,65]);
+    for(let i=0;i<3;i++){
+      this._family(this._add(cylGeo(0.22,0.22,0.04,4.3,FLOOR+1.2,-9.1+i*0.6),cream,false));
+      this._family(this._add(cylGeo(0.17,0.18,0.24,4.3,FLOOR+1.35,-9.1+i*0.6),bread,false));
+      this._family(this._add(cylGeo(0.18,0.17,0.07,4.3,FLOOR+1.5,-9.1+i*0.6),icing,false));
+    }
+    const bellMat=lambert([42,55,65],{emissive:C(40,45,55),emissiveIntensity:0.25});
+    this._family(this._add(cylGeo(0.14,0.14,0.03,4.3,FLOOR+1.19,-3.4),bellMat,false));
+    const bell=this._add(new THREE.SphereGeometry(0.12,12,8,0,Math.PI*2,0,Math.PI/2),bellMat,false);bell.position.set(4.3,FLOOR+1.2,-3.4);this._family(bell);
+    const menu=this._add(new THREE.PlaneGeometry(4,1.15),new THREE.MeshBasicMaterial({map:T.signTexture('TEA · CAKES · LEMONADE',1024,256,[43,35,88],'#65766d')}),false);menu.position.set(6.56,FLOOR+2.2,-6.5);menu.rotation.y=-Math.PI/2;this._family(menu);
+    const light=new THREE.MeshBasicMaterial({color:'#ffe5b1'});
+    for(const h of [FLOOR+1.18,FLOOR+2.98])this._family(this._add(boxGeo(0.025,0.045,7.2,6.31,h,-6.5),light,false));
+    this._family(this._add(boxGeo(0.025,0.055,7.3,3.81,FLOOR+1.05,-6.5),light,false));
+    // Bright painted room lining and existing lamps supply fill without new point lights.
+    const lining=lambert([40,25,83],{emissive:C(38,25,70),emissiveIntensity:0.27});
+    this._add(boxGeo(0.04,3.15,11.5,-7.05,FLOOR+1.6,-6.1),lining,false);
+    this._add(boxGeo(14.1,3.15,0.04,0,FLOOR+1.6,-12.03),lining,false);
+    this._add(boxGeo(14.1,0.04,11.7,0,3.75,-6.05),lining,false);
   }
 
   _board(x, z) {
@@ -128,38 +161,19 @@ export class SaloonInterior {
 
   _bar() {
     const m = this.m;
-    // counter along the right-hand wall, the back bar behind it
+    // counter along the right-hand wall, cake shelves behind it
     this._add(boxGeo(0.7, 1.1, 7.5, 4.3, FLOOR + 0.55, -6.5), m.varnish);
     this._add(boxGeo(0.95, 0.07, 7.7, 4.3, FLOOR + 1.13, -6.5), m.top);
-    this._add(new THREE.CylinderGeometry(0.04, 0.04, 7.4, 8).rotateX(Math.PI / 2).translate(3.85, FLOOR + 0.2, -6.5), m.brass); // foot rail
     this._block(4.3, -6.5, 0.5, 3.85);
     this._add(boxGeo(0.5, 2.8, 7.4, 6.85, FLOOR + 1.4, -6.5), m.varnish);
-    this._add(boxGeo(0.02, 1.2, 4, 6.58, FLOOR + 2.2, -6.5), m.mirror, false);
     for (const y of [1.35, 2.95]) this._add(boxGeo(0.4, 0.05, 7.4, 6.55, FLOOR + y, -6.5), m.varnish);
     this._block(6.85, -6.5, 0.3, 3.7);
-    // bottles on the shelves
-    const parts = [];
-    const colours = [[120, 40, 25], [30, 60, 35], [0, 0, 15], [45, 70, 50], [200, 30, 30]].map((c) => C(...c));
-    for (const y of [1.38, 2.98]) {
-      for (let z = -9.9; z < -3.1; z += 0.22) {
-        if (Math.abs(z + 6.5) < 2.1 && y < 2) continue; // gap where the mirror is
-        const h = 0.25 + Math.random() * 0.12, gg = cylGeo(0.045, 0.05, h, 6.55 + (Math.random() - 0.5) * 0.15, FLOOR + y + h / 2 + 0.025, z, 6).toNonIndexed();
-        const col = colours[Math.floor(Math.random() * colours.length)], arr = new Float32Array(gg.attributes.position.count * 3);
-        for (let i = 0; i < arr.length; i += 3) arr.set([col.r, col.g, col.b], i);
-        gg.setAttribute('color', new THREE.BufferAttribute(arr, 3));
-        parts.push(gg);
-      }
-    }
-    this._adult(this._add(mergeGeometries(parts), new THREE.MeshLambertMaterial({ vertexColors: true, emissive: C(35, 60, 30), emissiveIntensity: 0.25 }), false));
-    // glasses and a bottle on the counter
-    for (const z of [-4.2, -5.6, -8.4]) this._adult(this._add(cylGeo(0.04, 0.035, 0.11, 4.15, FLOOR + 1.22, z, 8), m.glass, false));
-    this._adult(this._add(cylGeo(0.05, 0.06, 0.3, 4.3, FLOOR + 1.32, -7.6, 8), lambert([120, 40, 22]), false));
     // bartender behind the counter, facing the room
     const bt = makePerson(CAST.bartender);
     bt.g.position.set(5.6, FLOOR, -5.4);
     bt.g.rotation.y = -Math.PI / 2;
     this.g.add(bt.g);
-    this.people.push({ p: bt, kind: 'bartender', ph: 0 });
+    this.people.push({ p: bt, kind: 'owner', ph: 0 });
   }
 
   _piano() {
@@ -192,7 +206,7 @@ export class SaloonInterior {
     const m = this.m;
     const tables = [[-2.5, -3.6, 0], [0.6, -6.6, 3], [-3.6, -7.9, 3], [1.2, -10.2, 0]];
     for (const [tx, tz, players] of tables) {
-      this._add(cylGeo(0.65, 0.65, 0.06, tx, FLOOR + 0.78, tz, 18), players ? m.felt : m.top);
+      this._add(cylGeo(0.65, 0.65, 0.06, tx, FLOOR + 0.78, tz, 18), m.cloth);
       this._add(cylGeo(0.08, 0.12, 0.75, tx, FLOOR + 0.38, tz, 8), m.varnish);
       this._add(cylGeo(0.35, 0.38, 0.04, tx, FLOOR + 0.02, tz, 12), m.varnish);
       this.world.colliders.circles.push(this._worldCircle(tx, tz, 0.7));
@@ -209,25 +223,20 @@ export class SaloonInterior {
         chair.rotation.y = Math.atan2(tx - cx, tz - cz); // seat faces the table
         this.g.add(chair);
         if (k < players) {
-          const p = makePerson(randomTownsfolk(['gambler', 'cowboy', 'prospector', 'rancher', 'sheriff'][this.people.length % 5]));
+          const p = makePerson(randomTownsfolk(['teacher', 'shopkeeper', 'prospector', 'rancher', 'sheriff'][this.people.length % 5]));
           seat(p);
           p.arms.forEach((arm) => (arm.rotation.x = -1.05));
           p.g.position.set(cx, FLOOR + 0.5 + 0.07 - HIP, cz);
           p.g.rotation.y = chair.rotation.y;
           this.g.add(p.g);
-          this.people.push({ p, kind: 'cards', ph: Math.random() * 6 });
+          this.people.push({ p, kind: 'games', ph: Math.random() * 6 });
         }
       }
       if (players) {
-        // a scatter of cards and two glasses
-        for (let k = 0; k < 6; k++) {
-          const card = this._add(boxGeo(0.07, 0.005, 0.1, 0, 0, 0), m.ivory, false);
-          card.position.set(tx + (Math.random() - 0.5) * 0.6, FLOOR + 0.815, tz + (Math.random() - 0.5) * 0.6);
-          card.rotation.y = Math.random() * 3; this._adult(card);
-        }
-        for (const d of [-0.3, 0.3]) this._adult(this._add(cylGeo(0.04, 0.035, 0.11, tx + d, FLOOR + 0.87, tz + d * 0.5, 8), m.glass, false));
         this._board(tx, tz);
       }
+      this._teapot(tx+0.35,FLOOR+0.815,tz-0.25);
+      if(!players){this._cup(tx-0.3,FLOOR+0.815,tz);this._family(this._add(cylGeo(0.16,0.17,0.15,tx,FLOOR+0.9,tz+0.2),m.ivory,false));}
     }
   }
 
@@ -246,7 +255,7 @@ export class SaloonInterior {
       halo.scale.setScalar(1.4);
       this.g.add(halo);
     }
-    for (const [x, z] of [[-1.5, -4.5], [-0.5, -9.5]]) {
+    for (const [x, z] of [[3.6, -5.5], [1, -9.5]]) {
       const l = new THREE.PointLight(0xffb060, 14, 11, 2);
       l.position.set(x, 3, z);
       this.g.add(l);
@@ -259,30 +268,16 @@ export class SaloonInterior {
     rug.rotation.x = -Math.PI / 2;
     rug.position.set(-1.2, FLOOR + 0.012, -6.6);
     const wallX = -this.world.interiors.saloon.hx + 0.02;
-    [['wanted', -2.5, 1], ['painting', -5.5, 2], ['wanted', -8.5, 3]].forEach(([kind, z, seed]) => {
-      const pic = this._add(new THREE.PlaneGeometry(0.8, 1.0), new THREE.MeshLambertMaterial({ map: T.pictureTexture(kind, seed) }), false);
-      pic.position.set(wallX, 2.2, z);
-      pic.rotation.y = Math.PI / 2;
-      if (kind === 'wanted') {
-        this._adult(pic);
-        const painting = new THREE.Mesh(pic.geometry, new THREE.MeshLambertMaterial({ map: T.pictureTexture('painting', seed) }));
-        painting.position.copy(pic.position); painting.rotation.copy(pic.rotation); this.g.add(painting); this._family(painting);
-      }
-    });
-    // spittoons and a couple of barrels by the bar
-    for (const z of [-3.2, -9.8]) {
-      this._adult(this._add(cylGeo(0.14, 0.11, 0.22, 3.75, FLOOR + 0.11, z, 10), this.m.brass));
-      this._family(this._add(cylGeo(0.13, 0.09, 0.22, 3.75, FLOOR + 0.11, z, 10), this.m.ivory));
-      this._family(this._add(cylGeo(0.015, 0.015, 0.28, 3.75, FLOOR + 0.32, z, 6), lambert([100,40,35])));
-      const flower = this._add(new THREE.SphereGeometry(0.095, 8, 6), lambert([45,85,65])); flower.position.set(3.75, FLOOR + 0.48, z); this._family(flower);
-    }
-    for (const z of [-10.6, -11.4]) this._add(cylGeo(0.32, 0.3, 0.85, 5.9, FLOOR + 0.42, z, 12), this.m.varnish);
+    [-2.5,-5.5,-8.5].forEach((z,i)=>{const pic=this._add(new THREE.PlaneGeometry(0.8,1),new THREE.MeshLambertMaterial({map:T.pictureTexture('painting',i+1)}),false);pic.position.set(wallX,2.2,z);pic.rotation.y=Math.PI/2;});
+    for(const z of [-3.2,-9.8]){this._family(this._add(cylGeo(0.13,0.09,0.22,3.75,FLOOR+0.11,z,10),this.m.ivory));const flower=this._add(new THREE.SphereGeometry(0.12,8,6),lambert([330,45,75]));flower.position.set(3.75,FLOOR+0.4,z);}
+    for(const z of [-10.6,-11.4]){this._add(cylGeo(0.32,0.3,0.3,5.9,FLOOR+0.15,z,12),this.m.top);for(let i=0;i<4;i++){const roll=this._add(new THREE.SphereGeometry(0.12,8,6),lambert([32,50,65]));roll.position.set(5.75+(i%2)*0.25,FLOOR+0.36,z-0.12+Math.floor(i/2)*0.24);}}
+
     this._block(5.9, -11, 0.4, 0.8);
   }
 
   _doors() {
     const it = this.world.interiors.saloon;
-    const geo = new THREE.BoxGeometry(it.dw / 2 - 0.05, 1.1, 0.05);
+    const geo = new THREE.BoxGeometry(it.dw / 2 - 0.05, 2.5, 0.05);
     for (const side of [-1, 1]) {
       const hinge = new THREE.Group();
       hinge.position.set((side * it.dw) / 2, FLOOR + 1.25, 0);
@@ -290,6 +285,7 @@ export class SaloonInterior {
       panel.position.x = (-side * (it.dw / 2 - 0.05)) / 2;
       panel.castShadow = true;
       hinge.add(panel);
+      const pane=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.9,0.025),new THREE.MeshLambertMaterial({color:'#c0dcd5',emissive:'#c2d5cc',emissiveIntensity:0.25}));pane.position.set(panel.position.x,0.35,0.04);hinge.add(pane);
       this.g.add(hinge);
       this.doors.push({ hinge, side, a: 0, v: 0 });
     }
@@ -300,8 +296,8 @@ export class SaloonInterior {
   update(dt, t, who, lanternLevel) {
     if (!this.g) return;
     for (const { p, kind, ph } of this.people) {
-      if (kind === 'bartender') {
-        // polishing a glass, now and then looking up
+      if (kind === 'owner') {
+        // arranging cakes, now and then looking up
         p.arms[0].rotation.set(-0.55 + Math.sin(t * 3.1) * 0.2, 0, Math.sin(t * 3.1) * 0.15);
         p.arms[1].rotation.set(-0.6 + Math.cos(t * 3.1) * 0.15, 0, 0);
         p.elbows[0].rotation.x = p.elbows[1].rotation.x = -1.3;

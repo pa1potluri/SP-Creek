@@ -6,7 +6,7 @@ export const BASE_LIFE = { people: 10, riders: 2, coach: 1, train: 1, chickens: 
 export const VIDEO_PRESETS = {
   golden: {
     label: 'Golden afternoon in town',
-    about: 'A slow stroll down the boardwalk, townsfolk about, birds, the piano faint from the saloon.',
+    about: 'A slow stroll down the boardwalk, townsfolk about, birds, the piano faint from the café.',
     style: 'oil', rain: 0, wind: 0.3, ambience: 0.8,
     life: { people: 14, riders: 2 },
     clips: [
@@ -18,8 +18,8 @@ export const VIDEO_PRESETS = {
     ],
   },
   rainyNight: {
-    label: 'Rainy night at the Golden Spur',
-    about: 'Rain on the empty street, then in through the batwing doors to the warm piano and the singer.',
+    label: 'Rainy night at the Honey Bun Café',
+    about: 'Rain on the empty street, then in through the café doors to the warm piano and the singer.',
     style: 'oil', rain: 0.75, wind: 0.45, ambience: 0.9,
     life: { people: 3, riders: 0, coach: 0, chickens: 0, tumbleweeds: 0, wind: 1.3 },
     clips: [
@@ -67,8 +67,8 @@ export const VIDEO_PRESETS = {
     ],
   },
   cozySaloon: {
-    label: 'Cozy saloon (animated film look)',
-    about: 'Inside only: the bar, the card game and the piano, in the soft animated-film style.',
+    label: 'Cozy Honey Bun Café (animated film look)',
+    about: 'Inside Honey Bun Café: cakes at the counter, board games and piano music, in the soft animated-film style.',
     style: 'film', rain: 0.4, wind: 0.2, ambience: 1,
     life: {},
     clips: [

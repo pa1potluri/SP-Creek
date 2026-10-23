@@ -49,7 +49,7 @@ function makeShots() {
   const town = [
     panShot('Town Square 360°', G(0, 1.7, 10), 90, Math.PI),
     pathShot('Arrival', [[G(3, 2.4, 125), G(1, 4, 40)], [G(0.8, 2.0, 82), G(0, 3.5, 30)], [G(0, 1.8, 48), G(0, 2.6, 0)]], 42),
-    pathShot('Saloon → Sheriff', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
+    pathShot('Honey Bun Café → Sheriff', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
     pathShot('Boardwalk Stroll', [[G(-6.2, 2.05, 46), G(-4.5, 2.1, 30)], [G(-6.2, 2.05, 10), G(-4.5, 2.2, -5)], [G(-6.2, 2.05, -28), G(-3, 2.6, -45)]], 55),
     pathShot('Church Approach', [[G(0, 1.7, -18), G(0, 3.5, -62)], [G(0.4, 1.6, -46), G(0, 10, -64)]], 30),
     pathShot('Crane Reveal', [[G(0, 1.8, 24), G(0, 2.5, -10)], [G(5, 14, 40), G(0, 4, -5)], [G(12, 42, 88), G(0, 0, -40)]], 36),
@@ -80,9 +80,9 @@ function makeShots() {
   const S = (lx, y, lz) => V(7.5 - lz, y, 8 + lx);
   const saloon = [
     pathShot('Through the Doors', [[S(0, 1.9, 2.2), S(-1.5, 1.5, -8)], [S(0, 1.95, -1.2), S(-2.5, 1.4, -9)], [S(-0.8, 1.9, -5), S(-4.5, 1.3, -11.2)]], 30),
-    pathShot('At the Bar', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
-    orbitShot('Card Game', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
-  ].map((s) => ({ ...s, group: 'Saloon' }));
+    pathShot('At the Counter', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
+    orbitShot('Board Games', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
+  ].map((s) => ({ ...s, group: 'Café' }));
   // the cast line-up stands across the street at z = 24 (Town life → Cast line-up)
   const cast = [
     pathShot('Meet the Cast', [[G(-3, 1.45, 27.3), G(-3.9, 1.15, 24)], [G(3, 1.45, 27.3), G(3.9, 1.15, 24)]], 40),

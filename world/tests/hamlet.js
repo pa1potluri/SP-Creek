@@ -31,7 +31,7 @@ export async function runHamletTests() {
     check(w.colliders.rects.length === rects && w.floors.length === floors, 'Toggle restores physics exactly');
     w.loadLayout(w.layout());
     check(h.buildings.every(e => e.obj.parent && e.obj.visible), 'Project layout reload preserves hamlet');
-    const oldNames = ['Town Square 360°','Arrival','Saloon → Sheriff','Boardwalk Stroll','Church Approach','Crane Reveal','Golden Orbit','Hilltop Vista','Mill Wheel','Bridge Crossing','River Drift','Station Platform','Trackside','Ranch Overlook','Corral Orbit','Forest Camp','Valley Journey','Through the Doors','At the Bar','Card Game','Meet the Cast'];
+    const oldNames = ['Town Square 360°','Arrival','Honey Bun Café → Sheriff','Boardwalk Stroll','Church Approach','Crane Reveal','Golden Orbit','Hilltop Vista','Mill Wheel','Bridge Crossing','River Drift','Station Platform','Trackside','Ranch Overlook','Corral Orbit','Forest Camp','Valley Journey','Through the Doors','At the Counter','Board Games','Meet the Cast'];
     check(oldNames.every((n,i) => a.director.shots[i].name === n), 'All original shot indices unchanged');
     // later areas append their own shots after these, so only 21–23 are checked
     check(a.director.shots.slice(21, 24).length === 3 && a.director.shots.slice(21, 24).every(s => s.group === 'Willow Creek'), 'Three appended hamlet shots');

@@ -238,7 +238,7 @@ let styleKey = 'oil';
 const styleButtons = Object.entries(STYLES).map(([key, s]) => {
   const b = document.createElement('button');
   b.textContent = s.label;
-  b.onclick = () => applyStyle(key);
+  b.onclick = () => { applyStyle(key); LS.set('dh.styleChoice', key); };
   $('#styles').append(b);
   return [key, b];
 });
@@ -255,7 +255,6 @@ function applyStyle(key) {
   applyTextures();
   styleButtons.forEach(([k, b]) => b.classList.toggle('on', k === styleKey));
   document.querySelectorAll('[data-for]').forEach((row) => row.classList.toggle('off', !row.dataset.for.split(' ').includes(styleKey)));
-  LS.set('dh.style', styleKey);
 }
 // texture set: 'auto' follows the style; or force oil / clean / flat for every style
 let textureSet = 'oil';
@@ -271,7 +270,9 @@ function applyTextures() {
 $('#texSet').value = LS.get('dh.texSet') || 'auto';
 $('#texSet').onchange = applyTextures;
 document.querySelector('[data-paint="strength"]').addEventListener('input', (e) => (oil.enabled = +e.target.value > 0));
-applyStyle(LS.get('dh.style') || 'oil');
+// The kids' channel opens in the Animated-film look; a style is remembered only when the user picks
+// one (the old key 'dh.style' was written on every load and by presets, so it is ignored).
+applyStyle(LS.get('dh.styleChoice') || 'film');
 setLife(LS.get('dh.life'));
 
 // ---------- camera ----------
@@ -863,11 +864,34 @@ $('#playBtn').onclick = togglePlay;
 // ---------- keys ----------
 const toggleUI = () => document.body.classList.toggle('ui-hidden');
 $('#uiToggle').onclick = toggleUI;
+// Review controls: freeze the whole scene (time stops, the frame keeps drawing), and full screen.
+let frozen = false;
+function toggleFreeze() {
+  frozen = !frozen;
+  $('#freezeBtn').textContent = frozen ? '▶' : '⏸';
+  $('#freezeBtn').classList.toggle('on', frozen);
+  if (frozen) audio.pauseLive(); else { audio.resumeLive(); clock.getDelta(); }
+}
+$('#freezeBtn').onclick = (e) => { toggleFreeze(); e.currentTarget.blur(); };
+$('#fullBtn').onclick = (e) => {
+  e.currentTarget.blur();
+  if (document.fullscreenElement) return document.exitFullscreen();
+  // if the browser refuses (embedded or background window), at least fill the window: hide the panel
+  const fallback = () => $('#fullBtn').classList.toggle('on', document.body.classList.toggle('ui-hidden'));
+  const req = document.documentElement.requestFullscreen?.();
+  if (req) req.catch(fallback); else fallback();
+};
+document.addEventListener('fullscreenchange', () => {
+  const on = !!document.fullscreenElement;
+  $('#fullBtn').classList.toggle('on', on);
+  document.body.classList.toggle('ui-hidden', on);
+});
 addEventListener('keydown', (e) => {
   if (e.target.closest && e.target.closest('input, select, textarea')) return;
   if (e.code === 'KeyG') return togglePlay();
   if (e.code === 'KeyH') return toggleUI();
   if (game.active) return; // the game uses the other keys
+  if (e.code === 'Space') { e.preventDefault(); return toggleFreeze(); }
   if (e.code === 'KeyH') toggleUI();
   else if (e.code === 'KeyF') toggleFree();
   else if (e.code === 'KeyK') addKey();
@@ -979,7 +1003,7 @@ function step(dt) {
 function frame() {
   requestAnimationFrame(frame);
   if (exporting) return;
-  step(Math.min(clock.getDelta(), 0.1));
+  step(frozen ? 0 : Math.min(clock.getDelta(), 0.1));
   if (director.label !== lastLabel) { lastLabel = director.label; refreshCamera(); }
   if (recorder.active) {
     $('#rec').textContent = `● REC ${mmss(recorder.seconds)}`;

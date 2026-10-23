@@ -65,6 +65,15 @@ function applyPond(h, x, z) {
 }
 function applyUserPads(h, x, z) {
   for (const p of userPads) {
+    if (p.basin) {
+      if (Math.abs(x-p.x)>p.rx*1.8 || Math.abs(z-p.z)>p.rz*1.8) continue;
+      const r = pondRadius(x,z,p);
+      if (r < 1.6) {
+        const bed = p.y + (r < 1 ? p.depth * (r*r-1) : 0.9*(r-1));
+        h += (bed-h) * (1-smoothstep(1.02,1.6,r));
+      }
+      continue;
+    }
     const d = padDistance(p, x, z);
     const blend = p.blend || 8;
     if (d < blend) h += (p.y - h) * (1 - smoothstep(0, blend, d));
@@ -792,6 +801,12 @@ export class World {
     const p = { yaw: 0, blend: 12, ...spec };
     p.y ??= terrainHeight(p.x, p.z);
     (this.areaPads ??= []).push(p); userPads.push(p);
+    return p;
+  }
+
+  registerWaterArea(spec, floors = []) {
+    const p = this.registerAreaPad({ ...spec, basin:true, depth:spec.depth??2.2, hx:spec.rx*1.6, hz:spec.rz*1.6 });
+    this.colliders.water.push(p); this.floors.push(...floors); userFloors.push(...floors);
     return p;
   }
 

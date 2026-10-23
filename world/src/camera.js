@@ -120,7 +120,11 @@ function makeShots() {
     [G(-67,3,-176),G(-78,2,-190)],[G(-76,3,-186),G(-88,2,-201)],
     [G(-85,4,-196),G(-90,2,-207)],[G(-88,4,-199),G(-89,3,-212)],
   ],100),group:'Forest',clearance:2.5}];
-  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest];
+  const meadow=[{...pathShot('Meadow and Waterfall',[
+    [G(-190,9,28),G(-225,3,-10)],[G(-209,7,12),G(-240,3,-18)],
+    [G(-221,6,1),G(-251,6,-23)],[G(-224,5,-9),G(-254,5,-23)],
+  ],100),group:'Meadow',clearance:3}];
+  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

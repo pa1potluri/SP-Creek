@@ -109,4 +109,5 @@ export const VIDEO_PRESETS = {
     style:'oil',rain:0,wind:0.15,ambience:0.65,life:{people:4,riders:0,coach:0,wind:0.25},
     clips:[{shot:26,seconds:100,mood:'villageDusk',move:'cut'},{shot:26,seconds:100,mood:'night',move:'fly'}],
   },
+  dreamyMeadow:{label:'Dreamy meadow',about:'Dreamland flower colours, butterflies and a soft rainbow over a sparkling waterfall lake.',style:'oil',rain:0,wind:0.2,ambience:0.65,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:27,seconds:100,mood:'morning',move:'cut'},{shot:27,seconds:100,mood:'golden',move:'fly'}]},
 };

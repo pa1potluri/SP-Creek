@@ -480,6 +480,18 @@ for (const option of $('#buildWall').options) {
   $('#buildSwatches').append(b);
 }
 $('#deleteBuilding').onclick = deleteBuilding;
+// everything made in Build mode (buildings, hitching posts, fences, roads); Willow Creek and the
+// town stay. "Remove all placed" under Place objects only clears props.
+$('#clearBuilt').onclick = () => {
+  if (!confirm('Remove everything you built (buildings, hitching posts, fences and roads)?')) return;
+  selectBuilding(null);
+  for (const e of [...world.fences]) world.removeFence(e);
+  for (const e of [...world.buildings]) world.removeBuilding(e, false);
+  for (const e of world.roads) { world.root.remove(e.obj); e.obj.geometry.dispose(); }
+  world.roads = [];
+  world.updateTerrain();
+  saveLayout();
+};
 $('#drawRoad').onclick = () => setTool('road');
 $('#drawFence').onclick = () => setTool('fence');
 $('#finishFence').onclick = finishRoad;

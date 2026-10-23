@@ -112,7 +112,11 @@ function makeShots() {
     [G(0, 3.2, -17), G(-6, 2.5, -32)], [G(2.5, 4, -43), G(0, 2.3, -55)],
     [G(4.2, 4.2, -49), G(0, 4, -66)],
   ], 100), group: 'Town center', clearance: 2.2 }];
-  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter];
+  const ghostTown = [{ ...pathShot('Old Hollow Stroll', [
+    [G(125,4.5,26),G(125,3,-7)],[G(124,3.5,8),G(135,3,-14)],
+    [G(124,3.5,-16),G(115,3,-35)],[G(125,4,-31),G(133,7,-45)],
+  ], 100), group:'Ghost town', clearance:2.5 }];
+  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

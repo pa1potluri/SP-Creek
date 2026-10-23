@@ -726,7 +726,20 @@ export class Life {
     }
   }
 
+  addTownCenterKids(pois) {
+    this.townKids = ['#e6a8b4', '#8fc7c0'].map((shirt, i) => {
+      const w = new Walker(makePerson({ ...CAST.kid, shirt, role: 'kid', skin: i ? '#c68863' : '#f1c9a5' }), pois, this.world);
+      w.pos.set(i ? 3 : -3, 0, -42 + i * 5); w.speed = 0.85 + i * 0.08;
+      this.root.add(w.p.g); return w;
+    });
+  }
+
   setFamilyMode(on) {
+    this.familyMode = !!on;
+    for (const w of this.townKids || []) {
+      w.p.g.visible = !!on && this.settings.people > 0;
+      if (!on) { w.leaveSeat(); w.endChat(); w.state = 'wait'; w.wait = 1; }
+    }
     for (const s of this.signs) {
       s.text = familySign(s.originalText, on);
       if (s.text !== s.originalText) s.familyTex ??= T.signTexture(s.text, 360, 156, s.signBg, s.signInk);
@@ -802,6 +815,11 @@ export class Life {
     this.world.wind = wind; // painted plants sway with the same wind
     this._socialise(dt, t);
     for (const w of this.walkers) w.update(dt, t);
+    for (const w of this.townKids || []) {
+      w.p.g.visible = this.familyMode && this.settings.people > 0;
+      if (w.p.g.visible) w.update(dt, t);
+      else { w.leaveSeat(); w.endChat(); }
+    }
     if (this.settings.hamlet) for (const w of this.hamletWalkers) w.update(dt, t);
     for (const r of this.riders) r.update(dt);
     if (this.coach) this.coach.update(dt);

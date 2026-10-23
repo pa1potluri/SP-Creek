@@ -21,6 +21,8 @@ import { tickCharacters } from './characters.js';
 import { VIDEO_PRESETS, BASE_LIFE } from './presets.js';
 import { encodeVideo } from './exporter.js';
 import { putFile, getFile, deleteFile } from './store.js';
+import { DEFAULT_FAMILY_MODE } from './family.js';
+import { buildTownCenter } from './areas/town-center.js';
 
 const $ = (s) => document.querySelector(s);
 const LS = {
@@ -68,16 +70,20 @@ const timeline = new Timeline(director, atmos);
 const life = new Life(scene, world);
 const game = new Game({ scene, camera, canvas, world, life, director });
 const saloon = new SaloonInterior(world);
-let familyMode = false;
-function setFamilyMode(on) {
+const townCenter = buildTownCenter(world, life);
+let familyMode = DEFAULT_FAMILY_MODE;
+// Saved only when the user flips the switch, so the default can still change later. (The old key
+// 'dh.familyMode' was written on every load, not chosen, so it is ignored.)
+function setFamilyMode(on, save = false) {
   familyMode = !!on;
   $('#familyMode').checked = familyMode;
   world.setFamilyMode(familyMode); life.setFamilyMode(familyMode); saloon.setFamilyMode(familyMode);
-  LS.set('dh.familyMode', familyMode);
+  townCenter.setFamilyMode(familyMode);
+  if (save) LS.set('dh.familyChoice', familyMode);
   document.dispatchEvent(new Event('familymodechange'));
 }
-$('#familyMode').onchange = () => setFamilyMode($('#familyMode').checked);
-setFamilyMode(LS.get('dh.familyMode') === true);
+$('#familyMode').onchange = () => setFamilyMode($('#familyMode').checked, true);
+setFamilyMode(LS.get('dh.familyChoice') ?? DEFAULT_FAMILY_MODE);
 
 // The scene renders into its own target so the style passes can also read its depth.
 // render → tone map → brush (Kuwahara) → art style → anti-alias → finish & grade
@@ -689,7 +695,7 @@ function projectData() {
 function loadProject(p) {
   if (!p || p.app !== 'dusty-hollow') throw new Error('Not a Dusty Hollow project file');
   timeline.stop();
-  setFamilyMode(p.familyMode === true);
+  setFamilyMode(p.familyMode ?? DEFAULT_FAMILY_MODE, true);
   applyStyle(p.style);
   for (const [k, v] of Object.entries(p.paint || {})) setSlider('paint', k, v);
   for (const [k, v] of Object.entries(p.look || {})) setSlider('look', k, v);
@@ -821,7 +827,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { world, camera, life, saloon, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { world, camera, life, saloon, townCenter, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;
@@ -910,6 +916,7 @@ function step(dt) {
   else director.update(dt);
   atmos.update(dt, time, camera);
   world.update(dt, time, camera);
+  townCenter.update(time);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(dt, time, camera);
   saloon.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);

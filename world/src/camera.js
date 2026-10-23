@@ -107,7 +107,12 @@ function makeShots() {
       out.pos.y = Math.max(out.pos.y, walkHeight(out.pos.x, out.pos.z) + 3);
     } };
   });
-  return [...town, ...places, ...saloon, ...cast, ...hamlet];
+  const townCenter = [{ ...pathShot('Town Center Stroll', [
+    [G(0.8, 2.8, 46), G(-6, 2.8, 32)], [G(1, 2.9, 17), G(-6, 2.6, 6)],
+    [G(0, 3.2, -17), G(-6, 2.5, -32)], [G(2.5, 4, -43), G(0, 2.3, -55)],
+    [G(4.2, 4.2, -49), G(0, 4, -66)],
+  ], 100), group: 'Town center', clearance: 2.2 }];
+  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

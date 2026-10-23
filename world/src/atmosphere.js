@@ -27,9 +27,10 @@ export const PRESETS = {
     mountain: '#3e3450', exposure: 1.15, warmth: 0.08, sat: 1.05,
   },
   night: {
-    label: 'Moonlit Night', skyTop: '#0a1330', skyHorizon: '#283a60', skyGround: '#0e121a', sunColor: '#9cb2e0',
-    cloudLit: '#4c5c84', cloudShade: '#121a2e', sunElev: 32, sunAzim: 140, sunIntensity: 1.1, sunSize: 0.0007,
-    hemiSky: '#4a66a0', hemiGround: '#1a2030', hemiIntensity: 1.2, fogColor: '#1c2742', fogNear: 20, fogFar: 320,
+    // kept readable for young viewers: a soft moon and a lifted ground fill, so grass and docks never go black
+    label: 'Moonlit Night', skyTop: '#0a1330', skyHorizon: '#283a60', skyGround: '#0e121a', sunColor: '#b0c4ee',
+    cloudLit: '#4c5c84', cloudShade: '#121a2e', sunElev: 32, sunAzim: 140, sunIntensity: 1.6, sunSize: 0.0007,
+    hemiSky: '#5a76b0', hemiGround: '#3a4766', hemiIntensity: 1.9, fogColor: '#1c2742', fogNear: 20, fogFar: 320,
     cloudCover: 0.35, stars: 1, lanterns: 1, dust: 0.25, dustColor: '#a8c0ff', fireflies: 1, rain: 0, birds: 0,
     mountain: '#222c4c', exposure: 1.7, warmth: -0.12, sat: 0.85,
   },

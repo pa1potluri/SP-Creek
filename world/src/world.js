@@ -421,7 +421,7 @@ export class World {
   // Point lights are created once (changing the light count recompiles every shader).
   _lightPool() {
     this.pool = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       const l = new THREE.PointLight(0xffa850, 0, 20, 2);
       l.position.set(0, -50, 0);
       this.root.add(l);

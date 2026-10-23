@@ -17,7 +17,7 @@ const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-r
     console.log(suite, JSON.stringify(summary));
     if (suite === 'family-mode') {
       for (const on of [true, false]) {
-        await page.evaluate(on => window.__app.setFamilyMode(on), on);
+        await page.evaluate(on => window.__app.setFamilyMode(on, true), on);
         await page.reload(); await page.waitForFunction(() => window.__app, { timeout: 120000 });
         const ok = await page.evaluate(on => window.__app.projectData().familyMode === on && window.__app.saloon.familyMode === on && document.querySelector('#familyMode').checked === on, on);
         if (!ok) throw Error('Family startup persistence: ' + on);

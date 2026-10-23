@@ -5,6 +5,7 @@ import * as T from './textures.js';
 import { HAMLET } from './hamlet.js';
 import { familySign } from './family.js';
 import { cloudShader, waterMaterial } from './environment.js';
+import { dressHamletHouse, dressPondShore } from './areas/pond-details.js';
 
 export const smoothstep = (a, b, x) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -275,6 +276,7 @@ export class World {
       const e = this.placeBuilding(spec, false);
       this.buildings.pop(); this.buildingPOIs.pop();
       this.hamlet.buildings.push(e); this.hamlet.pois.push(e.poi);
+      if (spec.type === 'house') dressHamletHouse(this,e);
     }
     this._pond();
     this.updateTerrain();
@@ -938,13 +940,18 @@ export class World {
     geo.rotateX(-Math.PI/2);geo.computeBoundingSphere();
     const water=mesh(geo,this._waterMaterial(1),false,true);water.renderOrder=2;g.add(water);
     const start=-p.rz*1.2, planks=[];
-    for(let i=0;i<19;i++)planks.push(boxAt(2.5,0.12,0.34,0,0.32,start+i*0.37));
-    const deck=mesh(mergeGeometries(planks),this.mat.darkWood);g.add(deck);
+    for(let i=0;i<19;i++) {
+      const plank=boxAt(2.5,0.12,0.31,0,0.32,start+i*0.37),color=C(31,35,59+(i%3)*3),cols=new Float32Array(plank.attributes.position.count*3);
+      for(let k=0;k<cols.length;k+=3)cols.set([color.r,color.g,color.b],k);plank.setAttribute('color',new THREE.BufferAttribute(cols,3));planks.push(plank);
+    }
+    const deck=mesh(mergeGeometries(planks),new THREE.MeshLambertMaterial({vertexColors:true}));g.add(deck);
     const colliders=[],posts=[];
-    for(const x of [-1.1,1.1])for(const z of [start+0.6,start+6.2]) {
+    for(const [x,z] of [[-1.1,start+0.6],[1.1,start+0.6],[1.1,start+6.2]]) {
       posts.push(boxAt(0.18,2.1,0.18,x,-0.45,z));colliders.push({x:p.x+x,z:p.z+z,r:0.12});
     }
-    g.add(mesh(mergeGeometries(posts),this.mat.wood));
+    g.add(mesh(mergeGeometries(posts),new THREE.MeshLambertMaterial({color:C(29,32,56)})));
+    const lantern=mesh(new THREE.BoxGeometry(0.22,0.3,0.22),this.mat.lantern,false);lantern.position.set(1.1,0.78,start+0.6);g.add(lantern);
+    const halo=new THREE.Sprite(this.haloMat);halo.position.copy(lantern.position);halo.scale.setScalar(1.5);g.add(halo);
     for(let i=0;i<3;i++)this.waterUniforms.uWaterFoam.value[13+i].set(colliders[i].x,colliders[i].z,0.3);
     g.updateMatrixWorld(true);
     const floor={...this._rectOf(g,0,start+3.33,1.25,3.5),y:y+0.38};
@@ -952,12 +959,13 @@ export class World {
     const area={kind:'pond',...p,y};this.colliders.water.push(area);
     const reeds=[],tips=[];
     for(let i=0;i<28;i++) {
-      const angle=-0.15+i/27*Math.PI*1.25, radius=1.06+hash2(i,41)*0.08;
+      const cluster=i<10?0:i<16?1:i<24?2:3;
+      const angle=[0.22,0.58,2.55,2.93][cluster]+(hash2(i,61)-0.5)*0.3, radius=1.04+hash2(i,41)*0.14;
       const factor=1+0.06*Math.sin(angle*3+0.5)+0.035*Math.cos(angle*5);
       const x=Math.cos(angle)*p.rx*factor*radius,z=Math.sin(angle)*p.rz*factor*radius;
       const bottom=terrainHeight(p.x+x,p.z+z)-y;
-      for(let j=0;j<3;j++) {
-        const h=0.9+hash2(i,j+13)*0.65,dx=x+(j-1)*0.12;
+      for(let j=0;j<1+i%3;j++) {
+        const h=0.55+hash2(i,j+13)*0.95,dx=x+(j-1)*0.12;
         reeds.push(boxAt(0.025,h,0.025,dx,bottom+h/2,z));
         const leaf=boxAt(0.045,h*0.65,0.02,0,0,0);leaf.rotateZ((j-1)*0.36+0.3);leaf.translate(dx,bottom+h*0.45,z);reeds.push(leaf);
         const tip=new THREE.CylinderGeometry(0.045,0.045,0.24,6);tip.translate(dx,bottom+h,z);tips.push(tip);
@@ -983,6 +991,7 @@ export class World {
     }
     bankGeo.setAttribute('color',new THREE.BufferAttribute(colors,3));
     const bank=mesh(bankGeo,this.ground.material,false,true);this.root.add(bank);this.walkables.push(bank);
+    dressPondShore(this,g,p,y);
     this.hamlet.pond={obj:g,water,bank,deck,floor,colliders,area,reeds:reedMat,pad:pondPad};
   }
 

@@ -49,7 +49,7 @@ function makeShots() {
   const town = [
     panShot('Town Square 360°', G(0, 1.7, 10), 90, Math.PI),
     pathShot('Arrival', [[G(3, 2.4, 125), G(1, 4, 40)], [G(0.8, 2.0, 82), G(0, 3.5, 30)], [G(0, 1.8, 48), G(0, 2.6, 0)]], 42),
-    pathShot('Honey Bun Café → Sheriff', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
+    pathShot('Café to Town Hall', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
     pathShot('Boardwalk Stroll', [[G(-6.2, 2.05, 46), G(-4.5, 2.1, 30)], [G(-6.2, 2.05, 10), G(-4.5, 2.2, -5)], [G(-6.2, 2.05, -28), G(-3, 2.6, -45)]], 55),
     pathShot('Church Approach', [[G(0, 1.7, -18), G(0, 3.5, -62)], [G(0.4, 1.6, -46), G(0, 10, -64)]], 30),
     pathShot('Crane Reveal', [[G(0, 1.8, 24), G(0, 2.5, -10)], [G(5, 14, 40), G(0, 4, -5)], [G(12, 42, 88), G(0, 0, -40)]], 36),
@@ -80,9 +80,9 @@ function makeShots() {
   const S = (lx, y, lz) => V(7.5 - lz, y, 8 + lx);
   const saloon = [
     // starts high and a little back so the room shows, not just the doors
-    pathShot('Through the Doors', [[S(0, 2.4, 3.2), S(-1.5, 1.3, -8)], [S(0, 2.1, -1.2), S(-2.5, 1.3, -9)], [S(-0.8, 1.9, -5), S(-4.5, 1.3, -11.2)]], 30),
+    pathShot('Into the Honey Bun Café', [[S(0, 2.4, 3.2), S(-1.5, 1.3, -8)], [S(0, 2.1, -1.2), S(-2.5, 1.3, -9)], [S(-0.8, 1.9, -5), S(-4.5, 1.3, -11.2)]], 30),
     pathShot('At the Counter', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
-    orbitShot('Board Games', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
+    orbitShot('Board Game Table', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
   ].map((s) => ({ ...s, group: 'Café' }));
   // the cast line-up stands across the street at z = 24 (Town life → Cast line-up)
   const cast = [
@@ -134,7 +134,14 @@ function makeShots() {
     pathShot('Crystal Mine',[[V(173,3,-100),V(173,2.5,-115)],[V(173,2.6,-110),V(173,2,-119)],[V(173,2.3,-114),V(175,2,-118)]],75),
     pathShot('Balloon Hilltop',[[V(202,4,-134),V(202,12,-145)],[V(209,5,-143),V(202,9,-145)],[V(203,5,-151),V(5,4,0)]],100),
   ].map(s=>{const sample=s.sample;return {...s,group:'Crystal hill',clearance:2.2,sample(t,out){sample(t,out);out.pos.y+=terrainHeight(out.pos.x,out.pos.z);out.look.y+=terrainHeight(out.look.x,out.look.z);}};});
-  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill];
+  const grandTour = [
+    pathShot('Old Hollow Tour', [[G(124,34,32),G(125,3,-12)],[G(145,34,24),G(125,3,-20)]],12),
+    pathShot('Firefly Forest Tour', [[G(-65,38,-161),G(-98,4,-196)],[G(-72,38,-172),G(-99,4,-204)]],12),
+    pathShot('Meadow and Lake Tour', [[V(-207,mh+22,29),V(-244,mh+3,-18)],[V(-216,mh+22,16),V(-247,mh+4,-23)]],12),
+    pathShot('Crystal Mine Tour', [[G(160,32,-94),G(173,3,-115)],[G(157,32,-104),G(173,3,-115)]],12),
+    pathShot('Willow Creek Pond Tour', [[G(-53,32,113),G(-69,1,94)],[G(-48,32,98),G(-69,1,94)]],12),
+  ].map(s => ({...s, group:'Grand tour', clearance:3}));
+  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

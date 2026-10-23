@@ -19,13 +19,13 @@ export const CAST = {
     hat: 'cowboy', hatColor: '#8a5a32', band: '#4a2e1a', shirt: '#efe2c6', sleeves: 'rolled', vest: '#6b3f22',
     bandana: '#c8372d', pants: '#4a6a9a', belt: '#5a3520', buckle: GOLD, boots: '#7a4a2a',
   },
-  sheriff: {
-    label: 'Sheriff', skin: '#d9a27c', hair: '#3b2416', hairStyle: 'short', eyes: '#3b2a1a', mustache: true,
-    hat: 'cowboy', hatColor: '#2b2420', band: '#6a5040', shirt: '#d8d2c0', sleeves: 'long', vest: '#2e2b2a', badge: true,
+  mayor: {
+    label: 'Mayor', skin: '#d9a27c', hair: '#3b2416', hairStyle: 'short', eyes: '#3b2a1a', mustache: true,
+    hat: 'derby', hatColor: '#557480', band: '#edc581', shirt: '#f5e9cf', sleeves: 'long', vest: '#657b70', flower: true,
     pants: '#4a4038', belt: '#2a1a12', buckle: '#b8b8b8', boots: '#3a2618',
   },
   bartender: {
-    label: 'Bartender', skin: '#e2b08a', hair: '#1d1612', hairStyle: 'short', eyes: '#2a1a12', mustache: true,
+    label: 'Café host', skin: '#e2b08a', hair: '#1d1612', hairStyle: 'short', eyes: '#2a1a12', mustache: true,
     hat: 'none', shirt: '#f4f0e6', sleeves: 'long', vest: '#1f1f24', apron: '#efe9dc',
     pants: '#2a2a2e', belt: '#1a1a1a', buckle: '#b8b8b8', boots: '#1e1612', build: 1.1,
   },
@@ -35,7 +35,7 @@ export const CAST = {
     pants: '#3a3a40', belt: '#1a1a1a', buckle: GOLD, boots: '#1e1612',
   },
   singer: {
-    label: 'Saloon singer', female: true, skin: '#f1c9a5', hair: '#2a1a12', hairStyle: 'bun', eyes: '#3a5a7a',
+    label: 'Café singer', female: true, skin: '#f1c9a5', hair: '#2a1a12', hairStyle: 'bun', eyes: '#3a5a7a',
     hat: 'none', dress: '#a8233a', shirt: '#a8233a', sleeves: 'rolled', boots: '#2a1a14', bandana: null, necklace: GOLD,
   },
   townswoman: {
@@ -67,7 +67,7 @@ export const CAST = {
     pants: '#5a4a38', belt: '#3a2a1a', buckle: '#8a8a8a', boots: '#4a3424',
   },
   gambler: {
-    label: 'Gambler', skin: '#e9b48c', hair: '#1d1612', hairStyle: 'short', eyes: '#2a1a12', mustache: true,
+    label: 'Board game neighbour', skin: '#e9b48c', hair: '#1d1612', hairStyle: 'short', eyes: '#2a1a12', mustache: true,
     hat: 'cowboy', hatColor: '#151414', band: '#7a1a22', shirt: '#f4f2ec', sleeves: 'long', vest: '#7a1a22',
     coat: '#151414', pants: '#151414', belt: '#111', buckle: '#b8b8b8', boots: '#111',
   },
@@ -91,6 +91,8 @@ const BANDANAS = ['#c8372d', '#2a4a7a', '#d8a030', '#3a6a3a', null, null];
 const STREET = ['cowboy', 'cowboy', 'rancher', 'rancher', 'shopkeeper', 'prospector', 'gambler', 'townswoman', 'townswoman', 'teacher', 'singer', 'kid'];
 
 export function randomTownsfolk(role = pick(STREET)) {
+  // Old saved café guest lists still use this role key.
+  if (role === 'sheriff') role = 'mayor';
   const o = { ...CAST[role], role };
   o.skin = pick(SKINS);
   o.hair = R() < 0.15 ? '#9a9a9a' : pick(HAIRS);
@@ -249,6 +251,10 @@ export function makeCharacter(outfit = CAST.cowboy) {
     rig.add(upper, new THREE.TorusGeometry(0.075, 0.024, 6, 14), mat(o.bandana), [0, 1.455, 0.005], [Math.PI / 2, 0, 0]);
   }
   if (o.necklace) rig.add(upper, new THREE.TorusGeometry(0.08, 0.01, 4, 16), mat(o.necklace), [0, 1.44, 0.02], [Math.PI / 2 - 0.35, 0, 0]);
+  if (o.flower) {
+    for (let i = 0; i < 5; i++) rig.add(upper, sphere(0.022), mat('#efb4c8'), [0.09 + Math.cos(i * Math.PI * 0.4) * 0.025, 1.3 + Math.sin(i * Math.PI * 0.4) * 0.025, 0.155]);
+    rig.add(upper, sphere(0.018), mat('#f4d378'), [0.09, 1.3, 0.17]);
+  }
   if (o.badge) rig.add(upper, new THREE.CylinderGeometry(0.036, 0.036, 0.012, 5), mat(GOLD), [0.08 * b, 1.3, 0.14], [Math.PI / 2, 0, 0]);
 
   // arms: shoulder → elbow → hand

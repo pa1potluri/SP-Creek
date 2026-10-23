@@ -61,7 +61,8 @@ export class Timeline {
     const c = this.clips[i];
     this.index = i;
     if (c.mood && c.mood !== 'keep') this.atmos.setPreset(c.mood, first);
-    this.director.playShot(c.shot, { cut: first || c.move === 'cut', fitTo: Math.max(0.5, +c.seconds || 0) });
+    // natural: play the shot at its own calm speed and just cut after `seconds` (tours of long paths)
+    this.director.playShot(c.shot, { cut: first || c.move === 'cut', fitTo: c.natural ? 0 : Math.max(0.5, +c.seconds || 0) });
     this.onClip(i);
   }
 
@@ -72,6 +73,6 @@ export class Timeline {
   }
 
   toJSON() {
-    return this.clips.map(({ shot, seconds, mood, move }) => ({ shot, seconds, mood, move }));
+    return this.clips.map(({ shot, seconds, mood, move, natural }) => ({ shot, seconds, mood, move, ...(natural ? { natural } : {}) }));
   }
 }

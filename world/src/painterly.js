@@ -148,12 +148,12 @@ export const FinalShader = {
   uniforms: {
     tDiffuse: { value: null }, uRes: { value: new THREE.Vector2(1, 1) }, uTime: { value: 0 }, uWeave: { value: 1 },
     uImpasto: { value: 0.6 }, uCanvas: { value: 0.5 }, uSat: { value: 1 }, uWarmth: { value: 0 }, uContrast: { value: 1.05 },
-    uVignette: { value: 0.45 }, uGrain: { value: 0.3 }, uLetterbox: { value: 0 },
+    uVignette: { value: 0.45 }, uGrain: { value: 0.3 }, uLetterbox: { value: 0 }, uFloor: { value: 0.1 },
   },
   vertexShader: vert,
   fragmentShader: /* glsl */ `
     uniform sampler2D tDiffuse; uniform vec2 uRes;
-    uniform float uTime, uWeave, uImpasto, uCanvas, uSat, uWarmth, uContrast, uVignette, uGrain, uLetterbox;
+    uniform float uTime, uWeave, uImpasto, uCanvas, uSat, uWarmth, uContrast, uVignette, uGrain, uLetterbox, uFloor;
     varying vec2 vUv;
     ${noiseFns}
     float lum(vec3 c) { return dot(min(c, vec3(1.0)), vec3(0.299, 0.587, 0.114)); }
@@ -177,6 +177,10 @@ export const FinalShader = {
       c *= mix(1.0, smoothstep(1.05, 0.25, length(d)), uVignette);
       // grain is fixed to the screen like paper tooth, so a still picture stays perfectly still
       c += (hash(f) - 0.5) * uGrain * 0.06;
+      // brightness floor for young viewers: lift only the darkest tones (after the vignette, so corners
+      // too), mid-tones and highlights stay almost untouched
+      vec3 cc = clamp(c, 0.0, 1.0);
+      c = cc + uFloor * pow(1.0 - cc, vec3(3.0));
       float bar = max(0.0, (1.0 - (uRes.x / 2.39) / uRes.y) * 0.5) * uLetterbox;
       if (vUv.y < bar || vUv.y > 1.0 - bar) c = vec3(0.015, 0.012, 0.01);
       gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);

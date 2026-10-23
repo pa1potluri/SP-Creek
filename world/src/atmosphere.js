@@ -23,7 +23,7 @@ export const PRESETS = {
     label: 'Dusk & Lanterns', skyTop: '#27305c', skyHorizon: '#e57e5c', skyGround: '#3a2c2e', sunColor: '#ff7448',
     cloudLit: '#f39a77', cloudShade: '#463656', sunElev: -2, sunAzim: 252, sunIntensity: 0.7, sunSize: 0.0018,
     // lifted fill (was 0.7 with a near-black ground): dusk must stay readable for young viewers
-    hemiSky: '#8a8cbc', hemiGround: '#6a5048', hemiIntensity: 1.5, fogColor: '#8a6678', fogNear: 30, fogFar: 430,
+    hemiSky: '#8a8cbc', hemiGround: '#8c6e5e', hemiIntensity: 1.6, fogColor: '#8a6678', fogNear: 30, fogFar: 430,
     cloudCover: 0.5, stars: 0.3, lanterns: 1, dust: 0.5, dustColor: '#ffad6a', fireflies: 0.45, rain: 0, birds: 0.6,
     mountain: '#3e3450', exposure: 1.3, warmth: 0.08, sat: 1.05,
   },

@@ -283,10 +283,13 @@ export class SaloonInterior {
   _doors() {
     const it = this.world.interiors.saloon;
     const geo = new THREE.BoxGeometry(it.dw / 2 - 0.05, 1.1, 0.05);
+    // plain warm boards: the mahogany grain repeats into a carpet-like pattern at door size
+    const plain = this.world.paintedMaterial('boards', 1, 1, { color: C(30, 45, 62) }) || lambert([28, 40, 40]);
+    this.world.surfaces.add(plain);
     for (const side of [-1, 1]) {
       const hinge = new THREE.Group();
       hinge.position.set((side * it.dw) / 2, FLOOR + 1.25, 0);
-      const panel = new THREE.Mesh(geo, this.m.varnish);
+      const panel = new THREE.Mesh(geo, plain);
       panel.position.x = (-side * (it.dw / 2 - 0.05)) / 2;
       panel.castShadow = true;
       hinge.add(panel);

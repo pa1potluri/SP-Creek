@@ -32,6 +32,22 @@ Browser tests: `node world/tests/run-browser.cjs <suites…>` (see existing suit
 - Family mode must stay ON by default for the kids' world; the old western details (saloon,
   gunsmith…) only exist behind the Family-mode switch for the separate music-background videos.
 
+## The two most important rules
+
+- **Never merge to `main` without a passing full test suite.** Fast building is only an advantage
+  if the merges stay clean.
+- **Don't get stuck.** If something doesn't work after a few tries, write it down in
+  `tasks/STUCK.md` (what, where, what was tried) and move on to the next thing. It gets fixed later.
+
+## The queue (Codex never sits idle)
+
+`tasks/QUEUE.md` lists the tasks in order. When Codex finishes a task (result file written and
+committed), it **immediately starts the next one in the queue without waiting**, on a new branch
+made **from the tip of the branch it just finished** (stacked branches keep shot and preset numbers
+in order). Claude reviews and merges finished branches in order while Codex keeps building.
+Claude may add, reorder or edit queue items at any time; always re-read `QUEUE.md` before starting
+the next task.
+
 ## How we work
 
 1. **One area (or small feature) per task.** Claude writes `tasks/<area>.md`: the area, the mood,

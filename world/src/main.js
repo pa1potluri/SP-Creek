@@ -24,6 +24,9 @@ import { putFile, getFile, deleteFile } from './store.js';
 import { DEFAULT_FAMILY_MODE } from './family.js';
 import { buildTownCenter } from './areas/town-center.js';
 import { buildGhostTown } from './areas/ghost-town.js';
+import { buildForest } from './areas/forest.js';
+import { buildMeadowLake } from './areas/meadow-lake.js';
+import { buildCrystalMine } from './areas/crystal-mine.js';
 
 const $ = (s) => document.querySelector(s);
 const LS = {
@@ -73,6 +76,9 @@ const game = new Game({ scene, camera, canvas, world, life, director });
 const saloon = new SaloonInterior(world);
 const townCenter = buildTownCenter(world, life);
 const ghostTown = buildGhostTown(world);
+const forest = buildForest(world);
+const meadowLake = await buildMeadowLake(world);
+const crystalMine = buildCrystalMine(world);
 let familyMode = DEFAULT_FAMILY_MODE;
 // Saved only when the user flips the switch, so the default can still change later. (The old key
 // 'dh.familyMode' was written on every load, not chosen, so it is ignored.)
@@ -829,7 +835,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { world, camera, life, saloon, townCenter, ghostTown, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { world, camera, life, saloon, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;
@@ -920,6 +926,9 @@ function step(dt) {
   world.update(dt, time, camera);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
+  forest.update(time, camera, atmos.cur);
+  meadowLake.update(time, camera, atmos.cur, atmos.key);
+  crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(dt, time, camera);
   saloon.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);

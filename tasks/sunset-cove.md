@@ -25,9 +25,16 @@ Golden-hour seaside village: warm, bright, calm, magical. Gentle waves and seagu
 8. Works in every mood, season (winter: no snow on the beach sand, frosty roofs are fine) and art style. Add the cove to the
    shot-clearance audit.
 
-## Textures
-Use the existing sets tinted (stone, roof, road) for now. Note in the result file which painted textures (oil + clean) the
-user should request from ChatGPT: white plaster wall, terracotta roof tiles, cobblestones, beach sand, palm leaves.
+## Textures (ready, approved by Claude)
+Painted oil + clean sets are already in place (new, uncommitted: commit them on your branch):
+`world/assets/textures/{oil,clean}/plaster_wall.png, terracotta_roof.png, cobblestones.png, beach_sand.png` and
+`world/assets/foliage/{oil,clean}/palm.png, bougainvillea.png` (transparent, edges cleaned). Use them for the cottage
+walls, roofs, lanes, beach, palms and the pink flowers; derive the flat set the same way as the other textures.
+
+Sea backdrop (oil painting, used for every style): `world/assets/backdrop_tiles/sea_horizon_1.png` (sun, light path,
+lighthouse island on the right) and `sea_horizon_2.png` (continues to the right, tiny islands). Both 1536×1024, they join
+edge to edge, **horizon at 56–57 % of the height** (not the centre): place them as a far curved backdrop seen only
+from the cove (west), with their horizon matched to the sea's horizon. Do not change the main valley panorama.
 
 ## Files you may change
 New `areas/sunset-cove.js` (registered with the other areas), `world.js` (terrain slope to the sea, river mouth, water and

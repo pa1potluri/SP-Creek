@@ -14,3 +14,9 @@ Things that didn't get solved in a few tries. Fix them later, in a batch.
 - Checked the complete 180-second Episode 1 timeline at 10 Hz (1,800 simulated samples, no encoding/audio). Four explicit cuts jump the camera by 100.936m, 49.027m, 45.350m and 92.835m at the clip boundaries. See world/tests/cove-polish-playback.json.
 - The flags are in world/src/presets.js (VIDEO_PRESETS.episode1Welcome). Task 22 only allows sunset-cove.js, cove shots in camera.js and cove townsfolk in life.js. AGENTS.md says: "If something outside them must change, stop and write it in the result file as a request instead of changing it."
 - Request: allow presets.js for Episode 1 transition flags, then check any resulting fly/staging transitions for actor pops. Avoid disguising a preset edit through camera/area side effects. Remaining continuity work is not marked done. Continue task 23 on the saved tip.
+
+## Task 25 - branch train spatial audio follow-up
+
+- Main-station departure reuses the existing gentle whistle and soft steam. Visual trains and passengers follow the new branch.
+- main.js listener() still sends `{x: RAIL_X, z: t.s}` to ambience. Branch sounds therefore retain the original line's horizontal audio position; the new trip keeps the sound level calm but cannot correct its pan from the allowed train files.
+- Request main.js listener scope to use the locomotive's actual world x/z for the train snapshot. Not changed in this task, which only permits life.js (train), world.js (track extension), camera.js, presets.js and BLUEPRINT.md.

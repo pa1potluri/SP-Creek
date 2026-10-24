@@ -53,9 +53,10 @@ export const TRAIN_SPUR_POINTS=[[70,28],[70,60],[40,105],[-20,112],[-110,112],[-
 export const TRAIN_SPUR_CURVE=new THREE.CatmullRomCurve3(TRAIN_SPUR_POINTS.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
 export const TRAIN_SPUR_LENGTH=TRAIN_SPUR_CURVE.getLength();
 export const TRAIN_HALTS=[{name:'Willow Creek halt',distance:TRAIN_SPUR_CURVE.getLengths(1400)[800]},{name:'Seaside halt',distance:TRAIN_SPUR_LENGTH}];
+let trainGrade=null;
 export function sampleTrainTrack(distance){
  const u=THREE.MathUtils.clamp(distance/TRAIN_SPUR_LENGTH,0,1),p=distance<0?new THREE.Vector3(70,0,28+distance):TRAIN_SPUR_CURVE.getPointAt(u),t=distance<0?new THREE.Vector3(0,0,1):TRAIN_SPUR_CURVE.getTangentAt(u);
- p.y=terrainHeight(p.x,p.z)+0.51;return {pos:p,yaw:Math.atan2(t.x,t.z)};
+ if(distance>=0&&trainGrade){const v=u*(trainGrade.length-1),i=Math.min(trainGrade.length-2,Math.floor(v));p.y=THREE.MathUtils.lerp(trainGrade[i],trainGrade[i+1],v-i);}else p.y=terrainHeight(p.x,p.z)+0.51;return {pos:p,yaw:Math.atan2(t.x,t.z)};
 }
 
 
@@ -1083,6 +1084,11 @@ export class World {
     // Build after the hamlet pads exist, so the new rails use the finished valley ground.
     this.buildTrainSpur=()=>{
       if(this.trainSpur)return;const root=new THREE.Group();root.name='Willow and seaside railway';this.root.add(root);this.trainSpur={root,halts:[]};
+      const count=Math.ceil(TRAIN_SPUR_LENGTH/4),spacing=TRAIN_SPUR_LENGTH/count,raw=Array.from({length:count+1},(_,i)=>{const p=TRAIN_SPUR_CURVE.getPointAt(i/count);return terrainHeight(p.x,p.z)+0.51;});
+      trainGrade=raw.map((_,i)=>{let sum=0,n=0;for(let j=Math.max(0,i-5);j<=Math.min(count,i+5);j++){sum+=raw[j];n++;}return sum/n;});trainGrade[0]=raw[0];
+      for(let i=1;i<=count;i++)trainGrade[i]=THREE.MathUtils.clamp(trainGrade[i],trainGrade[i-1]-spacing*0.1,trainGrade[i-1]+spacing*0.1);
+      // Smooth only the new railway corridor, keeping coaches clear of steep natural banks.
+      for(let i=1;i<=count;i++){const p=sampleTrainTrack(i*spacing);this.registerAreaPad({x:p.pos.x,z:p.pos.z,y:p.pos.y-0.51,hx:2.5,hz:2.2,yaw:p.yaw,blend:5});}
       for(let d=30;d<=TRAIN_SPUR_LENGTH;d+=8){const p=sampleTrainTrack(d).pos;this.registerAreaPad({x:p.x,z:p.z,hx:6,hz:6,blend:0,clearOnly:true});}
       this._ribbon(TRAIN_SPUR_POINTS,4.6,this._pathMaterial(),{lift:0.18});
       const ties=[],rails=[],up=V(0,1,0);for(let d=0;d<TRAIN_SPUR_LENGTH;d+=0.8){const f=sampleTrainTrack(d);ties.push(new THREE.BoxGeometry(2.6,0.14,0.26).rotateY(f.yaw).translate(f.pos.x,f.pos.y-0.21,f.pos.z));}

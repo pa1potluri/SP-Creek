@@ -171,11 +171,11 @@ function makeCoachCar(colour) {
   const g = new THREE.Group(), wheels = [];
   const body=mat(colour),trim=mat([35,30,45]);
   part(new THREE.BoxGeometry(2.7,0.15,9),body,0,1.1,0,g);
-  for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,1.1,3.7),body,x,1.7,z,g);part(new THREE.BoxGeometry(0.12,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.12,1.1,0.12),trim,x,2.7,z,g);}
+  for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,0.85,3.7),body,x,1.55,z,g);part(new THREE.BoxGeometry(0.12,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.12,1.25,0.12),trim,x,2.65,z,g);}
   for(const z of [-4.4,4.4])part(new THREE.BoxGeometry(2.7,2.2,0.12),body,0,2.25,z,g);
   for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(2,0.3,0.8),mat([35,40,50]),0,1.5,z,g);
   const boardingSteps=new THREE.Group();g.add(boardingSteps);for(let i=0;i<5;i++)part(new THREE.BoxGeometry(0.6,0.14,1.5),trim,-3.9+i*0.55,-0.17+i*0.3,0,boardingSteps);
-  const doors=[-1.3,1.3].map(x=>part(new THREE.BoxGeometry(0.12,1.1,2.6),body,x,1.7,0,g));
+  const doors=[-1.3,1.3].map(x=>part(new THREE.BoxGeometry(0.12,0.85,2.6),body,x,1.55,0,g));
   part(new THREE.BoxGeometry(2.9, 0.18, 9.4), mat([0, 0, 12]), 0, 3.5, 0, g);
   part(new THREE.BoxGeometry(2.0, 0.12, 9.6), mat([42, 60, 50]), 0, 1.05, 0, g);
   for (const z of [-4.1, -2.7, 2.7, 4.1]) wheelSet(g, wheels, z, 0.45, mat([0, 0, 15]));
@@ -628,7 +628,7 @@ export class Life {
     starWorld=world;
     addCharacterPoseLayer(t=>this.updateMoments(t));
     addCharacterPoseLayer(t=>this.updateBalloonRiders(t));
-    addCharacterPoseLayer(()=>{if(this.world.trainTripActive){this.trainHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.trainHidden.has(p))this.trainHidden.set(p,p.g.visible);p.g.visible=false;}}else if(this.trainHidden){for(const [p,visible]of this.trainHidden)p.g.visible=visible;this.trainHidden=null;}});
+    addCharacterPoseLayer(()=>{if(this.world.trainTripActive){this.trainHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.trainHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.trainHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}}});
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -924,6 +924,8 @@ export class Life {
   }
 
   update(dt, t, camera) {
+    // Release the train's visibility override before the playground applies its own.
+    if(!trainTripReader()&&this.trainHidden){for(const [p,visible]of this.trainHidden)p.g.visible=visible;this.trainHidden=null;}
     const wind = this.settings.wind;
     this.world.wind = wind; // painted plants sway with the same wind
     this._socialise(dt, t);

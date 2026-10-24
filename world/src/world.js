@@ -91,15 +91,28 @@ function applyUserPads(h, x, z) {
       }
       continue;
     }
-    const d = padDistance(p, x, z);
     const blend = p.blend || 8;
+    // Most pads belong to distant railway segments; avoid trigonometry for those.
+    const reach = p.hx + p.hz + blend * Math.SQRT2;
+    if (Math.abs(x - p.x) > reach || Math.abs(z - p.z) > reach) continue;
+    const d = padDistance(p, x, z);
     if (d < blend) h += (p.y + (x-p.x)*(p.slopeX||0) - h) * (1 - smoothstep(0, blend, d));
   }
   return h;
 }
+const padRotations = new WeakMap();
 function padDistance(p, x, z) {
-  const dx = x - p.x, dz = z - p.z, c = Math.cos(p.yaw), a = Math.sin(p.yaw);
+  let rotation = padRotations.get(p);
+  if (!rotation || rotation.yaw !== p.yaw) {
+    rotation = { yaw: p.yaw, c: Math.cos(p.yaw), a: Math.sin(p.yaw) };
+    padRotations.set(p, rotation);
+  }
+  const dx = x - p.x, dz = z - p.z, { c, a } = rotation;
   return Math.max(Math.abs(c * dx - a * dz) - p.hx, Math.abs(a * dx + c * dz) - p.hz);
+}
+function withinPad(p, x, z, margin) {
+  const reach = p.hx + p.hz + Math.max(0, margin) * Math.SQRT2;
+  return Math.abs(x - p.x) <= reach && Math.abs(z - p.z) <= reach && padDistance(p, x, z) < margin;
 }
 
 // Flat valley floor for the town, rolling hills around it.
@@ -836,7 +849,7 @@ export class World {
   }
 
   _reserved(x, z, pad = 0) {
-    if (this.areaPads?.some(p => padDistance(p, x, z) < pad)) return true;
+    if (this.areaPads?.some(p => withinPad(p, x, z, pad))) return true;
     if (this.hamlet?.visible && pondRadius(x,z) < 1.18 + pad / HAMLET.pond.rz) return true;
     if (Math.abs(z - riverZ(x)) < 14 + pad) return true;
     if (Math.abs(x - RAIL_X) < 9 + pad) return true;
@@ -2032,7 +2045,7 @@ export class World {
       for (let i = 0; i < m.count; i++) {
         matrix.fromArray(matrices, i * 16);
         const x = matrix.elements[12], z = matrix.elements[14];
-        const hidden = userPads.some((p) => padDistance(p, x, z) < 1) || this._insideFence(x, z) || this.inPond(x,z,2.5);
+        const hidden = userPads.some((p) => withinPad(p, x, z, 1)) || this._insideFence(x, z) || this.inPond(x,z,2.5);
         // Keep the original vertical offset (flower heads, buried tree roots).
         const base = matrix.elements[13];
         matrix.elements[13] = base + applyPond(applyUserPads(heights[i], x, z),x,z) - heights[i];
@@ -2043,10 +2056,10 @@ export class World {
       m.computeBoundingSphere();
     }
     this.colliders.circles = this.colliders.circles.filter((c) => !this.plantColliders.has(c));
-    for (const c of this.plantColliders) if (!userPads.some((p) => padDistance(p, c.x, c.z) < 1) && !this._insideFence(c.x, c.z) && !this.inPond(c.x,c.z,2.5)) this.colliders.circles.push(c);
+    for (const c of this.plantColliders) if (!userPads.some((p) => withinPad(p, c.x, c.z, 1)) && !this._insideFence(c.x, c.z) && !this.inPond(c.x,c.z,2.5)) this.colliders.circles.push(c);
     for (const e of this.props) {
       e.obj.position.y = this.surfaceY(e.x, e.z);
-      e.obj.visible = !userPads.some((p) => padDistance(p, e.x, e.z) < 0) && !this.inPond(e.x,e.z);
+      e.obj.visible = !userPads.some((p) => withinPad(p, e.x, e.z, 0)) && !this.inPond(e.x,e.z);
       e.obj.updateMatrixWorld(true);
       for (const seat of e.seats || []) seat.y = e.obj.position.y + 0.45;
       for (const emitter of e.emitters) if (emitter.local) emitter.pos.copy(e.obj.localToWorld(emitter.local.clone()));
@@ -2054,7 +2067,7 @@ export class World {
     }
     for (const m of this.billboards) {
       m.position.y = this.surfaceY(m.position.x, m.position.z);
-      m.visible = !userPads.some((p) => padDistance(p, m.position.x, m.position.z) < 0) && !this.inPond(m.position.x,m.position.z);
+      m.visible = !userPads.some((p) => withinPad(p, m.position.x, m.position.z, 0)) && !this.inPond(m.position.x,m.position.z);
     }
     for (const e of [...this.roads, ...(this.hamlet?.roads || [])]) {
       this.root.remove(e.obj); e.obj.geometry.dispose();

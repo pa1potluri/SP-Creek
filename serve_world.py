@@ -54,6 +54,13 @@ def main():
     handler = functools.partial(NoCacheHandler, directory=str(ROOT))
     with http.server.ThreadingHTTPServer(("127.0.0.1", port), handler) as httpd:
         print(f"SP Creek: http://localhost:{port}")
+        if "--open" in sys.argv[2:]:
+            import threading
+            import webbrowser
+            # Open only after the port is bound, so the first visit can connect.
+            opener = threading.Timer(0.2, webbrowser.open, args=(f"http://localhost:{port}",))
+            opener.daemon = True
+            opener.start()
         httpd.serve_forever()
 
 

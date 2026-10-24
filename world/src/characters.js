@@ -24,7 +24,7 @@ export const CAST = {
     hat: 'derby', hatColor: '#557480', band: '#edc581', shirt: '#f5e9cf', sleeves: 'long', vest: '#657b70', flower: true,
     pants: '#4a4038', belt: '#2a1a12', buckle: '#b8b8b8', boots: '#3a2618',
   },
-  bartender: {
+  cafeHost: {
     label: 'Café host', skin: '#e2b08a', hair: '#1d1612', hairStyle: 'short', eyes: '#2a1a12', mustache: true,
     hat: 'none', shirt: '#f4f0e6', sleeves: 'long', vest: '#1f1f24', apron: '#efe9dc',
     pants: '#2a2a2e', belt: '#1a1a1a', buckle: '#b8b8b8', boots: '#1e1612', build: 1.1,
@@ -66,7 +66,7 @@ export const CAST = {
     hat: 'cowboy', hatColor: '#6a5a48', band: '#3a3028', shirt: '#8a7a5a', sleeves: 'rolled', vest: '#4a3a2a',
     pants: '#5a4a38', belt: '#3a2a1a', buckle: '#8a8a8a', boots: '#4a3424',
   },
-  gambler: {
+  neighbour: {
     label: 'Board game neighbour', skin: '#e9b48c', hair: '#1d1612', hairStyle: 'short', eyes: '#2a1a12', mustache: true,
     hat: 'cowboy', hatColor: '#151414', band: '#7a1a22', shirt: '#f4f2ec', sleeves: 'long', vest: '#7a1a22',
     coat: '#151414', pants: '#151414', belt: '#111', buckle: '#b8b8b8', boots: '#111',
@@ -88,11 +88,9 @@ const PANTS = ['#4a6a9a', '#4a4038', '#2a2a2e', '#5a4a38', '#3a3a40', '#5a6a8a',
 const DRESSES = ['#a8233a', '#4a6a8a', '#5a4a6a', '#6a8a5a', '#c89a4a', '#8a4a3a', '#3a5a6a', '#b07a8a'];
 const HATS = ['#8a5a32', '#2b2420', '#6a5a48', '#d9b56a', '#4a3a2a', '#c8b89a', '#3a3028'];
 const BANDANAS = ['#c8372d', '#2a4a7a', '#d8a030', '#3a6a3a', null, null];
-const STREET = ['cowboy', 'cowboy', 'rancher', 'rancher', 'shopkeeper', 'prospector', 'gambler', 'townswoman', 'townswoman', 'teacher', 'singer', 'kid'];
+const STREET = ['cowboy', 'cowboy', 'rancher', 'rancher', 'shopkeeper', 'prospector', 'neighbour', 'townswoman', 'townswoman', 'teacher', 'singer', 'kid'];
 
 export function randomTownsfolk(role = pick(STREET)) {
-  // Old saved café guest lists still use this role key.
-  if (role === 'sheriff') role = 'mayor';
   const o = { ...CAST[role], role };
   o.skin = pick(SKINS);
   o.hair = R() < 0.15 ? '#9a9a9a' : pick(HAIRS);

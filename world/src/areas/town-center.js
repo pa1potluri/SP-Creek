@@ -70,7 +70,7 @@ export function buildTownCenter(world, life) {
   for (const [side, specs] of [[-1, LEFT], [1, RIGHT]]) for (const [i, s] of specs.entries()) {
     const shop = group(side * 7.5, 0, s.z, -side * Math.PI / 2);
     for (const x of [-s.w * 0.29, s.w * 0.29]) flowerBox(x, 1.15, 0.42, shop, Math.min(2, s.w * 0.23));
-    if (['UNDERTAKER', 'BANK', 'SP CREEK MERCANTILE', 'GUNSMITH'].includes(s.sign)) {
+    if (['BAKERY', 'BANK', 'SP CREEK MERCANTILE', 'TOY SHOP'].includes(s.sign)) {
       const awning = group(0, 0, 1.45, 0, shop); canopy(awning, s.w - 0.3, 2.9, 3.52, colors[i % 5]);
     }
     // Hanging baskets sit outside the porch's walking lane.

@@ -1,0 +1,92 @@
+[
+  {
+    "mood": "golden",
+    "fraction": 0,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 126.07403472222222,
+    "nearBlackPct": 0,
+    "median": 98
+  },
+  {
+    "mood": "golden",
+    "fraction": 0.25,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 130.35871006944444,
+    "nearBlackPct": 0,
+    "median": 99
+  },
+  {
+    "mood": "golden",
+    "fraction": 0.5,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 141.83194618055555,
+    "nearBlackPct": 0,
+    "median": 120
+  },
+  {
+    "mood": "golden",
+    "fraction": 0.75,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 138.99321701388888,
+    "nearBlackPct": 0,
+    "median": 123
+  },
+  {
+    "mood": "golden",
+    "fraction": 0.999,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 135.61352430555556,
+    "nearBlackPct": 0,
+    "median": 124
+  },
+  {
+    "mood": "night",
+    "fraction": 0,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 141.19706076388889,
+    "nearBlackPct": 0,
+    "median": 118
+  },
+  {
+    "mood": "night",
+    "fraction": 0.25,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 145.88377604166666,
+    "nearBlackPct": 0,
+    "median": 119
+  },
+  {
+    "mood": "night",
+    "fraction": 0.5,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 159.85926215277777,
+    "nearBlackPct": 0,
+    "median": 140
+  },
+  {
+    "mood": "night",
+    "fraction": 0.75,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 156.46703125,
+    "nearBlackPct": 0,
+    "median": 145
+  },
+  {
+    "mood": "night",
+    "fraction": 0.999,
+    "width": 960,
+    "height": 600,
+    "meanLuma": 152.98692881944444,
+    "nearBlackPct": 0,
+    "median": 147
+  }
+]

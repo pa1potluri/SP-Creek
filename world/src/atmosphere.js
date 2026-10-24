@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import * as T from './textures.js';
 import { installCloudLighting, cloudUniforms } from './environment.js';
-import { terrainHeight, walkHeight } from './world.js';
+import { terrainHeight, walkHeight, riverZ } from './world.js';
 
 export const PRESETS = {
   golden: {
@@ -16,7 +16,7 @@ export const PRESETS = {
   morning: {
     label: 'Misty Morning', skyTop: '#93adc4', skyHorizon: '#e6e1d3', skyGround: '#6f7062', sunColor: '#ffe0b8',
     cloudLit: '#fbf3e8', cloudShade: '#a3acb8', sunElev: 14, sunAzim: 75, sunIntensity: 1.9, sunSize: 0.0016,
-    hemiSky: '#d9e3ec', hemiGround: '#6e7058', hemiIntensity: 1.3, fogColor: '#d8d7cc', fogNear: 4, fogFar: 170,
+    hemiSky: '#d9e3ec', hemiGround: '#6e7058', hemiIntensity: 1.3, fogColor: '#d8d7cc', fogNear: 45, fogFar: 480,
     cloudCover: 0.5, stars: 0, lanterns: 0, dust: 0.5, dustColor: '#fff6e0', fireflies: 0, rain: 0, birds: 1,
     mountain: '#7d8794', exposure: 1.0, warmth: -0.05, sat: 0.9,
   },
@@ -241,8 +241,9 @@ class Birds {
     right.crossVectors(fwd, up).normalize();
     let o = 0;
     const put = (v) => { this.pos[o++] = v.x; this.pos[o++] = v.y; this.pos[o++] = v.z; };
-    for (const b of this.birds) {
+    for (const [index,b] of this.birds.entries()) {
       p.copy(c).add(b.off);
+      if(index>=8){p.x+=38;p.y+=7;p.z-=34;}
       p.x += Math.sin(t * 0.4 + b.ph) * 2;
       p.y += Math.sin(t * 0.6 + b.ph);
       p.z += Math.cos(t * 0.3 + b.ph) * 2;
@@ -303,8 +304,12 @@ export class Atmosphere {
     this.poolMaterial=new THREE.MeshBasicMaterial({map:T.glowTexture(),color:'#ffc778',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
     this.groundPools=new THREE.InstancedMesh(poolGeo,this.poolMaterial,256);this.groundPools.frustumCulled=false;this.groundPools.count=0;this.lightDecor.add(this.groundPools);
     this.poolSources=[];this.poolRootCount=-1;this.roofRim={value:0};
+    this.morningMist=new THREE.Group();this.morningMist.name='Low morning river and valley mist';scene.add(this.morningMist);
+    this.mistMaterial=new THREE.MeshBasicMaterial({map:T.puffTexture(),color:'#ecf1e5',transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide});
+    const mistSites=[...[-60,-30,10,45,80].map(x=>[x,riverZ(x),true]),[-69,94,true],[-240,-18,true],[-48,110,false],[-35,-95,false]];
+    this.mistPatches=mistSites.map(([x,z,water],i)=>{const plane=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.mistMaterial);plane.scale.set(water?27:36,2.8,1);this.morningMist.add(plane);return {plane,x,z,y:(water?world.waterLevel(x,z):terrainHeight(x,z))+0.9,phase:i*2.399};});
     this.dust = motes(1800, new THREE.Vector3(70, 18, 70), false);
-    this.flies = motes(260, new THREE.Vector3(60, 4, 60), true);
+    this.flies = motes(400, new THREE.Vector3(60, 4, 60), true);
     this.flies.material.uniforms.uColor.value.set(0.85, 1.0, 0.45);
     this.rain = rainLines(4000, new THREE.Vector3(40, 25, 40));
     this.birds = new Birds();
@@ -432,8 +437,11 @@ export class Atmosphere {
       if (color) uu.uColor.value.copy(color);
       pts.visible = amount > 0.01;
     };
+    this.mistMaterial.opacity=this.key==='morning'?0.065*(0.45+0.55*Math.exp(-Math.max(0,time)/220)):0;
+    this.mistMaterial.color.copy(c.fogColor).lerp(new THREE.Color('#f2f5e9'),0.4);
+    for(const {plane,x,z,y,phase} of this.mistPatches){plane.position.set(x+Math.sin(time*0.014+phase)*3,y+Math.sin(time*0.02+phase)*0.12,z+Math.cos(time*0.012+phase)*2);plane.rotation.y=Math.atan2(camera.position.x-plane.position.x,camera.position.z-plane.position.z);}
     setMotes(this.dust, c.dust * m.dust, c.dustColor);
-    setMotes(this.flies, c.fireflies);
+    setMotes(this.flies, Math.min(1,c.fireflies*1.5));
     const ru = this.rain.material.uniforms, rain = THREE.MathUtils.clamp(c.rain + m.rain, 0, 1);
     ru.uTime.value = time;
     ru.uCam.value.copy(camera.position);

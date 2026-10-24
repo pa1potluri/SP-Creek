@@ -13,7 +13,7 @@ export async function buildMeadowLake(world) {
   const imgs=Object.fromEntries(await Promise.all([...names,'meadow'].map(name=>new Promise(resolve=>{const img=new Image();img.onload=()=>resolve([name,img]);img.onerror=()=>resolve([name,null]);img.src=name==='meadow'?'assets/textures/dream/meadow.png':`assets/foliage/dream/${name}.png`;}))));
   const r=rng(471),v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide});
   const stone=world.paintedMaterial('stone',1,1,{color:'#b2ac92'}) || m('#9b9784'),moss=m('#7b9b76'),wood=world.mat.darkWood,cream=m('#fff5d4'),gold=m('#e5bf6e');
-  const buckets=new Map(),plants=[],ducks=[],butterflies=[],birds=[],dragonflies=[];
+  const buckets=new Map(),plants=[],ducks=[],rabbits=[],butterflies=[],birds=[],dragonflies=[];
   function solid(geo,mat,x,h,z,parent=root,rot=null){if(rot)geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot)));geo.translate(x,h,z);const key=parent.uuid+mat.uuid;if(!buckets.has(key))buckets.set(key,{parent,mat,geos:[]});buckets.get(key).geos.push(geo.index?geo.toNonIndexed():geo);}
   const box=(w,h,d,mat,x,py,z,g=root)=>solid(new THREE.BoxGeometry(w,h,d),mat,x,py,z,g);
   const ball=(radius,mat,x,h,z,g=root,s=[1,1,1])=>solid(new THREE.SphereGeometry(radius,12,8).scale(...s),mat,x,h,z,g);
@@ -46,18 +46,25 @@ export async function buildMeadowLake(world) {
   const sprayPos=new Float32Array(70*3),sprayGeo=new THREE.BufferGeometry();sprayGeo.setAttribute('position',new THREE.BufferAttribute(sprayPos,3));const spray=new THREE.Points(sprayGeo,new THREE.PointsMaterial({color:'#f0fbf3',size:0.16,transparent:true,opacity:0.45,depthWrite:false}));spray.frustumCulled=false;root.add(spray);
   const sparkPos=new Float32Array(80*3),sparkGeo=new THREE.BufferGeometry();sparkGeo.setAttribute('position',new THREE.BufferAttribute(sparkPos,3));const sparkles=new THREE.Points(sparkGeo,new THREE.PointsMaterial({color:'#fff4c7',size:0.1,transparent:true,opacity:0.5,depthWrite:false}));sparkles.frustumCulled=false;root.add(sparkles);
   for(let i=0;i<3;i++){const g=group(0,0,0);ball(0.28,cream,0,0.15,0,g,[0.8,0.8,1.3]);ball(0.16,cream,0,0.4,0.23,g);ball(0.09,gold,0,0.36,0.4,g,[1,0.4,1.4]);for(const sx of [-1,1])ball(0.025,m('#435b61'),sx*0.1,0.43,0.34,g);ducks.push(g);}
+  for(const [i,[x,z]] of [[-211,13],[-205,16],[-216,20]].entries()){
+    const g=group(x,terrainHeight(x,z),z),coat=i%2?m('#d8bea0'):cream;
+    ball(0.29,coat,0,0.29,0,g,[0.85,0.9,1.3]);ball(0.21,coat,0,0.57,0.27,g);
+    for(const sx of [-1,1]){ball(0.07,coat,sx*0.1,0.86,0.27,g,[0.75,3,0.8]);ball(0.03,m('#51606a'),sx*0.1,0.61,0.44,g);ball(0.04,m('#e9bac6'),sx*0.1,0.88,0.32,g,[0.6,3,0.4]);}
+    ball(0.11,cream,0,0.34,-0.33,g);rabbits.push({g,x,z});
+  }
   for(let i=0;i<10;i++){const g=group(0,0,0),wings=[];for(const sx of [-1,1]){const wing=new THREE.Mesh(new THREE.CircleGeometry(0.16,12),m(i%2?'#e8b9d0':'#c6d4ef'));wing.position.x=sx*0.12;g.add(wing);wings.push(wing);}butterflies.push({g,wings});}
   for(let i=0;i<3;i++){const g=group(0,0,0);ball(0.13,cream,0,0,0,g,[0.7,0.6,1.4]);const wings=[-1,1].map(sx=>{const w=new THREE.Mesh(new THREE.SphereGeometry(0.18,8,6).scale(2,0.15,0.6),cream);w.position.x=sx*0.2;g.add(w);return w;});birds.push({g,wings});}
   for(let i=0;i<4;i++){const g=group(0,0,0);ball(0.08,m('#82c7bc'),0,0,0,g,[0.4,0.4,2.5]);solid(new THREE.SphereGeometry(0.15,8,6).scale(3,0.1,0.65),cream,0,0.03,0,g);dragonflies.push(g);}
   for(const {parent,mat,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),mat);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}root.updateMatrixWorld(true);
-  return {root,pad,lake,water,plants,ducks,rainbows,update(t,camera,atmos,key){
+  return {root,pad,lake,water,plants,ducks,rabbits,rainbows,update(t,camera,atmos,key){
     const flat=world.textureSet==='flat';plants.forEach(p=>p.visible=!flat);fallback.forEach(p=>p.visible=flat);
     fallMat.map.offset.y=-t*0.12;fallMat.color.copy(world.waterUniforms.uWaterHorizon.value).lerp(new THREE.Color('#cce4df'),0.55);foamMat.color.copy(world.waterUniforms.uWaterFoamColor.value);foam.scale.setScalar(1+Math.sin(t*0.7)*0.06);
     rainbows.forEach(a=>a.material.opacity=(key==='golden'||key==='morning')?0.19:0);
     for(let i=0;i<70;i++){const phase=(t*0.3+i/70)%1;sprayPos[i*3]=-247+Math.sin(i*2.4)*phase*2;sprayPos[i*3+1]=lake.y+Math.sin(phase*Math.PI)*1.4;sprayPos[i*3+2]=-23+Math.cos(i*2.4)*phase*2;}sprayGeo.attributes.position.needsUpdate=true;
     for(let i=0;i<80;i++){const x=MEADOW.x+Math.sin(i*2.399)*((i%7)+1)*4,z=Math.cos(i*2.399)*((i%6)+1)*3;sparkPos[i*3]=x;sparkPos[i*3+1]=terrainHeight(x,z)+0.7+Math.sin(t*0.3+i)*0.3;sparkPos[i*3+2]=z;}sparkGeo.attributes.position.needsUpdate=true;
     ducks.forEach((g,i)=>{const a=t*0.04+i*2.094;g.position.set(lake.x+Math.sin(a)*4,lake.y+0.03+Math.sin(t+i)*0.02,lake.z+Math.cos(a)*3);g.rotation.y=Math.PI/2+a;});
-    butterflies.forEach(({g,wings},i)=>{g.position.set(-212+Math.sin(t*0.2+i)*15,y+1+Math.sin(t*0.4+i)*0.6,8+Math.cos(t*0.17+i)*13);wings.forEach((w,k)=>w.rotation.y=Math.sin(t*6+i)*(k?1:-1)*0.7);});
+    rabbits.forEach(({g,x,z},i)=>{const phase=(t+i*4)%22,hop=phase<3?Math.sin(phase/3*Math.PI)*0.16:0;g.position.set(x,terrainHeight(x,z)+hop,z);g.rotation.y=Math.sin(t*0.1+i)*0.3;g.visible=atmos.stars<0.65;});
+    butterflies.forEach(({g,wings},i)=>{g.visible=atmos.stars<0.65;g.position.set(-212+Math.sin(t*0.2+i)*15,y+1+Math.sin(t*0.4+i)*0.6,8+Math.cos(t*0.17+i)*13);wings.forEach((w,k)=>w.rotation.y=Math.sin(t*6+i)*(k?1:-1)*0.7);});
     birds.forEach(({g,wings},i)=>{g.position.set(MEADOW.x+Math.sin(t*0.07+i*2)*22,y+11+i,Math.cos(t*0.07+i*2)*16);g.rotation.y=-t*0.07-i*2;wings.forEach((w,k)=>w.rotation.z=Math.sin(t*3+i)*(k?1:-1)*0.3);});
     dragonflies.forEach((g,i)=>g.position.set(lake.x+Math.sin(t*0.4+i)*10,lake.y+1+Math.sin(t*0.8+i)*0.3,lake.z+Math.cos(t*0.3+i)*7));
   }};

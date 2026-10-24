@@ -866,7 +866,7 @@ export class Life {
     else if(kind==='ducks'){for(const [role,p]of pair){p.arms[role==='pavi'?1:0].rotation.x=-0.65+Math.sin(t*0.8)*0.15;p.elbows[role==='pavi'?1:0].rotation.x=-0.5;p.headPitch=0.12;}}
     else if(kind==='wave'){gesture(pavi,'wave',0.5+Math.sin(t*0.16)*0.25,t);gesture(siri,'wave',0.5+Math.sin(t*0.13)*0.25,t);}
     else if(kind==='balloon'){pointCharacterArm(pavi,1,V(202,walkHeight(202,-145)+13,-145),0.8+Math.sin(t*0.3)*0.05);siri.headYaw=0.3;siri.headPitch=-0.15;}
-    else if(kind==='collar'){pavi.g.rotation.y=Math.PI/2;siri.g.rotation.y=-Math.PI/2;siri.upper.rotation.x=0.2;pavi.headPitch=0.08;pavi.g.updateMatrixWorld(true);const collar=pavi.g.localToWorld(V(0,0.69,0.12));pointCharacterArm(siri,0,collar,0.75+Math.sin(t*0.35)*0.12);siri.headPitch=0.1;}
+    else if(kind==='collar'){pavi.g.rotation.y=Math.PI/2;siri.g.rotation.y=-Math.PI/2;siri.upper.rotation.x=0.2;pavi.headPitch=0.08;siri.arms[0].rotation.set(-1.1+Math.sin(t*0.35)*0.025,0,-0.25);siri.elbows[0].rotation.set(-0.5,0,0);siri.headPitch=0.1;}
     w.activeMoment=kind;
   }
 

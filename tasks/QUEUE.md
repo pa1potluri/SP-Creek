@@ -34,7 +34,7 @@ finished. Re-read this file each time; Claude may change it.
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | done; full 1266 + 2 passed; day/night, dusk and oil previews saved; stopped after 20 |
 | 21 | `tasks/pavi-siri-3d.md` | `area/pavi-siri-3d` | done (from main 75a90ab); full 1293 + 2 passed; original-model day/night previews saved |
 | 22 | `tasks/cove-polish.md` | `area/cove-polish` | WIP: side-lane clearance + warm pebbles saved; Episode 1 cuts need presets.js scope (STUCK.md); continue 23 |
-| 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | in progress; seven moments, props and five-minute preset; smoke next |
+| 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | WIP saved; seven moments + preset, smoke 35 and clearance 54 passed; day/night 46–52 saved; full suite running |
 | 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | queued |
 | 25 | `tasks/train-trip.md` | `area/train-trip` | queued |
 | 26 | `tasks/camping-night.md` | `area/camping-night` | queued |

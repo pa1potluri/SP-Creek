@@ -6,6 +6,7 @@
 // Everything faces +z.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export const HIP = 0.95;
 const R = Math.random;
@@ -313,80 +314,52 @@ export function makeCharacter(outfit = CAST.cowboy) {
   return p;
 }
 
-// Pavi and Siri keep their reference silhouettes and colours; other cast rigs are untouched.
-let siriSkirtMaterial;
-function starSkirt() {
-  if(siriSkirtMaterial)return siriSkirtMaterial;
-  const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512;const c=canvas.getContext('2d');
-  c.fillStyle='#bf3b50';c.fillRect(0,0,1024,512);
-  for(let x=0;x<1024;x++){c.fillStyle=`rgba(82,20,38,${0.12+0.1*Math.sin(x*0.15)})`;c.fillRect(x,0,1,512);}
-  c.strokeStyle='#e9b85e';c.lineWidth=3;
-  for(const y of [7,20,53,78,385,402,460,486,505]){c.beginPath();c.moveTo(0,y);c.lineTo(1024,y);c.stroke();}
-  for(let row=0;row<8;row++)for(let i=0;i<28;i++){const x=i*40+(row%2)*20,y=100+row*38;c.save();c.translate(x,y);c.fillStyle='#e7ba64';for(let k=0;k<4;k++){c.rotate(Math.PI/2);c.beginPath();c.ellipse(0,4,2,5,0,0,Math.PI*2);c.fill();}c.restore();}
-  for(let i=0;i<25;i++){const x=i*43;c.beginPath();c.moveTo(x,410);c.lineTo(x+17,438);c.lineTo(x,460);c.lineTo(x-17,438);c.closePath();c.stroke();c.beginPath();c.arc(x,438,6,0,Math.PI*2);c.stroke();}
-  const map=new THREE.CanvasTexture(canvas);map.colorSpace=THREE.SRGBColorSpace;
-  return siriSkirtMaterial=new THREE.MeshLambertMaterial({map,side:THREE.DoubleSide});
+// These original meshes/textures are shared; every appearance owns its own skeleton.
+const starSources=Object.fromEntries(await Promise.all(['pavi','siri'].map(async role=>{
+  const gltf=await new GLTFLoader().loadAsync(new URL('../assets/characters/'+role+'.glb',import.meta.url).href);let source;gltf.scene.updateMatrixWorld(true);gltf.scene.traverse(o=>{if(o.isMesh)source=o;});
+  const geometry=source.geometry.clone().applyMatrix4(source.matrixWorld),material=source.material.clone();material.emissive.set(0xffffff);material.emissiveMap=material.map;material.emissiveIntensity=0.07;
+  return [role,{geometry,material}];
+})));
+const STAR_BONES=[['hips',null,[0,0.43,0.04]],['spine',0,[0,0.57,0.04]],['chest',1,[0,0.70,0.04]],['neck',2,[0,0.745,0.04]],['head',3,[0,0.79,0.025]],['armR',2,[-0.12,0.70,0.04]],['elbowR',5,[-0.215,0.49,0.055]],['armL',2,[0.12,0.70,0.04]],['elbowL',7,[0.215,0.49,0.055]],['legR',0,[-0.08,0.40,0.05]],['kneeR',9,[-0.09,0.20,0.065]],['footR',10,[-0.09,0.055,0.09]],['legL',0,[0.08,0.40,0.05]],['kneeL',12,[0.09,0.20,0.065]],['footL',13,[0.09,0.055,0.09]],['skirt',0,[0,0.43,0.04]],['Thick side braid',4,[0,0.83,-0.10]]];
+function starRigSpecs(role){
+  const specs=STAR_BONES.map(([name,parent,pos])=>[name,parent,[...pos]]);if(role==='siri'){
+    for(const [i,pos]of [[0,[0,0.56,0.04]],[1,[0,0.64,0.04]],[2,[0,0.72,0.04]],[3,[0,0.80,0.04]],[4,[0,0.84,0.025]],[5,[-0.12,0.73,0.035]],[6,[-0.205,0.56,0.035]],[7,[0.12,0.73,0.035]],[8,[0.205,0.56,0.035]],[9,[-0.08,0.53,0.05]],[10,[-0.09,0.29,0.065]],[12,[0.08,0.53,0.05]],[13,[0.09,0.29,0.065]],[15,[0,0.56,0.04]],[16,[0,0.83,-0.10]]])specs[i][2]=pos;
+  }return specs;
 }
-function makeStarCharacter(o) {
-  const g=new THREE.Group(),rig=new Rig(),upper=joint(g,0,0,0),skin=mat(o.skin),hair=mat(o.hair),cream=mat('#eee1c4'),red=mat('#8b2938'),gold=mat('#d9ae54'),sandals=mat(o.boots),isSiri=o.star==='siri';
-  g.name=o.label;const ball=(j,r,m,x,y,z,scale=[1,1,1])=>rig.add(j,sphere(r),m,[x,y,z],[0,0,0],scale);
-  const tube=(j,points,r,m)=>rig.add(j,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p))),12,r,6,false),m);
-  const legs=[],knees=[],arms=[],elbows=[];
-  for(const side of [-1,1]){
-    const hip=joint(g,side*0.11,0.61,0),knee=joint(hip,0,-0.27,0);legs.push(hip);knees.push(knee);
-    rig.add(hip,capsule(isSiri?0.055:0.10,0.18),isSiri?skin:mat(o.pants),[0,-0.14,0]);
-    rig.add(knee,capsule(0.052,0.20),skin,[0,-0.12,0]);
-    ball(knee,0.064,skin,0,-0.29,0.065,[1,0.52,1.65]);
-    rig.add(knee,new THREE.BoxGeometry(0.14,0.025,0.25),sandals,[0,-0.32,0.045]);
-    for(const z of [0,0.085])rig.add(knee,new THREE.TorusGeometry(0.055,0.012,5,12,Math.PI),sandals,[0,-0.29,z],[0,0,0]);
-    rig.add(knee,new THREE.TorusGeometry(0.055,0.012,5,12),sandals,[0,-0.20,0],[Math.PI/2,0,0]);
-    const sh=joint(upper,side*0.195,1.02,0),el=joint(sh,0,-0.20,0);arms.push(sh);elbows.push(el);sh.userData.rest=side*0.08;
-    ball(sh,0.086,mat(o.shirt),0,-0.045,0,[1,1.25,1]);rig.add(sh,capsule(0.048,0.1),skin,[0,-0.14,0]);rig.add(el,capsule(0.043,0.13),skin,[0,-0.09,0]);ball(el,0.05,skin,0,-0.205,0.01,[0.85,1,0.8]);
-    for(let i=0;i<4;i++)ball(el,0.012,skin,-0.027+i*0.018,-0.239,0.025,[0.8,1.7,0.8]);
-    if(isSiri)for(const y of [-0.13,-0.15,-0.17])rig.add(el,new THREE.TorusGeometry(0.048,0.009,5,14),gold,[0,y,0],[Math.PI/2,0,0]);
+function starArmGroups(geometry,role){
+  const p=geometry.attributes.position,n=p.count,cap=role==='siri'?0.69:0.66,parent=Int32Array.from({length:n},(_,i)=>i),seen=new Map();
+  const find=i=>{while(parent[i]!==i){parent[i]=parent[parent[i]];i=parent[i];}return i;},join=(a,b)=>{parent[find(a)]=find(b);};
+  for(let i=0;i<n;i++){if(p.getY(i)>cap)continue;const key=[p.getX(i),p.getY(i),p.getZ(i)].map(v=>Math.round(v*1e5)).join(',');if(seen.has(key))join(i,seen.get(key));else seen.set(key,i);}
+  const index=geometry.index;for(let i=0;i<index.count;i+=3){const tri=[index.getX(i),index.getX(i+1),index.getX(i+2)];for(let k=0;k<3;k++){const a=tri[k],b=tri[(k+1)%3];if(p.getY(a)<=cap&&p.getY(b)<=cap)join(a,b);}}
+  const roots=[-1,1].map(side=>{let best=Infinity,seed=0;for(let i=0;i<n;i++){if(p.getY(i)>cap)continue;const distance=(p.getX(i)-side*0.26)**2+(p.getY(i)-(role==='siri'?0.41:0.34))**2+(p.getZ(i)-0.055)**2;if(distance<best){best=distance;seed=i;}}return find(seed);});
+  return {cap,arm:Uint8Array.from({length:n},(_,i)=>p.getY(i)<=cap&&roots.includes(find(i))?1:0)};
+}
+function skinStarGeometry(role,geometry){
+  const groups=role==='siri'?starArmGroups(geometry,role):null;
+  const position=geometry.attributes.position,indices=new Uint16Array(position.count*4),weights=new Float32Array(position.count*4),smooth=(a,b,x)=>THREE.MathUtils.smoothstep(x,a,b);
+  for(let i=0;i<position.count;i++){
+    const x=position.getX(i),y=position.getY(i),z=position.getZ(i),ax=Math.abs(x),siri=role==='siri',influences=new Map(),add=(bone,w)=>{if(w>0)influences.set(bone,(influences.get(bone)||0)+w);};
+    const side=x<0?0:1,leg=side?12:9,knee=leg+1,foot=leg+2;
+    let armGate=smooth((siri?0.34-0.29*y:0.26-0.20*y)-0.018,(siri?0.34-0.29*y:0.26-0.20*y)+0.012,ax)*smooth(siri?0.32:0.26,siri?0.36:0.30,y)*(1-smooth(0.70,0.79,y))*(1-smooth(0.12,0.16,z));
+    if(groups&&y<groups.cap){const blend=smooth(groups.cap-0.025,groups.cap,y);armGate=groups.arm[i]*(1-blend)+armGate*blend;}
+    const body=1-armGate;
+    if(siri&&y>=0.13&&y<0.59){const skirt=1-smooth(0.53,0.59,y);add(15,body*skirt);add(0,body*(1-skirt));}
+    else if(y<0.43){const root=smooth(0.32,0.43,y),lower=1-smooth(0.16,0.25,y),toe=1-smooth(0.04,0.105,y);add(0,body*root);add(leg,body*(1-root)*(1-lower));add(knee,body*(1-root)*lower*(1-toe));add(foot,body*(1-root)*lower*toe);}
+    else {const chain=siri?[[0,0.56],[1,0.64],[2,0.72],[3,0.80],[4,0.84]]:[[0,0.43],[1,0.57],[2,0.70],[3,0.745],[4,0.79]];let j=0;while(j<chain.length-1&&y>chain[j+1][1])j++;if(j===4)add(4,body);else{const u=smooth(chain[j][1],chain[j+1][1],y);add(chain[j][0],body*(1-u));add(chain[j+1][0],body*u);}}
+    if(armGate){const arm=side?7:5,bend=1-smooth(siri?0.52:0.44,siri?0.61:0.55,y);add(arm,armGate*(1-bend));add(arm+1,armGate*bend);}
+    // The back braid follows the head and upper back; the known front braid is preserved.
+    if(siri&&y>0.56&&y<0.84&&z<-0.11&&ax<0.15){const mix=smooth(0.56,0.67,y)*(1-smooth(0.12,0.16,ax));for(const [bone,w]of influences)influences.set(bone,w*(1-mix));add(16,mix*0.7);add(2,mix*0.3);}
+    const chosen=[...influences].sort((a,b)=>b[1]-a[1]).slice(0,4),total=chosen.reduce((n,p)=>n+p[1],0)||1;chosen.forEach(([bone,w],k)=>{indices[i*4+k]=bone;weights[i*4+k]=w/total;});
   }
-  rig.add(upper,capsule(0.155,0.19),mat(o.shirt),[0,0.86,0],[0,0,0],[1,1,0.82]);
-  let skirt=null;
-  if(isSiri){
-    skirt=joint(upper,0,0,0);rig.add(skirt,new THREE.CylinderGeometry(0.14,0.40,0.62,48,4,true),starSkirt(),[0,0.41,0]);
-    rig.add(upper,new THREE.TorusGeometry(0.16,0.027,6,24),red,[0,0.74,0],[Math.PI/2,0,0]);rig.add(upper,new THREE.TorusGeometry(0.04,0.007,5,16),gold,[0,0.75,0.17]);
-    for(const x of [-0.2,0.2])rig.add(upper,new THREE.TorusGeometry(0.08,0.012,5,14),red,[x,0.96,0],[Math.PI/2,0,0]);
-    tube(upper,[[0.16,1.07,0.10],[0,0.9,0.145],[-0.22,0.68,0.13]],0.024,mat('#725136'));
-    ball(upper,0.14,mat('#684b37'),-0.25,0.57,0.03,[1,1.12,0.55]);ball(upper,0.13,mat('#806044'),-0.25,0.63,0.075,[1,0.55,0.4]);
-    rig.add(upper,new THREE.BoxGeometry(0.035,0.04,0.018),gold,[-0.25,0.59,0.13]);
-    rig.add(upper,new THREE.TorusGeometry(0.10,0.007,5,20),gold,[0,1.03,0.1],[0.8,0,0]);
-  } else {
-    rig.add(upper,new THREE.CylinderGeometry(0.17,0.205,0.28,18,1,true),cream,[0,0.73,0]);
-    for(const x of [-0.07,0.07])rig.add(upper,new THREE.BoxGeometry(0.11,0.045,0.13),red,[x,1.055,0.055],[0,0,x>0?-0.3:0.3]);
-    for(const y of [0.80,0.90,0.99])ball(upper,0.012,mat('#b49970'),0,y,0.15);
-    for(let i=0;i<4;i++)rig.add(upper,new THREE.TorusGeometry(0.175,0.016,5,24),red,[0,0.72+i*0.018,0],[Math.PI/2,0,0],[1,1,0.8]);
-    ball(upper,0.06,red,-0.12,0.74,0.145);
-    for(let i=0;i<2;i++)rig.add(upper,capsule(0.035,0.25-i*0.05),red,[-0.12-i*0.045,0.54,0.15],[0,0,-0.1+i*0.3],[1,1,0.3]);
-    tube(upper,[[0.14,1.07,0.09],[0,0.95,0.15],[-0.16,0.82,0.14]],0.022,red);
-  }
-  const head=joint(upper,0,1.29,0),eyes=joint(head,0,0.025,0.21);
-  rig.add(upper,capsule(0.055,0.09),skin,[0,1.08,0]);ball(head,0.255,skin,0,0,0,[1,1.07,0.94]);ball(head,0.22,skin,0,-0.065,0.025,[1,0.8,0.94]);
-  for(const side of [-1,1]){
-    ball(head,0.09,skin,side*0.265,-0.025,-0.005,[0.75,1,0.6]);ball(head,0.055,mat('#d88b70'),side*0.285,-0.02,0.025,[0.75,1,0.3]);
-    ball(head,0.067,mat('#ed9e87'),side*0.18,-0.085,0.185,[1,0.5,0.13]);
-    ball(eyes,0.075,whiteOfEye(),side*0.105,0,0.015,[1,1.1,0.53]);ball(eyes,0.056,mat(o.eyes),side*0.10,-0.003,0.052,[1,1.05,0.42]);ball(eyes,0.035,mat('#1c110c'),side*0.10,-0.003,0.072,[1,1.07,0.4]);ball(eyes,0.014,whiteOfEye(),side*0.10+0.016,0.019,0.085);ball(eyes,0.006,whiteOfEye(),side*0.10-0.01,-0.016,0.085);
-    rig.add(head,capsule(0.015,0.075),hair,[side*0.108,0.14,0.204],[0,0,Math.PI/2-side*0.13]);
-    if(isSiri){rig.add(head,new THREE.TorusGeometry(0.035,0.008,5,12),gold,[side*0.285,-0.11,0.01]);ball(head,0.025,gold,side*0.285,-0.16,0.02);}
-  }
-  ball(head,0.042,skin,0,-0.035,0.25,[1,0.8,0.8]);
-  rig.add(head,new THREE.TorusGeometry(isSiri?0.064:0.075,0.007,5,20,Math.PI),mat('#9d5242'),[0,-0.105,0.224],[0,0,Math.PI],[1,0.45,0.5]);
-  ball(head,0.27,hair,0,0.15,-0.065,[1.04,0.72,1]);
-  if(isSiri){
-    ball(head,0.012,red,0,0.155,0.239);const braid=joint(head,-0.26,-0.02,-0.025);braid.name='Thick side braid';
-    for(let i=0;i<10;i++)ball(braid,0.075,mat(i%2?'#3d2b23':o.hair),Math.sin(i*Math.PI/2)*0.032,-i*0.069,0.05+i*0.008,[1,0.8,0.8]);
-    for(let i=0;i<7;i++){tube(head,[[0.04+i*0.009,0.285-i*0.002,0.08-i*0.01],[-0.045-i*0.017,0.275-i*0.006,0.21],[-0.17-i*0.012,0.205-i*0.014,0.22],[-0.27-i*0.004,0.075-i*0.02,0.03]],0.023,mat(i%3?'#35271f':'#5a4030'));tube(head,[[0.04+i*0.005,0.285,0.07],[0.12+i*0.019,0.25-i*0.007,0.19],[0.25+i*0.004,0.15-i*0.008,0.15],[0.28,-0.02,-0.11]],0.022,hair);}
-    for(const [x,y,z]of [[-0.25,0.18,0.05],[-0.28,-0.42,0.10]])for(let k=0;k<5;k++)ball(head,0.027,mat(k%2?'#f4e9cc':'#e9a051'),x+Math.cos(k*1.257)*0.033,y+Math.sin(k*1.257)*0.033,z);
-  } else {
-    for(let i=0;i<26;i++){const a=i*2.399,r=0.25*Math.sqrt((i+0.5)/26),x=Math.cos(a)*r,z=Math.sin(a)*r-0.04,y=0.18+0.10*(1-r/0.3);tube(head,[[x-0.05,y,z],[x-0.07,y+0.10,z+0.04],[x+0.03,y+0.14,z+0.06],[x+0.07,y+0.06,z+0.08],[x+0.02,y+0.03,z+0.10]],0.026,mat(i%3?'#35231e':'#54382b'));}
-    for(const side of [-1,1])ball(head,0.09,hair,side*0.24,0.08,-0.10,[0.7,1.3,1]);
-  }
-  rig.build();const person={g,upper,head,eyes,legs,knees,arms,elbows,skirt,apron:null,hat:null,outfit:o,amt:0,headYaw:0,headPitch:0,blinkOff:isSiri?1.2:0.4,blinkEvery:isSiri?5.5:4.3,lookOff:0,lookAround:0.15};
-  live.add(new WeakRef(person));return person;
+  geometry.setAttribute('skinIndex',new THREE.Uint16BufferAttribute(indices,4));geometry.setAttribute('skinWeight',new THREE.Float32BufferAttribute(weights,4));
+}
+for(const [role,source]of Object.entries(starSources))skinStarGeometry(role,source.geometry);
+function makeStarCharacter(o){
+  const source=starSources[o.star],g=new THREE.Group(),upper=new THREE.Bone(),specs=starRigSpecs(o.star),bones=specs.map(([name])=>{const b=new THREE.Bone();b.name=name;return b;});g.name=o.label;upper.name='torsoMotion';g.add(bones[0]);bones[0].add(upper);
+  specs.forEach(([,parent,pos],i)=>{bones[i].position.fromArray(pos);if(parent!==null){bones[i].position.sub(new THREE.Vector3(...specs[parent][2]));(i===1?upper:bones[parent]).add(bones[i]);}});
+  const mesh=new THREE.SkinnedMesh(source.geometry,source.material);mesh.name=o.label+' original textured model';mesh.castShadow=mesh.receiveShadow=true;g.add(mesh);g.updateMatrixWorld(true);mesh.bind(new THREE.Skeleton([...bones,upper]));g.scale.setScalar(1.42);mesh.boundingSphere=new THREE.Sphere(new THREE.Vector3(0,0.6,0),1.05);mesh.userData.star=o.star;
+  const eyes=new THREE.Group(),arms=[bones[5],bones[7]],elbows=[bones[6],bones[8]],legs=[bones[9],bones[12]],knees=[bones[10],bones[13]],feet=[bones[11],bones[14]];for(const arm of arms)arm.userData.rest=0;
+  const person={g,upper,head:bones[4],eyes,arms,elbows,legs,knees,feet,skirt:o.star==='siri'?bones[15]:null,apron:null,hat:null,outfit:o,model:mesh,bones,amt:0,headYaw:0,headPitch:0,blinkOff:0,blinkEvery:5,lookOff:0,lookAround:0.15};live.add(new WeakRef(person));return person;
 }
 
 // Returns the hat's joint (it can be tipped), or null for no hat or a bonnet.
@@ -449,6 +422,7 @@ export function seat(p, astride = false, k = 1) {
   if (p.elbows) p.elbows.forEach((e) => e.rotation.set(-0.15 - 0.45 * k, 0, 0));
   p.upper.rotation.set(0, 0, 0);
   p.upper.position.y = 0;
+  if(p.model){if(p.skirt)p.skirt.rotation.set(0,0,0);return;}
   if (p.skirt) {
     p.skirt.rotation.set(-1.2 * k, 0, 0);
     p.skirt.position.set(0, (HIP - 0.08) * k, 0.12 * k);
@@ -469,6 +443,9 @@ const mix = (a, b, e) => a + (b - a) * e;
 export function gesture(p, kind, k, t) {
   const [ra, la] = p.arms, [re, le] = p.elbows; // the right arm is on the −x side
   const e = env(k);
+  if(kind==='wave'&&p.model&&p.outfit.star==='siri'){
+    ra.rotation.set(-0.15*e,0,-1.3*e);re.rotation.set(-0.25*e,0,Math.sin(t*2)*0.15*e);p.headPitch=-0.04*e;return;
+  }
   if (kind === 'wave') {
     // upper arm up and out, forearm upright, the hand swinging side to side
     ra.rotation.set(mix(ra.rotation.x, -0.3, e), 0, mix(ra.rotation.z, -2.2, e));

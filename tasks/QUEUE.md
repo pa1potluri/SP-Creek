@@ -32,7 +32,7 @@ finished. Re-read this file each time; Claude may change it.
 | 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | done; full 1202 + 2 passed; final replay checks 32; day/night previews saved |
 | 19 | `tasks/playground.md` | `area/playground` | done; full 1240 + 2 passed; day/night and oil previews saved |
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | done; full 1266 + 2 passed; day/night, dusk and oil previews saved; stopped after 20 |
-| 21 | `tasks/pavi-siri-3d.md` | `area/pavi-siri-3d` | queued: branch from **main** (batch 6 merged) |
+| 21 | `tasks/pavi-siri-3d.md` | `area/pavi-siri-3d` | WIP: original GLB rigs built from main 75a90ab; previews saved; full suite running |
 | 22 | `tasks/cove-polish.md` | `area/cove-polish` | queued |
 | 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | queued |
 | 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | queued |

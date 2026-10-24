@@ -91,6 +91,9 @@ setSeason(LS.get('dh.season')||'summer');
 function setWeather(key,save=false){atmos.setWeather(key);$('#weather').value=atmos.weather;if(save)LS.set('dh.weather',atmos.weather);}
 $('#weather').onchange=()=>setWeather($('#weather').value,true);
 setWeather(LS.get('dh.weather')||'auto');
+function setFestival(on,save=false){atmos.festival=world.festival=!!on;$('#festival').checked=atmos.festival;if(save)LS.set('dh.festival',atmos.festival);}
+$('#festival').onchange=()=>setFestival($('#festival').checked,true);
+setFestival(LS.get('dh.festival')??false);
 let familyMode = DEFAULT_FAMILY_MODE;
 // Saved only when the user flips the switch, so the default can still change later. (The old key
 // 'dh.familyMode' was written on every load, not chosen, so it is ignored.)
@@ -712,6 +715,7 @@ function applyVideoPreset(key) {
   if ($('#presetStyle').checked) applyStyle(p.style);
   setSeason(p.season||'summer',true);
   setWeather(p.weather||'auto',true);
+  setFestival(!!p.festival,true);
   setSlider('atmos', 'rain', p.rain);
   setSlider('audio', 'wind', p.wind);
   setSlider('audio', 'ambience', p.ambience);
@@ -736,7 +740,7 @@ function applyVideoPreset(key) {
 // ---------- project files ----------
 function projectData() {
   return {
-    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, style: styleKey, paint: { ...paint }, look: { ...lookParams },
+    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, festival:atmos.festival, style: styleKey, paint: { ...paint }, look: { ...lookParams },
     mood: atmos.key, atmos: { ...atmos.mult }, life: { ...life.settings }, letterbox: fin.uniforms.uLetterbox.value,
     timeline: timeline.toJSON(), keys: director.custom.map((k) => [k.pos.toArray(), k.look.toArray()]), layout: world.layout(),
   };
@@ -748,6 +752,7 @@ function loadProject(p) {
   applyStyle(p.style);
   setSeason(p.season||'summer',true);
   setWeather(p.weather||'auto',true);
+  setFestival(!!p.festival,true);
   for (const [k, v] of Object.entries(p.paint || {})) setSlider('paint', k, v);
   for (const [k, v] of Object.entries(p.look || {})) setSlider('look', k, v);
   for (const [k, v] of Object.entries(p.atmos || {})) setSlider('atmos', k, v);
@@ -878,7 +883,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { seasons, setSeason, setWeather, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { seasons, setSeason, setWeather, setFestival, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;

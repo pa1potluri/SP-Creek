@@ -268,7 +268,7 @@ export class Atmosphere {
     this.mountains = mountains;
     this.presets = Object.fromEntries(Object.entries(PRESETS).map(([k, p]) => [k, prepare(p)]));
     this.key = 'golden';
-    this.weather='auto';this.weatherStart=0;this.clock=0;
+    this.weather='auto';this.weatherStart=0;this.clock=0;this.festival=false;
     this.cur = cloneState(this.presets.golden);
     this.from = null;
     this.to = null;
@@ -362,6 +362,7 @@ export class Atmosphere {
   }
 
   update(dt, time, camera) {
+    this.world.festival=this.festival;
     this.clock=time;
     if (this.blend < 1) {
       this.blend = Math.min(1, this.blend + dt / Math.max(0.1, this.mult.transition));

@@ -28,8 +28,8 @@ finished. Re-read this file each time; Claude may change it.
 | 16 | `tasks/sky-edge.md` | `area/sky-edge` | done (from main) |
 | 17 | `tasks/soft-wind.md` | `area/soft-wind` | done (from main) |
 | 17a | `tasks/pavi-siri.md` | `area/pavi-siri` | done |
-| 17b | `tasks/sunset-cove.md` | `area/sunset-cove` | WIP: approved painted assets and cove-only sea horizon integrated; verification next |
-| 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | queued |
+| 17b | `tasks/sunset-cove.md` | `area/sunset-cove` | WIP saved: approved art built; full 1159 + 2 and affected rerun passed; final visual closeout pending after 3:09 PM reset |
+| 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | WIP saved as acbcb2c; unverified draft; bring updated cove forward after reset |
 | 19 | `tasks/playground.md` | `area/playground` | queued |
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | queued |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |

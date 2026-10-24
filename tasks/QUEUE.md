@@ -33,7 +33,7 @@ finished. Re-read this file each time; Claude may change it.
 | 19 | `tasks/playground.md` | `area/playground` | done; full 1240 + 2 passed; day/night and oil previews saved |
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | done; full 1266 + 2 passed; day/night, dusk and oil previews saved; stopped after 20 |
 | 21 | `tasks/pavi-siri-3d.md` | `area/pavi-siri-3d` | done (from main 75a90ab); full 1293 + 2 passed; original-model day/night previews saved |
-| 22 | `tasks/cove-polish.md` | `area/cove-polish` | queued |
+| 22 | `tasks/cove-polish.md` | `area/cove-polish` | WIP: side-lane clearance + warm pebbles saved; Episode 1 cuts need presets.js scope (STUCK.md); continue 23 |
 | 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | queued |
 | 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | queued |
 | 25 | `tasks/train-trip.md` | `area/train-trip` | queued |

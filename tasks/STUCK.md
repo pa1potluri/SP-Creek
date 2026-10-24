@@ -7,3 +7,10 @@ Things that didn't get solved in a few tries. Fix them later, in a batch.
   from the bar. Options: a lamp right above the bar (costs one more point light for every shader in
   the world), emissive warm light strips under the back-bar shelf, or a lighter back-bar texture.
   Claude, lead/tuning.
+
+## Task 22 - Episode 1 hard cuts need preset-file scope
+
+- Built the side-lane townsfolk clearance and smaller warm pebbles in area/cove-polish.
+- Checked the complete 180-second Episode 1 timeline at 10 Hz (1,800 simulated samples, no encoding/audio). Four explicit cuts jump the camera by 100.936m, 49.027m, 45.350m and 92.835m at the clip boundaries. See world/tests/cove-polish-playback.json.
+- The flags are in world/src/presets.js (VIDEO_PRESETS.episode1Welcome). Task 22 only allows sunset-cove.js, cove shots in camera.js and cove townsfolk in life.js. AGENTS.md says: "If something outside them must change, stop and write it in the result file as a request instead of changing it."
+- Request: allow presets.js for Episode 1 transition flags, then check any resulting fly/staging transitions for actor pops. Avoid disguising a preset edit through camera/area side effects. Remaining continuity work is not marked done. Continue task 23 on the saved tip.

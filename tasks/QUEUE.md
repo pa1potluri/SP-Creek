@@ -39,7 +39,7 @@ finished. Re-read this file each time; Claude may change it.
 | 25 | `tasks/train-trip.md` | `area/train-trip` | done; full 1389 + 2 passed; day/night 56-58 saved; audio-pan follow-up in STUCK.md |
 | 26 | `tasks/camping-night.md` | `area/camping-night` | WIP by user choice; module + 14 smoke checks + four day/night previews saved; main.js wiring deferred (STUCK.md); continue 27 |
 | 27 | `tasks/pony-farm.md` | `area/pony-farm` | done; full 1440 + 2 passed; day/night farm 61-63 and camera correction 60 saved |
-| 28 | `tasks/episode-presets.md` | `area/episode-presets` | queued |
+| 28 | `tasks/episode-presets.md` | `area/episode-presets` | WIP: Episodes 2/3/5 ready, smoke 5 + clearance 66 passed, six previews saved; Episode 4 waits for user-deferred camping wiring; continue 29 |
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | queued |
 | 30 | `tasks/performance.md` | `area/performance` | queued |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | queued (not before Thu Oct 29) |

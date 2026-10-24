@@ -27,3 +27,9 @@ Things that didn't get solved in a few tries. Fix them later, in a batch.
 - main.js is not allowed by tasks/camping-night.md. Required integration is import buildCamping, construct the area alongside the others, and call its update in step(dt). No hidden registration or production debug-global dependency was added.
 - Asked for those three wiring changes; user explicitly chose "Leave camping WIP and continue" on 2026-10-24. Keep WIP, do not add the main.js wiring without later authorization.
 - Before done: wire at startup, full suite once with camping-night, verify the four previews and update result/queue. Shots 59-60 remain reserved; later tasks append from 61.
+
+## Task 28 - Episode 4 waits for deferred camping wiring
+
+- Episodes 2, 3 and 5 are built and smoke-tested (three-minute natural-pace cuts, wide starts/ends); establishing view 64 and six day/night previews saved.
+- User chose to leave task 26 startup wiring WIP. Episode 4 is therefore not added as a new ready-made button, because it would show an empty clearing in normal startup.
+- After authorized camping registration: add Episode 4 using reserved camping shots 59-60, then full suite and final result. Task 28 remains WIP; move to 29.

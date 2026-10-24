@@ -1,4 +1,4 @@
-# WIP - original 3D Pavi and Siri: rig built, full suite running
+# Original 3D Pavi and Siri - ready for Claude review
 
 Started area/pavi-siri-3d from main 75a90ab. Commit 279d2c7 saved all new task files/QUEUE and the user's two GLB models. Models and embedded textures remain byte-for-byte unchanged; no upload. The unchanged official Three r160 GLTFLoader was added locally; its only add-on dependency is the existing BufferGeometryUtils.
 
@@ -8,8 +8,9 @@ Walk/idle/gesture APIs are retained. Pavi keeps his lively wave; Siri has a slow
 
 Early positional-only Siri arm assignments pulled adjacent garment geometry; a colour-mask trial was discarded. The final mesh-connectivity partition and Siri-specific bone proportions fixed the wave. Final idle/walk/rear/wave inspection captures are saved and visually checked. In-world front/back walking and Episode 1 sunset day/night captures reported no errors and audio locked.
 
-Exact resume point: complete thirteen-suite run is active on port 8811 (exec session 84636). Wait for output, fix any failures, record full counts and mark done/commit only after it passes. Expanded pavi-siri tests check normalized weights, feet isolated from arm bones, original bind geometry, independent skeletons/shared textures, all styles and all scene appearances. Earlier smoke passed 23 and an earlier expanded check passed 48; final expanded suite is part of the pending full run.
+Completed full thirteen-suite run on port 8811: area-shots 7; build-mode 525; clouds-water 227; family-mode 46 plus 2 startup reload checks; hamlet-shots 47; hamlet 37; more-buildings 155; names-tour-shots 51; pavi-siri 50; shot-clearance 47; sunset-cove 40; playground 35; lantern-evening 26. Total **1,293 checks plus 2 startup checks**, no browser errors. All 46 shots / 9,246 clearance samples passed, and Willow Creek's 27,009 flight samples stayed clear. No test started sound.
 
+The final 50 sibling checks cover normalized weights and joint blends, feet excluded from arm weights, unchanged bind-pose geometry, independent skeletons with shared geometry/maps, original textures in all six styles, all staged appearances, deterministic routes/poses and existing camera/preset slots. Final code and previews were checkpointed in 0b653f3; the required full suite passed on that saved code. Nothing remains for this builder task; Claude's visual review is required before merge.
 Required previews: world/tests/pavi-siri-3d-front-day.png / -night.png, -back-day.png / -night.png, -sunset-day.png / -night.png. Also saved source-front/back and rig-idle/walk/back/wave inspection PNGs.
 
-Next after this task: cove-polish (22), then the queue in order. The queue note explicitly permits a larger review backlog while Claude is offline. Task 31 is not eligible before Thu Oct 29. Never merge, push or publish.
+Next: cove-polish (22), then the queue in order. The queue note explicitly permits a larger review backlog while Claude is offline. Task 31 is not eligible before Thu Oct 29. Never merge, push or publish.

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SP Creek</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="loading">Painting the town…</div>
+<div id="exportOverlay" class="hidden">
+  <div class="box">
+    <h2>Rendering video…</h2>
+    <div class="bar"><div id="exportBar"></div></div>
+    <p id="exportText">Preparing…</p>
+    <button id="exportCancel">Cancel</button>
+  </div>
+</div>
+<div id="gameHelp" class="hidden">
+  <b>Playing</b> · click the picture to steer with the mouse (or drag) ·
+  <b>WASD</b> move · <b>Shift</b> run / gallop · <b>Space</b> jump · <b>E</b> ride / get off a horse ·
+  <b>wheel</b> zoom · <b>G</b> stop playing · <b>H</b> panel
+</div>
+<div id="gamePrompt" class="hidden"></div>
+<div id="hud"><span id="rec"></span><span id="shotName"></span><span id="hint"></span></div>
+<button id="uiToggle" title="Hide / show panel (H)">☰</button>
+<button id="freezeBtn" class="viewBtn" title="Pause / play the whole scene (Space)">⏸</button>
+<button id="fullBtn" class="viewBtn" title="Full screen (Esc to leave)">⛶</button>
+
+<aside id="panel">
+  <header>
+    <h1>SP Creek</h1>
+    <p>A painted frontier town · H hides this panel</p>
+  </header>
+
+  <details open>
+    <summary>Ready-made videos</summary>
+    <p class="hint">Peaceful background videos, ready to go: each sets the shots, mood, sounds and town life, and starts a looping preview. Then render it under <i>Video</i> at any length.</p>
+    <div id="videoPresets" class="presetlist"></div>
+    <label class="row check"><span>Use the preset's art style</span><input type="checkbox" id="presetStyle" checked></label>
+  </details>
+
+  <details open>
+    <summary>Art style</summary>
+    <label class="row check"><span>Family mode (kid-friendly)</span><input type="checkbox" id="familyMode"></label>
+    <div id="styles" class="grid"></div>
+    <label class="row"><span>Textures</span>
+      <select id="texSet"><option value="auto">Follow the style</option><option value="oil">Oil painted</option><option value="clean">Clean cartoon</option><option value="flat">Flat toy colours</option></select>
+    </label>
+    <label class="row" data-for="film"><span>Depth of field</span><input type="range" data-look="dof" min="0" max="2" step="0.05" value="0.8"><output></output></label>
+    <label class="row" data-for="film"><span>Glow</span><input type="range" data-look="bloom" min="0" max="2" step="0.05" value="0.6"><output></output></label>
+    <label class="row" data-for="toy"><span>Outlines</span><input type="range" data-look="outline" min="0" max="1" step="0.05" value="1"><output></output></label>
+    <label class="row" data-for="toy paper pixel"><span>Colour steps</span><input type="range" data-look="poster" min="2" max="16" step="1" value="6"><output></output></label>
+    <label class="row" data-for="paper"><span>Paper layers</span><input type="range" data-look="layers" min="2" max="14" step="1" value="7"><output></output></label>
+    <label class="row" data-for="paper"><span>Layer shadows</span><input type="range" data-look="paperShadow" min="0" max="2" step="0.05" value="1"><output></output></label>
+    <label class="row" data-for="pixel"><span>Pixel size</span><input type="range" data-look="pixel" min="2" max="16" step="1" value="4"><output></output></label>
+    <p class="hint">A style also sets the sliders under <i>Brush &amp; finish</i>; adjust them freely afterwards.</p>
+  </details>
+
+  <details open>
+    <summary>Camera</summary>
+    <div class="btnrow"><button id="playBtn" class="primary">🎮 Play — walk &amp; ride (G)</button></div>
+    <div id="shots" class="grid"></div>
+    <div class="btnrow">
+      <button id="autoBtn">Auto director</button>
+      <button id="freeBtn">Free camera (F)</button>
+      <button id="pauseBtn">Pause (P)</button>
+    </div>
+    <label class="row"><span>Speed</span><input type="range" data-cam="speed" min="0.1" max="3" step="0.05" value="1"><output></output></label>
+    <label class="row"><span>Hand-held sway</span><input type="range" data-cam="sway" min="0" max="2" step="0.05" value="0.4"><output></output></label>
+    <h3>Your own camera move</h3>
+    <p class="hint">Free camera: drag to look, WASD to move, E/Q up/down, Shift = fast. Stop at a spot, <b>Add key (K)</b>, repeat, then <b>Play move</b>.</p>
+    <div class="btnrow">
+      <button id="addKey">Add key (K)</button>
+      <button id="playKeys">Play move</button>
+      <button id="clearKeys">Clear</button>
+    </div>
+    <label class="row"><span>Seconds per key</span><input type="range" data-cam="segSeconds" min="2" max="20" step="0.5" value="6"><output></output></label>
+    <div id="keyCount" class="hint">0 keys</div>
+  </details>
+
+  <details open>
+    <summary>Timeline</summary>
+    <p class="hint">Plan a whole video: each clip is a shot, how long it lasts, an optional mood change, and how the camera gets there (<b>fly</b> over the roofs, or <b>cut</b>). Paths are timed to end exactly when their clip ends.</p>
+    <div id="clips"></div>
+    <div class="btnrow">
+      <button id="addClip">+ Add clip</button>
+      <button id="tlPlay">▶ Play timeline</button>
+      <button id="tlFit">Fit to music</button>
+    </div>
+    <label class="row check"><span>Loop the preview</span><input type="checkbox" id="tlLoop"></label>
+    <div id="tlTotal" class="hint"></div>
+    <h3>Project</h3>
+    <p class="hint">Saves the timeline, art style, sliders, mood, placed objects and camera keys in one file.</p>
+    <div class="btnrow">
+      <button id="projSave">Save project</button>
+      <label class="file">Open project…<input type="file" id="projFile" accept=".json,application/json"></label>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Atmosphere</summary>
+    <div id="presets" class="grid"></div>
+    <label class="row"><span>Fog</span><input type="range" data-atmos="fog" min="0.3" max="4" step="0.05" value="1"><output></output></label>
+    <label class="row"><span>Dust in the air</span><input type="range" data-atmos="dust" min="0" max="3" step="0.05" value="1"><output></output></label>
+    <label class="row"><span>Clouds</span><input type="range" data-atmos="clouds" min="0" max="2" step="0.05" value="1"><output></output></label>
+    <label class="row"><span>Cloud shadows</span><input id="cloudShadows" type="range" data-atmos="cloudShadows" min="0" max="1" step="0.05" value="0.6"><output></output></label>
+    <label class="row"><span>Extra rain</span><input type="range" data-atmos="rain" min="0" max="1" step="0.05" value="0"><output></output></label>
+    <label class="row"><span>Mood change (s)</span><input type="range" data-atmos="transition" min="0.5" max="30" step="0.5" value="5"><output></output></label>
+  </details>
+
+  <details open>
+    <summary>Town life</summary>
+    <label class="row"><span>People walking</span><input type="range" data-life="people" min="0" max="24" step="1" value="10"><output></output></label>
+    <label class="row"><span>Horse riders</span><input type="range" data-life="riders" min="0" max="4" step="1" value="2"><output></output></label>
+    <label class="row"><span>Wind</span><input type="range" data-life="wind" min="0" max="2" step="0.05" value="1"><output></output></label>
+    <label class="row check"><span>Stagecoach</span><input type="checkbox" data-life-check="coach" checked></label>
+    <label class="row check"><span>Steam train</span><input type="checkbox" data-life-check="train" checked></label>
+    <div class="btnrow"><button id="callTrain" title="The train arrives at the station in about 15 seconds">Call the train</button></div>
+    <label class="row check"><span>Chickens</span><input type="checkbox" data-life-check="chickens" checked></label>
+    <label class="row check"><span>Tumbleweeds</span><input type="checkbox" data-life-check="tumbleweeds" checked></label>
+    <label class="row check"><span>Willow Creek hamlet</span><input type="checkbox" data-life-check="hamlet" checked></label>
+    <label class="row check"><span>Cast line-up</span><input type="checkbox" id="castLineup"></label>
+    <div class="btnrow"><button id="meetCast" title="The whole cast stands in a row across the street">Meet the cast</button></div>
+    <p class="hint">Riders and the stagecoach come down the road, turn in front of the church and ride back out. Wind moves the shop signs, the flag and the tumbleweeds.</p>
+  </details>
+
+  <details open>
+    <summary>Brush &amp; finish</summary>
+    <label class="row"><span>Brush size</span><input type="range" data-paint="radius" min="1" max="7" step="1" value="4"><output></output></label>
+    <label class="row"><span>Paint amount</span><input type="range" data-paint="strength" min="0" max="1" step="0.05" value="1"><output></output></label>
+    <label class="row"><span>Stroke wobble</span><input type="range" data-paint="wobble" min="0" max="2" step="0.05" value="0.8"><output></output></label>
+    <label class="row"><span>Hand-painted flicker</span><input type="range" data-paint="boil" min="0" max="1" step="0.05" value="0.3"><output></output></label>
+    <label class="row"><span>Thick paint (impasto)</span><input type="range" data-paint="impasto" min="0" max="1.5" step="0.05" value="0.6"><output></output></label>
+    <label class="row"><span>Canvas texture</span><input type="range" data-paint="canvas" min="0" max="1.5" step="0.05" value="0.5"><output></output></label>
+    <label class="row"><span>Saturation</span><input type="range" data-paint="sat" min="0.3" max="1.6" step="0.05" value="1"><output></output></label>
+    <label class="row"><span>Warmth</span><input type="range" data-paint="warmth" min="-1" max="1" step="0.05" value="0"><output></output></label>
+    <label class="row"><span>Contrast</span><input type="range" data-paint="contrast" min="0.7" max="1.5" step="0.05" value="1.05"><output></output></label>
+    <label class="row"><span>Vignette</span><input type="range" data-paint="vignette" min="0" max="1" step="0.05" value="0.45"><output></output></label>
+    <label class="row"><span>Film grain</span><input type="range" data-paint="grain" min="0" max="1" step="0.05" value="0.3"><output></output></label>
+  </details>
+
+  <details>
+    <summary>Place objects</summary>
+    <p class="hint">Pick an object, then click the ground. Esc stops placing.</p>
+    <div id="props" class="grid">
+      <button data-prop="barrel">Barrel</button><button data-prop="crate">Crate</button>
+      <button data-prop="hay">Hay bale</button><button data-prop="wagon">Wagon</button>
+      <button data-prop="lantern">Lantern</button><button data-prop="campfire">Campfire</button>
+      <button data-prop="tree">Tree</button><button data-prop="rock">Rock</button>
+      <button data-prop="trough">Water trough</button><button data-prop="bench" title="Townsfolk come and sit on benches">Bench</button>
+    </div>
+    <h3>2D painted cut-out</h3>
+    <label class="file">Add cut-out (PNG)…<input type="file" id="cutoutFile" accept="image/png,image/webp"></label>
+    <label class="row"><span>Cut-out height (m)</span><input type="range" id="cutoutHeight" min="0.3" max="8" step="0.1" value="2.2"><output></output></label>
+    <label class="row check"><span>Cut-outs walk around</span><input type="checkbox" id="cutoutWander"></label>
+    <div class="btnrow"><button id="undoProp">Undo last</button><button id="clearProps">Remove all placed</button></div>
+  </details>
+
+  <details id="buildPanel" open>
+    <summary>Build</summary>
+    <p class="hint">Pick a building, then click the ground. R or mouse wheel rotates. Esc stops. With no tool, click a placed building to select it.</p>
+    <div id="buildCatalogue" class="grid">
+      <button data-build="shop">Shop front</button><button data-build="hotel">Two-storey hotel</button>
+      <button data-build="house">House</button><button data-build="barn">Barn</button>
+      <button data-build="chapel">Chapel</button><button data-build="tower">Water tower</button>
+      <button data-build="windmill">Windmill</button>
+      <button data-build="cabin">Log cabin</button><button data-build="brick">Brick store</button>
+      <button data-build="blacksmith">Blacksmith</button><button data-build="hitch">Hitching post</button>
+    </div>
+    <label class="row"><span>Width (m)</span><input id="buildWidth" type="range" min="6" max="20" step="1" value="10"><output>10</output></label>
+    <label class="row"><span>Floors</span><input id="buildFloors" type="range" min="1" max="2" step="1" value="1"><output>1</output></label>
+    <label class="row"><span>Wall colour</span><select id="buildWall">
+      <option value="34,30,48">Sandstone</option><option value="8,45,35">Barn red</option>
+      <option value="205,25,52">Blue</option><option value="95,25,45">Sage</option><option value="38,18,84">Ivory</option>
+    </select></label>
+    <div id="buildSwatches" class="btnrow" aria-label="Wall colour presets"></div>
+    <label class="row"><span>Sign text</span><input id="buildSign" type="text" maxlength="60" value="GENERAL STORE"></label>
+    <p class="hint">Floors and signs apply to shops, hotels, houses and barns. Width scales the chapel and towers.</p>
+    <div class="btnrow"><button id="deleteBuilding" disabled>Delete selected (Delete)</button><button id="clearBuilt">Remove all built</button></div>
+    <div id="buildSelection" class="hint">No building selected</div>
+    <h3>Dirt roads</h3>
+    <label class="row"><span>Road width (m)</span><input id="roadWidth" type="range" min="1" max="14" step="0.5" value="5"><output>5</output></label>
+    <div class="btnrow"><button id="drawRoad">Draw road</button><button id="finishRoad">Finish (Enter)</button><button id="undoRoad">Remove last road</button></div>
+    <div class="btnrow"><button id="drawFence">Draw fence</button><button id="finishFence">Finish fence</button><button id="undoFence">Remove last fence</button></div>
+    <p class="hint">Click ground points. Enter or double-click finishes; Esc cancels the unfinished road.</p>
+  </details>
+
+  <details>
+    <summary>Painted backdrop</summary>
+    <p class="hint">Load a stitched 360° painting (sky + far mountains). It wraps around the whole valley.</p>
+    <a class="file" href="stitch.html">Stitch ChatGPT tiles…</a>
+    <label class="file">Load backdrop…<input type="file" id="backdropFile" accept="image/*"></label>
+    <div class="btnrow"><button id="backdropClear">Back to painted mountains</button></div>
+  </details>
+
+  <details>
+    <summary>Sound</summary>
+    <label class="file">Load music…<input type="file" id="musicFile" accept="audio/*"></label>
+    <div id="musicName" class="hint">No music loaded</div>
+    <div class="btnrow"><button id="musicToggle">Play / pause music</button></div>
+    <label class="row"><span>Music volume</span><input type="range" data-audio="music" min="0" max="1" step="0.05" value="0.8"><output></output></label>
+    <label class="row"><span>Wind ambience</span><input type="range" data-audio="wind" min="0" max="1" step="0.05" value="0.35"><output></output></label>
+    <label class="row"><span>Place sounds</span><input type="range" data-audio="ambience" min="0" max="1.5" step="0.05" value="0.8"><output></output></label>
+    <div class="hint">Birds by day, crickets and owls at night, the river, mill, train, café piano and rain, following the camera. Click anywhere once to start the sound. Videos get the same sounds.</div>
+  </details>
+
+  <details open>
+    <summary>Video</summary>
+    <label class="row"><span>Output size</span>
+      <select id="outputSize"><option value="window">Fit window</option><option value="1080p">1920 × 1080</option><option value="720p">1280 × 720</option></select>
+    </label>
+    <label class="row check"><span>Cinema bars</span><input type="checkbox" id="letterbox"></label>
+    <h3>Render MP4 (smooth, for YouTube)</h3>
+    <p class="hint">Draws every frame one by one, so the video never stutters, even at 4K on a slow PC. Takes longer than real time.</p>
+    <label class="row"><span>Resolution</span>
+      <select id="renderRes"><option value="1280x720">1280 × 720</option><option value="1920x1080" selected>1920 × 1080 (HD)</option><option value="2560x1440">2560 × 1440</option><option value="3840x2160">3840 × 2160 (4K)</option></select>
+    </label>
+    <label class="row"><span>Frames / second</span>
+      <select id="renderFps"><option>24</option><option selected>30</option><option>60</option></select>
+    </label>
+    <label class="row"><span>What to render</span>
+      <select id="renderWhat"><option value="timeline">The timeline, once</option><option value="loop">The timeline, looped to length</option><option value="current">Current camera</option></select>
+    </label>
+    <label class="row" id="renderSecondsRow"><span>Length (minutes)</span><input type="number" id="renderMinutes" min="0.1" max="240" step="0.5" value="1"></label>
+    <label class="row check"><span>Include sound</span><input type="checkbox" id="renderSound" checked></label>
+    <div class="btnrow"><button id="renderBtn" class="primary">⬇ Render MP4</button></div>
+
+    <h3>Quick screen recording</h3>
+    <div class="btnrow"><button id="recBtn" class="rec">● Record video</button></div>
+    <p class="hint">Records what you see live (with music and wind) as a .webm. Can stutter if the PC is busy; use Render MP4 for final videos.</p>
+  </details>
+</aside>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

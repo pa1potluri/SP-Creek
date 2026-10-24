@@ -1,0 +1,24 @@
+# Only SP Creek is tracked here; this folder also holds other projects.
+/*
+!/.gitignore
+!/AGENTS.md
+!/CLAUDE.md
+!/tasks/
+!/serve_world.py
+!/SP Creek.bat
+!/README.md
+!/CREDITS.md
+!/JOIN.md
+!/docs/
+!/world/
+
+# big outputs and other people's work inside world/
+world/renders/
+world/tests/village-dusk/
+world/src/showroom/
+world/assets/showroom/
+world/showroom*
+*.mp4
+*.wav
+__pycache__/
+world/tests/*.log

@@ -9,6 +9,7 @@
 - First three day previews loaded without browser errors. Rounded pony geometry and interaction spacing adjusted after review.
 
 ## Left / stopping point
-- Farm smoke tests, all-camera clearance and final day/night captures next.
-- Full suite once (include camping-night and pony-farm suites), record counts, commit result and mark done before task 28.
+- Farm smoke: 32 passed. Clearance: 65 passed, 64 shots / 12,864 samples, no failed paths or browser errors; sound remained locked.
+- Final day/night captures saved for farm shots 61-63. Also corrected reserved camping camera 60 in the allowed camera.js to clamp above natural ground while camping is unwired; extra pony-farm-60-day/night.png evidence uses the manual factory harness. Camping startup remains deferred as requested.
+- Full suite next (all eighteen suites, including manual camping-night factory smoke and pony-farm). Record counts, commit result and mark done before task 28.
 - Current branch area/pony-farm from camping WIP faea577. No merge, push or publication.

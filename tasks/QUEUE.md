@@ -30,7 +30,7 @@ finished. Re-read this file each time; Claude may change it.
 | 17a | `tasks/pavi-siri.md` | `area/pavi-siri` | done |
 | 17b | `tasks/sunset-cove.md` | `area/sunset-cove` | done; preview fixes + Episode 1; full 1172 + 2 passed, day/night previews saved |
 | 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | done; full 1202 + 2 passed; final replay checks 32; day/night previews saved |
-| 19 | `tasks/playground.md` | `area/playground` | queued |
+| 19 | `tasks/playground.md` | `area/playground` | done; full 1240 + 2 passed; day/night and oil previews saved |
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | queued |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |

@@ -1740,12 +1740,13 @@ export class World {
   }
 
   _detailBounds(type) {
-    return {gardenFence:[2.6,0.2],vegetablePatch:[2.3,1.5],flowerBox:[1,0.35],laundryLine:[2.7,0.35],waterWell:[1.2,1],woodPile:[1.1,0.8],mailbox:[0.35,0.3],lanternString:[3,0.3],gardenBench:[1.1,0.55],snowman:[0.8,0.75],pumpkinPile:[1.2,0.85],littleBridge:[1.6,3]}[type];
+    return {gardenFence:[2.6,0.2],vegetablePatch:[2.3,1.5],flowerBox:[1,0.35],laundryLine:[2.7,0.35],waterWell:[1.2,1],woodPile:[1.1,0.8],mailbox:[0.35,0.3],lanternString:[3,0.3],gardenBench:[1.1,0.55],snowman:[0.8,0.75],pumpkinPile:[1.2,0.85],littleBridge:[1.6,3]}[type]||this.extraBuildPieces?.[type]?.bounds;
   }
 
   _buildDetail(type, s) {
     const g=new THREE.Group(), scale=s.w/10, bounds=this._detailBounds(type);
     g.name=type;g.userData.buildPiece=true;g.position.set(s.x,s.y,s.z);g.rotation.y=s.rot;g.scale.setScalar(scale);this.root.add(g);
+    if(this.extraBuildPieces?.[type]){this.extraBuildPieces[type].build(g);this.colliders.rects.push(this._rectOf(g,0,0,bounds[0]*scale,bounds[1]*scale));return g;}
     this.detailMats??=Object.fromEntries(Object.entries({cream:'#f2dfb5',green:'#84a477',soil:'#8d7057',pink:'#e6b1c7',blue:'#accbdc',gold:'#ebc676',orange:'#d79450',snow:'#eff3ee',ink:'#5a514b'}).map(([key,color])=>[key,new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide})]));
     const m=this.detailMats,wood=this.mat.wood,dark=this.mat.darkWood;
     const add=(geo,mat,x=0,y=0,z=0)=>{const o=mesh(geo,mat);o.position.set(x,y,z);g.add(o);return o;};

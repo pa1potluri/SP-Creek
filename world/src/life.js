@@ -961,3 +961,12 @@ export class Life {
     }
   }
 }
+
+// Small, absolute-time playground poses; routes stay with their owning area.
+export function posePlaygroundChild(p,kind,t){
+  animatePerson(p,t*1.4,kind==='slide'?0.35:0);
+  let sit=kind==='swing'?1:kind==='slide'?THREE.MathUtils.smoothstep(t,18,20)*(1-THREE.MathUtils.smoothstep(t,28,30)):0;
+  if(sit){for(const leg of p.legs)leg.rotation.x=-1.15*sit;for(const knee of p.knees||[])knee.rotation.x=0.55*sit;for(const arm of p.arms)arm.rotation.x=-0.8*sit;}
+  if(kind==='dig'){p.upper.rotation.x=0.25;for(let i=0;i<2;i++){p.arms[i].rotation.x=-0.9+Math.sin(t*0.8+i)*0.15;p.elbows[i].rotation.x=-0.65;}for(const knee of p.knees||[])knee.rotation.x=0.9;}
+  return kind==='slide'?0.72*sit:0;
+}

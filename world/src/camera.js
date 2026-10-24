@@ -159,7 +159,7 @@ function makeShots() {
     {name:'Two small friends on a big beach',duration:35,loop:false,sample(t,out){const p=stageCove('beach',t+15);out.pos.set(-299-t*0.04,55,-5-t*0.08);out.look.set(p.x,p.y,p.z);}},
     {name:'Down the lantern lane',duration:35,loop:false,sample(t,out){const p=stageCove('lane',t),x=p.x+6;out.pos.set(x,Math.max(p.y+3.5,walkHeight(x,p.z)+1.6),p.z);out.look.set(p.x-12,p.y+2,p.z);}},
   ].map(s=>({...s,group:'Sunset Cove',clearance:1.5}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews];
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5}];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

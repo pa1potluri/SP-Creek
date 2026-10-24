@@ -11,6 +11,7 @@ import { OilShader, LookShader, FinalShader } from './painterly.js';
 import { STYLES } from './styles.js';
 import { Seasons } from './seasons.js';
 import { buildSunsetCove } from './areas/sunset-cove.js';
+import { buildPlayground } from './areas/playground.js';
 import * as T from './textures.js';
 import { Director } from './camera.js';
 import { AudioEngine } from './audio.js';
@@ -82,6 +83,7 @@ const forest = buildForest(world);
 const meadowLake = await buildMeadowLake(world);
 const crystalMine = buildCrystalMine(world);
 const sunsetCove=await buildSunsetCove(world,life);
+const playground=buildPlayground(world,life);
 const seasons=new Seasons(world,atmos,{forest,meadowLake});
 function setSeason(key,save=false){seasons.set(key);$('#season').value=seasons.key;if(save)LS.set('dh.season',seasons.key);}
 $('#season').onchange=()=>setSeason($('#season').value,true);
@@ -998,6 +1000,7 @@ function step(dt) {
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(dt, time, camera);
   sunsetCove.update(time,camera,atmos.cur);
+  playground.update(time,camera);
   cafe.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
   audio.tick(listener(), dt);

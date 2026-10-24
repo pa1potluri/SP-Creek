@@ -494,7 +494,7 @@ replaySpeed.oninput=()=>{replaySpeed.nextElementSibling.textContent=replaySpeed.
 $('#replayBuild').onclick=()=>{
   if(timeline.playing&&timeline.clips[timeline.index]?.shot==='buildReplay'){timeline.stop();refreshTimeline();return;}
   if(!world.buildEntries().length)return flash('Place a few pieces first.');
-  game.exit();let index=timeline.clips.findIndex(c=>c.shot==='buildReplay');
+  game.exit();setTool(null);let index=timeline.clips.findIndex(c=>c.shot==='buildReplay');
   if(index<0){index=timeline.clips.length;timeline.clips.push({shot:'buildReplay',seconds:1,mood:'keep',move:'cut'});}
   timeline.clips[index].replaySpeed=+replaySpeed.value;saveTimeline();renderClips();timeline.start(index);refreshTimeline();
 };
@@ -502,6 +502,7 @@ $('#replayBuild').onclick=()=>{
 // town stay. "Remove all placed" under Place objects only clears props.
 $('#clearBuilt').onclick = () => {
   if (!confirm('Remove everything you built (buildings, hitching posts, fences and roads)?')) return;
+  world.endBuildReplay();
   selectBuilding(null);
   for (const e of [...world.fences]) world.removeFence(e);
   for (const e of [...world.buildings]) world.removeBuilding(e, false);
@@ -516,6 +517,7 @@ $('#finishFence').onclick = finishRoad;
 $('#undoFence').onclick = () => { const e = world.fences.at(-1); if (e) { world.removeFence(e); if (selectedBuilding === e) selectBuilding(null); saveLayout(); } };
 $('#finishRoad').onclick = finishRoad;
 $('#undoRoad').onclick = () => {
+  world.endBuildReplay();
   const e = world.roads.pop();
   if (e) { world.root.remove(e.obj); e.obj.geometry.dispose(); saveLayout(); }
 };
@@ -642,6 +644,7 @@ function renderClips() {
     if(c.shot==='buildReplay'){d.querySelector('[data-k=seconds]').disabled=true;d.querySelector('[data-k=seconds]').title='Replay length follows your piece count and speed';}
     d.querySelectorAll('[data-k]').forEach((el) => (el.onchange = () => {
       c[el.dataset.k] = el.dataset.k === 'seconds' ? Math.max(0.5, +el.value || 0.5) : el.value;
+      if(el.dataset.k==='shot'){if(c.shot==='buildReplay')c.replaySpeed=+replaySpeed.value;renderClips();}
       saveTimeline();
       refreshTimeline();
     }));

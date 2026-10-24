@@ -1725,10 +1725,10 @@ export class World {
     if(changed){for(const p of replay.physics){const list=this._replayList(p.key),i=list.indexOf(p.value),show=p.item.shown&&p.index>=0;if(show&&i<0)list.push(p.value);else if(!show&&i>=0)list.splice(i,1);}this.onBuildingsChanged?.();}
     this.buildSparkles.count=count;this.buildSparkles.instanceMatrix.needsUpdate=true;
   }
-  buildReplayCamera(t,director) {
+  buildReplayCamera(t,out) {
     const replay=this.buildReplay;if(!replay)return;const center=replay.bounds.getCenter(V()),size=replay.bounds.getSize(V()),r=Math.max(12,Math.max(size.x,size.z)*0.9+8),a=0.35+t*0.035;
-    const x=center.x+Math.cos(a)*r,z=center.z+Math.sin(a)*r,y=Math.max(terrainHeight(x,z)+8,replay.bounds.max.y+r*0.55+5);
-    director.state.pos.set(x,y,z);center.y=replay.bounds.min.y+Math.min(size.y,6)*0.5;const d=center.sub(director.state.pos);director.free.yaw=Math.atan2(d.x,d.z);director.free.pitch=Math.atan2(d.y,Math.hypot(d.x,d.z));
+    const x=center.x+Math.cos(a)*r,z=center.z+Math.sin(a)*r,y=Math.max(terrainHeight(x,z)+35,replay.bounds.max.y+r*0.55+12);
+    out.pos.set(x,y,z);center.y=replay.bounds.min.y+Math.min(size.y,6)*0.5;out.look.copy(center);
   }
   endBuildReplay() {
     const replay=this.buildReplay;if(!replay)return;this.buildReplay=null;
@@ -1969,6 +1969,7 @@ export class World {
   }
 
   updateTerrain() {
+    this.endBuildReplay();
     const pos = this.ground.geometry.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i), z = pos.getZ(i);

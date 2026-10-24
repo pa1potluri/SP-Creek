@@ -38,7 +38,13 @@ export class Timeline {
     return true;
   }
 
+  _restoreReplayCamera() {
+    if(!this.replayCamera)return;
+    this.director.setFree(true);this.director.customShot=this.replayCamera.previous;this.replayCamera=null;
+  }
+
   stop() {
+    this._restoreReplayCamera();
     this.world.endBuildReplay();
     this.playing = false;
     this.index = -1;
@@ -62,18 +68,21 @@ export class Timeline {
     if(this.clips[i]?.shot==='buildReplay'){
       if(!this.world.buildReplay){this.stop();return 'ended';}
       const local=this.t-this.clips.slice(0,i).reduce((n,c)=>n+this.duration(c),0);
-      this.world.updateBuildReplay(local);this.world.buildReplayCamera(local,this.director);
+      this.world.updateBuildReplay(local);this.replayCamera.time=local;
     }
     return null;
   }
 
   _enter(i, first) {
     const c = this.clips[i];
-    this.world.endBuildReplay();
+    this._restoreReplayCamera();this.world.endBuildReplay();
     this.index = i;
     if (c.mood && c.mood !== 'keep') this.atmos.setPreset(c.mood, first);
     if(c.shot==='buildReplay'){
-      this.world.beginBuildReplay(c.replaySpeed);this.director.setFree(true);this.director.free.keys.clear();this.director.auto=false;this.world.buildReplayCamera(0,this.director);this.onClip(i);return;
+      if(!this.world.beginBuildReplay(c.replaySpeed)){this.stop();return;}
+      const d=this.director;this.replayCamera={previous:d.customShot,time:0};
+      d.customShot={name:'Replay build',duration:this.duration(c),loop:true,sample:(_,out)=>this.world.buildReplayCamera(this.replayCamera?.time||0,out)};
+      d.mode='shot';d.index=-1;d.t=0;d.flight=null;d.hold=true;d.shotSpeed=1;d.auto=false;d.free.keys.clear();d.customShot.sample(0,d.state);d.onChange();this.onClip(i);return;
     }
     // natural: play the shot at its own calm speed and just cut after `seconds` (tours of long paths)
     this.director.playShot(c.shot, { cut: first || c.move === 'cut', fitTo: c.natural ? 0 : Math.max(0.5, +c.seconds || 0) });

@@ -1,20 +1,18 @@
-# Little train trip - WIP
+# Little train trip - complete
 
 ## Built
-- Railway branch south of Willow Creek, clear of its houses and pond, to a sheltered seaside halt above Cove. Both stops recorded in BLUEPRINT.md.
-- Windowed coaches, boarding steps, closed lower doors during travel, original Pavi/Siri passengers and soft steam.
-- Appended shots 56-58 and four-minute "A little train trip" preset. Existing north-south service retained.
-- Track clearing uses clear-only pads after scenery generation, preserving the original seeded layout elsewhere. A smoothed 10%-maximum grade prevents the coaches cutting into steep natural banks.
+- A 422m railway branch south of Willow Creek, outside its houses and pond, ending at a sheltered seaside halt above Cove. Stops and route recorded in BLUEPRINT.md.
+- Windowed coaches, original Pavi/Siri passengers, gradual boarding, retracting steps, closed lower travel doors, soft steam and the existing main-station departure whistle.
+- Appended shots 56-58 and four-minute "A little train trip" preset. Existing north-south service remains.
+- Smoothed track grade capped at 10%; narrow terrain pads prevent coach-floor burial. Railway pad priority survives Hamlet off/on and project changes. Clearing preserves seeded scenery outside the corridor.
+- Fixed visibility ownership with the playground and restored both normal and Cove siblings when the trip ends. Warm emissive trim keeps coach windows readable at night without new lights.
 
-## Stopped point / left
-- Corrected station framing, boarding height, level halt decks, retracting steps and closed lower travel doors. Fixed the station/playground visibility ownership interaction.
-- Focused checks: 25 passed, including final rendered preset frame and visibility cleanup. Clearance: 60 passed (59 shots / 11,859 samples), browser errors empty. Graded-route floor clearance at least 0.827m in the sampled longitudinal check. Full suite running (session 69490); not yet complete.
-- All six final Animated film screenshots for shots 56-58 are saved, in day/night.
-- Still need the completed full-suite outcome and counts before done. Code and all six final day/night previews saved. Warm emissive coach trim makes the night windows readable without new lights.
-- Existing departure whistle is reused at the main station. Audio listener in main.js still assumes rail x=70; spatial following on the branch would require main.js scope (not edited).
-- Current branch area/train-trip, from balloon completion 2d48a57. No merge, push or publication.
+## Checked
+- Fresh full browser suite: **1389 passed + 2 startup reload checks**, browser errors `[]`; sound stayed locked.
+- Counts: train-trip 28; area-shots 7; build-mode 525; clouds-water 227; family-mode 46 (+2 startup); hamlet-shots 47; hamlet 37; more-buildings 155; names-tour-shots 51; pavi-siri 50; shot-clearance 60; sunset-cove 40; playground 35; lantern-evening 26; pavi-siri-moments 35; balloon-ride 20.
+- Clearance: 59 shots / 11,859 samples, no failed paths. Route sampling keeps coach floors at least 0.827m above sampled longitudinal ground; deterministic seeks, stops, doors, steps, Hamlet toggles and final rendered preset frame pass.
+- Animated film previews: `world/tests/train-trip-56-day.png` / `-night.png` through shot 58 (six images), day/night inspected.
 
-## Full-run follow-up
-- First full run passed the other fifteen suites but the final train ground check failed after Hamlet toggles reordered terrain pads (reported burial 7.685m). Not marked done.
-- Fixed railway pad priority in the track module and train update/apply paths; added off/on Hamlet regression checks. Also removed an early Cove-actor hide so its saved visibility remains correct; added Cove cleanup coverage.
-- Focused regression: train 28, sunset-cove 40, moments 35 passed; browser errors empty. Fresh full run follows with train first.
+## Follow-up / scope limit
+- Visual trip complete. Branch audio pan remains tied to original rail x=70 because main.js listener() is outside this task's files. Main-station whistle works; request for actual locomotive x/z is in STUCK.md. No main.js edit was made.
+- Claude reviews before acceptance. No merge, push or publication.

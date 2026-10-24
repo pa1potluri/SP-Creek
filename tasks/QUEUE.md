@@ -28,7 +28,7 @@ finished. Re-read this file each time; Claude may change it.
 | 16 | `tasks/sky-edge.md` | `area/sky-edge` | done (from main) |
 | 17 | `tasks/soft-wind.md` | `area/soft-wind` | done (from main) |
 | 17a | `tasks/pavi-siri.md` | `area/pavi-siri` | done |
-| 17b | `tasks/sunset-cove.md` | `area/sunset-cove` | WIP saved: approved art built; full 1159 + 2 and affected rerun passed; final visual closeout pending after 3:09 PM reset |
+| 17b | `tasks/sunset-cove.md` | `area/sunset-cove` | done; preview fixes + Episode 1; full 1172 + 2 passed, day/night previews saved |
 | 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | WIP saved as acbcb2c; unverified draft; bring updated cove forward after reset |
 | 19 | `tasks/playground.md` | `area/playground` | queued |
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | queued |

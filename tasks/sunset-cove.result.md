@@ -1,32 +1,40 @@
-# WIP - Sunset Cove: saved at the 7% usage stop
+# Sunset Cove - ready for Claude review
 
-Stopped on area/sunset-cove at the user's instruction, before the 3:09 PM reset. All implementation, approved assets and review images are saved locally. No push or publication.
+Finished the approved-art cove, all five preview fixes and the first episode additions. No push, merge or publication. Main's offline libraries and sky fix remain in place.
 
-Done: west coast slope, curved golden beach and river mouth; shallow sea and waterline barrier; railed/floored pier and three rocking boats; fifteen instanced cottages, lanes/steps, fountain, plants/flowers, warm lanterns/windows; lighthouse island and slow soft beam; dry sibling beach scene and calm coast walkers; three appended shots 39-41 and a twenty-minute preset; quiet filtered sea/breeze audio. Native vegetation retains legacy sampling so old camera flights remain clear. Sea/pier safety and all styles/seasons have checks.
+Built: curved golden beach, west coast terrain and river mouth, shallow turquoise sea, protected waterline, railed pier and three gently rocking boats; fifteen instanced white cottages with terracotta roofs, bougainvillea, pots, warm windows/lanterns, fountain, connecting lanes and courtyard palms. Sea/breeze sound stays locked until a real user click. All approved oil/clean textures, foliage and horizon tiles are committed (assets originally saved in a590a91).
 
-Approved art is committed in a590a91: oil/clean plaster_wall, terracotta_roof, cobblestones, beach_sand, palm and bougainvillea, plus sea_horizon_1/2. These are integrated, with painted foliage and 3D flat-style fallback. The cove-only west-facing panorama follows camera height with its image horizon at 56.5%; upper/side edges feather out. The main valley panorama is unchanged. Exact ground triangles prevent grass seams through the sand. Far sea fog is disabled and distant water fades into the painted sea, removing the cream fog band found in the direct horizon preview.
+## Completed from the plan after reset
 
-Full approved-art suite passed: area-shots 7, build-mode 493, clouds-water 227, family-mode 46 plus 2 startup reload checks, hamlet-shots 47, hamlet 37, more-buildings 155, names-tour-shots 51, shot-clearance 43, pavi-siri 23, sunset-cove 30. Total 1,159 checks plus 2 startup checks; no browser errors. All 42 shots / 8,442 clearance samples passed. After the final panorama rotation and far-sea fog/fade adjustment, the affected suites were repeated: sunset-cove 30 and shot-clearance 43, both passed with no browser errors. Captures also reported no errors and audio locked. No tests started sound. Local server: port 8811.
+- One horizon: distant 3D water samples the same painted panorama along the viewing ray, with a gentle near-water transition. High views retain live water rather than stretching the picture's bottom row. The cove's sky rim feathers broadly; the valley panorama is hidden only while at the cove and restored on leaving, including after switching styles.
+- One lighthouse: kept the painted lighthouse island; removed the duplicate modelled island, tower and beam.
+- Smooth foam: denser near-shore water geometry and a continuous soft foam mask. A metre-spaced sand strip replaces the coarse ground triangles at the shoreline, removing the saw-tooth beach edge.
+- Footprints: small paired sand-coloured alpha dents, feathered edges, no cast shadows, fading deterministically with world time.
+- Natural village: fixed seeded spacing, size and rotation variations, matching cottage details/colliders, additional lanes, flowers and courtyard palms. Gentler coast terrain and one sloping lane pad support shallow steps without the previous abrupt descent.
+- Shot 42, Walking into the sunset: low tracking view from behind, shared route/clip time and hand-in-hand pose; no face close-ups.
+- Shot 43, Two small friends on a big beach: high, wide, very slow view with the siblings small on the beach.
+- Shot 44, Down the lantern lane: follows the pair from behind down the shallow steps; nearby walkers stay out of the episode framing. The existing lane shot 41 now samples the actual descent height throughout.
+- Episode 1: Welcome to SP Creek: appended preset, exactly 180 seconds, golden hour and quiet sea/breeze. Order: 39 (20s), 43 (35s), 44 (35s), 41 (20s), 42 (70s). The front-facing shot 40 remains available but is excluded. Closing composition faces the approved painted sunset; the sun is part of that painting, not a separate animated astronomical sunset.
 
-Latest review images in world/tests/: sunset-cove-39-day/night.png, sunset-cove-40-day/night.png, sunset-cove-41-day/night.png, sunset-cove-oil-day.png, and sunset-cove-sea-horizon-day/night.png. The direct horizon day view was inspected after the fog fix; the cream band is gone.
+For a three-minute local video: choose the Episode 1 preset, then Video > The timeline, once. The shared preset UI otherwise defaults to a long looping render. No video was uploaded or published.
 
-Left / exact resume point: final visual closeout of the approved-art version, especially the direct horizon composition (the painted tile contains a distant lighthouse island as well as the modelled nearer island). Do not start new experiments before the reset. After closeout, mark 17b done and bring this updated branch into area/lets-build-replay before continuing. No new full run is pending unless code changes warrant one; the completed full run and affected rerun are recorded above. Claude review remains required before merge.
+## Checks
 
-Task 18 is separately saved as WIP acbcb2c on area/lets-build-replay, branched from the earlier cove completion 183d82f. Its own result file is committed there. It contains placement-order persistence, hidden/revealed owned physics, temporary scale pivots and sparkles, an orbit, replay UI/speed and a timeline clip/preset. It has NOT been smoke-tested or run through suites. Resume by rebasing/merging the updated cove branch forward, then verify the implementation. First inspect camera focus (the draft uses free camera, whose fixed look distance may blur a large build), preserve the user's custom camera if replacing it with a temporary replay shot, and make clear-built/undo-road stop replay before directly removing road meshes, including road-only builds. Also check terrain updates during replay restore temporary wrappers before repositioning props. Add mixed-order, save/load, seek, cleanup, undo and remove-all tests to build-mode; save day/night replay previews and run the full suite before done.
+Completed full browser suite on port 8811: area-shots 7; build-mode 493; clouds-water 227; family-mode 46 plus 2 startup reload checks; hamlet-shots 47; hamlet 37; more-buildings 155; names-tour-shots 51; pavi-siri 23; shot-clearance 46; sunset-cove 40. Total: **1,172 checks plus 2 startup checks**, no browser errors. All 45 shots / 9,045 clearance samples passed; Willow Creek's 27,009 flight samples remain clear. Earlier focused checks exposed and fixed the lane clearance issue before this completed run.
 
-Tasks 19 playground and 20 lantern-evening are not started. Continue them in order on stacked branches after 18, then stop as requested. Watercolour remains paused until Thu Oct 29.
+Cove checks cover sea/pier safety, dry sibling routes, repeatable seeking/boats, all six art styles, winter sand, appended episode slots/order/duration, cameras staying behind the pair, and valley-panorama restoration after style changes. Captures reported no browser errors and audio locked; no test started sound. Horizon views were saved for golden, morning, dusk, village dusk, rain and night. Visually inspected the smooth shore, overview, rear walks, ending, oil and night views.
 
+## Preview files in world/tests/
 
-## Plan after reset
+- sunset-cove-39-day.png / sunset-cove-39-night.png
+- sunset-cove-40-day.png / sunset-cove-40-night.png
+- sunset-cove-41-day.png / sunset-cove-41-night.png
+- sunset-cove-42-day.png / sunset-cove-42-night.png
+- sunset-cove-43-day.png / sunset-cove-43-night.png
+- sunset-cove-44-day.png / sunset-cove-44-night.png
+- sunset-cove-oil-day.png
+- sunset-cove-sea-horizon-day.png / sunset-cove-sea-horizon-night.png
+- sunset-cove-sea-horizon-morning.png, -dusk.png, -villageDusk.png, -rain.png
+- sunset-cove-episode-ending-day.png
 
-Planning only; Claude's five preview fixes and Episode 1 additions remain to be implemented and checked.
-
-- **1. One horizon:** `world/src/world.js` - `World.createSea()`; `world/src/areas/sunset-cove.js` - `buildSunsetCove()` / `area.update()`: align the painted horizon with the water plane in screen space, then tune the distant sea alpha/colour transition against the painting. Inspect low and high views in every mood so the blend leaves no second edge or dark band.
-- **2. One lighthouse:** `world/src/areas/sunset-cove.js` - `buildSunsetCove()` / `area.update()`: retain the approved painted island; remove the duplicate modelled island, tower and rotating beam, including their update references.
-- **3. Smooth foam:** `world/src/world.js` - `World.createSea()`: add closely spaced shoreline columns/rows so the curved coast is resolved near the beach, and use a soft continuous shoreline-distance foam mask with gentle world-time motion instead of coarse triangular interpolation.
-- **4. Sand footprints:** `world/src/areas/sunset-cove.js` - `buildSunsetCove()` footprint instances: replace solid grey discs with small paired sand-tinted oval dent decals, using a feathered alpha mask, slight shading and deterministic age/distance fading; keep them flush with the sampled beach surface.
-- **5. Above-view sky and village:** `world/src/areas/sunset-cove.js` - `buildSunsetCove()` / `area.update()`: correct the backdrop's upper coverage and feather/tint transition to remove the dark sky patch. Give cottages seeded modest position, yaw and scale variation, transform all attached details and colliders consistently, and add short connecting lanes, trees and flowers while preserving clear routes and pads. Check the existing above shot in `world/src/camera.js`.
-- **New shot - Walking into the sunset:** `world/src/areas/sunset-cove.js` - `beachWalk()` / `area.update()`; `world/src/camera.js` - appended shot `sample()`: provide a deterministic shared walking phase and hand-in-hand arm pose; follow low from behind as the pair walk toward the painted sun on a dry, protected route. Use real subject look distance and keep faces out of view throughout the clip.
-- **New shot - Two small friends on a big beach:** `world/src/camera.js` - appended shot `sample()`, using the cove's shared route sampler: make a wide, high, very slow move with both siblings small on the waterline, keeping village/beach context and safe camera clearance.
-- **New shot - Down the lantern lane:** `world/src/areas/sunset-cove.js` - a shared lane-route sampler and `area.update()`; `world/src/camera.js` - appended shot `sample()`: stage the siblings together on the existing lane steps and track from behind toward the sea, sampling actual walk heights and coordinating actor/camera time without showing their faces.
-- **Episode 1 preset:** `world/src/presets.js` - append `VIDEO_PRESETS.episode1Welcome`: build about 180 seconds in the requested order (above, wide beach, lane descent, existing lantern lane, sunset walk), with the final walk longest, golden hour and quiet sea/breeze. Coordinate route phases with clip timing and frame the painted sun touching the sea at the ending; exclude the front-facing beach shot. Before completion, extend `world/tests/sunset-cove.js` and the clearance audit for routes, append-only shots and preset timing, run the full suite once, and save Animated film day/night previews of all three new and any changed shots plus an oil view.
+Nothing remains for this builder task; Claude's visual review is still required before acceptance/merge. Faces remain the existing provisional character models, deliberately hidden or distant in Episode 1. Next: bring this finished tip into the saved area/lets-build-replay WIP acbcb2c, finish task 18, then playground and lantern evening. Watercolour remains paused until Thu Oct 29.

@@ -83,7 +83,7 @@ function applyUserPads(h, x, z) {
     }
     const d = padDistance(p, x, z);
     const blend = p.blend || 8;
-    if (d < blend) h += (p.y - h) * (1 - smoothstep(0, blend, d));
+    if (d < blend) h += (p.y + (x-p.x)*(p.slopeX||0) - h) * (1 - smoothstep(0, blend, d));
   }
   return h;
 }
@@ -111,8 +111,8 @@ export function terrainHeight(x, z) {
   const rd = Math.abs(z - riverZ(x));
   h *= smoothstep(13, 60, rd); // broad flat river valley
   h -= 2.6 * (1 - smoothstep(6, 13, rd)); // the channel itself
-  if(!legacyNatureTerrain&&x<-290){const d=x-coastX(z),land=d<0?-1.2+d*0.035:-0.85+d*0.06+d*d*0.003;
-    const channel=2.2*(1-smoothstep(7,15,Math.abs(z-riverZ(x))));h+=(land-channel-h)*(1-smoothstep(-330,-290,x));}
+  if(!legacyNatureTerrain&&x<-270){const d=x-coastX(z),land=d<0?-1.2+d*0.035:-0.85+d*0.06+d*d*0.0012;
+    const channel=2.2*(1-smoothstep(7,15,Math.abs(z-riverZ(x))));h+=(land-channel-h)*(1-smoothstep(-300,-270,x));}
   return applyPond(applyUserPads(h, x, z), x, z);
 }
 
@@ -484,6 +484,8 @@ export class World {
     if (oil.meadow) groundSets.oil = T.groundDetailFromImage(oil.meadow, 90);
     if (clean.meadow) groundSets.clean = T.groundDetailFromImage(clean.meadow, 90);
     const groundMat = new THREE.MeshLambertMaterial({ vertexColors: true, map: groundSets.oil || groundSets.clean || T.groundDetailTexture() });
+    // Underwater coast ground must not reappear through the distant sea fade.
+    groundMat.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <begin_vertex>','#include <begin_vertex>\nvCoastGround=position;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nfloat edge=-350.0-18.0*exp(-pow((vCoastGround.z-35.0)/115.0,2.0))+8.0*sin(vCoastGround.z*0.007);if(vCoastGround.x < -330.0 && (vCoastGround.y < -1.01 || (vCoastGround.x<edge+8.0 && vCoastGround.z>-115.0 && vCoastGround.z<195.0))) discard;');};
     groundMat.userData.sets = groundSets;
     this.surfaces.add(groundMat);
     this.ground = mesh(geo, groundMat, false, true);
@@ -944,18 +946,18 @@ export class World {
     this.floors.push(...floors);userFloors.push(...floors);
     // A soft waterline barrier, with a gap only for the railed, floored pier.
     for(let z=-800;z<800;z+=4)if(z<28||z>=32)this.colliders.segs.push({ax:coastX(z)+0.6,az:z,bx:coastX(z+4)+0.6,bz:z+4});
-    const pos=[],uv=[],idx=[],cols=64,rows=200;
-    for(let j=0;j<=rows;j++){const z=-1000+j*10,edge=coastX(z);for(let i=0;i<=cols;i++){pos.push(edge-3000*(1-i/cols),WATER_Y,z);uv.push(z/18,i/cols);}}
+    const pos=[],uv=[],idx=[],cols=96,rows=800;
+    for(let j=0;j<=rows;j++){const z=-1000+j*2.5,edge=coastX(z);for(let i=0;i<=cols;i++){pos.push(edge-3000*Math.pow(1-i/cols,3),WATER_Y,z);uv.push(z/18,1-Math.pow(1-i/cols,3));}}
     for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const a=j*(cols+1)+i,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}
     const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
     const mat=this._waterMaterial(0),before=mat.onBeforeCompile;
     mat.userData.waterUniforms.uWaterDetail={value:0.22};mat.fog=false;
-    mat.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);shader.fragmentShader=shader.fragmentShader
+    mat.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);Object.assign(shader.uniforms,mat.userData.covePicture||{});shader.fragmentShader=shader.fragmentShader
+      .replace('#include <common>','#include <common>\nuniform sampler2D uCovePicture; uniform vec3 uCoveTint; uniform float uCoveRotation,uCoveHeight,uCoveFade;')
       .replace('float shore = uWaterKind < 0.5 ? abs(vWaterUV.y * 2.0 - 1.0) * 1.09 : length(vWaterUV * 2.0 - 1.0);','float shore = clamp(1.0-(1.0-vWaterUV.y)*3000.0/14.0+sin(uWaterTime*0.22+wp.y*0.025)*0.025,0.0,1.0);')
       .replace('float banks = smoothstep(0.40, 0.96, shore);','float banks = 0.0;')
-      .replace('glint * 0.22','glint * 0.07').replace('broken) * 0.28;','broken) * 0.45;')
-      .replace('#include <opaque_fragment>','diffuseColor.a *= 1.0-smoothstep(450.0,1000.0,length(vCloudWorld.xz-cameraPosition.xz));\n#include <opaque_fragment>')
-      .replace('outgoingLight = mix(outgoingLight, reflected, 0.90 + fresnel * 0.07);','vec3 seaDeep=uWaterSky*0.16+uWaterHorizon*0.04;reflected=mix(seaDeep,reflected,smoothstep(0.96,1.0,vWaterUV.y));outgoingLight = mix(outgoingLight, reflected, 0.90 + fresnel * 0.07);');};
+      .replace('glint * 0.22','glint * 0.07').replace('float foam = smoothstep(0.88, 0.99, shore) * smoothstep(0.15, 0.75, broken) * 0.28;','float foam = smoothstep(0.88,0.96,shore)*(1.0-smoothstep(0.98,1.0,shore))*0.32;')
+      .replace('#include <opaque_fragment>','vec3 ray=vCloudWorld-cameraPosition;float dist=length(ray.xz);float theta=mod(atan(ray.x,ray.z)-uCoveRotation+6.2831853,6.2831853);vec2 pictureUV=vec2(1.0-(theta-3.14159265)/3.14159265,0.435+ray.y/max(0.1,dist)*1800.0/uCoveHeight);vec3 picture=texture2D(uCovePicture,pictureUV).rgb*uCoveTint;picture=mix(uWaterHorizon*0.45,picture,uCoveFade);outgoingLight=mix(outgoingLight,picture,smoothstep(25.0,140.0,dist)*smoothstep(0.06,0.25,pictureUV.y));diffuseColor.a=1.0;\n#include <opaque_fragment>');};
     mat.customProgramCacheKey=()=> 'cove-sea-v1';const sea=mesh(geo,mat,false,true);sea.name='Sunset Cove sea';sea.renderOrder=2;this.root.add(sea);return {area,sea};
   }
 

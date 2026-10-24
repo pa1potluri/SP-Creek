@@ -1044,3 +1044,4 @@ function frame() {
 }
 atmos.setPreset('golden', true);
 frame();
+if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));

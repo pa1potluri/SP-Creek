@@ -999,8 +999,8 @@ function step(dt) {
   world.update(dt, time, camera);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
-  forest.update(time, camera, atmos.cur);
-  meadowLake.update(time, camera, atmos.cur, atmos.key);
+  if (world.areaAnimationVisible(camera,-90,forest.pad.y+10,-204,90)) forest.update(time, camera, atmos.cur);
+  if (world.areaAnimationVisible(camera,-225,meadowLake.pad.y+10,0,110)) meadowLake.update(time, camera, atmos.cur, atmos.key);
   crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(dt, time, camera);

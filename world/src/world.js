@@ -1449,7 +1449,7 @@ export class World {
   // Bend a plant with the wind: nothing at the base, most at the top.
   _sway(mat, height, amount) {
     const u = this.foliageUniforms;
-    mat.customProgramCacheKey = () => `sway-${height}-${amount}`;
+    mat.customProgramCacheKey = () => `sway-lod-${height}-${amount}`;
     mat.onBeforeCompile = (shader) => {
       cloudShader(shader);
       shader.uniforms.uTime = u.uTime;
@@ -1465,7 +1465,8 @@ export class World {
           #endif
           float sway = (sin(uTime * 1.6 + swayBase.x * 0.31 + swayBase.z * 0.23) + 0.4 * sin(uTime * 3.1 + swayBase.z * 0.5)) * uWind * ${amount.toFixed(3)} * swayH * swayH;
           transformed.x += sway;
-          transformed.z += sway * 0.6;`);
+          transformed.z += sway * 0.6;
+          ${height <= 0.6 ? 'transformed *= 1.0 - smoothstep(100.0, 180.0, distance(cameraPosition.xz, (modelMatrix * vec4(swayBase, 1.0)).xz));' : ''}`);
     };
   }
 
@@ -2023,6 +2024,7 @@ export class World {
   }
 
   updateTerrain() {
+    this.terrainRevision = (this.terrainRevision || 0) + 1;
     this.endBuildReplay();
     const pos = this.ground.geometry.attributes.position;
     for (let i = 0; i < pos.count; i++) {
@@ -2091,6 +2093,17 @@ export class World {
       sites.forEach(([x,z,sx,sz],i)=>this.puddles.setMatrixAt(i,matrix.makeScale(sx,1,sz).setPosition(x,walkHeight(x,z)+0.025,z)));this.puddles.computeBoundingSphere();this.root.add(this.puddles);
     }
     this.puddles.visible=(this.wetAmount||0)>0.01;this.puddles.material.opacity=(this.wetAmount||0)*0.42;
+  }
+
+  areaAnimationVisible(camera, x, y, z, radius) {
+    if (!camera) return true;
+    const view = this._areaView ??= { center: V(), matrix: new THREE.Matrix4(), frustum: new THREE.Frustum() };
+    view.center.set(x,y,z);
+    // Keep nearby animation and potential shadow casters exact, even behind the camera.
+    if (camera.position.distanceToSquared(view.center) < (radius+120)**2) return true;
+    camera.updateMatrixWorld();
+    view.frustum.setFromProjectionMatrix(view.matrix.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse));
+    return view.frustum.intersectsSphere(new THREE.Sphere(view.center,radius));
   }
 
   update(dt, t, camera) {

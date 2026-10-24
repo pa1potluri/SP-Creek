@@ -44,3 +44,26 @@ the waterline wall only), plant system (palm only), `camera.js` / `presets.js` (
 ## Check
 Full suite; day/night screenshots of the three new shots (`world/tests/sunset-cove-<shot>-day/night.png`) plus one oil
 painting view. Write `tasks/sunset-cove.result.md`, commit, mark done in `QUEUE.md`, continue with the next queued task.
+
+## Claude's preview notes (fix before marking done)
+From your WIP previews `sunset-cove-39/40/41-day.png` and `sunset-cove-sea-horizon-day.png`:
+1. **One horizon only:** the painted sea backdrop and the 3D sea show two horizons with a dark band between them. Blend
+   the 3D sea into the backdrop at the same height (no band), in every mood.
+2. **One lighthouse only:** the 3D lighthouse island duplicates the painted one. Keep the painted one in the far
+   backdrop and either remove the 3D one or move it so they never show together.
+3. **Foam line:** it shows as zig-zag triangles (lantern-lane view). Make it a soft, smooth, rounded foam edge.
+4. **Footprints** look like grey stepping stones. Make them small, soft, sand-coloured dents in pairs, fading out.
+5. **From above:** a dark patch in the sky at the top; and the cottages stand in neat rows like a model. Vary their
+   rotation, size and spacing a little, add a few lanes, trees and flowers between them so it feels like a real village.
+
+## Extra for the first YouTube episode (this evening)
+The first video introduces "SP Creek" (Siri and Pavi's Creek) with Pavi & Siri at the cove, like the reference picture.
+Their faces are not final yet, so **no close-ups of their faces**: only from behind or far away.
+- Append shots: **"Walking into the sunset"** (low camera behind them, they walk hand in hand along the waterline away
+  from the camera toward the sun), **"Two small friends on a big beach"** (very wide, high and slow; they are small figures
+  on the waterline), **"Down the lantern lane"** (from behind, they walk down the lane steps toward the sea).
+  The existing "Beach walk at sunset" faces them: keep it, but don't use it in this preset.
+- Append preset **"Episode 1: Welcome to SP Creek"** (about 3 minutes, golden hour, calm sea and soft breeze): Sunset Cove
+  from above → Two small friends on a big beach → Down the lantern lane → Lantern lane to the sea → Walking into the
+  sunset (last, long, ending as the sun touches the sea). Gentle slow moves, natural pace.
+- Day/night screenshots of the three new shots like the others.

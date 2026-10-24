@@ -152,10 +152,58 @@ export async function runBuildTests() {
     check(world.buildings.length===11&&!world.colliders.rects.includes(selected.additions.rects[0]),'Individual detail removal cleans collider');
     const confirm=window.confirm;try{window.confirm=()=>true;click('#clearBuilt');}finally{window.confirm=confirm;}
     check(world.buildings.length===0&&countPhysics()===clean,'Remove all built clears detail physics, bridge floors and walkables');
+    await checkBuildReplay(app,check);
     return { passed: results.length, results };
   } finally {
     document.title = originalTitle;
     app.loadProject(original);
     if (originalLayout === null) localStorage.removeItem('dh.layout'); else localStorage.setItem('dh.layout', originalLayout);
   }
+}
+
+export async function checkBuildReplay(app=window.__app,report) {
+  const {world:w,director:d,timeline:tl}=app,original=app.projectData(),previousShot=d.customShot,results=[],oldSpeed=localStorage.getItem('dh.replaySpeed'),speedInput=document.querySelector('#replaySpeed'),speedBefore=speedInput.value,loopBefore=tl.loop;
+  const check=(ok,message)=>{if(!ok)throw Error(message);results.push(message);report?.(ok,message);};
+  try {
+    app.loadProject({...original,layout:[]});
+    w.placeProp('crate',-130,-110,0.3);w.addRoad([[-136,-100],[-116,-100]],3);w.placeBuilding({type:'flowerBox',x:-120,z:-110,w:10});w.addFence([[-138,-115],[-110,-115]]);
+    const saved=JSON.stringify(w.layout());check(w.layout().map(e=>e.kind||e.type).join(',')==='crate,road,building,fence','Replay saves mixed chronological placement order');
+    w.loadLayout(JSON.parse(saved));check(JSON.stringify(w.layout())===saved,'Replay order survives exact mixed layout round trip');
+    const legacy=[{kind:'road',points:[[-136,-100],[-116,-100]],width:3},{type:'crate',x:-130,z:-110,yaw:0},{kind:'building',type:'flowerBox',x:-120,z:-110,w:10}];
+    w.loadLayout(legacy);check(w.layout().map(e=>e.kind||e.type).join(',')==='road,crate,building','Legacy layout order follows saved array order');w.loadLayout(JSON.parse(saved));
+    const entries=w.buildEntries(),transforms=entries.map(e=>({parent:e.obj.parent,p:e.obj.position.clone(),q:e.obj.quaternion.clone(),s:e.obj.scale.clone()}));
+    const keys=['rects','circles','segs','floors','walkables','emitters','spinners','windowMats','benches','buildingPOIs'],physics=keys.map(k=>[k,[...w._replayList(k)]]);
+    check(w.beginBuildReplay(2),'Replay begins with placed pieces');
+    check(w.buildReplay.items.every(i=>!i.wrapper.visible),'Replay initially hides every built object');
+    check(w.buildReplay.physics.every(p=>!w._replayList(p.key).includes(p.value)),'Hidden pieces remove their owned physics and destinations');
+    w.updateBuildReplay(0.6);check(w.buildReplay.items.filter(i=>i.wrapper.visible).length===1&&w.buildSparkles.count>0,'First piece appears alone with soft sparkles');
+    w.updateBuildReplay(2.5);check(w.buildReplay.items.every(i=>i.wrapper.visible&&Math.abs(i.wrapper.scale.x-1)<1e-9),'Every piece settles at original scale');
+    check(w.buildReplay.physics.every(p=>p.index<0||w._replayList(p.key).includes(p.value)),'Revealed pieces restore their owned physics');
+    w.updateBuildReplay(0.4);const seek=[w.buildReplay.items[0].wrapper.scale.x,...w.buildSparkles.instanceMatrix.array.slice(0,w.buildSparkles.count*16)];w.updateBuildReplay(1.4);w.updateBuildReplay(0.4);
+    check(JSON.stringify(seek)===JSON.stringify([w.buildReplay.items[0].wrapper.scale.x,...w.buildSparkles.instanceMatrix.array.slice(0,w.buildSparkles.count*16)]),'Replay seeking exactly reproduces pop and sparkles');
+    let gentle=true;for(let t=0.25;t<1;t+=0.025){w.updateBuildReplay(t);if(w.buildReplay.items[0].wrapper.scale.x>1.15)gentle=false;}check(gentle,'Settle bounce stays small');
+    w.endBuildReplay();check(JSON.stringify(w.layout())===saved,'Stopping replay preserves saved layout');
+    check(entries.every((e,i)=>e.obj.parent===transforms[i].parent&&e.obj.position.distanceTo(transforms[i].p)<1e-8&&e.obj.quaternion.angleTo(transforms[i].q)<1e-7&&e.obj.scale.distanceTo(transforms[i].s)<1e-8),'Stopping replay restores exact transforms and parents');
+    check(physics.every(([k,a])=>a.length===w._replayList(k).length&&a.every((v,i)=>v===w._replayList(k)[i])),'Stopping replay restores physics arrays in their original order');
+    const custom={name:'Saved camera',duration:10,sample(t,out){out.pos.set(0,20,0);out.look.set(0,0,10);}};d.customShot=custom;const keysBefore=JSON.stringify(app.projectData().keys);
+    tl.loop=false;tl.clips=[{shot:0,seconds:0.5,mood:'golden',move:'cut'},{shot:'buildReplay',seconds:1,replaySpeed:3,mood:'keep',move:'cut'},{shot:2,seconds:0.5,mood:'keep',move:'cut'}];tl.start(1);
+    check(tl.index===1&&d.shot.name==='Replay build','Replay starts without replacing other timeline clips');
+    check(d.state.pos.distanceTo(d.state.look)>10,'Replay camera focuses at the actual build distance');
+    tl.update(0.4);d.update(0);const camera=d.state.pos.clone();tl.t=1.3;tl.update(0);d.update(0);tl.t=0.9;tl.update(0);d.update(0);check(d.state.pos.distanceTo(camera)<1e-8,'Replay camera seek is deterministic');
+    check(tl.toJSON()[1].replaySpeed===3&&Math.abs(tl.duration(tl.clips[1])-(4/3+1))<1e-8,'Render clip preserves speed and derives exact duration');
+    tl.t=0.5+tl.duration(tl.clips[1])+0.1;tl.update(0);check(tl.index===2&&d.index===2&&d.customShot===custom&&!w.buildReplay,'Ordinary clip after replay restores custom camera');tl.stop();
+    check(JSON.stringify(app.projectData().keys)===keysBefore,'Replay preserves user camera keys');
+    tl.clips=[{shot:0,seconds:0.5,mood:'keep',move:'cut'}];document.querySelector('#replayBuild').click();check(tl.playing&&tl.clips.length===2&&tl.clips[1].shot==='buildReplay','Replay button appends a clip while preserving the timeline');
+    speedInput.value=5;speedInput.dispatchEvent(new Event('input'));check(tl.clips[1].replaySpeed===5&&Math.abs(tl.duration(tl.clips[1])-1.8)<1e-8,'Replay speed slider updates rate and duration');
+    const replayProject=app.projectData();app.loadProject(replayProject);check(tl.clips[1].replaySpeed===5&&tl.clips[1].shot==='buildReplay','Replay clip survives project save/load');
+    document.querySelector('#replayBuild').click();check(tl.playing&&tl.clips.length===2,'Replay button reuses the saved replay clip');document.querySelector('#replayBuild').click();check(!tl.playing&&!w.buildReplay&&d.customShot===custom,'Stop replay button restores the saved camera');
+    let clipShot=document.querySelector('#clips [data-k=shot]');clipShot.value='buildReplay';clipShot.dispatchEvent(new Event('change'));check(document.querySelector('#clips [data-k=seconds]').disabled,'Selecting replay clip makes its duration automatic');clipShot=document.querySelector('#clips [data-k=shot]');clipShot.value='0';clipShot.dispatchEvent(new Event('change'));check(!document.querySelector('#clips [data-k=seconds]').disabled,'Selecting ordinary shot makes seconds editable again');
+    w.loadLayout([]);const road=w.addRoad([[-136,-100],[-116,-100]],3);tl.clips=[{shot:'buildReplay',replaySpeed:2,seconds:1,mood:'keep',move:'cut'}];tl.start();
+    const confirm=window.confirm;try{window.confirm=()=>true;document.querySelector('#clearBuilt').click();}finally{window.confirm=confirm;}
+    check(!w.roads.length&&!road.obj.parent&&!w.buildReplay,'Remove all safely clears a road-only replay');tl.update(0);
+    const road2=w.addRoad([[-136,-100],[-116,-100]],3);tl.start();document.querySelector('#undoRoad').click();check(!w.roads.length&&!road2.obj.parent&&!w.buildReplay,'Undo road safely removes its replay wrapper');tl.update(0);
+    const prop=w.placeProp('crate',-130,-110);tl.start();w.undo();check(!w.placed.includes(prop)&&!prop.obj.parent&&!w.buildReplay,'Undo prop works during replay');tl.update(0);
+    w.placeProp('crate',-130,-110);tl.start();w.updateTerrain();check(!w.buildReplay&&w.placed[0].obj.parent===w.root,'Terrain updates restore temporary replay transforms first');tl.update(0);
+    check(app.audio.ctx===null,'Replay never starts sound');return {passed:results.length,results};
+  } finally {tl.stop();d.customShot=previousShot;app.loadProject(original);tl.loop=loopBefore;speedInput.value=speedBefore;speedInput.nextElementSibling.textContent=speedBefore;if(oldSpeed===null)localStorage.removeItem('dh.replaySpeed');else localStorage.setItem('dh.replaySpeed',oldSpeed);}
 }

@@ -185,8 +185,17 @@ export function buildTownCenter(world, life) {
   }
   const homeDetails=buildVillageDetails(world,root,terrainHeight,{gardens:[[-28,24],[-28,-24]],mailboxes:[[-5.1,33],[5.1,31],[-5.1,-29],[5.1,-17]],well:[-27,12],paths:[[[-28,21],[-27,17],[-27,12]],[[-27,12],[-23,12],[-21,8]],[[-28,-22],[-24,-18],[-21,-12]]]});
   const hamletDetails=buildVillageDetails(world,world.root,terrainHeight,{hamlet:true,gardens:[[-126,92],[-106,38]],mailboxes:[[-130,74],[-109,76],[-87,76],[-106,54]],windows:world.hamlet.buildings.filter(e=>e.spec.type==='house').map(e=>({object:e.obj})),well:[-121,65],paths:[[[-121,65],[-132,65],[-134,73]],[[-121,65],[-113,67],[-113,75]],[[-121,65],[-110,63],[-110,55]],[[-126,90],[-130,88],[-134,82]]]});
+  const festivalRoot=new THREE.Group();festivalRoot.name='Festival paper lantern strings';festivalRoot.visible=false;root.add(festivalRoot);
+  const rows=[[-7,7,-35],[-7,7,-12],[-7,7,12],[-7,7,36],[-11,15,-48],[-11,15,-60]],hanging=[],cords=[];
+  for(const [x0,x1,z]of rows){const points=[];for(let j=0;j<=24;j++){const u=j/24;points.push(v(THREE.MathUtils.lerp(x0,x1,u),5.7-Math.sin(u*Math.PI)*0.65,z));}cords.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),24,0.025,5,false));for(let i=0;i<8;i++){const u=(i+0.5)/8;hanging.push(v(THREE.MathUtils.lerp(x0,x1,u),5.25-Math.sin(u*Math.PI)*0.65,z));}}
+  const paper=new THREE.MeshLambertMaterial({color:'#fff0d0',emissive:'#ffcb79',emissiveIntensity:0.45}),lanterns=new THREE.InstancedMesh(new THREE.SphereGeometry(0.26,12,8),paper,hanging.length),caps=new THREE.InstancedMesh(new THREE.CylinderGeometry(0.1,0.1,0.04,8),yellow,hanging.length),matrix=new THREE.Matrix4();
+  hanging.forEach((p,i)=>{lanterns.setMatrixAt(i,matrix.makeScale(1,1.25,1).setPosition(p));lanterns.setColorAt(i,new THREE.Color(['#ffe3a6','#f5c7aa','#f8efd2'][i%3]));caps.setMatrixAt(i,matrix.makeTranslation(p.x,p.y+0.32,p.z));});lanterns.computeBoundingSphere();caps.computeBoundingSphere();
+  const cord=new THREE.Mesh(mergeGeometries(cords),mat('#a38a68'));cords.forEach(g=>g.dispose());
+  const glowGeometry=new THREE.BufferGeometry().setFromPoints(hanging),glow=new THREE.Points(glowGeometry,new THREE.PointsMaterial({map:world.tex.glow,color:'#ffd49a',size:1.5,transparent:true,opacity:0.15,blending:THREE.AdditiveBlending,depthWrite:false}));festivalRoot.add(cord,lanterns,caps,glow);
+  const festival={root:festivalRoot,lanterns,caps,glow,hanging};
   let familyMode=true;
-  const area={root,family,keepers,flags,square,path,homeDetails,hamletDetails,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
+  const area={root,family,keepers,flags,square,path,homeDetails,hamletDetails,festival,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
+    festivalRoot.visible=!!world.festival;paper.emissiveIntensity=0.3+world.lanternLevel*0.8;glow.material.opacity=0.04+world.lanternLevel*0.2;
     homeDetails.update(t);hamletDetails.update(t);
     flags.forEach((f,i)=>{f.rotation.x=Math.sin(t*1.1+i*0.7)*0.13*(world.wind??1);f.rotation.y=Math.sin(t*0.8+i)*0.08*(world.wind??1);});
     streams.forEach(({drop,curve},i)=>drop.position.copy(curve.getPoint((t*0.45+i/8)%1)));

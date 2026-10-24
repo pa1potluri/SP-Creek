@@ -16,6 +16,7 @@ function pieces(geometry) {
 
 export function runShotClearanceTests() {
   const a=window.__app,w=a.world,original=a.projectData(),d=a.director,cache=new Map(),solids=[],meshes=[],buildingVolumes=[],buildingRoots=new Set(),cutouts=[],alphaPixels=new WeakMap();
+  if(!['Sunset Cove from above','Beach walk at sunset','Lantern lane to the sea','Walking into the sunset','Two small friends on a big beach','Down the lantern lane'].every(name=>d.shots.some(s=>s.name===name)))throw Error('Missing cove shot from clearance audit');
   const visible=o=>{while(o){if(!o.visible)return false;o=o.parent;}return true;};
   const insideRay=new THREE.Raycaster(),insideDirection=new THREE.Vector3(0.357,0.529,0.77).normalize(),normalMatrix=new THREE.Matrix3(),normal=new THREE.Vector3(),auditMaterial=new THREE.MeshBasicMaterial({side:THREE.DoubleSide});
   const furniture=new Set(Object.values(a.cafe.m)),matrix=new THREE.Matrix4(),size=new THREE.Vector3();

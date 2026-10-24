@@ -39,10 +39,14 @@ export function roadX(z) {
   return z > 60 ? Math.sin((z - 60) * 0.018) * (z - 60) * 0.22 : 0;
 }
 
+let legacyNatureTerrain=false;
+
 // The river crosses the whole valley north of town, flowing east (+x).
 export function riverZ(x) {
-  return 150 + Math.sin(x * 0.012) * 18 + Math.sin(x * 0.031) * 6;
+  const z=150+Math.sin(x*0.012)*18+Math.sin(x*0.031)*6;
+  return legacyNatureTerrain?z:z+(150-z)*(1-smoothstep(-370,-285,x));
 }
+export function coastX(z) {return -350-18*Math.exp(-Math.pow((z-35)/115,2))+8*Math.sin(z*0.007);}
 export const WATER_Y = -1;
 export const RAIL_X = 70; // the railway runs north–south east of town
 
@@ -54,6 +58,7 @@ const userPads = [];
 const userFloors = [];
 let pondPad = null;
 export function pondRadius(x, z, p = HAMLET.pond) {
+  if(p.sea)return 1+(x-coastX(z))/p.rz;
   const dx = (x - p.x) / p.rx, dz = (z - p.z) / p.rz, a = Math.atan2(dz, dx);
   return Math.hypot(dx, dz) / (1 + 0.06 * Math.sin(a * 3 + 0.5) + 0.035 * Math.cos(a * 5));
 }
@@ -66,6 +71,7 @@ function applyPond(h, x, z) {
 }
 function applyUserPads(h, x, z) {
   for (const p of userPads) {
+    if(p.clearOnly)continue;
     if (p.basin) {
       if (Math.abs(x-p.x)>p.rx*1.8 || Math.abs(z-p.z)>p.rz*1.8) continue;
       const r = pondRadius(x,z,p);
@@ -77,7 +83,7 @@ function applyUserPads(h, x, z) {
     }
     const d = padDistance(p, x, z);
     const blend = p.blend || 8;
-    if (d < blend) h += (p.y - h) * (1 - smoothstep(0, blend, d));
+    if (d < blend) h += (p.y + (x-p.x)*(p.slopeX||0) - h) * (1 - smoothstep(0, blend, d));
   }
   return h;
 }
@@ -105,6 +111,8 @@ export function terrainHeight(x, z) {
   const rd = Math.abs(z - riverZ(x));
   h *= smoothstep(13, 60, rd); // broad flat river valley
   h -= 2.6 * (1 - smoothstep(6, 13, rd)); // the channel itself
+  if(!legacyNatureTerrain&&x<-270){const d=x-coastX(z),land=d<0?-1.2+d*0.035:-0.85+d*0.06+d*d*0.0012;
+    const channel=2.2*(1-smoothstep(7,15,Math.abs(z-riverZ(x))));h+=(land-channel-h)*(1-smoothstep(-300,-270,x));}
   return applyPond(applyUserPads(h, x, z), x, z);
 }
 
@@ -262,12 +270,15 @@ export class World {
     this._ranch();
     this._camp();
     const natureStart = this.root.children.length, treeColliderStart = this.colliders.circles.length;
+    // Preserve the existing seeded plant layout before sculpting and clearing the coast.
+    legacyNatureTerrain=true;
     this._nature();
     this.plantColliders = new Set(this.colliders.circles.slice(treeColliderStart));
     this.plantInstances = [];
     for (const g of this.root.children.slice(natureStart)) g.traverse((m) => {
       if (m.isInstancedMesh) this.plantInstances.push({ mesh: m, matrices: m.instanceMatrix.array.slice(), heights: Array.from({ length: m.count }, (_, i) => terrainHeight(m.instanceMatrix.array[i * 16 + 12], m.instanceMatrix.array[i * 16 + 14])) });
     });
+    legacyNatureTerrain=false;
     this._decor();
     this.hamlet = { visible: true, buildings: [], roads: [], props: [], pois: [] };
     this.hamlet.pad = { x: HAMLET.x, z: HAMLET.z, y: terrainHeight(HAMLET.x, HAMLET.z), yaw: 0, hx: 50, hz: 32, blend: 26 };
@@ -473,6 +484,8 @@ export class World {
     if (oil.meadow) groundSets.oil = T.groundDetailFromImage(oil.meadow, 90);
     if (clean.meadow) groundSets.clean = T.groundDetailFromImage(clean.meadow, 90);
     const groundMat = new THREE.MeshLambertMaterial({ vertexColors: true, map: groundSets.oil || groundSets.clean || T.groundDetailTexture() });
+    // Underwater coast ground must not reappear through the distant sea fade.
+    groundMat.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <begin_vertex>','#include <begin_vertex>\nvCoastGround=position;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nfloat edge=-350.0-18.0*exp(-pow((vCoastGround.z-35.0)/115.0,2.0))+8.0*sin(vCoastGround.z*0.007);if(vCoastGround.x < -330.0 && (vCoastGround.y < -1.01 || (vCoastGround.x<edge+8.0 && vCoastGround.z>-115.0 && vCoastGround.z<195.0))) discard;');};
     groundMat.userData.sets = groundSets;
     this.surfaces.add(groundMat);
     this.ground = mesh(geo, groundMat, false, true);
@@ -927,6 +940,39 @@ export class World {
     return this.colliders.water.some(p => Math.abs(x-p.x)<p.rx*1.1*(1+margin/p.rz) && Math.abs(z-p.z)<p.rz*1.1*(1+margin/p.rz) && pondRadius(x,z,p)<1+margin/p.rz);
   }
   waterLevel(x,z) { return this.colliders.water.find(p => pondRadius(x,z,p)<1)?.y ?? WATER_Y; }
+
+  createSea(floors=[]) {
+    const area={x:-1100,z:0,rx:1000,rz:1200,y:WATER_Y,sea:true};this.colliders.water.push(area);
+    this.floors.push(...floors);userFloors.push(...floors);
+    // A soft waterline barrier, with a gap only for the railed, floored pier.
+    for(let z=-800;z<800;z+=4)if(z<28||z>=32)this.colliders.segs.push({ax:coastX(z)+0.6,az:z,bx:coastX(z+4)+0.6,bz:z+4});
+    const pos=[],uv=[],idx=[],cols=96,rows=800;
+    for(let j=0;j<=rows;j++){const z=-1000+j*2.5,edge=coastX(z);for(let i=0;i<=cols;i++){pos.push(edge-3000*Math.pow(1-i/cols,3),WATER_Y,z);uv.push(z/18,1-Math.pow(1-i/cols,3));}}
+    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const a=j*(cols+1)+i,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}
+    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
+    const mat=this._waterMaterial(0),before=mat.onBeforeCompile;
+    mat.userData.waterUniforms.uWaterDetail={value:0.22};mat.fog=false;
+    mat.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);Object.assign(shader.uniforms,mat.userData.covePicture||{});shader.fragmentShader=shader.fragmentShader
+      .replace('#include <common>','#include <common>\nuniform sampler2D uCovePicture; uniform vec3 uCoveTint; uniform float uCoveRotation,uCoveHeight,uCoveFade;')
+      .replace('float shore = uWaterKind < 0.5 ? abs(vWaterUV.y * 2.0 - 1.0) * 1.09 : length(vWaterUV * 2.0 - 1.0);','float shore = clamp(1.0-(1.0-vWaterUV.y)*3000.0/14.0+sin(uWaterTime*0.22+wp.y*0.025)*0.025,0.0,1.0);')
+      .replace('float banks = smoothstep(0.40, 0.96, shore);','float banks = 0.0;')
+      .replace('glint * 0.22','glint * 0.07').replace('float foam = smoothstep(0.88, 0.99, shore) * smoothstep(0.15, 0.75, broken) * 0.28;','float foam = smoothstep(0.88,0.96,shore)*(1.0-smoothstep(0.98,1.0,shore))*0.32;')
+      .replace('#include <opaque_fragment>','vec3 ray=vCloudWorld-cameraPosition;float dist=length(ray.xz);float theta=mod(atan(ray.x,ray.z)-uCoveRotation+6.2831853,6.2831853);vec2 pictureUV=vec2(1.0-(theta-3.14159265)/3.14159265,0.435+ray.y/max(0.1,dist)*1800.0/uCoveHeight);vec3 picture=texture2D(uCovePicture,pictureUV).rgb*uCoveTint;picture=mix(uWaterHorizon*0.45,picture,uCoveFade);outgoingLight=mix(outgoingLight,picture,smoothstep(25.0,140.0,dist)*smoothstep(0.06,0.25,pictureUV.y));diffuseColor.a=1.0;\n#include <opaque_fragment>');};
+    mat.customProgramCacheKey=()=> 'cove-sea-v1';const sea=mesh(geo,mat,false,true);sea.name='Sunset Cove sea';sea.renderOrder=2;this.root.add(sea);return {area,sea};
+  }
+
+  palmGeometry() {
+    const trunk=[],leaves=[];
+    for(let i=0;i<9;i++){const g=new THREE.CylinderGeometry(0.18-i*0.01,0.22-i*0.01,0.9,9);g.translate(Math.sin(i*0.14)*0.7,i*0.82+0.45,0);trunk.push(g);}
+    for(let i=0;i<9;i++){
+      const a=i*Math.PI*2/9,verts=[],uv=[],indices=[];
+      for(let j=0;j<=9;j++){const u=j/9,r=u*4.3,y=7.5+Math.sin(u*Math.PI)*1.1-u*2.2,w=Math.sin(u*Math.PI)*0.42+0.015;
+        for(const side of [-1,1]){verts.push(0.65+Math.cos(a)*r-Math.sin(a)*w*side,y,Math.sin(a)*r+Math.cos(a)*w*side);uv.push(u,side>0?1:0);}
+        if(j){const n=j*2;indices.push(n-2,n,n-1,n-1,n,n+1);}}
+      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();leaves.push(g);
+    }
+    return {trunk:mergeGeometries(trunk),leaves:mergeGeometries(leaves)};
+  }
 
   _pond() {
     const p=HAMLET.pond, y=terrainHeight(p.x,p.z)-0.3;
@@ -1532,7 +1578,8 @@ export class World {
     return hit ? hit.point.y : terrainHeight(x, z);
   }
 
-  placeProp(type, x, z, yaw = 0, record = true) {
+  placeProp(type, x, z, yaw = 0, record = true, order) {
+    this.endBuildReplay();
     const obj = this.makeProp(type);
     obj.position.set(x, this.surfaceY(x, z), z);
     obj.rotation.y = yaw;
@@ -1570,7 +1617,7 @@ export class World {
     }
     if (entry.flame) this.flames.push(entry.flame);
     this.props.push(entry);
-    if (record) this.placed.push(entry);
+    if (record) {entry.order=this._buildOrder(order);this.placed.push(entry);}
     return entry;
   }
 
@@ -1614,6 +1661,7 @@ export class World {
     if (b >= 0) this.billboards.splice(b, 1);
   }
   undo() {
+    this.endBuildReplay();
     const e = this.placed.pop();
     if (e) this._remove(e);
   }
@@ -1622,14 +1670,16 @@ export class World {
   }
   layout() {
     return [
-      ...this.placed.filter((p) => p.type !== 'cutout').map(({ type, x, z, yaw }) => ({ type, x, z, yaw })),
+      ...this.placed.filter((p) => p.type !== 'cutout').map(({ type, x, z, yaw, order }) => ({ type, x, z, yaw, order })),
       ...this.buildings.map((e) => ({ kind: 'building', ...e.spec })),
-      ...this.roads.map((e) => ({ kind: 'road', points: e.points, width: e.width })),
-      ...this.fences.map((e) => ({ kind: 'fence', points: e.points })),
-    ];
+      ...this.roads.map((e) => ({ kind: 'road', points: e.points, width: e.width, order:e.order })),
+      ...this.fences.map((e) => ({ kind: 'fence', points: e.points, order:e.order })),
+    ].sort((a,b)=>a.order-b.order);
   }
 
   loadLayout(layout = []) {
+    this.endBuildReplay();this.buildOrder=0;
+    layout=layout.map((e,i)=>({...e,order:Number.isFinite(e.order)?e.order:i}));
     this.clearPlaced();
     for (const e of [...this.fences]) this.removeFence(e);
     for (const e of [...this.buildings]) this.removeBuilding(e, false);
@@ -1638,20 +1688,65 @@ export class World {
     for (const e of layout) if (e.kind === 'building') this.placeBuilding(e, false);
     this.updateTerrain();
     for (const e of layout) {
-      if (e.kind === 'road') this.addRoad(e.points, e.width);
-      else if (e.kind === 'fence') this.addFence(e.points);
-      else if (!e.kind) this.placeProp(e.type, e.x, e.z, e.yaw);
+      if (e.kind === 'road') this.addRoad(e.points, e.width, e.order);
+      else if (e.kind === 'fence') this.addFence(e.points, e.order);
+      else if (!e.kind) this.placeProp(e.type, e.x, e.z, e.yaw, true, e.order);
     }
   }
 
 
+  _buildOrder(order) {const n=Number.isFinite(order)?order:(this.buildOrder||0);this.buildOrder=Math.max(this.buildOrder||0,n+1);return n;}
+  buildEntries() {return [...this.placed.filter(e=>e.type!=='cutout'),...this.buildings,...this.roads,...this.fences].sort((a,b)=>a.order-b.order);}
+  replayDuration(speed=2) {return this.buildEntries().length/Math.max(1,Math.min(5,+speed||2))+1;}
+  _replayList(key) {return key==='userFloors'?userFloors:['rects','circles','segs'].includes(key)?this.colliders[key]:this[key];}
+  beginBuildReplay(speed=2) {
+    this.endBuildReplay();const entries=this.buildEntries();if(!entries.length)return false;
+    this.root.updateMatrixWorld(true);const bounds=new THREE.Box3(),physics=[],items=[];
+    for(const entry of entries){
+      const obj=entry.obj,box=new THREE.Box3().setFromObject(obj),center=box.getCenter(V());center.y=box.min.y;bounds.union(box);
+      const item={entry,obj,parent:obj.parent,position:obj.position.clone(),rotation:obj.quaternion.clone(),scale:obj.scale.clone(),visible:obj.visible,lightVisible:entry.light?.light.visible,shown:null,pivot:center};
+      const wrapper=new THREE.Group();wrapper.position.copy(center);this.root.add(wrapper);wrapper.updateMatrixWorld(true);wrapper.attach(obj);item.wrapper=wrapper;items.push(item);
+      const record=(key,values)=>{for(const value of values||[]){const index=this._replayList(key).indexOf(value);physics.push({key,value,index,item});}};
+      for(const [key,values]of Object.entries(entry.additions||{}))record(key,values);
+      record('userFloors',entry.additions?.floors);record('segs',entry.segs);record('circles',entry.collider?[entry.collider]:[]);record('benches',entry.seats);record('emitters',entry.emitters);record('flames',entry.flame?[entry.flame]:[]);record('buildingPOIs',entry.poi?[entry.poi]:[]);
+    }
+    if(!this.buildSparkles){this.buildSparkles=new THREE.InstancedMesh(new THREE.SphereGeometry(1,6,4),new THREE.MeshBasicMaterial({color:'#f8deb0',transparent:true,opacity:0.45,depthWrite:false}),48);this.buildSparkles.frustumCulled=false;this.root.add(this.buildSparkles);}
+    this.buildSparkles.visible=true;this.buildReplay={items,physics,speed:Math.max(1,Math.min(5,+speed||2)),bounds};this.updateBuildReplay(0);return true;
+  }
+  updateBuildReplay(t) {
+    const replay=this.buildReplay;if(!replay)return;let changed=false,count=0;const matrix=new THREE.Matrix4();
+    replay.items.forEach((item,i)=>{
+      const age=t-0.25-i/replay.speed,shown=age>=0;
+      if(shown!==item.shown){item.shown=shown;changed=true;}
+      const u=Math.max(0,Math.min(1,age/0.65)),pop=1-Math.pow(1-u,3)+Math.sin(u*Math.PI)*0.12;
+      item.wrapper.visible=shown&&item.visible;item.wrapper.scale.setScalar(Math.max(0.001,pop));if(item.entry.light)item.entry.light.light.visible=shown&&item.lightVisible;
+      if(age>=0&&age<0.9)for(let k=0;k<8&&count<48;k++){const a=k*2.399+i,r=0.25+age*0.9,size=(1-age/0.9)*0.055;this.buildSparkles.setMatrixAt(count++,matrix.makeScale(size,size,size).setPosition(item.pivot.x+Math.cos(a)*r,item.pivot.y+0.15+age*0.8,item.pivot.z+Math.sin(a)*r));}
+    });
+    if(changed){for(const p of replay.physics){const list=this._replayList(p.key),i=list.indexOf(p.value),show=p.item.shown&&p.index>=0;if(show&&i<0)list.push(p.value);else if(!show&&i>=0)list.splice(i,1);}this.onBuildingsChanged?.();}
+    this.buildSparkles.count=count;this.buildSparkles.instanceMatrix.needsUpdate=true;
+  }
+  buildReplayCamera(t,out) {
+    const replay=this.buildReplay;if(!replay)return;const center=replay.bounds.getCenter(V()),size=replay.bounds.getSize(V()),r=Math.max(12,Math.max(size.x,size.z)*0.9+8),a=0.35+t*0.035;
+    const x=center.x+Math.cos(a)*r,z=center.z+Math.sin(a)*r,y=Math.max(terrainHeight(x,z)+35,replay.bounds.max.y+r*0.55+12);
+    out.pos.set(x,y,z);center.y=replay.bounds.min.y+Math.min(size.y,6)*0.5;out.look.copy(center);
+  }
+  endBuildReplay() {
+    const replay=this.buildReplay;if(!replay)return;this.buildReplay=null;
+    // Restore exact transforms and physics without rebuilding or losing the saved layout.
+    for(const item of replay.items){item.parent.add(item.obj);item.obj.position.copy(item.position);item.obj.quaternion.copy(item.rotation);item.obj.scale.copy(item.scale);item.obj.visible=item.visible;item.wrapper.removeFromParent();if(item.entry.light)item.entry.light.light.visible=item.lightVisible;}
+    for(const p of replay.physics){const list=this._replayList(p.key),i=list.indexOf(p.value);if(i>=0)list.splice(i,1);}
+    for(const p of [...replay.physics].sort((a,b)=>a.index-b.index)){if(p.index>=0){const list=this._replayList(p.key);list.splice(Math.min(p.index,list.length),0,p.value);}}
+    this.buildSparkles.visible=false;this.onBuildingsChanged?.();this.root.updateMatrixWorld(true);
+  }
+
   _detailBounds(type) {
-    return {gardenFence:[2.6,0.2],vegetablePatch:[2.3,1.5],flowerBox:[1,0.35],laundryLine:[2.7,0.35],waterWell:[1.2,1],woodPile:[1.1,0.8],mailbox:[0.35,0.3],lanternString:[3,0.3],gardenBench:[1.1,0.55],snowman:[0.8,0.75],pumpkinPile:[1.2,0.85],littleBridge:[1.6,3]}[type];
+    return {gardenFence:[2.6,0.2],vegetablePatch:[2.3,1.5],flowerBox:[1,0.35],laundryLine:[2.7,0.35],waterWell:[1.2,1],woodPile:[1.1,0.8],mailbox:[0.35,0.3],lanternString:[3,0.3],gardenBench:[1.1,0.55],snowman:[0.8,0.75],pumpkinPile:[1.2,0.85],littleBridge:[1.6,3]}[type]||this.extraBuildPieces?.[type]?.bounds;
   }
 
   _buildDetail(type, s) {
     const g=new THREE.Group(), scale=s.w/10, bounds=this._detailBounds(type);
     g.name=type;g.userData.buildPiece=true;g.position.set(s.x,s.y,s.z);g.rotation.y=s.rot;g.scale.setScalar(scale);this.root.add(g);
+    if(this.extraBuildPieces?.[type]){this.extraBuildPieces[type].build(g);this.colliders.rects.push(this._rectOf(g,0,0,bounds[0]*scale,bounds[1]*scale));return g;}
     this.detailMats??=Object.fromEntries(Object.entries({cream:'#f2dfb5',green:'#84a477',soil:'#8d7057',pink:'#e6b1c7',blue:'#accbdc',gold:'#ebc676',orange:'#d79450',snow:'#eff3ee',ink:'#5a514b'}).map(([key,color])=>[key,new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide})]));
     const m=this.detailMats,wood=this.mat.wood,dark=this.mat.darkWood;
     const add=(geo,mat,x=0,y=0,z=0)=>{const o=mesh(geo,mat);o.position.set(x,y,z);g.add(o);return o;};
@@ -1780,7 +1875,8 @@ export class World {
   }
 
   placeBuilding(spec, update = true) {
-    const e = this.makeBuilding(spec);
+    this.endBuildReplay();
+    const e = this.makeBuilding(spec);e.order=this._buildOrder(spec.order);e.spec.order=e.order;
     this.buildings.push(e);
     if (e.obj.userData.forge) {
       e.light = this._takeLight();
@@ -1799,6 +1895,7 @@ export class World {
 
   removeBuilding(e, update = true) {
     if (!this.buildings.includes(e)) return; // built-in scenery is not a user selection
+    this.endBuildReplay();
     for (const [k, items] of Object.entries(e.additions)) {
       const a = k === 'rects' || k === 'circles' ? this.colliders[k] : this[k];
       for (const item of items) { const i = a.indexOf(item); if (i >= 0) a.splice(i, 1); }
@@ -1836,27 +1933,30 @@ export class World {
     return g;
   }
 
-  addFence(points) {
+  addFence(points, order) {
+    this.endBuildReplay();
     points = points.filter(([x, z], i) => Number.isFinite(x) && Number.isFinite(z) && (!i || Math.hypot(x - points[i - 1][0], z - points[i - 1][1]) > 0.1));
     if (points.length < 2) return null;
     const start = this.colliders.segs.length;
     const e = { points: points.map(p => [...p]), spec: { type: 'fence' }, obj: this._fence(points, true), segs: this.colliders.segs.slice(start) };
-    this.fences.push(e); this.updateTerrain(); return e;
+    e.order=this._buildOrder(order);this.fences.push(e); this.updateTerrain(); return e;
   }
 
   removeFence(e) {
     if (!this.fences.includes(e)) return;
+    this.endBuildReplay();
     this.colliders.segs = this.colliders.segs.filter(s => !e.segs.includes(s));
     this.root.remove(e.obj); e.obj.geometry.dispose(); this.fences.splice(this.fences.indexOf(e), 1); this.updateTerrain();
   }
 
-  addRoad(points, width) {
+  addRoad(points, width, order) {
+    this.endBuildReplay();
     points = points.filter(([x, z], i) => Number.isFinite(x) && Number.isFinite(z) && (!i || Math.hypot(x - points[i - 1][0], z - points[i - 1][1]) > 0.1));
     if (points.length < 2) return null;
     this.userRoadMat ??= this._pathMaterial();
     const e = { points: points.map((p) => [...p]), width: Math.max(1, Math.min(14, +width || 5)) };
     e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1 });
-    this.roads.push(e);
+    e.order=this._buildOrder(order);this.roads.push(e);
     this.setTextureSet(this.textureSet || 'oil');
     return e;
   }
@@ -1870,6 +1970,7 @@ export class World {
   }
 
   updateTerrain() {
+    this.endBuildReplay();
     const pos = this.ground.geometry.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i), z = pos.getZ(i);

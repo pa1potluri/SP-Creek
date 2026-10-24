@@ -573,10 +573,30 @@ const BLADES = {
   'SP CREEK MERCANTILE': 'GOODS', 'HONEY BUN CAFÉ': 'CAFÉ', 'POST OFFICE': 'MAIL',
 };
 
+let starWorld=null;
+const STAR_ROUTE=[[0,0,-26],[25,0,-44],[40,-3,-51],[55,-3,-51],[70,0,-44],[135,0,8],[145,5.8,8],[165,5.8,8],[175,0,12],[245,0,65],[335,-69,65],[365,-69,83.5],[400,-69,83.5],[430,-69,65],[520,0,65],[590,0,12],[650,0,-26],[680,0,-26]];
+export function sampleStarRoute(t,role='siri',world=starWorld) {
+  const clock=((t+(world?.starsOffset||0))%680+680)%680;
+  let i=0;while(i<STAR_ROUTE.length-2&&clock>=STAR_ROUTE[i+1][0])i++;
+  const a=STAR_ROUTE[i],b=STAR_ROUTE[i+1],raw=(clock-a[0])/(b[0]-a[0]),u=Math.min(1,raw*(role==='pavi'?1.35:1));
+  let x=a[1]+(b[1]-a[1])*u,z=a[2]+(b[2]-a[2])*u;
+  if(i===15&&world?.playground?.meetingPoint){const p=world.playground.meetingPoint;x+=(p.x-x)*Math.sin(raw*Math.PI);z+=(p.z-z)*Math.sin(raw*Math.PI);}
+  const moving=(a[1]!==b[1]||a[2]!==b[2])&&u<1,yaw=moving?Math.atan2(b[1]-a[1],b[2]-a[2]):i===11?Math.PI:0;
+  x+=role==='pavi'?-0.4:0.4;
+  return {pos:V(x,walkHeight(x,z),z),yaw,moving,clock};
+}
+export function starCameraFocus() {
+  const t=starWorld?.waterUniforms.uWaterTime.value||0,a=sampleStarRoute(t,'pavi'),b=sampleStarRoute(t,'siri');
+  return {pos:a.pos.add(b.pos).multiplyScalar(0.5),yaw:b.yaw};
+}
+
 export class Life {
   constructor(scene, world) {
     this.scene = scene;
     this.world = world;
+    starWorld=world;
+    this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
+    for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
     this.root = new THREE.Group();
     scene.add(this.root);
@@ -827,11 +847,30 @@ export class Life {
     this.root.add(this.tumbleGroup);
   }
 
+  updateStars(t) {
+    for(const [role,p]of Object.entries(this.stars)){
+      const state=sampleStarRoute(t,role,this.world),clock=t+(this.world.starsOffset||0),pavi=role==='pavi';
+      p.g.position.copy(state.pos);p.g.rotation.y=state.yaw;
+      animatePerson(p,clock*(pavi?8:4.8),state.moving?(pavi?1.1:0.55):0);
+      if(pavi){
+        p.g.position.y+=state.moving?Math.max(0,Math.sin(clock*8))*0.045:Math.pow(Math.max(0,Math.sin(clock*0.5)),10)*0.06;
+        if(!state.moving){const phase=(clock%12)/12;gesture(p,'wave',phase,clock*0.55);}
+      }else{
+        p.arms[0].rotation.set(-0.3,0,0.15);p.arms[1].rotation.set(-0.3,0,-0.15);
+        p.elbows[0].rotation.set(-0.8,0,0.8);p.elbows[1].rotation.set(-0.8,0,-0.8);
+      }
+    }
+    for(const [i,w]of this.walkers.entries()){
+      if(Math.hypot(w.pos.x-this.stars.siri.g.position.x,w.pos.z-this.stars.siri.g.position.z)<5){const phase=((t+i*0.7)%18)/18;if(phase<0.2)gesture(w.p,'wave',phase/0.2,t*0.55);}
+    }
+  }
+
   update(dt, t, camera) {
     const wind = this.settings.wind;
     this.world.wind = wind; // painted plants sway with the same wind
     this._socialise(dt, t);
     for (const w of this.walkers) w.update(dt, t);
+    this.updateStars(t);
     for (const w of this.townKids || []) {
       w.p.g.visible = this.familyMode && this.settings.people > 0;
       if (w.p.g.visible) w.update(dt, t);
@@ -921,4 +960,13 @@ export class Life {
       b.scale.x = s.dir;
     }
   }
+}
+
+// Small, absolute-time playground poses; routes stay with their owning area.
+export function posePlaygroundChild(p,kind,t){
+  animatePerson(p,t*1.4,kind==='slide'?0.35:0);
+  let sit=kind==='swing'?1:kind==='slide'?THREE.MathUtils.smoothstep(t,18,20)*(1-THREE.MathUtils.smoothstep(t,28,30)):0;
+  if(sit){for(const leg of p.legs)leg.rotation.x=-1.15*sit;for(const knee of p.knees||[])knee.rotation.x=0.55*sit;for(const arm of p.arms)arm.rotation.x=-0.8*sit;}
+  if(kind==='dig'){p.upper.rotation.x=0.25;for(let i=0;i<2;i++){p.arms[i].rotation.x=-0.9+Math.sin(t*0.8+i)*0.15;p.elbows[i].rotation.x=-0.65;}for(const knee of p.knees||[])knee.rotation.x=0.9;}
+  return kind==='slide'?0.72*sit:0;
 }

@@ -1,0 +1,15 @@
+# Let's build replay - ready for Claude review
+
+Finished on area/lets-build-replay, stacked on completed Sunset Cove 15e6f59. The original saved draft acbcb2c was rebased onto that tip as 5febb66; no changes were lost and Episode 1 remains intact. No push or merge.
+
+Build mode records and saves chronological order across props, buildings/detail pieces, roads and fences. Legacy projects without order use their existing saved-array order. Replay hides only user-built pieces and their owned physics/destinations, then reveals them in order with a small scale bounce and soft sparkles. Temporary pivots keep world-coordinate road/fence geometry in place; stopping restores exact transforms, parents, visibility and physics-array ordering without rebuilding the layout.
+
+Replay build and the 1-5 pieces/second slider are in Build. The button adds/reuses a replay clip while preserving other timeline clips; Stop restores the saved custom camera. The appended Let's build SP Creek preset uses that clip. Duration follows piece count/rate plus a second to settle. The slow orbit targets the actual build centre, with real focus distance and enough ground clearance. No permanent shot numbers were added. All motion samples the timeline clock used by step(dt) and frame-by-frame rendering. For a single build video, choose Video > The timeline, once.
+
+Undo, road-only remove-all and terrain updates stop replay before mutating wrapped objects. Clip-type switching refreshes the duration control, so replay seconds are automatic and ordinary shots remain editable. The browser harness now passes the intended 120-second ready timeout in Playwright's options argument, and prints startup page errors immediately; its previous argument position silently left a 30-second default.
+
+Checks: full browser suite completed with area-shots 7; build-mode 523 (including 30 replay checks); clouds-water 227; family-mode 46 plus 2 startup reload checks; hamlet-shots 47; hamlet 37; more-buildings 155; names-tour-shots 51; pavi-siri 23; shot-clearance 46; sunset-cove 40. Total **1,202 checks plus 2 startup checks**, no browser errors. All 45 shots / 9,045 clearance samples passed. After the final clip-selector refresh, the focused replay check passed **32 checks**, including switching to and from replay, and refreshed captures reported no browser errors and audio locked. No test started sound.
+
+The focused checks cover mixed/legacy order and exact save/load, hidden/revealed physics, seek/pop/sparkle repeatability, small bounce, exact restoration, actual camera focus, custom camera keys, normal clips after replay, UI start/stop/speed, project persistence, road-only clear/undo, prop undo and terrain updates during replay.
+
+Animated film previews: world/tests/lets-build-replay-orbit-day.png and lets-build-replay-orbit-night.png. Visually inspected both. No unfinished builder work; Claude review remains required. Next: playground, then lantern evening, on stacked branches; stop after task 20. Watercolour remains paused until Thu Oct 29.

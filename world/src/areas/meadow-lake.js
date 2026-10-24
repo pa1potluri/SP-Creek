@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { terrainHeight, pondRadius, smoothstep } from '../world.js';
+import { makeCharacter, CAST, animatePerson, gesture } from '../characters.js';
 import { imageTexture, rng } from '../textures.js';
 
 export const MEADOW={x:-225,z:0}, LAKE={x:-240,z:-18,rx:12,rz:8.5};
@@ -56,7 +57,22 @@ export async function buildMeadowLake(world) {
   for(let i=0;i<3;i++){const g=group(0,0,0);ball(0.13,cream,0,0,0,g,[0.7,0.6,1.4]);const wings=[-1,1].map(sx=>{const w=new THREE.Mesh(new THREE.SphereGeometry(0.18,8,6).scale(2,0.15,0.6),cream);w.position.x=sx*0.2;g.add(w);return w;});birds.push({g,wings});}
   for(let i=0;i<4;i++){const g=group(0,0,0);ball(0.08,m('#82c7bc'),0,0,0,g,[0.4,0.4,2.5]);solid(new THREE.SphereGeometry(0.15,8,6).scale(3,0.1,0.65),cream,0,0.03,0,g);dragonflies.push(g);}
   for(const {parent,mat,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),mat);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}root.updateMatrixWorld(true);
-  return {root,pad,lake,water,plants,ducks,rabbits,rainbows,update(t,camera,atmos,key){
+  const festivalRoot=new THREE.Group();festivalRoot.name='Lake lantern evening';festivalRoot.visible=false;root.add(festivalRoot);
+  const count=36,paper=new THREE.MeshLambertMaterial({color:'#ffe9bf',emissive:'#ffc875',emissiveIntensity:0.7}),lanterns=new THREE.InstancedMesh(new THREE.SphereGeometry(0.3,12,8),paper,count),caps=new THREE.InstancedMesh(new THREE.TorusGeometry(0.13,0.025,5,10),gold,count),matrix=new THREE.Matrix4(),rotation=new THREE.Quaternion(),scale=new THREE.Vector3();
+  const glowPos=new Float32Array(count*3),glowColors=new Float32Array(count*3),glowGeometry=new THREE.BufferGeometry();glowGeometry.setAttribute('position',new THREE.BufferAttribute(glowPos,3));glowGeometry.setAttribute('color',new THREE.BufferAttribute(glowColors,3));const glow=new THREE.Points(glowGeometry,new THREE.PointsMaterial({map:world.tex.glow,color:'#ffd99b',size:1.8,transparent:true,vertexColors:true,opacity:0.3,blending:THREE.AdditiveBlending,depthWrite:false}));
+  const reflectionMat=new THREE.MeshBasicMaterial({map:world.tex.glow,color:'#ffcc86',transparent:true,opacity:0.24,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}),reflections=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),reflectionMat,count);reflections.renderOrder=3;
+  const fliesPos=new Float32Array(40*3),fliesGeo=new THREE.BufferGeometry();fliesGeo.setAttribute('position',new THREE.BufferAttribute(fliesPos,3));const flies=new THREE.Points(fliesGeo,new THREE.PointsMaterial({map:world.tex.glow,color:'#fff2b1',size:0.24,transparent:true,opacity:0.6,blending:THREE.AdditiveBlending,depthWrite:false}));
+  for(let i=0;i<count;i++)lanterns.setColorAt(i,new THREE.Color(['#ffe8b5','#f8d2ae','#f9edcc'][i%3]));for(const o of [lanterns,caps,glow,reflections,flies]){o.frustumCulled=false;festivalRoot.add(o);}
+  const crowd=[CAST.pavi,CAST.siri,CAST.cafeHost,CAST.townswoman].map((outfit,i)=>{const p=makeCharacter(outfit),angle=0.2+i*0.16,x=lake.x+Math.cos(angle)*(lake.rx+3),z=lake.z+Math.sin(angle)*(lake.rz+3);p.g.position.set(x,terrainHeight(x,z),z);p.g.rotation.y=Math.atan2(lake.x-x,lake.z-z);festivalRoot.add(p.g);return p;});
+  const festival={root:festivalRoot,lanterns,caps,glow,reflections,flies,crowd,update(t,camera,atmos){
+    festivalRoot.visible=!!world.festival;if(!festivalRoot.visible)return;const level=0.3+0.7*atmos.stars;paper.emissiveIntensity=0.4+level*0.65;glow.material.opacity=0.15+0.18*level;reflectionMat.opacity=0.12+0.15*level;flies.material.opacity=0.2+0.5*level;
+    for(let i=0;i<count;i++){const phase=((t/80+i/count)%1+1)%1,a=i*2.399,x=lake.x+Math.cos(a)*(2+i%4)+Math.sin(t*0.07+i)*0.35,z=lake.z+Math.sin(a)*(1+i%3)+Math.cos(t*0.06+i)*0.35,h=lake.y+0.7+phase*17,fade=smoothstep(0,0.08,phase)*(1-smoothstep(0.85,1,phase));rotation.setFromAxisAngle(v(0,0,1),Math.sin(t*0.17+i)*0.06);scale.set(fade,fade*1.25,fade);lanterns.setMatrixAt(i,matrix.compose(v(x,h,z),rotation,scale));caps.setMatrixAt(i,matrix.makeScale(fade,fade,fade).setPosition(x,h+0.33*fade,z));glowPos.set([x,h,z],i*3);glowColors.set([fade,fade,fade],i*3);const reflected=fade*(1-smoothstep(0.15,0.65,phase));reflections.setMatrixAt(i,matrix.makeScale(reflected*0.9,1,reflected*(2+Math.sin(t*0.4+i)*0.2)).setPosition(x,lake.y+0.045,z));}
+    lanterns.instanceMatrix.needsUpdate=caps.instanceMatrix.needsUpdate=reflections.instanceMatrix.needsUpdate=true;glowGeometry.attributes.position.needsUpdate=glowGeometry.attributes.color.needsUpdate=true;
+    for(let i=0;i<40;i++){const a=i*2.399;fliesPos.set([lake.x+Math.sin(a)*10+Math.sin(t*0.2+i)*0.4,lake.y+0.7+(i%4)*0.5+Math.sin(t*0.5+i)*0.25,lake.z+Math.cos(a)*7+Math.cos(t*0.2+i)*0.4],i*3);}fliesGeo.attributes.position.needsUpdate=true;
+    crowd.forEach((p,i)=>{animatePerson(p,t*0.6+i,0);gesture(p,i%2?'listen':'talk',((t+i*2)%18)/18,t);});
+  }};
+  return {root,pad,lake,water,plants,ducks,rabbits,rainbows,festival,update(t,camera,atmos,key){
+    festival.update(t,camera,atmos);
     const flat=world.textureSet==='flat';plants.forEach(p=>p.visible=!flat);fallback.forEach(p=>p.visible=flat);
     fallMat.map.offset.y=-t*0.12;fallMat.color.copy(world.waterUniforms.uWaterHorizon.value).lerp(new THREE.Color('#cce4df'),0.55);foamMat.color.copy(world.waterUniforms.uWaterFoamColor.value);foam.scale.setScalar(1+Math.sin(t*0.7)*0.06);
     rainbows.forEach(a=>a.material.opacity=(key==='golden'||key==='morning')?0.19:0);

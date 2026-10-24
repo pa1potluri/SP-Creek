@@ -4,10 +4,10 @@ const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-r
   const page = await browser.newPage({ viewport: { width: 800, height: 500 } });
   const errors = [];
   page.on('console', m => { if (m.type() === 'log') console.log(m.text()); });
-  page.on('pageerror', e => errors.push(e.message));
+  page.on('pageerror', e => {errors.push(e.message);console.error('Browser error:',e.message);});
   page.on('console', m => { if (m.type() === 'error' && !m.text().includes('404')) errors.push(m.text()); });
-  await page.goto(process.env.DH_URL || 'http://localhost:8810'); // DH_URL: test another checkout (reviews)
-  await page.waitForFunction(() => window.__app, { timeout: 120000 });
+  await page.goto(process.env.DH_URL || 'http://localhost:8810', {waitUntil:'domcontentloaded',timeout:120000}); // DH_URL: test another checkout (reviews)
+  await page.waitForFunction(() => window.__app, undefined, { timeout: 120000 });
   for (const suite of process.argv.slice(2).filter(a => !a.startsWith('--'))) {
     const result = await page.evaluate(async name => {
       const m = await import(`/tests/${name}.js`);
@@ -18,7 +18,7 @@ const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-r
     if (suite === 'family-mode') {
       for (const on of [true, false]) {
         await page.evaluate(on => window.__app.setFamilyMode(on, true), on);
-        await page.reload(); await page.waitForFunction(() => window.__app, { timeout: 120000 });
+        await page.reload(); await page.waitForFunction(() => window.__app, undefined, { timeout: 120000 });
         const ok = await page.evaluate(on => window.__app.projectData().familyMode === on && window.__app.cafe.familyMode === on && document.querySelector('#familyMode').checked === on, on);
         if (!ok) throw Error('Family startup persistence: ' + on);
       }

@@ -40,7 +40,7 @@ finished. Re-read this file each time; Claude may change it.
 | 26 | `tasks/camping-night.md` | `area/camping-night` | WIP by user choice; module + 14 smoke checks + four day/night previews saved; main.js wiring deferred (STUCK.md); continue 27 |
 | 27 | `tasks/pony-farm.md` | `area/pony-farm` | done; full 1440 + 2 passed; day/night farm 61-63 and camera correction 60 saved |
 | 28 | `tasks/episode-presets.md` | `area/episode-presets` | WIP: Episodes 2/3/5 ready, smoke 5 + clearance 66 passed, six previews saved; Episode 4 waits for user-deferred camping wiring; continue 29 |
-| 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | WIP verification saved; inherited fix bright in ten day/night frames (0% near-black); four previews saved; stale STUCK item removed; full suite running |
+| 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | WIP saved at usage stop; existing bright counter verified, four previews + metrics committed; full suite interrupted during more-buildings/paper after 963 + 2 passed; resume full run (result); task 30 not started |
 | 30 | `tasks/performance.md` | `area/performance` | queued |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | queued (not before Thu Oct 29) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |

@@ -3,7 +3,7 @@
 // Everything follows a listener state (where the camera or player is, which way it faces, the mood).
 // update(state, when, dt) is called every frame: live with the AudioContext clock, or, for a video,
 // once per recorded frame on an OfflineAudioContext, so the render sounds exactly like the shot.
-import { riverZ } from './world.js';
+import { riverZ, coastX } from './world.js';
 import { OLD_HOLLOW } from './areas/ghost-town.js';
 import { FOREST } from './areas/forest.js';
 import { LAKE } from './areas/meadow-lake.js';
@@ -65,6 +65,8 @@ export class Ambience {
     this.out = out;
     this.buf = { white: noise(ctx, 3, 'white'), pink: noise(ctx, 6, 'pink'), crickets: crickets(ctx, 6) };
     // continuous beds, each with its own gain (and a panner where it has a direction)
+    this.sea=this._bed(this.buf.pink,[['highpass',80],['lowpass',650]],true);
+    this.seaBreeze=this._bed(this.buf.pink,[['lowpass',380]],true);
     this.river = this._bed(this.buf.pink, [['highpass', 220], ['lowpass', 1600]], true);
     this.rain = this._bed(this.buf.white, [['highpass', 1100], ['lowpass', 7000]]);
     this.cricket = this._bed(this.buf.crickets, [['highpass', 3000]]);
@@ -144,6 +146,10 @@ export class Ambience {
     const nature = smooth(25, 90, town);
     const indoors = s.inside ? 1 : 0;
     const roofed = 1 - 0.65 * indoors; // walls soften everything from outside
+
+    const coast=near(Math.max(0,s.x-coastX(s.z)),0,150)*roofed;
+    set(this.sea.g.gain,coast*(0.11+0.025*Math.sin((when+this.t0)*0.18)));set(this.sea.pan.pan,this._panTo(s,coastX(s.z)-10,s.z));
+    set(this.seaBreeze.g.gain,coast*0.025);set(this.seaBreeze.pan.pan,this._panTo(s,coastX(s.z),s.z));
 
     // river: from its nearest bank, louder closer
     const rd = Math.abs(s.z - s.riverZ);

@@ -1,9 +1,10 @@
 // Camera director: slow cinematic shots, smooth flights between them (no cuts, no dissolves),
 // a free-fly camera, and your own key-framed camera moves.
 import * as THREE from 'three';
-import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP } from './world.js';
+import { terrainHeight, walkHeight, riverZ, roadX, coastX as coastXForCamera, RAIL_X, RANCH, CAMP } from './world.js';
 import { HAMLET } from './hamlet.js';
 import { starCameraFocus } from './life.js';
+import { beachWalk } from './areas/sunset-cove.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const clamp01 = (t) => Math.min(1, Math.max(0, t));
@@ -150,7 +151,12 @@ function makeShots() {
     {name:'Pavi & Siri walk',duration:120,group:'Pavi & Siri',clearance:1.5,loop:true,sample(t,out){const f=starCameraFocus(),x=f.pos.x+Math.sin(f.yaw)*4.8,z=f.pos.z+Math.cos(f.yaw)*4.8;out.pos.set(x,Math.max(walkHeight(x,z)+1.55,f.pos.y+1.55),z);out.look.copy(f.pos);out.look.y+=1.05;}},
     pathShot('Pavi & Siri at the pond',[[V(-71,walkHeight(-71,78)+2.1,78),V(-69,walkHeight(-69,83.5)+1,83.5)],[V(-67,walkHeight(-67,78)+2.1,78),V(-69,walkHeight(-69,83.5)+1,83.5)]],100),
   ].map(s=>({...s,group:'Pavi & Siri',clearance:1.5}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews];
+  const coveViews=[
+    pathShot('Sunset Cove from above',[[G(-289,62,118),V(-366,3,25)],[G(-291,65,92),V(-368,3,17)]],100),
+    {name:'Beach walk at sunset',duration:120,loop:true,sample(t,out){const p=beachWalk(),z=p.z+Math.cos(p.yaw)*5,x=coastXForCamera(z)+8;out.pos.set(x,walkHeight(x,z)+1.6,z);out.look.set(p.x,p.y+1,p.z);}},
+    pathShot('Lantern lane to the sea',[[G(-295,3.2,20),G(-346,1.5,20)],[G(-338,2.8,20),V(-395,0,25)]],100),
+  ].map(s=>({...s,group:'Sunset Cove',clearance:1.5}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

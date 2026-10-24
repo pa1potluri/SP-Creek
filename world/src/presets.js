@@ -145,3 +145,5 @@ VIDEO_PRESETS.snowyEvening=calmPreset('Snowy winter evening','20 minutes of soft
 VIDEO_PRESETS.deerFamily=calmPreset('Deer at the forest edge','20 minutes with the grazing deer family, birds and a gentle breeze.','summer','golden',[35]);
 
 VIDEO_PRESETS.paviSiri={label:'A day with Pavi & Siri',about:'Meet the brother and sister, follow their gentle town walk and rest beside Willow Creek pond.',style:'film',season:'summer',rain:0,wind:0.07,ambience:0.65,life:{people:8,riders:0,coach:0,train:0,chickens:1,tumbleweeds:0,wind:0.35,hamlet:1},clips:[{shot:37,seconds:365,mood:'golden',move:'cut'},{shot:37,seconds:35,mood:'golden',move:'cut'},{shot:37,seconds:280,mood:'villageDusk',move:'cut'}]};
+
+VIDEO_PRESETS.sunsetCove={label:'Sunset at the cove',about:'20 minutes over the warm seaside village, a gentle sibling beach walk and the lantern lane to the sea.',style:'film',season:'summer',rain:0,wind:0.07,ambience:0.65,life:{people:6,riders:0,coach:0,train:0,chickens:1,tumbleweeds:0,wind:0.3,hamlet:1},clips:[{shot:39,seconds:400,mood:'golden',move:'cut'},{shot:40,seconds:400,mood:'golden',move:'cut'},{shot:41,seconds:400,mood:'villageDusk',move:'fly'}]};

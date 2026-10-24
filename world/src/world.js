@@ -41,8 +41,10 @@ export function roadX(z) {
 
 // The river crosses the whole valley north of town, flowing east (+x).
 export function riverZ(x) {
-  return 150 + Math.sin(x * 0.012) * 18 + Math.sin(x * 0.031) * 6;
+  const z=150+Math.sin(x*0.012)*18+Math.sin(x*0.031)*6;
+  return z+(150-z)*(1-smoothstep(-370,-285,x));
 }
+export function coastX(z) {return -350-18*Math.exp(-Math.pow((z-35)/115,2))+8*Math.sin(z*0.007);}
 export const WATER_Y = -1;
 export const RAIL_X = 70; // the railway runs north–south east of town
 
@@ -54,6 +56,7 @@ const userPads = [];
 const userFloors = [];
 let pondPad = null;
 export function pondRadius(x, z, p = HAMLET.pond) {
+  if(p.sea)return 1+(x-coastX(z))/p.rz;
   const dx = (x - p.x) / p.rx, dz = (z - p.z) / p.rz, a = Math.atan2(dz, dx);
   return Math.hypot(dx, dz) / (1 + 0.06 * Math.sin(a * 3 + 0.5) + 0.035 * Math.cos(a * 5));
 }
@@ -105,6 +108,8 @@ export function terrainHeight(x, z) {
   const rd = Math.abs(z - riverZ(x));
   h *= smoothstep(13, 60, rd); // broad flat river valley
   h -= 2.6 * (1 - smoothstep(6, 13, rd)); // the channel itself
+  if(x<-290){const d=x-coastX(z),land=d<0?-1.2+d*0.035:-0.85+d*0.06+d*d*0.003;
+    const channel=2.2*(1-smoothstep(7,15,Math.abs(z-riverZ(x))));h+=(land-channel-h)*(1-smoothstep(-330,-290,x));}
   return applyPond(applyUserPads(h, x, z), x, z);
 }
 
@@ -927,6 +932,36 @@ export class World {
     return this.colliders.water.some(p => Math.abs(x-p.x)<p.rx*1.1*(1+margin/p.rz) && Math.abs(z-p.z)<p.rz*1.1*(1+margin/p.rz) && pondRadius(x,z,p)<1+margin/p.rz);
   }
   waterLevel(x,z) { return this.colliders.water.find(p => pondRadius(x,z,p)<1)?.y ?? WATER_Y; }
+
+  createSea(floors=[]) {
+    const area={x:-1100,z:0,rx:1000,rz:1200,y:WATER_Y,sea:true};this.colliders.water.push(area);
+    this.floors.push(...floors);userFloors.push(...floors);
+    // A soft waterline barrier, with a gap only for the railed, floored pier.
+    for(let z=-800;z<800;z+=4)if(z<28||z>=32)this.colliders.segs.push({ax:coastX(z)+0.6,az:z,bx:coastX(z+4)+0.6,bz:z+4});
+    const pos=[],uv=[],idx=[],cols=64,rows=200;
+    for(let j=0;j<=rows;j++){const z=-1000+j*10,edge=coastX(z);for(let i=0;i<=cols;i++){pos.push(edge-1100*(1-i/cols),WATER_Y,z);uv.push(z/18,i/cols);}}
+    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const a=j*(cols+1)+i,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}
+    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
+    const mat=this._waterMaterial(0),before=mat.onBeforeCompile;
+    mat.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);shader.fragmentShader=shader.fragmentShader
+      .replace('float shore = uWaterKind < 0.5 ? abs(vWaterUV.y * 2.0 - 1.0) * 1.09 : length(vWaterUV * 2.0 - 1.0);','float shore = clamp(1.0-(1.0-vWaterUV.y)*1100.0/14.0+sin(uWaterTime*0.22+wp.y*0.025)*0.025,0.0,1.0);')
+      .replace('float banks = smoothstep(0.40, 0.96, shore);','float banks = 0.0;')
+      .replace('outgoingLight = mix(outgoingLight, reflected, 0.90 + fresnel * 0.07);','vec3 seaDeep=uWaterSky*0.16+uWaterHorizon*0.04;reflected=mix(seaDeep,reflected,smoothstep(0.96,1.0,vWaterUV.y));outgoingLight = mix(outgoingLight, reflected, 0.90 + fresnel * 0.07);');};
+    mat.customProgramCacheKey=()=> 'cove-sea-v1';const sea=mesh(geo,mat,false,true);sea.name='Sunset Cove sea';sea.renderOrder=2;this.root.add(sea);return {area,sea};
+  }
+
+  palmGeometry() {
+    const trunk=[],leaves=[];
+    for(let i=0;i<9;i++){const g=new THREE.CylinderGeometry(0.18-i*0.01,0.22-i*0.01,0.9,9);g.translate(Math.sin(i*0.14)*0.7,i*0.82+0.45,0);trunk.push(g);}
+    for(let i=0;i<9;i++){
+      const a=i*Math.PI*2/9,verts=[],uv=[],indices=[];
+      for(let j=0;j<=9;j++){const u=j/9,r=u*4.3,y=7.5+Math.sin(u*Math.PI)*1.1-u*2.2,w=Math.sin(u*Math.PI)*0.42+0.015;
+        for(const side of [-1,1]){verts.push(0.65+Math.cos(a)*r-Math.sin(a)*w*side,y,Math.sin(a)*r+Math.cos(a)*w*side);uv.push(u,side>0?1:0);}
+        if(j){const n=j*2;indices.push(n-2,n,n-1,n-1,n,n+1);}}
+      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();leaves.push(g);
+    }
+    return {trunk:mergeGeometries(trunk),leaves:mergeGeometries(leaves)};
+  }
 
   _pond() {
     const p=HAMLET.pond, y=terrainHeight(p.x,p.z)-0.3;

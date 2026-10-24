@@ -38,7 +38,7 @@ finished. Re-read this file each time; Claude may change it.
 | 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | done; full 1358 + 2 passed; day/night previews 53-55 saved |
 | 25 | `tasks/train-trip.md` | `area/train-trip` | done; full 1389 + 2 passed; day/night 56-58 saved; audio-pan follow-up in STUCK.md |
 | 26 | `tasks/camping-night.md` | `area/camping-night` | WIP by user choice; module + 14 smoke checks + four day/night previews saved; main.js wiring deferred (STUCK.md); continue 27 |
-| 27 | `tasks/pony-farm.md` | `area/pony-farm` | WIP saved; farm smoke 32 + clearance 65 passed; day/night 60-63 saved; full suite running |
+| 27 | `tasks/pony-farm.md` | `area/pony-farm` | WIP saved; day/night 60-63 saved; full run 879 passed so far, startup/remaining suites pending (result); not done |
 | 28 | `tasks/episode-presets.md` | `area/episode-presets` | queued |
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | queued |
 | 30 | `tasks/performance.md` | `area/performance` | queued |

@@ -13,3 +13,7 @@
 - Final day/night captures saved for farm shots 61-63. Also corrected reserved camping camera 60 in the allowed camera.js to clamp above natural ground while camping is unwired; extra pony-farm-60-day/night.png evidence uses the manual factory harness. Camping startup remains deferred as requested.
 - Full suite next (all eighteen suites, including manual camping-night factory smoke and pony-farm). Record counts, commit result and mark done before task 28.
 - Current branch area/pony-farm from camping WIP faea577. No merge, push or publication.
+
+## Running full-suite checkpoint
+- Session 84491: pony-farm 32, camping-night manual factory 14, train-trip 28, area-shots 7, build-mode 525, clouds-water 227 and family-mode 46 passed (879 so far). Startup reloads and the remaining eleven suites are still pending; this is not a completed full-suite claim.
+- No source changes since this full run started. All eight current-task day/night images are committed.

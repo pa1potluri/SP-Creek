@@ -26,7 +26,8 @@ finished. Re-read this file each time; Claude may change it.
 | 14 | `tasks/build-pieces.md` | `area/build-pieces` | done |
 | 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | done |
 | 16 | `tasks/sky-edge.md` | `area/sky-edge` | done (from main) |
-| 17 | `tasks/soft-wind.md` | `area/soft-wind` | WIP: softer wind built; verification next (from main) |
+| 17 | `tasks/soft-wind.md` | `area/soft-wind` | done (from main) |
+| 17b | `tasks/sunset-cove.md` | `area/sunset-cove` | queued (after Pavi & Siri) |
 | 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | queued |
 | 19 | `tasks/playground.md` | `area/playground` | queued |
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | queued |

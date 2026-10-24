@@ -13,8 +13,11 @@ balloon on the hill. Day and night, summer, autumn and winter.
 
 | | |
 |---|---|
-| ![Town center](docs/images/town.png) **Town center**: bakery, general store, station, Honey Bun Café | ![Forest](docs/images/forest.png) **Forest**: fireflies, owls, a deer family |
-| ![Meadow](docs/images/meadow.png) **Flower meadow & waterfall lake**: rabbits, ducks, butterflies | ![Winter](docs/images/winter.png) **Seasons**: autumn leaves, snow and a snowman |
+| ![Forest](docs/images/forest.png) **Forest**: mushrooms, fireflies and friendly owls | ![Deer family](docs/images/deer.png) **Animal friends**: a deer family, rabbits, ducks |
+| ![Meadow](docs/images/meadow.png) **Flower meadow & waterfall lake** | ![Winter](docs/images/winter.png) **Seasons**: autumn leaves, snow and a snowman |
+
+Also: a town center with a bakery, general store, station and the Honey Bun Café, a friendly ghost town,
+a glowing crystal mine and a hot air balloon on the hill.
 
 - 🎬 **Ready-made calm videos** (10–30 minutes): misty morning, moonlit night, rainy café and a 2:30 grand tour
 - 🔨 **Build mode**: place fences, wells, houses and lanterns to grow the town
@@ -43,4 +46,6 @@ SP Creek is a **pilot project by one family**, made with AI helpers:
 *Grown-ups only in the comments please (GitHub is 13+). Kind words only: this is a children's project.*
 
 ---
-Code: MIT licence. Art, characters and the SP Creek name © Potluri family, all rights reserved.
+**Licence:** being chosen. Until a `LICENSE` file is added, everything here (code, art, characters and the
+SP Creek name) is © Potluri family, all rights reserved. Built with [Three.js](https://threejs.org) and
+[mp4-muxer](https://github.com/Vanilagy/mp4-muxer) (both MIT).

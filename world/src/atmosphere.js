@@ -406,8 +406,9 @@ export class Atmosphere {
       material.userData.softHorizon = { value: this.scene.fog.color };
       material.onBeforeCompile = shader => {
         shader.uniforms.uBackdropMist = material.userData.softHorizon;
+        shader.uniforms.uBackdropTop = {value:backdrop.geometry.parameters.height*0.5};
         shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nvarying float vBackdropHeight;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvBackdropHeight = position.y;');
-        shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uBackdropMist; varying float vBackdropHeight;').replace('#include <opaque_fragment>', 'outgoingLight = mix(outgoingLight, uBackdropMist, (1.0 - smoothstep(-35.0, 180.0, vBackdropHeight)) * 0.9);\n#include <opaque_fragment>');
+        shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uBackdropMist; uniform float uBackdropTop; varying float vBackdropHeight;').replace('#include <opaque_fragment>', 'outgoingLight = mix(outgoingLight, uBackdropMist, (1.0 - smoothstep(-35.0, 180.0, vBackdropHeight)) * 0.9);\n// Fade the open panorama rim into the procedural sky, including upward views.\ndiffuseColor.a *= 1.0 - smoothstep(uBackdropTop * 0.25, uBackdropTop, vBackdropHeight);\n#include <opaque_fragment>');
       };
       material.needsUpdate = true;
     }

@@ -81,3 +81,10 @@ west and flows into the bay at its south end.
 - Uses the free clearing at (-200, 58), south-east of the meadow lake, west of Willow Creek chapel and north of the railway branch.
 - Glowing tents, guarded stone-ring fire, log/blanket for Pavi and Siri, two nearby grown-ups and a friendly owl.
 - Footpath comes from (-144, 90) through (-174, 90) and (-185, 80), avoiding the chapel and pond.
+
+## Little pony farm (task 27)
+
+- Uses the free site west of the ranch at (-180, -80), clear of the meadow lake and forest.
+- Red barn, rounded fenced paddock, protected baby-animal pen, vegetable beds and a shallow-looking duck pond with a collision barrier.
+- Pavi feeds at the paddock rail; Siri pets a lamb through the nursery rail. Path links from ranch (-125, -55) through (-145, -42) and (-164, -43).
+- Farm barn, rounded rail, hay bale, vegetable bed and pond join Build mode through its existing extension catalogue.

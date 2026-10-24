@@ -1,3 +1,4 @@
+import { buildPonyFarm } from './areas/pony-farm.js';
 import { balloonRideState } from './areas/crystal-mine.js';
 import { familySign } from './family.js';
 // Town life: people strolling the boardwalks, riders and a stagecoach on the road, chickens,
@@ -51,10 +52,10 @@ export function makePerson(outfit = randomTownsfolk()) {
   return makeCharacter(outfit);
 }
 
-function makeHorse(saddled) {
+function makeHorse(saddled, rounded=false) {
   const g = new THREE.Group(), coatHsl = pick(COAT), coat = animalMat(coatHsl), dark = animalMat([24, 28, 24]), muzzle = animalMat([30, 30, 73]);
   const body = joint(g, 0, 0, 0);
-  part(new THREE.BoxGeometry(0.55, 0.62, 1.55), coat, 0, 1.38, 0, body);
+  part(rounded?new THREE.CapsuleGeometry(0.28,0.99,5,12).rotateX(Math.PI/2):new THREE.BoxGeometry(0.55,0.62,1.55), coat, 0, 1.38, 0, body);
   part(new THREE.SphereGeometry(0.33, 10, 8), coat, 0, 1.4, 0.66, body).scale.set(0.85, 1, 0.9);
   part(new THREE.SphereGeometry(0.33, 10, 8), coat, 0, 1.42, -0.66, body).scale.set(0.9, 1, 0.9);
   if (coatHsl === COAT[4]) for (const side of [-1,1]) for (const [z,r] of [[-0.45,0.23],[0.2,0.28]]) {
@@ -62,19 +63,19 @@ function makeHorse(saddled) {
   }
   const neck = joint(body, 0, 1.58, 0.75);
   neck.rotation.x = 0.6;
-  part(new THREE.BoxGeometry(0.26, 0.85, 0.32), coat, 0, 0.42, 0, neck);
+  part(rounded?new THREE.CapsuleGeometry(0.15,0.55,5,10):new THREE.BoxGeometry(0.26,0.85,0.32), coat, 0, 0.42, 0, neck);
   const mane = joint(neck,0,0.42,-0.17);
   part(new THREE.BoxGeometry(0.07, 0.8, 0.12), dark, 0, 0, 0, mane);
-  part(new THREE.BoxGeometry(0.22, 0.24, 0.55), coat, 0, 0.83, 0.22, neck).rotation.x = 0.1;
+  const face=part(rounded?new THREE.SphereGeometry(0.14,12,8):new THREE.BoxGeometry(0.22,0.24,0.55),coat,0,0.83,0.22,neck);face.rotation.x=0.1;if(rounded)face.scale.set(0.85,0.9,2);
   part(new THREE.SphereGeometry(0.13,10,8),muzzle,0,0.81,0.48,neck).scale.set(0.95,0.7,0.65);
   for (const side of [-1,1]) part(new THREE.SphereGeometry(0.023,8,6),mat([25,25,12]),side*0.115,0.88,0.24,neck);
-  for (const s of [-1, 1]) part(new THREE.BoxGeometry(0.05, 0.12, 0.05), dark, s * 0.07, 0.98, 0.04, neck);
+  for (const s of [-1, 1]) part(rounded?new THREE.CapsuleGeometry(0.025,0.07,4,8):new THREE.BoxGeometry(0.05,0.12,0.05), dark, s * 0.07, 0.98, 0.04, neck);
   const tail = joint(body, 0, 1.55, -0.82);
   tail.rotation.x = 0.4;
   part(new THREE.BoxGeometry(0.1, 0.7, 0.12), dark, 0, -0.35, 0, tail);
   const legs = [[-0.17, 0.6], [0.17, 0.6], [-0.17, -0.6], [0.17, -0.6]].map(([x, z]) => {
     const j = joint(g, x, 1.12, z);
-    part(new THREE.BoxGeometry(0.13, 1.0, 0.15), coat, 0, -0.5, 0, j);
+    part(rounded?new THREE.CapsuleGeometry(0.07,0.86,4,8):new THREE.BoxGeometry(0.13,1,0.15), coat, 0, -0.5, 0, j);
     part(new THREE.BoxGeometry(0.15, 0.1, 0.17), mat([25, 15, 12]), 0, -1.04, 0, j);
     return j;
   });
@@ -84,6 +85,21 @@ function makeHorse(saddled) {
   }
   return { g, legs, neck, mane, tail, body };
 }
+function makeFarmBaby(kind){
+ const g=new THREE.Group(),legs=[],col=kind==='piglet'?'#e7b6af':kind==='calf'?'#c3a184':kind==='chick'?'#f2d68c':'#eee4cf',coat=new THREE.MeshLambertMaterial({color:col}),cream=new THREE.MeshLambertMaterial({color:'#f4e6cf'}),ink=new THREE.MeshLambertMaterial({color:'#514940'}),gold=new THREE.MeshLambertMaterial({color:'#dcb273'});
+ const add=(geo,m,x,y,z,parent=g)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;parent.add(o);return o;},ball=(r,m,x,y,z,scale=[1,1,1],parent=g)=>{const o=add(new THREE.SphereGeometry(r,12,8),m,x,y,z,parent);o.scale.set(...scale);return o;};
+ const bird=kind==='chick'||kind==='duck',scale=kind==='chick'?0.4:kind==='duck'?0.65:kind==='calf'?1.1:1;g.scale.setScalar(scale);
+ ball(0.36,coat,0,0.5,0,[0.85,0.85,1.35]);const head=new THREE.Group();head.position.set(0,0.7,0.5);g.add(head);ball(0.23,coat,0,0,0,[1,1,1],head);
+ for(const x of [-0.13,0.13]){ball(0.055,cream,x,0.05,0.18,[1,1,0.45],head);ball(0.026,ink,x,0.05,0.208,[1,1,0.4],head);}
+ ball(bird?0.09:0.12,bird?gold:cream,0,-0.07,0.23,[1.2,0.55,0.8],head);
+ if(!bird){for(const x of [-0.25,0.25])ball(0.13,coat,x,0.02,0,[1.4,0.45,0.7],head);for(const x of [-0.18,0.18])for(const z of [-0.3,0.3]){const leg=new THREE.Group();leg.position.set(x,0.38,z);g.add(leg);ball(0.085,coat,0,-0.18,0,[0.75,2.4,0.75],leg);legs.push(leg);}}
+ if(kind==='lamb')for(let i=0;i<9;i++)ball(0.16,cream,Math.sin(i*2.4)*0.25,0.68+Math.cos(i)*0.06,(i%3-1)*0.24);
+ if(kind==='calf')for(const x of [-0.29,0.29])for(const z of [-0.2,0.2])ball(0.15,cream,x,0.55,z,[0.2,1,1.2]);
+ if(kind==='piglet')add(new THREE.TorusGeometry(0.07,0.022,6,16),coat,0,0.55,-0.48);
+ return {g,legs,head};
+}
+function animateFarmBaby(p,t,amt){p.legs.forEach((leg,i)=>leg.rotation.x=Math.sin(t+(i%2)*Math.PI)*amt);p.head.rotation.y=Math.sin(t*0.18)*0.1;}
+
 export function animateHorse(h, phase, amt) {
   const s = Math.sin(phase) * 0.5 * amt;
   h.legs[0].rotation.x = h.legs[3].rotation.x = s;
@@ -664,6 +680,7 @@ export class Life {
     this._tumbleweeds();
     this._camRight = V();
     this.apply();
+    this.ponyFarm=buildPonyFarm(world,{makePony:()=>makeHorse(false,true),animatePony:animateHorse,makeBaby:makeFarmBaby,animateBaby:animateFarmBaby});
   }
 
   apply() {
@@ -942,6 +959,7 @@ export class Life {
     for (const r of this.riders) r.update(dt);
     if (this.coach) this.coach.update(dt);
     if (this.train) this.train.update(dt);
+    this.ponyFarm?.update(t,camera);
     for (const g of this.grazers) g.update(dt, t);
 
     for (const s of this.signs) s.pivot.rotation.z = (Math.sin(t * 1.4 + s.ph) * 0.1 + Math.sin(t * 2.3 + s.ph) * 0.04) * wind;

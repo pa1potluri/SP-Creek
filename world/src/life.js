@@ -1,3 +1,4 @@
+import { balloonRideState } from './areas/crystal-mine.js';
 import { familySign } from './family.js';
 // Town life: people strolling the boardwalks, riders and a stagecoach on the road, chickens,
 // tumbleweeds, swinging shop signs, a waving flag and wandering cut-outs. Everything advances
@@ -602,6 +603,7 @@ export class Life {
     this.world = world;
     starWorld=world;
     addCharacterPoseLayer(t=>this.updateMoments(t));
+    addCharacterPoseLayer(t=>this.updateBalloonRiders(t));
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -852,6 +854,14 @@ export class Life {
       return { mesh, x: -40 + i * 27, z: -40 + R() * 90, ph: R() * 6, speed: 0.7 + R() * 0.6 };
     });
     this.root.add(this.tumbleGroup);
+  }
+
+  updateBalloonRiders(t){
+    const ride=balloonRideState(),basket=this.world.balloonRide?.balloon;
+    if(!basket)return;
+    if(!this.balloonRiders){this.balloonRiders=['pavi','siri'].map(role=>{const p=makeCharacter(CAST[role]);basket.add(p.g);return p;});}
+    this.balloonRiders.forEach((p,i)=>{p.g.visible=!!ride;if(!ride)return;p.g.position.set(i?-0.37:0.37,0.18,0);p.g.rotation.set(0,0,0);animatePerson(p,t*0.6,0);gesture(p,'wave',0.35+Math.sin(t*0.25+i)*0.15,t*0.6+i);});
+    if(ride){this.balloonHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.balloonHidden.has(p))this.balloonHidden.set(p,p.g.visible);p.g.visible=false;}}else if(this.balloonHidden){for(const [p,visible]of this.balloonHidden)p.g.visible=visible;this.balloonHidden=null;}
   }
 
   updateMoments(t){

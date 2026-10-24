@@ -6,7 +6,7 @@ export async function runMomentTests(){
  try{
   a.timeline.stop();a.director.auto=false;
   const keys=Object.keys(MOMENTS),pose=()=>JSON.stringify(Object.values(a.life.stars).map(p=>[...p.g.position.toArray(),p.g.rotation.y,...p.arms.map(arm=>arm.quaternion.toArray())]));
-  check(keys.length===7&&a.director.shots.slice(46).length===7,'Seven moments append after original shot 45');
+  check(keys.length===7&&a.director.shots.slice(46,53).length===7,'Seven moments append after original shot 45');
   for(const [i,kind]of keys.entries()){
    check(a.director.shots[46+i].moment===kind,kind+': stable appended shot');a.director.playShot(46+i,{cut:true});a.life.updateMoments(12);const first=pose();a.life.updateMoments(60);a.life.updateMoments(12);
    check(pose()===first,kind+': world-time seeking restores exact poses');

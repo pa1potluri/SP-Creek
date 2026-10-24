@@ -35,7 +35,7 @@ finished. Re-read this file each time; Claude may change it.
 | 21 | `tasks/pavi-siri-3d.md` | `area/pavi-siri-3d` | done (from main 75a90ab); full 1293 + 2 passed; original-model day/night previews saved |
 | 22 | `tasks/cove-polish.md` | `area/cove-polish` | WIP: side-lane clearance + warm pebbles saved; Episode 1 cuts need presets.js scope (STUCK.md); continue 23 |
 | 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | done; full 1335 + 2 passed; day/night previews 46-52 saved |
-| 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | queued |
+| 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | in progress; flight route, basket, riders and three appended shots; smoke next |
 | 25 | `tasks/train-trip.md` | `area/train-trip` | queued |
 | 26 | `tasks/camping-night.md` | `area/camping-night` | queued |
 | 27 | `tasks/pony-farm.md` | `area/pony-farm` | queued |

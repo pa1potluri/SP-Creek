@@ -23,7 +23,7 @@ finished. Re-read this file each time; Claude may change it.
 | 11 | `tasks/village-details.md` | `area/village-details` | done |
 | 12 | `tasks/seasons.md` | `area/seasons` | done |
 | 13 | `tasks/season-presets.md` | `area/season-presets` | done |
-| 14 | `tasks/build-pieces.md` | `area/build-pieces` | WIP: twelve pieces built; verification next |
+| 14 | `tasks/build-pieces.md` | `area/build-pieces` | done |
 | 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | queued |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |

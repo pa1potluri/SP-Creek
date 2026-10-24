@@ -1,0 +1,7 @@
+# WIP - Pavi and Siri
+
+Read all four user references before modelling. Added dedicated child rigs without changing other characters: large brown eyes, rounded rosy faces and ears; Pavi's dark curls, cream shirt/red collar, maroon sash/strap, loose knee shorts and sandals; Siri's thick side braid and flowers, bindi, drop earrings, mustard blouse, patterned red-pink/gold skirt, belt, bangles, sandals and shoulder bag.
+
+Added a deterministic 680-second sibling route along main street, fountain, Honey Bun Cafe porch, Willow Creek road and dry pond shore, with an optional playground visit if present. Pavi runs ahead, gently hops and waits/waves; Siri walks slowly with folded hands. Nearby townsfolk wave. Appended shots 37/38 and the A day with Pavi & Siri preset. Existing characters, camera indices and presets are preserved.
+
+First focused run passed 23 character checks and 40 camera-clearance checks (39 shots / 7,839 samples), no browser errors. Eight Animated film day/night views saved, including front comparisons with the original references. Refined Siri's parted waves/folded hands and sandal straps after comparison. The models preserve the reference design through the project's simpler procedural rig, not the source images' rendered fabric/hair detail; Claude likeness review is essential. Remaining: full suite including pavi-siri, final counts and commit. No push. Next follow current QUEUE (17b Sunset Cove was added), then 18-20; stop after 20.

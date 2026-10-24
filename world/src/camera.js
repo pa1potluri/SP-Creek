@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP } from './world.js';
 import { HAMLET } from './hamlet.js';
+import { starCameraFocus } from './life.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const clamp01 = (t) => Math.min(1, Math.max(0, t));
@@ -145,7 +146,11 @@ function makeShots() {
     pathShot('Deer at the Forest Edge',[[G(-58,7,-193),G(-66,1.3,-206)],[G(-56,7,-197),G(-66,1.3,-206)]],90),
     pathShot('Snowman in the Square',[[G(11,3.2,-45),G(4.8,1.4,-53)],[G(13,3.3,-49),G(4.8,1.4,-53)]],100),
   ].map(s=>({...s,group:'Seasonal views',clearance:1.5}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews];
+  const starViews=[
+    {name:'Pavi & Siri walk',duration:120,group:'Pavi & Siri',clearance:1.5,loop:true,sample(t,out){const f=starCameraFocus(),x=f.pos.x+Math.sin(f.yaw)*4.8,z=f.pos.z+Math.cos(f.yaw)*4.8;out.pos.set(x,Math.max(walkHeight(x,z)+1.55,f.pos.y+1.55),z);out.look.copy(f.pos);out.look.y+=1.05;}},
+    pathShot('Pavi & Siri at the pond',[[V(-71,walkHeight(-71,78)+2.1,78),V(-69,walkHeight(-69,83.5)+1,83.5)],[V(-67,walkHeight(-67,78)+2.1,78),V(-69,walkHeight(-69,83.5)+1,83.5)]],100),
+  ].map(s=>({...s,group:'Pavi & Siri',clearance:1.5}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

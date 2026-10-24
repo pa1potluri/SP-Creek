@@ -1,4 +1,4 @@
-"""Serve Dusty Hollow (the world/ folder) with caching off, so code updates show up on reload.
+"""Serve SP Creek (the world/ folder) with caching off, so code updates show up on reload.
 
 POST /save?path=assets/<file> writes the request body to world/assets/<file> (and only there),
 so in-browser tools such as the backdrop stitcher can store their results in the project.
@@ -53,7 +53,7 @@ def main():
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8810
     handler = functools.partial(NoCacheHandler, directory=str(ROOT))
     with http.server.ThreadingHTTPServer(("127.0.0.1", port), handler) as httpd:
-        print(f"Dusty Hollow: http://localhost:{port}")
+        print(f"SP Creek: http://localhost:{port}")
         httpd.serve_forever()
 
 

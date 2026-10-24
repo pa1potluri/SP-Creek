@@ -1,10 +1,10 @@
-# AGENTS.md: how we build Dusty Hollow
+# AGENTS.md: how we build SP Creek
 
 Both Claude (Claude Code) and ChatGPT Codex read this file before every task. Follow it exactly.
 
 ## What this is
 
-**Dusty Hollow** is a cosy, child-safe 3D western valley for a **children's YouTube channel**:
+**SP Creek** is a cosy, child-safe 3D western valley for a **children's YouTube channel**:
 calm background videos, "let's build" videos and simple play. It must always feel friendly,
 bright, soft and safe.
 
@@ -64,6 +64,9 @@ the next task.
    what's needed, which files/folders may change, and how it will be checked.
 2. **One Git branch per task**: `area/<name>` (e.g. `area/town-center`). Codex works only on that
    branch and commits there. Never commit to `main`; Claude merges after review.
+   **Never push, post, upload, or change repo visibility** (GitHub, YouTube or anywhere else) without the
+   user's explicit approval in the same session. Codex never pushes. Claude publishes only what the user
+   approved, and only in that session.
 3. **Stay inside the task's files.** If something outside them must change, stop and write it in
    the result file as a request instead of changing it.
 4. **Keep the code organised.** New areas live in their own module `world/src/areas/<name>.js`,
@@ -103,7 +106,7 @@ the next task.
 - `world/src/world.js`: terrain (`terrainHeight`, `walkHeight`, pads), buildings, river, props,
   plants, texture sets (oil / clean / flat), Build mode pieces, colliders.
 - `world/src/hamlet.js`: Willow Creek. `world/src/life.js`: townsfolk, riders, train, animals.
-- `world/src/characters.js`: the cartoon cast. `world/src/interior.js`: the café/saloon interior.
+- `world/src/characters.js`: the cartoon cast. `world/src/interior.js`: the café interior.
 - `world/src/atmosphere.js`: moods, sky, fog, particles. `world/src/camera.js`: shots.
 - `world/src/presets.js`: ready-made videos. `world/src/ambience.js` + `audio.js`: place sounds.
 - `world/src/styles.js`, `painterly.js`: art styles and the post-processing look.

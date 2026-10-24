@@ -71,7 +71,7 @@ export function buildTownCenter(world, life) {
   for (const [side, specs] of [[-1, LEFT], [1, RIGHT]]) for (const [i, s] of specs.entries()) {
     const shop = group(side * 7.5, 0, s.z, -side * Math.PI / 2);
     for (const x of [-s.w * 0.29, s.w * 0.29]) flowerBox(x, 1.15, 0.42, shop, Math.min(2, s.w * 0.23));
-    if (['UNDERTAKER', 'BANK', 'DUSTY HOLLOW MERCANTILE', 'GUNSMITH'].includes(s.sign)) {
+    if (['BAKERY', 'BANK', 'SP CREEK MERCANTILE', 'TOY SHOP'].includes(s.sign)) {
       const awning = group(0, 0, 1.45, 0, shop); canopy(awning, s.w - 0.3, 2.9, 3.52, colors[i % 5]);
     }
     // Hanging baskets sit outside the porch's walking lane.
@@ -177,7 +177,7 @@ export function buildTownCenter(world, life) {
   sign('TRAIN STATION →',3.8,0.7,5.6,2.5,-47);
   box(0.12,2.7,0.12,wood,5.6,1.35,-47);
   for(const x of [-4.7,4.7])box(0.18,5.4,0.18,wood,x,2.7,58);
-  sign('WELCOME TO DUSTY HOLLOW',9,1.05,0,5.3,58);
+  sign('WELCOME TO SP CREEK',9,1.05,0,5.3,58);
   // Merge static pieces by parent/material; animated flags, water drops and people stay separate.
   for(const {parent,material,geos} of buckets.values()) {
     const geometry=mergeGeometries(geos);const m=new THREE.Mesh(geometry,material);m.castShadow=m.receiveShadow=true;parent.add(m);

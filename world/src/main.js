@@ -17,7 +17,7 @@ import { Recorder } from './recorder.js';
 import { Timeline } from './timeline.js';
 import { Life } from './life.js';
 import { Game } from './game.js';
-import { SaloonInterior } from './interior.js';
+import { CafeInterior } from './interior.js';
 import { tickCharacters } from './characters.js';
 import { VIDEO_PRESETS, BASE_LIFE } from './presets.js';
 import { encodeVideo } from './exporter.js';
@@ -74,7 +74,7 @@ const recorder = new Recorder();
 const timeline = new Timeline(director, atmos);
 const life = new Life(scene, world);
 const game = new Game({ scene, camera, canvas, world, life, director });
-const saloon = new SaloonInterior(world);
+const cafe = new CafeInterior(world);
 const townCenter = buildTownCenter(world, life);
 const ghostTown = buildGhostTown(world);
 const forest = buildForest(world);
@@ -90,7 +90,7 @@ let familyMode = DEFAULT_FAMILY_MODE;
 function setFamilyMode(on, save = false) {
   familyMode = !!on;
   $('#familyMode').checked = familyMode;
-  world.setFamilyMode(familyMode); life.setFamilyMode(familyMode); saloon.setFamilyMode(familyMode);
+  world.setFamilyMode(familyMode); life.setFamilyMode(familyMode); cafe.setFamilyMode(familyMode);
   townCenter.setFamilyMode(familyMode);
   if (save) LS.set('dh.familyChoice', familyMode);
   document.dispatchEvent(new Event('familymodechange'));
@@ -144,9 +144,8 @@ function resize(fw, fh) {
 }
 addEventListener('resize', () => { if (!exporting) resize(); });
 
-// Painted cut-outs (transparent PNGs from ChatGPT) in assets/cutouts/ stand around the saloon.
+// Painted cut-outs (transparent PNGs from ChatGPT) in assets/cutouts/ stand around the cafe.
 const CUTOUTS = [
-  { file: 'cowboy', x: 6.3, z: 3.2, h: 1.85 },
   { file: 'lady', x: 6.4, z: 13.2, h: 1.72 },
   { file: 'horse', x: 2.6, z: 13.8, h: 2.2 },
 ];
@@ -720,7 +719,7 @@ function projectData() {
   };
 }
 function loadProject(p) {
-  if (!p || p.app !== 'dusty-hollow') throw new Error('Not a Dusty Hollow project file');
+  if (!p || p.app !== 'dusty-hollow') throw new Error('Not an SP Creek project file');
   timeline.stop();
   setFamilyMode(p.familyMode ?? DEFAULT_FAMILY_MODE, true);
   applyStyle(p.style);
@@ -748,7 +747,7 @@ function loadProject(p) {
 $('#projSave').onclick = () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(projectData(), null, 2)], { type: 'application/json' }));
-  a.download = 'dusty-hollow-project.json';
+  a.download = 'sp-creek-project.json';
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 10000);
 };
@@ -779,7 +778,7 @@ $('#renderBtn').onclick = async () => {
   let writable = null;
   if (window.showSaveFilePicker) {
     try {
-      const handle = await window.showSaveFilePicker({ suggestedName: `dusty-hollow-${h}p.mp4`, types: [{ description: 'MP4 video', accept: { 'video/mp4': ['.mp4'] } }] });
+      const handle = await window.showSaveFilePicker({ suggestedName: `sp-creek-${h}p.mp4`, types: [{ description: 'MP4 video', accept: { 'video/mp4': ['.mp4'] } }] });
       writable = await handle.createWritable();
     } catch (err) {
       if (err.name === 'AbortError') return;
@@ -831,7 +830,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
     if (result instanceof Blob) {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(result);
-      a.download = `dusty-hollow-${h}p.mp4`;
+      a.download = `sp-creek-${h}p.mp4`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 60000);
     }
@@ -855,7 +854,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { seasons, setSeason, world, camera, life, saloon, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { seasons, setSeason, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;
@@ -939,20 +938,20 @@ const clock = new THREE.Clock();
 let time = 0, frames = 0, lastLabel = '', exporting = false;
 
 // What the soundscape needs to know this frame: where the ears are (the player in play mode,
-// else the camera), which way is right, inside the saloon or not, the mood, and the train.
-const saloonIt = world.interiors.saloon, _v = new THREE.Vector3();
-const saloonPos = saloonIt ? saloonIt.group.localToWorld(new THREE.Vector3(0, 0, saloonIt.zc)) : null;
+// else the camera), which way is right, inside the cafe or not, the mood, and the train.
+const cafeIt = world.interiors.cafe, _v = new THREE.Vector3();
+const cafePos = cafeIt ? cafeIt.group.localToWorld(new THREE.Vector3(0, 0, cafeIt.zc)) : null;
 function listener() {
   const p = game.active ? game.pos : camera.position, e = camera.matrixWorld.elements;
   let inside = false;
-  if (saloonIt) {
-    saloonIt.group.worldToLocal(_v.copy(p));
-    inside = Math.abs(_v.x) < saloonIt.hx && _v.z < 0 && _v.z > -saloonIt.depth && _v.y < 3.8;
+  if (cafeIt) {
+    cafeIt.group.worldToLocal(_v.copy(p));
+    inside = Math.abs(_v.x) < cafeIt.hx && _v.z < 0 && _v.z > -cafeIt.depth && _v.y < 3.8;
   }
   const c = atmos.cur, t = life.train;
   return {
     x: p.x, z: p.z, rx: e[0], rz: e[2], inside, riverZ: riverZ(p.x),
-    saloon: saloonPos && { x: saloonPos.x, z: saloonPos.z },
+    cafe: cafePos && { x: cafePos.x, z: cafePos.z },
     night: c.stars, day: 1 - c.stars, rain: THREE.MathUtils.clamp(c.rain + atmos.mult.rain, 0, 1),
     train: t && t.state !== 'away' ? { x: RAIL_X, z: t.s, v: t.v, state: t.state, approaching: t.state === 'run' && !t.stopped } : null,
   };
@@ -975,7 +974,7 @@ function step(dt) {
   crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(dt, time, camera);
-  saloon.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
+  cafe.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
   audio.tick(listener(), dt);
   if (backdrop) {

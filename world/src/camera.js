@@ -76,9 +76,9 @@ function makeShots() {
   ].map(([group, s]) => ({ ...s, group }));
 
   // Inside the Golden Spur. Room coordinates (x across, z inwards from the door, y absolute)
-  // turned into the world: the saloon faces west from x = 7.5, z = 8.
+  // turned into the world: the cafe faces west from x = 7.5, z = 8.
   const S = (lx, y, lz) => V(7.5 - lz, y, 8 + lx);
-  const saloon = [
+  const cafe = [
     // starts high and a little back so the room shows, not just the doors
     pathShot('Into the Honey Bun Café', [[S(0, 2.6, 3.2), S(0, 1.7, -8)], [S(0, 2.6, -1.2), S(0, 1.7, -9)], [S(0, 2.6, -5), S(0, 1.7, -10)]], 30),
     pathShot('At the Counter', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
@@ -145,7 +145,7 @@ function makeShots() {
     pathShot('Deer at the Forest Edge',[[G(-58,7,-193),G(-66,1.3,-206)],[G(-56,7,-197),G(-66,1.3,-206)]],90),
     pathShot('Snowman in the Square',[[G(11,3.2,-45),G(4.8,1.4,-53)],[G(13,3.3,-49),G(4.8,1.4,-53)]],100),
   ].map(s=>({...s,group:'Seasonal views',clearance:1.5}));
-  return [...town, ...places, ...saloon, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews];
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

@@ -12,7 +12,7 @@ export const VIDEO_PRESETS = {
     clips: [
       { shot: 3, seconds: 70, mood: 'golden', move: 'cut' }, // Boardwalk Stroll
       { shot: 0, seconds: 50, mood: 'keep', move: 'fly' }, // Town Square 360°
-      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Saloon → Sheriff
+      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Café → Town hall
       { shot: 6, seconds: 60, mood: 'keep', move: 'fly' }, // Golden Orbit
       { shot: 1, seconds: 55, mood: 'keep', move: 'fly' }, // Arrival
     ],
@@ -24,7 +24,7 @@ export const VIDEO_PRESETS = {
     life: { people: 3, riders: 0, coach: 0, chickens: 0, tumbleweeds: 0, wind: 1.3 },
     clips: [
       { shot: 3, seconds: 70, mood: 'night', move: 'cut' }, // Boardwalk Stroll
-      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Saloon → Sheriff
+      { shot: 2, seconds: 40, mood: 'keep', move: 'fly' }, // Café → Town hall
       { shot: 17, seconds: 40, mood: 'keep', move: 'cut' }, // Through the Doors
       { shot: 18, seconds: 45, mood: 'keep', move: 'cut' }, // At the Bar
       { shot: 19, seconds: 55, mood: 'keep', move: 'cut' }, // Card Game
@@ -66,7 +66,7 @@ export const VIDEO_PRESETS = {
       { shot: 6, seconds: 75, mood: 'keep', move: 'fly' }, // Golden Orbit
     ],
   },
-  cozySaloon: {
+  cozyCafe: {
     label: 'Cozy Honey Bun Café (animated film look)',
     about: 'Inside Honey Bun Café: cakes at the counter, board games and piano music, in the soft animated-film style.',
     style: 'film', rain: 0.4, wind: 0.2, ambience: 1,

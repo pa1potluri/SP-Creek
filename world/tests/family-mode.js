@@ -3,7 +3,7 @@ import { familySign } from '../src/family.js';
 import { STYLES } from '../src/styles.js';
 
 export async function runFamilyTests() {
-  const a=window.__app,w=a.world,room=a.saloon,original=a.projectData(),storage=new Map(Object.keys(localStorage).map(k=>[k,localStorage.getItem(k)]));
+  const a=window.__app,w=a.world,room=a.cafe,original=a.projectData(),storage=new Map(Object.keys(localStorage).map(k=>[k,localStorage.getItem(k)]));
   const results=[],check=(ok,msg)=>{if(!ok)throw Error(msg);results.push(msg);};
   const visible=o=>{while(o){if(!o.visible)return false;o=o.parent;}return true;};
   const toggle=on=>{const el=document.querySelector('#familyMode');el.checked=on;el.dispatchEvent(new Event('change'));};
@@ -17,11 +17,11 @@ export async function runFamilyTests() {
     for(const on of [false,true]){
       toggle(on);check(JSON.parse(localStorage.getItem('dh.familyChoice'))===on,'Switch saves the actual choice');
       check(room.familyProps.every(visible),`Café tea, cakes and games stay visible with switch ${on}`);
-      check(w.windowMats.filter(m=>m.userData.facadeSpec?.sign==='THE GOLDEN SPUR SALOON').every(m=>m.userData.displaySign==='HONEY BUN CAFÉ'),'Honey Bun Café permanent');
-      check(a.life.signs.every(s=>!(/saloon|guns/i.test(s.text))),'Blade signs permanently friendly');
+      check(w.windowMats.filter(m=>m.userData.facadeSpec?.sign==='HONEY BUN CAFÉ').every(m=>m.userData.displaySign==='HONEY BUN CAFÉ'),'Honey Bun Café permanent');
+      check(a.life.signs.every(s=>!(/cafe|guns/i.test(s.text))),'Blade signs permanently friendly');
       for(const [from,to]of [['GUNSMITH','TOY SHOP'],['UNDERTAKER','BAKERY'],['THE GOLDEN SPUR CAFÉ','HONEY BUN CAFÉ']])check(familySign(from,on)===to,`${from} permanently safe`);
     }
-    const e=w.placeBuilding({type:'shop',x:-35,z:-100,sign:'THE GOLDEN SPUR SALOON',signCustom:true});
+    const e=w.placeBuilding({type:'shop',x:-35,z:-100,sign:'HONEY BUN CAFÉ',signCustom:true});
     check(e.additions.windowMats[0].userData.displaySign==='HONEY BUN CAFÉ','Legacy custom sign is displayed safely');w.removeBuilding(e);
     for(const style of Object.keys(STYLES)){a.applyStyle(style);toggle(false);check(room.familyProps.every(visible)&&room.m.cloth.map,`${style}: permanent café and cheerful tablecloth`);}
     for(const [role,outfit]of Object.entries(CAST)){const p=makeCharacter(outfit);check(!Object.keys(p.outfit).some(k=>/gun|holster|weapon|rifle|pistol/i.test(k)),`${role}: no weapon outfit`);p.g.traverse(o=>{if(o.isMesh)o.geometry.dispose();});}

@@ -1,5 +1,5 @@
 // A peaceful soundscape synthesized on the fly (no sound files): birdsong by day, crickets and owls
-// at night, the river, the mill wheel, the steam train, a honky-tonk piano in the saloon, and rain.
+// at night, the river, the mill wheel, the steam train, a piano in the cafe, and rain.
 // Everything follows a listener state (where the camera or player is, which way it faces, the mood).
 // update(state, when, dt) is called every frame: live with the AudioContext clock, or, for a video,
 // once per recorded frame on an OfflineAudioContext, so the render sounds exactly like the shot.
@@ -18,7 +18,7 @@ const smooth = (a, b, x) => {
 const near = (d, n, f) => 1 - smooth(n, f, d);
 
 const MILL = { x: 48, z: riverZ(48) + 8 };
-const SALOON = { x: 7.3, z: 8 };
+const CAFE = { x: 7.3, z: 8 };
 const STATION = { x: 66, z: 10 };
 
 // ---------- sample buffers, made once per AudioContext ----------
@@ -178,8 +178,8 @@ export class Ambience {
       if (mg > 0.01) this._splash(when);
     }
 
-    // saloon piano: clear inside, muffled through the walls from the street
-    const sal = s.saloon || SALOON, pd = Math.hypot(s.x - sal.x, s.z - sal.z);
+    // cafe piano: clear inside, muffled through the walls from the street
+    const sal = s.cafe || CAFE, pd = Math.hypot(s.x - sal.x, s.z - sal.z);
     const pg = indoors ? 0.55 : 0.4 * near(pd, 4, 55);
     set(this.piano.g.gain, pg);
     set(this.piano.lp.frequency, indoors ? 9000 : 1300);
@@ -279,7 +279,7 @@ export class Ambience {
     this._tone('sine', when, 0.18, 95, 70, 0.25, this.mill.g, 0.01); // the wooden thump
   }
 
-  // Honky-tonk ragtime: stride bass and chords over C – A7 – Dm7 – G7, with a wandering tune.
+  // Gentle ragtime: stride bass and chords over C – A7 – Dm7 – G7, with a wandering tune.
   _pianoUntil(until, audible) {
     const beatLen = 60 / 112, abs = until + this.t0;
     // beats sit on a fixed grid of video time; after a pause, pick up from now

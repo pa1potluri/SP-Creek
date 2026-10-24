@@ -1,5 +1,5 @@
 // Honey Bun Café: cakes, tea, checkers, an upright piano and gently swinging glass doors.
-// Everything is placed in the saloon's own frame: x across the room, z from the door (0) inwards (−),
+// Everything is placed in the cafe's own frame: x across the room, z from the door (0) inwards (−),
 // floor top at y = 0.35.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -25,9 +25,9 @@ function cylGeo(rt, rb, h, x, y, z, seg = 12) {
   return g;
 }
 
-export class SaloonInterior {
+export class CafeInterior {
   constructor(world) {
-    const it = world.interiors.saloon;
+    const it = world.interiors.cafe;
     if (!it) return;
     this.world = world;
     this.g = it.group;
@@ -154,7 +154,7 @@ export class SaloonInterior {
     for (const d of [-0.45,0.45]) this._cup(x + d, FLOOR + 0.815, z);
   }
 
-  // a collider in the saloon's frame
+  // a collider in the cafe's frame
   _block(cx, cz, hx, hz) {
     this.world.colliders.rects.push(this.world._rectOf(this.g, cx, cz, hx, hz));
   }
@@ -168,8 +168,8 @@ export class SaloonInterior {
     this._add(boxGeo(0.5, 2.8, 7.4, 6.85, FLOOR + 1.4, -6.5), m.varnish);
     for (const y of [1.35, 2.95]) this._add(boxGeo(0.4, 0.05, 7.4, 6.55, FLOOR + y, -6.5), m.varnish);
     this._block(6.85, -6.5, 0.3, 3.7);
-    // bartender behind the counter, facing the room
-    const bt = makePerson(CAST.bartender);
+    // cafeHost behind the counter, facing the room
+    const bt = makePerson(CAST.cafeHost);
     bt.g.position.set(5.6, FLOOR, -5.4);
     bt.g.rotation.y = -Math.PI / 2;
     this.g.add(bt.g);
@@ -223,7 +223,7 @@ export class SaloonInterior {
         chair.rotation.y = Math.atan2(tx - cx, tz - cz); // seat faces the table
         this.g.add(chair);
         if (k < players) {
-          const p = makePerson(randomTownsfolk(['teacher', 'shopkeeper', 'prospector', 'rancher', 'sheriff'][this.people.length % 5]));
+          const p = makePerson(randomTownsfolk(['teacher', 'shopkeeper', 'prospector', 'rancher', 'mayor'][this.people.length % 5]));
           seat(p);
           p.arms.forEach((arm) => (arm.rotation.x = -1.05));
           p.g.position.set(cx, FLOOR + 0.5 + 0.07 - HIP, cz);
@@ -267,7 +267,7 @@ export class SaloonInterior {
     const rug = this._add(new THREE.PlaneGeometry(4.2, 6.2), new THREE.MeshLambertMaterial({ map: T.rugTexture() }), false);
     rug.rotation.x = -Math.PI / 2;
     rug.position.set(-1.2, FLOOR + 0.012, -6.6);
-    const wallX = -this.world.interiors.saloon.hx + 0.02;
+    const wallX = -this.world.interiors.cafe.hx + 0.02;
     [-2.5,-5.5,-8.5].forEach((z,i)=>{const pic=this._add(new THREE.PlaneGeometry(0.8,1),new THREE.MeshLambertMaterial({map:T.pictureTexture('painting',i+1)}),false);pic.position.set(wallX,2.2,z);pic.rotation.y=Math.PI/2;});
     for(const z of [-3.2,-9.8]){this._family(this._add(cylGeo(0.13,0.09,0.22,3.75,FLOOR+0.11,z,10),this.m.ivory));const flower=this._add(new THREE.SphereGeometry(0.12,8,6),lambert([330,45,75]));flower.position.set(3.75,FLOOR+0.4,z);}
     for(const z of [-10.6,-11.4]){this._add(cylGeo(0.32,0.3,0.3,5.9,FLOOR+0.15,z,12),this.m.top);for(let i=0;i<4;i++){const roll=this._add(new THREE.SphereGeometry(0.12,8,6),lambert([32,50,65]));roll.position.set(5.75+(i%2)*0.25,FLOOR+0.36,z-0.12+Math.floor(i/2)*0.24);}}
@@ -276,7 +276,7 @@ export class SaloonInterior {
   }
 
   _doors() {
-    const it = this.world.interiors.saloon;
+    const it = this.world.interiors.cafe;
     const geo = new THREE.BoxGeometry(it.dw / 2 - 0.05, 2.5, 0.05);
     // plain warm boards: the mahogany grain repeats into a carpet-like pattern at door size
     const plain = this.world.paintedMaterial('boards', 1, 1, { color: C(30, 45, 62) }) || lambert([28, 40, 40]);

@@ -170,16 +170,16 @@ function beam(a, b, t, mat) {
 
 export const LEFT = [ // west side of Main Street, facing east (+x)
   { sign: 'SP CREEK MERCANTILE', z: 38, w: 12, floors: 2, wall: [34, 30, 48], trim: [30, 25, 30], signBg: [40, 30, 80], signInk: '#3a2414', chimney: true, hitch: true },
-  { sign: 'SHERIFF', z: 22, w: 9, floors: 1, wall: [20, 25, 38], trim: [35, 20, 70], signBg: [25, 30, 22], signInk: '#f0e0c0' },
+  { sign: 'TOWN HALL', z: 22, w: 9, floors: 1, wall: [20, 25, 38], trim: [35, 20, 70], signBg: [25, 30, 22], signInk: '#f0e0c0' },
   { sign: 'BANK', z: 8, w: 10, floors: 2, wall: [205, 12, 52], trim: [40, 30, 80], signBg: [210, 25, 22], signInk: '#e8d9a8' },
   { sign: 'POST OFFICE', z: -6, w: 8, floors: 1, wall: [95, 15, 45], trim: [40, 30, 80], signBg: [40, 35, 85], signInk: '#3a2a1a' },
   { sign: 'DOCTOR', z: -19, w: 8, floors: 1, wall: [0, 30, 42], trim: [35, 25, 75], signBg: [30, 20, 90], signInk: '#5a1a10' },
-  { sign: 'UNDERTAKER', z: -33, w: 9, floors: 1, wall: [25, 10, 28], trim: [30, 10, 55], signBg: [0, 0, 15], signInk: '#d8d0c0' },
+  { sign: 'BAKERY', z: -33, w: 9, floors: 1, wall: [25, 10, 28], trim: [30, 10, 55], signBg: [0, 0, 15], signInk: '#d8d0c0' },
 ];
 export const RIGHT = [ // east side, facing west (-x)
-  { sign: 'GUNSMITH', z: 38, w: 9, floors: 1, wall: [25, 35, 35], trim: [40, 25, 70], signBg: [0, 0, 12], signInk: '#e9c46a' },
+  { sign: 'TOY SHOP', z: 38, w: 9, floors: 1, wall: [25, 35, 35], trim: [40, 25, 70], signBg: [0, 0, 12], signInk: '#e9c46a' },
   { sign: 'BARBER', z: 26, w: 7, floors: 1, wall: [200, 30, 58], trim: [0, 0, 92], signBg: [0, 55, 40], signInk: '#f6efe0' },
-  { sign: 'THE GOLDEN SPUR SALOON', z: 8, w: 15, floors: 2, balcony: true, batwing: true, interior: 'saloon', painted: true, wall: [28, 45, 40], trim: [42, 60, 60], signBg: [20, 50, 22], signInk: '#f2c86a', chimney: true, hitch: true },
+  { sign: 'HONEY BUN CAFÉ', z: 8, w: 15, floors: 2, balcony: true, batwing: true, interior: 'cafe', painted: true, wall: [28, 45, 40], trim: [42, 60, 60], signBg: [20, 50, 22], signInk: '#f2c86a', chimney: true, hitch: true },
   { sign: 'HOTEL', z: -12, w: 12, floors: 2, balcony: true, wall: [15, 25, 55], trim: [40, 30, 85], signBg: [150, 20, 25], signInk: '#f0e6c8', chimney: true },
   { sign: 'LIVERY STABLE', z: -32, w: 13, floors: 1, barn: true, wall: [8, 45, 35], trim: [40, 20, 85], signBg: [40, 20, 85], signInk: '#4a1a10' },
 ];
@@ -323,7 +323,7 @@ export class World {
   }
 
   // The painted front of a building (sign, windows, door), drawn once per texture set. Boards are
-  // the building's own painted image (`painted` + wall_boards, the saloon) or the shared pale
+  // the building's own painted image (`painted` + wall_boards, the cafe) or the shared pale
   // boards tinted to its colour; the flat set is one solid colour.
   _facadeSets(s) {
     // Composite openings over each building's existing boards; special doors stay procedural.

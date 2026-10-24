@@ -231,7 +231,7 @@ export function imageTexture(img, rx = 1, ry = 1) {
   return t;
 }
 
-// Saloon wallpaper: deep red damask stripes above a dark wooden wainscot (bottom 15%).
+// Café wallpaper: deep red damask stripes above a dark wooden wainscot (bottom 15%).
 export function wallpaperTexture() {
   const r = rng(18), W = 256, H = 512, c = makeCanvas(W, H), x = c.getContext('2d');
   x.fillStyle = 'hsl(355,45%,24%)';
@@ -275,41 +275,22 @@ export function rugTexture() {
   return toTexture(c);
 }
 
-// Small framed picture: 'wanted' poster or a little landscape painting.
+// Small framed picture: a little landscape painting.
 export function pictureTexture(kind, seed = 1) {
   const r = rng(seed), c = makeCanvas(160, 200), x = c.getContext('2d');
-  if (kind === 'wanted') {
-    x.fillStyle = 'hsl(40,40%,78%)';
-    x.fillRect(0, 0, 160, 200);
-    dabs(x, 0, 0, 160, 200, 80, [38, 35, 68], r, 8, 10, 0.3);
-    x.fillStyle = 'hsl(20,40%,18%)';
-    x.textAlign = 'center';
-    x.font = 'bold 30px Georgia, serif';
-    x.fillText('WANTED', 80, 38);
-    x.fillStyle = 'hsl(30,20%,35%)';
-    x.fillRect(45, 52, 70, 80);
-    x.fillStyle = 'hsl(30,25%,60%)';
-    x.beginPath(); x.arc(80, 82, 18, 0, 7); x.fill();
-    x.fillStyle = 'hsl(20,40%,18%)';
-    x.font = 'bold 18px Georgia, serif';
-    x.fillText(`$${(1 + Math.floor(r() * 9)) * 100}`, 80, 160);
-    x.font = '12px Georgia, serif';
-    x.fillText('REWARD', 80, 180);
-  } else {
-    const sky = x.createLinearGradient(0, 0, 0, 130);
-    sky.addColorStop(0, 'hsl(205,40%,55%)');
-    sky.addColorStop(1, 'hsl(35,60%,72%)');
-    x.fillStyle = sky;
-    x.fillRect(0, 0, 160, 200);
-    x.fillStyle = 'hsl(260,15%,45%)';
-    x.beginPath(); x.moveTo(0, 130); for (let i = 0; i <= 8; i++) x.lineTo(i * 20, 90 + r() * 35); x.lineTo(160, 200); x.lineTo(0, 200); x.fill();
-    x.fillStyle = 'hsl(70,35%,35%)';
-    x.fillRect(0, 140, 160, 60);
-    dabs(x, 0, 0, 160, 200, 200, [40, 30, 50], r, 7, 20, 0.25);
-    x.strokeStyle = 'hsl(40,60%,40%)';
-    x.lineWidth = 12;
-    x.strokeRect(0, 0, 160, 200);
-  }
+  const sky = x.createLinearGradient(0, 0, 0, 130);
+  sky.addColorStop(0, 'hsl(205,40%,55%)');
+  sky.addColorStop(1, 'hsl(35,60%,72%)');
+  x.fillStyle = sky;
+  x.fillRect(0, 0, 160, 200);
+  x.fillStyle = 'hsl(260,15%,45%)';
+  x.beginPath(); x.moveTo(0, 130); for (let i = 0; i <= 8; i++) x.lineTo(i * 20, 90 + r() * 35); x.lineTo(160, 200); x.lineTo(0, 200); x.fill();
+  x.fillStyle = 'hsl(70,35%,35%)';
+  x.fillRect(0, 140, 160, 60);
+  dabs(x, 0, 0, 160, 200, 200, [40, 30, 50], r, 7, 20, 0.25);
+  x.strokeStyle = 'hsl(40,60%,40%)';
+  x.lineWidth = 12;
+  x.strokeRect(0, 0, 160, 200);
   return toTexture(c);
 }
 

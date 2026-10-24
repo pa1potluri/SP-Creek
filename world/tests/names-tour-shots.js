@@ -11,8 +11,7 @@ export function runNamesTourTests() {
       p.g.traverse(n=>{if(n.geometry)n.geometry.dispose();});
     }
   }
-  check(!CAST.sheriff&&CAST.mayor.label==='Mayor'&&CAST.mayor.flower&&!CAST.mayor.badge,'Mayor has bowler and flower');
-  check(randomTownsfolk('sheriff').role==='mayor','Legacy café guest resolves to Mayor');
+  check(CAST.mayor.label==='Mayor'&&CAST.mayor.flower&&!CAST.mayor.badge,'Mayor has bowler and flower');
   for(const [i,name] of [[2,'Café to Town Hall'],[17,'Into the Honey Bun Café'],[18,'At the Counter'],[19,'Board Game Table']])check(a.director.shots[i].name===name,`Shot ${i} label`);
   const out={pos:new THREE.Vector3(),look:new THREE.Vector3()};
   for(let i=30;i<35;i++) {const s=a.director.shots[i];check(s.group==='Grand tour'&&s.duration===12,`Tour ${i}: group and length`);for(let j=0;j<=100;j++){s.sample(j/100*s.duration,out);if(!Number.isFinite(out.pos.length()))throw Error('Invalid tour curve');}}

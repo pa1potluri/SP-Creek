@@ -19,7 +19,7 @@ const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-r
       for (const on of [true, false]) {
         await page.evaluate(on => window.__app.setFamilyMode(on, true), on);
         await page.reload(); await page.waitForFunction(() => window.__app, { timeout: 120000 });
-        const ok = await page.evaluate(on => window.__app.projectData().familyMode === on && window.__app.saloon.familyMode === on && document.querySelector('#familyMode').checked === on, on);
+        const ok = await page.evaluate(on => window.__app.projectData().familyMode === on && window.__app.cafe.familyMode === on && document.querySelector('#familyMode').checked === on, on);
         if (!ok) throw Error('Family startup persistence: ' + on);
       }
       console.log('Family startup reload checks: 2 passed');
@@ -49,7 +49,7 @@ const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-r
       await page.evaluate(async style => {
         const THREE = await import('three'), a = window.__app;
         a.timeline.stop(); a.director.auto=false; a.director.setFree(true); a.applyStyle(style); a.setFamilyMode(true); a.atmos.setPreset('golden',true);
-        const it=a.world.interiors.saloon.group;
+        const it=a.world.interiors.cafe.group;
         const p=it.localToWorld(new THREE.Vector3(-5.8,2.6,-1.4)), target=it.localToWorld(new THREE.Vector3(2.4,1.7,-7.8)), d=target.clone().sub(p);
         a.director.state.pos.copy(p); a.director.free.yaw=Math.atan2(d.x,d.z); a.director.free.pitch=Math.atan2(d.y,Math.hypot(d.x,d.z)); a.director.update(0);
         document.body.classList.add('ui-hidden');

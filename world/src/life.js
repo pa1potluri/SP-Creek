@@ -91,7 +91,7 @@ export function animateHorse(h, phase, amt) {
 }
 
 function makeRider() {
-  const horse = makeHorse(true), rider = makePerson(randomTownsfolk(pick(['cowboy', 'cowboy', 'rancher', 'prospector', 'gambler'])));
+  const horse = makeHorse(true), rider = makePerson(randomTownsfolk(pick(['cowboy', 'cowboy', 'rancher', 'prospector', 'neighbour'])));
   seat(rider, true);
   rider.g.position.set(0, 0.85, 0.05);
   horse.body.add(rider.g);
@@ -246,7 +246,7 @@ class Train {
 }
 
 // Horses grazing loose in a paddock: heads down, tails swishing, now and then a few steps.
-// A tethered one stays put (the player's horse at the saloon rail). While someone rides it,
+// A tethered one stays put (the player's horse at the cafe rail). While someone rides it,
 // the game moves it instead (ridden = true).
 export class Grazer {
   constructor(home, radius, { saddled = false, tethered = false, yaw = R() * 6.28 } = {}) {
@@ -563,8 +563,8 @@ class RoadTraveller {
 
 // ---------- the town's life ----------
 const BLADES = {
-  GUNSMITH: 'GUNS', BARBER: 'SHAVE & BATH', DOCTOR: 'DOCTOR', HOTEL: 'ROOMS', SHERIFF: 'JAIL',
-  'SP CREEK MERCANTILE': 'GOODS', 'THE GOLDEN SPUR SALOON': 'SALOON', 'POST OFFICE': 'MAIL',
+  'TOY SHOP': 'TOYS', BARBER: 'SHAVE & BATH', DOCTOR: 'DOCTOR', HOTEL: 'ROOMS', 'TOWN HALL': 'MAYOR',
+  'SP CREEK MERCANTILE': 'GOODS', 'HONEY BUN CAFÉ': 'CAFÉ', 'POST OFFICE': 'MAIL',
 };
 
 export class Life {
@@ -589,7 +589,7 @@ export class Life {
     this.riders = [];
     this.coach = null;
     this.train = null;
-    // your own saddled horse waits at the saloon's hitching rail
+    // your own saddled horse waits at the cafe's hitching rail
     this.myHorse = new Grazer(V(2.3, 0, 8), 0, { saddled: true, tethered: true, yaw: Math.PI / 2 });
     this.grazers = [
       this.myHorse,

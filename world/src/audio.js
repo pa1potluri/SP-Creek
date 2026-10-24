@@ -2,34 +2,37 @@
 // recorder can capture, and the same mix rendered offline (faster than real time) for MP4 export.
 import { Ambience } from './ambience.js';
 
-// wind: looping brown noise through a slowly swept band-pass. Live, an LFO sweeps it; in a render
+// wind: seeded brown noise through a low, narrow band-pass and a gentle low-pass. Live, an LFO sweeps it; in a render
 // piece starting at video time t0 and lasting dur, the sweep is written out so it carries on
 // smoothly from the piece before.
 function buildWind(ctx, dest, t0 = null, dur = 0) {
   const len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate), data = buf.getChannelData(0);
-  let last = 0;
+  let last = 0, seed = 731;
   for (let i = 0; i < len; i++) {
-    last = (last + (Math.random() * 2 - 1) * 0.02) / 1.02;
-    data[i] = last * 3.5;
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    last = (last + (seed / 4294967296 * 2 - 1) * 0.02) / 1.02;
+    data[i] = last * 2.5;
   }
   const src = ctx.createBufferSource();
   src.buffer = buf;
   src.loop = true;
   const bp = ctx.createBiquadFilter();
   bp.type = 'bandpass';
-  bp.frequency.value = 500;
-  bp.Q.value = 0.6;
-  src.connect(bp).connect(dest);
-  src.start();
+  bp.frequency.value = 220;
+  bp.Q.value = 1.0;
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass'; lp.frequency.value = 550; lp.Q.value = 0.55;
+  src.connect(bp).connect(lp).connect(dest);
+  src.start(0, t0 === null ? 0 : ((t0 % 4) + 4) % 4);
   if (t0 !== null) {
     const n = Math.max(2, Math.ceil(dur * 20)), curve = new Float32Array(n);
-    for (let i = 0; i < n; i++) curve[i] = 500 + 300 * Math.sin(2 * Math.PI * 0.07 * (t0 + (i / (n - 1)) * dur));
+    for (let i = 0; i < n; i++) curve[i] = 220 + 45 * Math.sin(2 * Math.PI * 0.025 * (t0 + (i / (n - 1)) * dur));
     bp.frequency.setValueCurveAtTime(curve, 0, dur);
     return;
   }
   const lfo = ctx.createOscillator(), lfoGain = ctx.createGain();
-  lfo.frequency.value = 0.07;
-  lfoGain.gain.value = 300;
+  lfo.frequency.value = 0.025;
+  lfoGain.gain.value = 45;
   lfo.connect(lfoGain).connect(bp.frequency);
   lfo.start();
 }
@@ -58,7 +61,7 @@ export class AudioEngine {
     this.musicGain.gain.value = this.musicVol;
     this.musicGain.connect(this.master);
     this.windGain = ctx.createGain();
-    this.windGain.gain.value = this.windVol * 0.6;
+    this.windGain.gain.value = this.windVol * 0.3;
     this.windGain.connect(this.master);
     buildWind(ctx, this.windGain);
     this.ambGain = ctx.createGain();
@@ -140,7 +143,7 @@ export class AudioEngine {
       }
       if (this.windVol > 0) {
         const g = ctx.createGain();
-        g.gain.value = this.windVol * 0.6;
+        g.gain.value = this.windVol * 0.3;
         g.connect(ctx.destination);
         buildWind(ctx, g, start, end - start);
       }
@@ -181,7 +184,7 @@ export class AudioEngine {
 
   setWind(v) {
     this.windVol = v;
-    if (this.windGain) this.windGain.gain.setTargetAtTime(v * 0.6, this.ctx.currentTime, 0.3);
+    if (this.windGain) this.windGain.gain.setTargetAtTime(v * 0.3, this.ctx.currentTime, 0.8);
   }
 
   get stream() {

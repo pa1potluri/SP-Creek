@@ -81,7 +81,7 @@ const ghostTown = buildGhostTown(world);
 const forest = buildForest(world);
 const meadowLake = await buildMeadowLake(world);
 const crystalMine = buildCrystalMine(world);
-const sunsetCove=buildSunsetCove(world,life);
+const sunsetCove=await buildSunsetCove(world,life);
 const seasons=new Seasons(world,atmos,{forest,meadowLake});
 function setSeason(key,save=false){seasons.set(key);$('#season').value=seasons.key;if(save)LS.set('dh.season',seasons.key);}
 $('#season').onchange=()=>setSeason($('#season').value,true);

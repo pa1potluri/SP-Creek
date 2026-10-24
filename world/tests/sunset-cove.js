@@ -17,7 +17,12 @@ export async function runSunsetCoveTests(){
   const first=beachWalk(25),repeated=beachWalk(185);check(Math.abs(first.x-repeated.x)<1e-8&&first.z===repeated.z,'Beach routine repeats from world time');
   c.update(25,a.camera,a.atmos.cur);const boat=c.boats[0].position.y;c.update(60,a.camera,a.atmos.cur);c.update(25,a.camera,a.atmos.cur);check(c.boats[0].position.y===boat,'Boat rocking reproduces after seeking');
   a.setSeason('winter');a.step(0);check(!a.seasons.hooked.has(c.sand),'Winter leaves sand outside the snow shader');
-  for(const style of Object.keys(STYLES)){a.applyStyle(style);await new Promise(resolve=>requestAnimationFrame(resolve));check(c.root.visible&&c.palms[0].visible,`${style}: cove and palms render`);}
+  for(const style of Object.keys(STYLES)){a.applyStyle(style);await new Promise(resolve=>requestAnimationFrame(resolve));check(c.root.visible&&(w.textureSet==='flat'?c.palms[0].visible:c.paintedPalms.visible),`${style}: correct cove palm variant renders`);}
+  check(['plaster_wall','terracotta_roof','cobblestones','beach_sand'].every(name=>w.painted.oil[name]&&w.painted.clean[name]),'All approved surface texture sets loaded');
+  check(c.images.oil.palm&&c.images.clean.bougainvillea,'Approved foliage cutouts loaded');
+  const view=a.camera.clone();view.position.set(-330,12,20);c.update(25,view,a.atmos.cur);check(c.seaBackdrop.visible,'Sea panorama visible at cove');
+  check(Math.abs(c.seaBackdrop.position.y+(0.5-c.horizonRatio)*c.horizonHeight-view.position.y)<1e-6,'Painted sea horizon aligned at 56.5 percent');
+  view.position.x=0;c.update(25,view,a.atmos.cur);check(!c.seaBackdrop.visible,'Sea panorama absent from main valley');
   check(VIDEO_PRESETS.sunsetCove.clips.reduce((n,p)=>n+p.seconds,0)===1200,'Cove preset lasts twenty minutes');
   check([39,40,41].every(i=>a.director.shots[i].group==='Sunset Cove'),'Three cove shots appended after siblings');check(a.audio.ctx===null,'Audio never unlocked');
   return {passed:results.length,results};

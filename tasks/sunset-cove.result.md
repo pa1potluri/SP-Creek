@@ -1,4 +1,4 @@
-# Sunset Cove - done
+# WIP - Sunset Cove approved-art update
 
 Read the blueprint and original reference. Built the west coast slope, curved sand shore, sea using existing water shader, river mouth, waterline barrier and railed/floored pier. Added 15 instanced white stone cottages with clay roofs, flowers, pots, warm windows/lanterns, cobbled lanes/steps and fountain. Added instanced palms, rocks/footprints, rocking boats/sailboat, lighthouse island/soft slow beam, coast strolls and sibling beach scene. Appended shots 39-41 and a 20-minute cove preset. Added soft filtered sea/breeze audio through the existing live/offline soundscape; no seagulls.
 
@@ -9,3 +9,10 @@ Initial smoke capture passed without browser errors and all 42 shots / 8,442 cam
 Painted textures to request later, oil and clean: white plaster wall, terracotta roof tiles, cobblestones, beach sand, palm leaves. Existing tinted textures are placeholders. No push. Next lets-build-replay, playground, lantern-evening; stop after 20.
 
 Review previews (refreshed after the placement fix): world/tests/sunset-cove-39-day/night.png, sunset-cove-40-day/night.png, sunset-cove-41-day/night.png, sunset-cove-oil-day.png. No known unfinished implementation beyond the explicitly planned replacement painted textures. Claude review remains required before merge.
+
+
+Approved-art update: received new oil/clean plaster, clay roof, cobbles, sand, palm and bougainvillea assets plus two sea horizon tiles. Committed those on this branch as a590a91. Replaced placeholder materials, added instanced painted foliage with the existing 3D fallback for flat styles, and a cove-only west-facing curved sea panorama. It follows the camera height with its 56.5% image horizon at eye level; sides/top feather out. Main valley panorama is unchanged. Registration awaits the local assets; no sound is started.
+
+Replay work is checkpointed separately on area/lets-build-replay at acbcb2c. Remaining here: updated style/horizon tests and screenshots, full suite, final result/queue, then merge this branch forward into Replay build and continue tasks 18-20. Previous suite counts above belong to the placeholder-art implementation.
+
+Approved-art focused suite passed 30 checks; all 42 shots / 8,442 samples remained clear, audio locked and no browser errors. Sand now reuses the exact ground triangles to prevent mesh-grid grass seams, and the sea extends farther to reduce the gap between its finite edge and the painted horizon. Final screenshots/full suite pending.

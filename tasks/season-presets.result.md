@@ -4,6 +4,8 @@ Appended six Animated-film background presets, each exactly 20 minutes: Misty mo
 
 Appended shot 35 Deer at the Forest Edge (90 s), and shot 36 Snowman in the Square (100 s). Preset clips stretch path motion to their long durations. No old shot/preset indices changed.
 
-Checkpoint before verification. Remaining: audit new shot clearance and fix if needed; smoke-check all six buttons, season/mood/duration/audio lock; save day/night images of shots 35 and 36; run the full suite and record counts before marking done.
+Stopped at the user's 7% usage warning on area/season-presets. Implementation is built; verification is incomplete, so this task remains WIP. New-shot clearance passed: 37 shots, 7,437 samples, 38 checks, no browser errors. Saved the required Animated-film screenshots: world/tests/season-presets-35-day.png, season-presets-35-night.png, season-presets-36-day.png and season-presets-36-night.png. Capture reported no browser errors and audio stayed locked.
 
-Next: build-pieces, then gentle-weather on stacked branches. Watercolour remains paused until Thu Oct 29. No merge to main.
+The full suite was started but interrupted at the user's stop instruction: area-shots 7 passed; build-mode reached 100 checks without a reported failure, but did not finish. This is NOT a passing full-suite result. A six-button focused check was already running when stopped; its result was not available at this checkpoint. Do not mark done or merge.
+
+Left: review the four previews, finish the six-button preset activation/season/mood/duration/audio-lock check, then run every browser suite once and record final counts. No new building or tests after the stop instruction. Resume here after the 9:41 AM reset, finish season-presets, then branch build-pieces from this branch tip, followed by gentle-weather. Tasks 14 and 15 have not been started. Watercolour remains paused until Thu Oct 29. No merge to main.

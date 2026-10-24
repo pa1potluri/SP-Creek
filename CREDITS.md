@@ -3,8 +3,8 @@
 SP Creek is made by the Potluri family with AI helpers: Claude (lead and reviewer), ChatGPT Codex (builder)
 and ChatGPT (painted textures and plants, from our own prompts).
 
-SP Creek loads these open-source libraries from the jsDelivr CDN. They are not changed and not copied into
-this repository.
+SP Creek includes unchanged copies of these open-source libraries in `world/vendor/` (with their licence files),
+so it works offline.
 
 | Library | Version | Used for | Licence |
 |---|---|---|---|

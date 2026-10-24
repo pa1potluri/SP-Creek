@@ -26,6 +26,10 @@ finished. Re-read this file each time; Claude may change it.
 | 14 | `tasks/build-pieces.md` | `area/build-pieces` | done |
 | 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | done |
 | 16 | `tasks/sky-edge.md` | `area/sky-edge` | done (from main) |
+| 17 | `tasks/soft-wind.md` | `area/soft-wind` | queued (from main) |
+| 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | queued |
+| 19 | `tasks/playground.md` | `area/playground` | queued |
+| 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | queued |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

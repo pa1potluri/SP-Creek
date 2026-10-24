@@ -1645,15 +1645,79 @@ export class World {
   }
 
 
+  _detailBounds(type) {
+    return {gardenFence:[2.6,0.2],vegetablePatch:[2.3,1.5],flowerBox:[1,0.35],laundryLine:[2.7,0.35],waterWell:[1.2,1],woodPile:[1.1,0.8],mailbox:[0.35,0.3],lanternString:[3,0.3],gardenBench:[1.1,0.55],snowman:[0.8,0.75],pumpkinPile:[1.2,0.85],littleBridge:[1.6,3]}[type];
+  }
+
+  _buildDetail(type, s) {
+    const g=new THREE.Group(), scale=s.w/10, bounds=this._detailBounds(type);
+    g.name=type;g.userData.buildPiece=true;g.position.set(s.x,s.y,s.z);g.rotation.y=s.rot;g.scale.setScalar(scale);this.root.add(g);
+    this.detailMats??=Object.fromEntries(Object.entries({cream:'#f2dfb5',green:'#84a477',soil:'#8d7057',pink:'#e6b1c7',blue:'#accbdc',gold:'#ebc676',orange:'#d79450',snow:'#eff3ee',ink:'#5a514b'}).map(([key,color])=>[key,new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide})]));
+    const m=this.detailMats,wood=this.mat.wood,dark=this.mat.darkWood;
+    const add=(geo,mat,x=0,y=0,z=0)=>{const o=mesh(geo,mat);o.position.set(x,y,z);g.add(o);return o;};
+    const box=(w,h,d,mat,x,y,z)=>add(new THREE.BoxGeometry(w,h,d),mat,x,y,z);
+    const ball=(r,mat,x,y,z,sx=1,sy=1,sz=1)=>{const o=add(new THREE.SphereGeometry(r,12,8),mat,x,y,z);o.scale.set(sx,sy,sz);return o;};
+    const post=(x,h=1,z=0)=>add(new THREE.CapsuleGeometry(0.07,h-0.14,4,8),wood,x,h/2,z);
+    const rect=(x,z,hx,hz)=>this.colliders.rects.push(this._rectOf(g,x,z,hx*scale,hz*scale));
+    if(type==='gardenFence') {
+      for(const x of [-2.5,-1.25,0,1.25,2.5])post(x,0.9);
+      for(const y of [0.32,0.65])box(5,0.1,0.1,m.cream,0,y,0);
+    } else if(type==='vegetablePatch') {
+      box(4.4,0.12,2.8,m.soil,0,0.06,0);
+      for(const x of [-1.65,-0.55,0.55,1.65])for(const z of [-0.9,0,0.9]){ball(0.24,z<0?m.orange:z>0?m.pink:m.green,x,0.25,z,1,0.8,1);ball(0.23,m.green,x,0.45,z,1.2,0.35,1);}
+    } else if(type==='flowerBox') {
+      box(1.9,0.35,0.6,wood,0,0.18,0);box(1.7,0.03,0.45,m.soil,0,0.36,0);
+      for(let i=0;i<5;i++){post(-0.72+i*0.36,0.55);ball(0.17,[m.pink,m.gold,m.blue][i%3],-0.72+i*0.36,0.64,0);}
+    } else if(type==='laundryLine') {
+      for(const x of [-2.5,2.5])post(x,2.4);
+      box(5,0.025,0.025,m.cream,0,2.32,0);
+      this.clothMats??=[m.pink,m.blue,m.gold,m.green].map(base=>{const mat=base.clone();mat.onBeforeCompile=shader=>{shader.uniforms.uClothTime=this.waterUniforms.uWaterTime;shader.uniforms.uClothWind=this.waterUniforms.uWaterWind;shader.vertexShader='uniform float uClothTime,uClothWind;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.z += sin(uClothTime*1.1+position.x*2.0)*max(0.0,-position.y)*0.18*uClothWind;');};mat.customProgramCacheKey=()=> 'build-cloth';return mat;});
+      for(let i=0;i<6;i++){const geo=new THREE.PlaneGeometry(0.57,0.8,3,4);geo.translate(0,-0.4,0);add(geo,this.clothMats[i%4],-2+i*0.8,2.26,0);}
+      for(const x of [-2.5,2.5])rect(x,0,0.12,0.12);
+    } else if(type==='waterWell') {
+      add(new THREE.CylinderGeometry(0.85,1,0.9,16),this.mat.stone,0,0.45,0);
+      box(1.7,0.1,1.5,m.green,0,0.95,0);
+      for(const x of [-1,1])post(x,2.6);
+      box(2.5,0.2,1.9,wood,0,2.6,0);
+    } else if(type==='woodPile') {
+      for(let row=0;row<3;row++)for(let i=0;i<3-row;i++){const log=add(new THREE.CylinderGeometry(0.2,0.2,1.8,10),dark,0,0.2+row*0.34,-0.5+i*0.5+row*0.25);log.rotation.z=Math.PI/2;}
+    } else if(type==='mailbox') {
+      post(0,1.2);box(0.6,0.4,0.5,m.blue,0,1.3,0);box(0.48,0.23,0.02,m.cream,0,1.3,0.26);ball(0.08,m.pink,0.36,1.55,0);
+    } else if(type==='lanternString') {
+      for(const x of [-2.8,2.8]){post(x,3);rect(x,0,0.13,0.13);}
+      for(let i=0;i<8;i++){const x=-2.45+i*0.7,y=2.65+0.045*x*x;box(0.72,0.025,0.025,dark,x,y+0.1,0);ball(0.14,this.mat.lantern,x,y-0.12,0);const halo=new THREE.Sprite(this.haloMat);halo.position.set(x,y-0.12,0);halo.scale.setScalar(0.9);g.add(halo);}
+    } else if(type==='gardenBench') {
+      const bench=this.makeProp('bench');g.add(bench);
+    } else if(type==='snowman') {
+      ball(0.68,m.snow,0,0.64,0,1,1.05,1);ball(0.47,m.snow,0,1.5,0);ball(0.34,m.snow,0,2.15,0);
+      add(new THREE.CylinderGeometry(0.4,0.4,0.09,16),m.blue,0,2.43,0);ball(0.3,m.blue,0,2.51,0,1,0.4,1);
+      add(new THREE.TorusGeometry(0.36,0.09,6,16),m.pink,0,1.89,0).rotation.x=Math.PI/2;
+      for(const x of [-0.12,0.12])ball(0.035,m.ink,x,2.23,0.3);
+      ball(0.06,m.gold,0,2.13,0.34,1,1,1.6);
+      for(let i=0;i<5;i++){const a=i/4*Math.PI;ball(0.023,m.ink,Math.cos(a)*0.13,2.08-Math.sin(a)*0.06,0.315);}
+      for(const y of [1.3,1.55,1.74])ball(0.04,m.ink,0,y,0.43);
+      for(const side of [-1,1]){const arm=add(new THREE.CapsuleGeometry(0.045,0.5,4,8),dark,side*0.62,1.58,0);arm.rotation.z=side*0.9;}
+    } else if(type==='pumpkinPile') {
+      for(const [x,y,z,r]of [[-0.55,0.4,0,0.45],[0.4,0.35,0.2,0.4],[0,0.6,-0.35,0.5]]){ball(r,m.orange,x,y,z,1,0.85,1);add(new THREE.CapsuleGeometry(0.045,0.13,3,6),m.green,x,y+r*0.83,z);}
+    } else if(type==='littleBridge') {
+      const deck=box(3,0.18,6,wood,0,0.2,0);this.walkables.push(deck);
+      this.floors.push({...this._rectOf(g,0,0,1.5*scale,3*scale),y:s.y+0.29*scale});
+      for(const side of [-1,1]){for(const z of [-2.8,0,2.8])post(side*1.45,1.2,z);box(0.12,0.12,5.8,m.cream,side*1.45,1.1,0);rect(side*1.45,0,0.13,3);}
+    }
+    if(!['littleBridge','laundryLine','lanternString'].includes(type))rect(0,0,bounds[0],bounds[1]);
+    return g;
+  }
+
   makeBuilding(spec, preview = false) {
-    const type = spec.type;
-    if (!['shop', 'hotel', 'house', 'barn', 'chapel', 'tower', 'windmill', 'cabin', 'brick', 'blacksmith', 'hitch'].includes(type)) throw new Error('Unknown building type');
+    const type = spec.type, detail=this._detailBounds(type);
+    if (!detail && !['shop', 'hotel', 'house', 'barn', 'chapel', 'tower', 'windmill', 'cabin', 'brick', 'blacksmith', 'hitch'].includes(type)) throw new Error('Unknown building type');
     const w = Math.max(6, Math.min(20, +spec.w || 10)), yaw = +spec.yaw || 0;
     const x = +spec.x || 0, z = +spec.z || 0;
-    const offset = ['tower', 'windmill', 'chapel', 'hitch'].includes(type) ? 0 : type === 'cabin' ? -3.7 : -4.7;
+    const offset = detail ? 0 : ['tower', 'windmill', 'chapel', 'hitch'].includes(type) ? 0 : type === 'cabin' ? -3.7 : -4.7;
     const pad = { x: x + Math.sin(yaw) * offset, z: z + Math.cos(yaw) * offset, yaw,
       hx: w / 2 + 2.5, hz: type === 'chapel' ? 10.5 : offset ? 10 : w / 2 + 2.5 };
     if (type === 'hitch') { pad.hx = 2; pad.hz = 0.4; pad.blend = 2; }
+    if(detail){pad.hx=detail[0]*w/10;pad.hz=detail[1]*w/10;pad.blend=1;}
     pad.y = Number.isFinite(spec.y) ? spec.y : terrainHeight(pad.x, pad.z);
     const lists = { rects: this.colliders.rects, circles: this.colliders.circles, floors: this.floors,
       walkables: this.walkables, emitters: this.emitters, flames: this.flames, spinners: this.spinners, windowMats: this.windowMats };
@@ -1663,7 +1727,8 @@ export class World {
     const s = { buildArt: { barn: 'barn_boards', chapel: 'chapel_boards', house: 'house_boards', shop: 'wall_boards', hotel: 'wall_boards', cabin: 'log_wall', brick: 'brick_wall' }[type], x, z, y: pad.y, rot: yaw, w, floors: type === 'cabin' ? 1 : +spec.floors === 2 ? 2 : 1, wall,
       trim: [40, 25, 80], signBg: [30, 30, 22], signInk: '#f0e0c0',
       sign: String(spec.sign ?? (type === 'blacksmith' ? 'BLACKSMITH' : '')).slice(0, 60), signCustom: spec.signCustom ?? (spec.sign != null), balcony: type === 'hotel', barn: type === 'barn', chimney: type === 'house' || type === 'cabin', depth: type === 'cabin' ? 8 : 12 };
-    if (type === 'blacksmith') obj = this._smithy(s);
+    if (detail) obj=this._buildDetail(type,s);
+    else if (type === 'blacksmith') obj = this._smithy(s);
     else if (type === 'hitch') {
       obj = this.makeProp('hitch'); obj.position.set(x, pad.y, z); obj.rotation.y = yaw; this.root.add(obj);
       this.colliders.rects.push(this._rectOf(obj, 0, 0, 1.8, 0.12));
@@ -1726,7 +1791,7 @@ export class World {
     e.poi = e.obj.localToWorld(V(0, 0, doorZ));
     if (['tower', 'windmill'].includes(e.spec.type)) e.poi.set(e.spec.x + Math.sin(e.spec.yaw) * (e.pad.hz + 1), 0, e.spec.z + Math.cos(e.spec.yaw) * (e.pad.hz + 1));
     e.poi.y = 0;
-    if (e.spec.type !== 'hitch') this.buildingPOIs.push(e.poi);
+    if (e.spec.type !== 'hitch' && !e.obj.userData.buildPiece) this.buildingPOIs.push(e.poi);
     this.onBuildingsChanged?.();
     if (update) this.updateTerrain();
     return e;

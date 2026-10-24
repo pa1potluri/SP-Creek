@@ -464,7 +464,7 @@ buildButtons.forEach((b) => { b.onclick = () => {
   if (b.dataset.build === 'hotel') $('#buildFloors').value = 2;
   $('#buildFloors').nextElementSibling.textContent = $('#buildFloors').value;
   const signs = { shop: 'GENERAL STORE', hotel: 'HOTEL', house: 'HOMESTEAD', barn: 'LIVERY STABLE', chapel: '', tower: '', windmill: '', cabin: '', brick: 'GENERAL STORE', blacksmith: 'BLACKSMITH', hitch: '' };
-  $('#buildSign').value = signs[b.dataset.build]; buildSignCustom = false;
+  $('#buildSign').value = signs[b.dataset.build] || '';  buildSignCustom = false;
   setTool(`build:${b.dataset.build}`);
 }; });
 for (const id of ['buildWidth', 'buildFloors', 'buildWall', 'buildSign', 'roadWidth']) {

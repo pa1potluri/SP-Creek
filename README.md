@@ -4,20 +4,20 @@
 townsfolk, a cosy café, a river, forests with fireflies, a flower meadow, a glowing crystal mine and a hot air
 balloon on the hill. Day and night, summer, autumn and winter.
 
-![SP Creek at golden hour](docs/images/hero.png)
-
 > 🧸 **Our promise:** no weapons, no fighting, nothing scary, no jump scares. Even the old ghost town has only
 > smiling ghosts and soft fog. Soft colours, warm light, calm sounds.
 
-## What's inside
+## Day and night in SP Creek
 
-| | |
+| ☀️ Day | 🌙 Night |
 |---|---|
-| ![Forest](docs/images/forest.png) **Forest**: mushrooms, fireflies and friendly owls | ![Deer family](docs/images/deer.png) **Animal friends**: a deer family, rabbits, ducks |
-| ![Meadow](docs/images/meadow.png) **Flower meadow & waterfall lake** | ![Winter](docs/images/winter.png) **Seasons**: autumn leaves, snow and a snowman |
+| ![Main street at golden hour](docs/images/town-day.png) **Main street** at golden hour | ![Main street at night](docs/images/town-night.png) Lantern light on main street |
+| ![Snowman in the square](docs/images/winter-day.png) **Winter**: a snowman in the square | ![Snowy square at night](docs/images/winter-night.png) Cosy lamps on a snowy night |
+| ![Deer family](docs/images/deer.png) **Animal friends**: a deer family at the forest edge | ![Garden at night](docs/images/garden-night.png) A village garden by moonlight |
+| ![Flower meadow](docs/images/meadow.png) **Flower meadow & waterfall lake** | ![Hot air balloon](docs/images/balloon.png) **The balloon hilltop** at sunset |
 
-Also: a town center with a bakery, general store, station and the Honey Bun Café, a friendly ghost town,
-a glowing crystal mine and a hot air balloon on the hill.
+Also: a bakery, general store, station and the Honey Bun Café, a forest with fireflies and friendly owls,
+a friendly ghost town and a glowing crystal mine.
 
 - 🎬 **Ready-made calm videos** (10–30 minutes): misty morning, moonlit night, rainy café and a 2:30 grand tour
 - 🔨 **Build mode**: place fences, wells, houses and lanterns to grow the town

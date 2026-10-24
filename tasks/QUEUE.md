@@ -42,7 +42,7 @@ finished. Re-read this file each time; Claude may change it.
 | 28 | `tasks/episode-presets.md` | `area/episode-presets` | WIP: Episodes 2/3/5 ready, smoke 5 + clearance 66 passed, six previews saved; Episode 4 waits for user-deferred camping wiring; continue 29 |
 | 28a | `tasks/startup-hang.md` | `area/startup-hang` | done; server launcher + terrain startup fix; full 1446 + 2 passed; queue chat continues from here |
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
-| 30 | `tasks/performance.md` | `area/performance` | WIP: baseline saved; batching, small-plant LOD, sparkle cache and off-screen update gates built; after measurement running; full suite/previews pending |
+| 30 | `tasks/performance.md` | `area/performance` | WIP: final code saved; controlled render time 8.249 to 7.450ms; targeted 29 passed; day/night previews saving and full 19-suite run underway |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | queued (not before Thu Oct 29) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |

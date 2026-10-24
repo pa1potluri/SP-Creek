@@ -41,7 +41,7 @@ finished. Re-read this file each time; Claude may change it.
 | 27 | `tasks/pony-farm.md` | `area/pony-farm` | done; full 1440 + 2 passed; day/night farm 61-63 and camera correction 60 saved |
 | 28 | `tasks/episode-presets.md` | `area/episode-presets` | WIP: Episodes 2/3/5 ready, smoke 5 + clearance 66 passed, six previews saved; Episode 4 waits for user-deferred camping wiring; continue 29 |
 | 28a | `tasks/startup-hang.md` | `area/startup-hang` | done; server launcher + terrain startup fix; full 1446 + 2 passed; queue chat continues from here |
-| 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | WIP saved at usage stop; existing bright counter verified, four previews + metrics committed; full suite interrupted during more-buildings/paper after 963 + 2 passed; resume full run (result); task 30 not started |
+| 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | queued |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | queued (not before Thu Oct 29) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |

@@ -1,4 +1,4 @@
-# Cafe counter light - WIP verification
+# Cafe counter light - complete verification
 
 ## Finding / scoped change
 - The requested bright counter outcome already exists in the inherited code: shelf/counter self-lit strips, warm emissive wood/ivory, bright painted room lining and the existing two lamps. Source history includes main commit 3d5cde8; the old STUCK entry predates those changes.
@@ -22,3 +22,9 @@
 - Latest completed full suite: task 27, 1440 + 2. Task 28 added station view 64 and Episodes 2/3/5; its smoke 5 and clearance 66 pass, but Episode 4 remains WIP because the user explicitly deferred camping startup wiring. Do not add that wiring without later authorization.
 - Resume 29 verification, then 30 performance. Task 31 must not begin before Thu Oct 29; follow its skip/stop rule if earlier.
 - Local server was running on 8811 (session 18090); restart if needed. Never push, merge or publish.
+
+## Completed after reset
+- Fast-forwarded the user-authorized startup fix `2bbec71` from area/startup-hang into area/cafe-bar-light; the other chat committed and stopped first.
+- Fresh full run of every browser suite (19 suites): **1446 checks + 2 startup reload checks passed**, exit 0, Browser errors: []. Included startup-hang 5 and shot-clearance 66; command used every .js suite from world/tests on http://127.0.0.1:8813. Sound stayed locked.
+- The four committed Animated film previews remain the final counter/entry day-night evidence; no camera or application-source change was needed for this task.
+- Task 29 done. Continue task 30 on a stacked branch. Earlier scope-deferred WIP tasks stay deferred; no push or publication.

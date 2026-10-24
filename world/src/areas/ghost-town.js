@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { terrainHeight, smoothstep } from '../world.js';
 import { signTexture } from '../textures.js';
+import { buildVillageDetails } from '../hamlet.js';
 
 export const OLD_HOLLOW = { x: 125, z: -15, hx: 29, hz: 37 };
 
@@ -129,8 +130,10 @@ export function buildGhostTown(world) {
   }
   for(const {parent,mat,geos}of buckets.values()){const m=new THREE.Mesh(mergeGeometries(geos),mat);m.castShadow=!mat.transparent;m.receiveShadow=true;parent.add(m);for(const g of geos)g.dispose();}
   root.updateMatrixWorld(true);
+  const homeDetails=buildVillageDetails(world,root,terrainHeight,{gardens:[[106,24],[146,-29]],mailboxes:[[118,10],[132,7],[118,-19]],windows:buildings.map(e=>({object:e.obj})),paths:[[[125,-7],[120,-7],[118,-15]],[[125,-7],[130,-8],[132,-16]],[[106,22],[112,20],[120,17]],[[146,-27],[142,-24],[136,-24]]]});
   const scratch=v(0,0,0);
-  return {root,pad,buildings,ghosts,fog,signs,swing,update(t,player,atmos){
+  return {root,pad,buildings,ghosts,fog,signs,swing,homeDetails,update(t,player,atmos){
+    homeDetails.update(t);
     const night=Math.max(world.lanternLevel,atmos.stars);
     for(const [i,e]of buildings.entries())for(const m of e.additions.windowMats)m.emissiveIntensity=0.7+night*0.6;
     signs.forEach((g,i)=>g.rotation.z=(Math.sin(t*1.4+i)*0.07+Math.sin(t*2.3+i)*0.025)*(world.wind??1));

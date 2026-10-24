@@ -133,3 +133,13 @@ export const VIDEO_PRESETS = {
     ],
   },
 };
+
+// Long background loops appended after the existing presets; location sound follows the camera.
+const seasonalLife={people:6,riders:0,coach:0,train:0,chickens:1,tumbleweeds:0,wind:0.35,hamlet:1};
+const calmPreset=(label,about,season,mood,shots)=>({label,about,season,style:'film',rain:0,wind:0.15,ambience:0.65,life:{...seasonalLife},clips:shots.map((shot,i)=>({shot,seconds:1200/shots.length,mood,move:i?'fly':'cut'}))});
+VIDEO_PRESETS.mistyValley=calmPreset('Misty morning in the valley','20 minutes of low river and lake mist, water and quiet morning birds.','summer','morning',[10,34,32]);
+VIDEO_PRESETS.sunbeamTown=calmPreset('Golden sunbeams over town','20 minutes of a very slow town stroll, warm light and soft village sounds.','summer','golden',[24]);
+VIDEO_PRESETS.moonlitFireflies=calmPreset('Moonlit night with fireflies','20 minutes among gentle fireflies and sleepy forest sounds.','summer','night',[26]);
+VIDEO_PRESETS.autumnWillow=calmPreset('Autumn leaves in Willow Creek','20 minutes above gold and russet trees, drifting leaves and quiet village life.','autumn','villageDusk',[23]);
+VIDEO_PRESETS.snowyEvening=calmPreset('Snowy winter evening','20 minutes of soft snowfall, cosy windows and the smiling square snowman.','winter','villageDusk',[24,36,4]);
+VIDEO_PRESETS.deerFamily=calmPreset('Deer at the forest edge','20 minutes with the grazing deer family, birds and a gentle breeze.','summer','golden',[35]);

@@ -18,7 +18,7 @@ export function buildForest(world) {
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color});
   const bark=m('#8c7056'),moss=m('#759b6f'),cream=m('#f5ebd5'),dark=m('#455c62'),pink=m('#e8b6cb');
   const glows=['#a4ded8','#e6b8d7','#f4dda1'].map(color=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.1}));
-  const buckets=new Map(),variants=[],owls=[],butterflies=[];
+  const buckets=new Map(),variants=[],owls=[],butterflies=[],deer=[];
   function solid(geo,mat,x,h,z,parent=root,rot=null){if(rot)geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot)));geo.translate(x,h,z);const key=parent.uuid+mat.uuid;if(!buckets.has(key))buckets.set(key,{parent,mat,geos:[]});buckets.get(key).geos.push(geo.index?geo.toNonIndexed():geo);}
   const box=(w,h,d,mat,x,py,z,g=root)=>solid(new THREE.BoxGeometry(w,h,d),mat,x,py,z,g);
   const ball=(radius,mat,x,h,z,g=root,scale=[1,1,1])=>solid(new THREE.SphereGeometry(radius,12,8).scale(...scale),mat,x,h,z,g);
@@ -76,6 +76,17 @@ export function buildForest(world) {
     for(const sx of [-1,1]){ball(0.17,cream,sx*0.17,0.02,0.28,head);const eye=new THREE.Mesh(new THREE.SphereGeometry(0.09,12,8),dark);eye.position.set(sx*0.17,0.02,0.43);head.add(eye);eyes.push(eye);}
     ball(0.065,glows[2],0,-0.12,0.36,head);owls.push({owl,head,eyes,x,z});
   }
+  const deerCoat=m('#b58a62');deerCoat.emissive.set('#b58a62');deerCoat.emissiveIntensity=0.08;
+  for(const [i,[x,z,scale]] of [[-67,-204,1],[-64,-206,0.95],[-66,-208,0.62]].entries()){
+    const g=group(x,terrainHeight(x,z),z);g.scale.setScalar(scale);g.rotation.y=-0.6+i*0.35;
+    ball(0.6,deerCoat,0,1.05,0,g,[0.85,0.7,1.4]);
+    for(const sx of [-1,1])for(const sz of [-1,1])ball(0.095,deerCoat,sx*0.29,0.43,sz*0.5,g,[1,4.4,1]);
+    const head=group(0,1.4,0.55,g);ball(0.29,deerCoat,0,0,0.12,head,[0.9,1,1.25]);ball(0.15,cream,0,-0.08,0.37,head,[1,0.7,0.9]);
+    for(const sx of [-1,1]){ball(0.12,deerCoat,sx*0.22,0.3,0,head,[1,1.8,0.5]);ball(0.07,cream,sx*0.22,0.07,0.25,head);ball(0.037,dark,sx*0.23,0.07,0.3,head);}
+    ball(0.16,cream,0,1.1,-0.75,g,[0.8,0.7,1.5]);
+    if(i===2)for(const sx of [-1,1])for(const dz of [-0.25,0,0.25])ball(0.055,cream,sx*0.48,1.17,dz,g,[0.3,1,1]);
+    deer.push({g,head,x,z});
+  }
   const rabbit=group(FOREST.x-4,y,FOREST.z+2);
   ball(0.34,cream,0,0.35,0,rabbit,[0.85,0.9,1.3]);ball(0.23,cream,0,0.65,0.32,rabbit);
   for(const sx of [-1,1]){ball(0.09,cream,sx*0.12,1,0.3,rabbit,[0.8,2.8,1]);ball(0.03,dark,sx*0.12,0.7,0.51,rabbit);ball(0.05,pink,sx*0.12,1,0.38,rabbit,[0.7,3,0.4]);}ball(0.13,cream,0,0.4,-0.4,rabbit);
@@ -89,12 +100,13 @@ export function buildForest(world) {
   const nightGlow=new THREE.Mesh(new THREE.PlaneGeometry(22,22),new THREE.MeshBasicMaterial({map:tex,color:'#a4cbbb',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));nightGlow.rotation.x=-Math.PI/2;nightGlow.position.set(FOREST.x,y+0.07,FOREST.z);root.add(nightGlow);
   for(const {parent,mat,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),mat);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}
   root.updateMatrixWorld(true);
-  return {root,pad,owls,rabbit,fireflies,variants,trail,update(t,camera,atmos){
+  return {root,pad,owls,rabbit,deer,fireflies,variants,trail,update(t,camera,atmos){
     const night=Math.max(atmos.stars,world.lanternLevel*0.8),day=1-smoothstep(0.2,0.75,night);
     variants.forEach(({im,source})=>im.visible=source.visible);
     glows.forEach(mat=>mat.emissiveIntensity=0.1+night*0.9);fireflies.material.opacity=night*0.8;
     for(let i=0;i<90;i++){const a=i*2.399,d=4+(i%11)*1.5;fp[i*3]=FOREST.x+Math.cos(a)*d+Math.sin(t*0.23+i)*0.8;fp[i*3+1]=y+0.7+(i%7)*0.45+Math.sin(t*0.5+i)*0.35;fp[i*3+2]=FOREST.z+Math.sin(a)*d+Math.cos(t*0.2+i)*0.8;}fg.attributes.position.needsUpdate=true;
     owls.forEach(({owl,head,eyes},i)=>{owl.visible=night>0.2;head.rotation.y=Math.sin(t*0.25+i)*0.25;const blink=(t+i*3)%11;eyes.forEach(e=>e.scale.y=blink<0.22?0.12:1);});
+    deer.forEach(({g,head},i)=>{head.rotation.x=0.3+Math.sin(t*0.37+i)*0.18;head.rotation.y=Math.sin(t*0.19+i)*0.08;g.visible=true;});
     rabbit.visible=day>0.2;const hop=Math.max(0,Math.sin((t%14)*1.6))*((t%14)<4?1:0);rabbit.position.set(FOREST.x-4+Math.sin(t*0.2)*1.2,y+hop*0.22,FOREST.z+2);rabbit.rotation.y=Math.sin(t*0.2)*0.4;
     butterflies.forEach(({g,wings},i)=>{g.visible=day>0.3;g.position.set(FOREST.x+Math.sin(t*0.25+i)*4,y+1.3+Math.sin(t*0.6+i)*0.6,FOREST.z+Math.cos(t*0.23+i)*4);wings.forEach((w,k)=>w.rotation.y=Math.sin(t*6+i)*(k?1:-1)*0.7);});
     shafts.forEach((s,i)=>{s.rotation.set(0,Math.atan2(camera.position.x-s.position.x,camera.position.z-s.position.z),-0.22);s.material.opacity=day*0.065*(0.7+0.3*Math.abs(Math.sin(t*0.05+i)));});nightGlow.material.opacity=night*0.15;

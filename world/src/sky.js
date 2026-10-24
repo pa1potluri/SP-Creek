@@ -25,7 +25,7 @@ const skyFrag = /* glsl */ `
     float h = d.y;
     vec3 col = mix(uHorizon, uTop, pow(clamp(h, 0.0, 1.0), 0.4));
     float sd = max(dot(d, uSunDir), 0.0);
-    col += uSunColor * (pow(sd, 8.0) * 0.35 + pow(sd, 64.0) * 0.6);
+    col += uSunColor * (pow(sd, 8.0) * 0.35 + pow(sd, 64.0) * 0.6) * (1.0 - uStars * 0.75);
     col = mix(col, uSunColor * 1.6, smoothstep(1.0 - uSunSize, 1.0 - uSunSize * 0.5, sd));
     col = mix(col, uHorizon, exp(-abs(h) * 18.0) * 0.45);
     if (h > 0.0) {
@@ -37,6 +37,13 @@ const skyFrag = /* glsl */ `
       float n2 = fbm(uv * 1.3 + drift + normalize(uSunDir.xz + 1e-4) * 0.08);
       float lit = clamp(0.55 + (n - n2) * 5.0 + pow(sd, 3.0) * 0.5, 0.0, 1.0);
       col = mix(col, mix(uCloudShade, uCloudLit, lit), m * 0.95);
+      float band = exp(-pow(dot(d, normalize(vec3(0.65, 0.28, -0.7))), 2.0) * 90.0);
+      col += vec3(0.075, 0.09, 0.16) * band * (0.35 + fbm(d.xz * 23.0)) * uStars * (1.0 - m);
+      float moonAngle = acos(clamp(sd, 0.0, 1.0));
+      float moon = 1.0 - smoothstep(0.026, 0.029, moonAngle);
+      float pigment = 0.82 + 0.18 * fbm(d.xz * 270.0);
+      col += vec3(0.25, 0.32, 0.5) * exp(-moonAngle * 17.0) * uStars;
+      col = mix(col, vec3(0.91, 0.94, 1.0) * pigment, moon * uStars);
       vec2 sp = d.xz / (h + 0.3) * 120.0; vec2 id = floor(sp);
       float st = step(0.985, hash(id)) * smoothstep(0.15, 0.0, length(fract(sp) - 0.5));
       col += st * uStars * (1.0 - m) * (0.6 + 0.4 * sin(uTime * 2.0 + hash(id) * 40.0));

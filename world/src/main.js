@@ -9,6 +9,7 @@ import { createSky, createMountains } from './sky.js';
 import { Atmosphere, PRESETS } from './atmosphere.js';
 import { OilShader, LookShader, FinalShader } from './painterly.js';
 import { STYLES } from './styles.js';
+import { Seasons } from './seasons.js';
 import * as T from './textures.js';
 import { Director } from './camera.js';
 import { AudioEngine } from './audio.js';
@@ -79,6 +80,13 @@ const ghostTown = buildGhostTown(world);
 const forest = buildForest(world);
 const meadowLake = await buildMeadowLake(world);
 const crystalMine = buildCrystalMine(world);
+const seasons=new Seasons(world,atmos,{forest,meadowLake});
+function setSeason(key,save=false){seasons.set(key);$('#season').value=seasons.key;if(save)LS.set('dh.season',seasons.key);}
+$('#season').onchange=()=>setSeason($('#season').value,true);
+setSeason(LS.get('dh.season')||'summer');
+function setWeather(key,save=false){atmos.setWeather(key);$('#weather').value=atmos.weather;if(save)LS.set('dh.weather',atmos.weather);}
+$('#weather').onchange=()=>setWeather($('#weather').value,true);
+setWeather(LS.get('dh.weather')||'auto');
 let familyMode = DEFAULT_FAMILY_MODE;
 // Saved only when the user flips the switch, so the default can still change later. (The old key
 // 'dh.familyMode' was written on every load, not chosen, so it is ignored.)
@@ -459,7 +467,7 @@ buildButtons.forEach((b) => { b.onclick = () => {
   if (b.dataset.build === 'hotel') $('#buildFloors').value = 2;
   $('#buildFloors').nextElementSibling.textContent = $('#buildFloors').value;
   const signs = { shop: 'GENERAL STORE', hotel: 'HOTEL', house: 'HOMESTEAD', barn: 'LIVERY STABLE', chapel: '', tower: '', windmill: '', cabin: '', brick: 'GENERAL STORE', blacksmith: 'BLACKSMITH', hitch: '' };
-  $('#buildSign').value = signs[b.dataset.build]; buildSignCustom = false;
+  $('#buildSign').value = signs[b.dataset.build] || '';  buildSignCustom = false;
   setTool(`build:${b.dataset.build}`);
 }; });
 for (const id of ['buildWidth', 'buildFloors', 'buildWall', 'buildSign', 'roadWidth']) {
@@ -683,6 +691,8 @@ function applyVideoPreset(key) {
   game.exit();
   timeline.stop();
   if ($('#presetStyle').checked) applyStyle(p.style);
+  setSeason(p.season||'summer',true);
+  setWeather(p.weather||'auto',true);
   setSlider('atmos', 'rain', p.rain);
   setSlider('audio', 'wind', p.wind);
   setSlider('audio', 'ambience', p.ambience);
@@ -707,7 +717,7 @@ function applyVideoPreset(key) {
 // ---------- project files ----------
 function projectData() {
   return {
-    app: 'dusty-hollow', version: 1, familyMode, style: styleKey, paint: { ...paint }, look: { ...lookParams },
+    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, style: styleKey, paint: { ...paint }, look: { ...lookParams },
     mood: atmos.key, atmos: { ...atmos.mult }, life: { ...life.settings }, letterbox: fin.uniforms.uLetterbox.value,
     timeline: timeline.toJSON(), keys: director.custom.map((k) => [k.pos.toArray(), k.look.toArray()]), layout: world.layout(),
   };
@@ -717,6 +727,8 @@ function loadProject(p) {
   timeline.stop();
   setFamilyMode(p.familyMode ?? DEFAULT_FAMILY_MODE, true);
   applyStyle(p.style);
+  setSeason(p.season||'summer',true);
+  setWeather(p.weather||'auto',true);
   for (const [k, v] of Object.entries(p.paint || {})) setSlider('paint', k, v);
   for (const [k, v] of Object.entries(p.look || {})) setSlider('look', k, v);
   for (const [k, v] of Object.entries(p.atmos || {})) setSlider('atmos', k, v);
@@ -847,7 +859,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { seasons, setSeason, setWeather, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;
@@ -945,7 +957,7 @@ function listener() {
   return {
     x: p.x, z: p.z, rx: e[0], rz: e[2], inside, riverZ: riverZ(p.x),
     cafe: cafePos && { x: cafePos.x, z: cafePos.z },
-    night: c.stars, day: 1 - c.stars, rain: THREE.MathUtils.clamp(c.rain + atmos.mult.rain, 0, 1),
+    night: c.stars, day: 1 - c.stars, rain: world.rainAmount ?? THREE.MathUtils.clamp(c.rain + atmos.mult.rain, 0, 1),
     train: t && t.state !== 'away' ? { x: RAIL_X, z: t.s, v: t.v, state: t.state, approaching: t.state === 'run' && !t.stopped } : null,
   };
 }
@@ -957,7 +969,9 @@ function step(dt) {
   if (timeline.update(dt) === 'ended') refreshTimeline();
   if (game.active) game.update(dt);
   else director.update(dt);
+  world.wind=life.settings.wind*(atmos.weather==='windy'?2.2:1);
   atmos.update(dt, time, camera);
+  seasons.update(time,camera);
   world.update(dt, time, camera);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);

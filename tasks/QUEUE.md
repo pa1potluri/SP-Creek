@@ -16,7 +16,15 @@ finished. Re-read this file each time; Claude may change it.
 | 7a | `tasks/names-tour-shots.md` | `area/names-tour-shots` | done |
 | 7b | `tasks/visual-fixes.md` | `area/visual-fixes` | done |
 | 7c | `tasks/crystal-polish.md` | `area/crystal-polish` | done |
-| 8 | `tasks/watercolor.md` | `area/watercolor` | queued (preview only: the user decides before it is used widely) |
+| 7d | `tasks/shot-clearance.md` | `area/shot-clearance` | done (from crystal-polish) |
+| 8 | `tasks/watercolor.md` | `area/watercolor` | WIP saved as b0f369b; paused until Thu Oct 29 (do 9–12 first) |
+| 9 | `tasks/atmo-light.md` | `area/atmo-light` | done |
+| 10 | `tasks/atmo-mist-life.md` | `area/atmo-mist-life` | done |
+| 11 | `tasks/village-details.md` | `area/village-details` | done |
+| 12 | `tasks/seasons.md` | `area/seasons` | done |
+| 13 | `tasks/season-presets.md` | `area/season-presets` | done |
+| 14 | `tasks/build-pieces.md` | `area/build-pieces` | done |
+| 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | done |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

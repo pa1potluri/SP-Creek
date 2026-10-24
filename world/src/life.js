@@ -341,6 +341,11 @@ function pointsOfInterest() {
 class Walker {
   constructor(person, pois, world) {
     this.p = person;
+    this.umbrella=new THREE.Group();this.umbrella.name='Pastel rain umbrella';this.p.g.add(this.umbrella);
+    const palette=['#e4afc6','#b4d2de','#ead49b','#bad0a9'];
+    palette.forEach((color,i)=>part(new THREE.SphereGeometry(0.78,8,6,i*Math.PI/2,Math.PI/2,0,Math.PI/2),new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}),0,2.6,0,this.umbrella));
+    part(new THREE.CapsuleGeometry(0.025,1.15,4,6),mat([30,20,65]),0,2.04,0,this.umbrella);this.umbrella.visible=false;
+
     this.pois = pois;
     this.world = world;
     const dry = pois.filter(q => !world.inPond(q.x,q.z,0.8));
@@ -427,6 +432,7 @@ class Walker {
     }
   }
   update(dt, t) {
+    this.umbrella.visible=(this.world.rainAmount||0)>0.025;
     const p = this.p, s = this.state;
     this.greetCool -= dt;
     let sitK = 0, y = walkHeight(this.pos.x, this.pos.z);

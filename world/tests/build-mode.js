@@ -130,6 +130,28 @@ export async function runBuildTests() {
     click('#deleteBuilding'); check(world.buildings.length === 5, 'Delete button removes selection');
     app.loadProject({ ...original, layout: [] });
     check(world.colliders.rects.length === base.rects && world.colliders.circles.length === base.circles && world.floors.length === base.floors && world.walkables.length === base.walkables && world.emitters.length === base.emitters && world.spinners.length === base.spinners && world.windowMats.length === base.windows && window.__life.pois.length === base.pois, 'Deletion/reload cleans up physics, porches, smoke, spinners, windows and destinations');
+    const details=['gardenFence','vegetablePatch','flowerBox','laundryLine','waterWell','woodPile','mailbox','lanternString','gardenBench','snowman','pumpkinPile','littleBridge'];
+    app.applyStyle('film');
+    const countPhysics=()=>[world.colliders.rects.length,world.colliders.circles.length,world.floors.length,world.walkables.length,window.__life.pois.length].join(',');
+    const clean=countPhysics();
+    for(const [i,type]of details.entries()) {
+      const before=countPhysics();click(`[data-build="${type}"]`);
+      check(countPhysics()===before,`${type}: preview does not register physics`);
+      key('KeyR');groundClick(-170+i%4*12,118+Math.floor(i/4)*10);key('Escape');
+      const e=world.buildings.at(-1);
+      check(e.spec.type===type&&e.spec.yaw!==0,`${type}: editor places and rotates`);
+      check(e.additions.rects.length>0&&!window.__life.pois.includes(e.poi),`${type}: collider without a doorway destination`);
+      check(e.pad.hx<5&&e.pad.hz<6,`${type}: compact footprint`);
+      if(type==='littleBridge')check(e.additions.walkables.length===1&&Math.abs(walkHeight(e.spec.x,e.spec.z)-e.additions.floors[0].y)<1e-6,'Little bridge: deck is walkable between side rails');
+    }
+    await nextFrame();
+    const detailLayout=JSON.stringify(world.layout()), savedDetails=app.projectData();app.loadProject(savedDetails);
+    check(JSON.stringify(world.layout())===detailLayout,'All twelve detail types round trip through project layout');
+    for(const style of Object.keys(STYLES)){app.applyStyle(style);await nextFrame();check(world.buildings.length===12,`${style}: all detail pieces remain present`);}
+    const selected=world.buildings.find(e=>e.spec.type==='mailbox');world.removeBuilding(selected);
+    check(world.buildings.length===11&&!world.colliders.rects.includes(selected.additions.rects[0]),'Individual detail removal cleans collider');
+    const confirm=window.confirm;try{window.confirm=()=>true;click('#clearBuilt');}finally{window.confirm=confirm;}
+    check(world.buildings.length===0&&countPhysics()===clean,'Remove all built clears detail physics, bridge floors and walkables');
     return { passed: results.length, results };
   } finally {
     document.title = originalTitle;

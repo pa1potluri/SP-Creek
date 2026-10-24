@@ -39,10 +39,12 @@ export function roadX(z) {
   return z > 60 ? Math.sin((z - 60) * 0.018) * (z - 60) * 0.22 : 0;
 }
 
+let legacyNatureTerrain=false;
+
 // The river crosses the whole valley north of town, flowing east (+x).
 export function riverZ(x) {
   const z=150+Math.sin(x*0.012)*18+Math.sin(x*0.031)*6;
-  return z+(150-z)*(1-smoothstep(-370,-285,x));
+  return legacyNatureTerrain?z:z+(150-z)*(1-smoothstep(-370,-285,x));
 }
 export function coastX(z) {return -350-18*Math.exp(-Math.pow((z-35)/115,2))+8*Math.sin(z*0.007);}
 export const WATER_Y = -1;
@@ -109,7 +111,7 @@ export function terrainHeight(x, z) {
   const rd = Math.abs(z - riverZ(x));
   h *= smoothstep(13, 60, rd); // broad flat river valley
   h -= 2.6 * (1 - smoothstep(6, 13, rd)); // the channel itself
-  if(x<-290){const d=x-coastX(z),land=d<0?-1.2+d*0.035:-0.85+d*0.06+d*d*0.003;
+  if(!legacyNatureTerrain&&x<-290){const d=x-coastX(z),land=d<0?-1.2+d*0.035:-0.85+d*0.06+d*d*0.003;
     const channel=2.2*(1-smoothstep(7,15,Math.abs(z-riverZ(x))));h+=(land-channel-h)*(1-smoothstep(-330,-290,x));}
   return applyPond(applyUserPads(h, x, z), x, z);
 }
@@ -268,12 +270,15 @@ export class World {
     this._ranch();
     this._camp();
     const natureStart = this.root.children.length, treeColliderStart = this.colliders.circles.length;
+    // Preserve the existing seeded plant layout before sculpting and clearing the coast.
+    legacyNatureTerrain=true;
     this._nature();
     this.plantColliders = new Set(this.colliders.circles.slice(treeColliderStart));
     this.plantInstances = [];
     for (const g of this.root.children.slice(natureStart)) g.traverse((m) => {
       if (m.isInstancedMesh) this.plantInstances.push({ mesh: m, matrices: m.instanceMatrix.array.slice(), heights: Array.from({ length: m.count }, (_, i) => terrainHeight(m.instanceMatrix.array[i * 16 + 12], m.instanceMatrix.array[i * 16 + 14])) });
     });
+    legacyNatureTerrain=false;
     this._decor();
     this.hamlet = { visible: true, buildings: [], roads: [], props: [], pois: [] };
     this.hamlet.pad = { x: HAMLET.x, z: HAMLET.z, y: terrainHeight(HAMLET.x, HAMLET.z), yaw: 0, hx: 50, hz: 32, blend: 26 };

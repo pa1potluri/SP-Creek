@@ -20,3 +20,10 @@ Things that didn't get solved in a few tries. Fix them later, in a batch.
 - Main-station departure reuses the existing gentle whistle and soft steam. Visual trains and passengers follow the new branch.
 - main.js listener() still sends `{x: RAIL_X, z: t.s}` to ambience. Branch sounds therefore retain the original line's horizontal audio position; the new trip keeps the sound level calm but cannot correct its pan from the allowed train files.
 - Request main.js listener scope to use the locomotive's actual world x/z for the train snapshot. Not changed in this task, which only permits life.js (train), world.js (track extension), camera.js, presets.js and BLUEPRINT.md.
+
+## Task 26 - camping startup registration scope (user deferred)
+
+- Camping module, views 59-60, 20-minute preset, ambience and four day/night previews are built. Manual factory smoke: 14 passed, no browser errors, audio locked.
+- main.js is not allowed by tasks/camping-night.md. Required integration is import buildCamping, construct the area alongside the others, and call its update in step(dt). No hidden registration or production debug-global dependency was added.
+- Asked for those three wiring changes; user explicitly chose "Leave camping WIP and continue" on 2026-10-24. Keep WIP, do not add the main.js wiring without later authorization.
+- Before done: wire at startup, full suite once with camping-night, verify the four previews and update result/queue. Shots 59-60 remain reserved; later tasks append from 61.

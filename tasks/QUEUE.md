@@ -37,7 +37,7 @@ finished. Re-read this file each time; Claude may change it.
 | 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | done; full 1335 + 2 passed; day/night previews 46-52 saved |
 | 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | done; full 1358 + 2 passed; day/night previews 53-55 saved |
 | 25 | `tasks/train-trip.md` | `area/train-trip` | done; full 1389 + 2 passed; day/night 56-58 saved; audio-pan follow-up in STUCK.md |
-| 26 | `tasks/camping-night.md` | `area/camping-night` | queued |
+| 26 | `tasks/camping-night.md` | `area/camping-night` | WIP by user choice; module + 14 smoke checks + four day/night previews saved; main.js wiring deferred (STUCK.md); continue 27 |
 | 27 | `tasks/pony-farm.md` | `area/pony-farm` | queued |
 | 28 | `tasks/episode-presets.md` | `area/episode-presets` | queued |
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | queued |

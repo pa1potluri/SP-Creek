@@ -75,3 +75,9 @@ west and flows into the bay at its south end.
 - Willow Creek halt: locomotive stop (-110, 112), sheltered coach platform slightly north/east of it.
 - Continues through (-170, 105), (-245, 92), ending at the Seaside halt above Cove (-284, 66), east of the cottages.
 - Existing north-south train service remains. The four-minute trip uses the branch with two gentle station pauses.
+
+## Camping clearing (task 26)
+
+- Uses the free clearing at (-200, 58), south-east of the meadow lake, west of Willow Creek chapel and north of the railway branch.
+- Glowing tents, guarded stone-ring fire, log/blanket for Pavi and Siri, two nearby grown-ups and a friendly owl.
+- Footpath comes from (-144, 90) through (-174, 90) and (-185, 80), avoiding the chapel and pond.

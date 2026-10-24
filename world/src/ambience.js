@@ -7,6 +7,7 @@ import { riverZ, coastX } from './world.js';
 import { OLD_HOLLOW } from './areas/ghost-town.js';
 import { FOREST } from './areas/forest.js';
 import { LAKE } from './areas/meadow-lake.js';
+import { CAMPING, campingReady } from './areas/camping.js';
 import { CRYSTAL_HILL } from './areas/crystal-mine.js';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -85,6 +86,7 @@ export class Ambience {
     this.crystalChimes=this._bus(true);this.nextCrystalChime=5;
     this.hillWind=this._bed(this.buf.pink,[['highpass',180],['lowpass',1500]],true);
     this.balloonAir=this._bed(this.buf.pink,[['lowpass',1100]],true);
+    this.campFire=this._bus(true);this.campOwl=this._bus(true);this.nextCampCrackle=0;this.nextCampOwl=12;
     this.nextBird = 0;
     this.nextOwl = 3;
     this.nextSplash = 0;
@@ -202,6 +204,10 @@ export class Ambience {
     set(this.forestLeaves.g.gain,forestGain*0.07,0.7);set(this.forestLeaves.pan.pan,this._panTo(s,FOREST.x,FOREST.z));
     set(this.forestOwl.g.gain,forestGain*s.night*0.4,0.7);
     this.nextForestOwl-=dt;if(this.nextForestOwl<=0){this.nextForestOwl=19;const i=this.forestOwlIndex++%3;set(this.forestOwl.pan.pan,this._panTo(s,FOREST.x-8+i*8,FOREST.z-10));if(forestGain>0.01&&s.night>0.3)this._owl(when,0.065,this.forestOwl.g);}
+    const campGain=campingReady?near(Math.hypot(s.x-CAMPING.x,s.z-CAMPING.z),8,50)*roofed:0;
+    set(this.campFire.g.gain,campGain*0.18,0.8);set(this.campFire.pan.pan,this._panTo(s,CAMPING.x,CAMPING.z));set(this.campOwl.g.gain,campGain,0.8);set(this.campOwl.pan.pan,this._panTo(s,CAMPING.x+8,CAMPING.z+1));
+    this.nextCampCrackle-=dt;if(this.nextCampCrackle<=0){this.nextCampCrackle=1.7;if(campGain>0.01)this._burst(when,0.22,'lowpass',650,0.035,this.campFire.g);}
+    this.nextCampOwl-=dt;if(this.nextCampOwl<=0){this.nextCampOwl=27;if(campGain>0.01&&s.night>0.3)this._owl(when,0.045,this.campOwl.g);}
     const meadowGain=near(Math.hypot(s.x-LAKE.x,s.z-LAKE.z),10,75)*roofed;
     set(this.waterfall.g.gain,meadowGain*0.22,0.7);set(this.waterfall.pan.pan,this._panTo(s,-250,-23));set(this.meadowLife.g.gain,meadowGain*0.3,0.7);set(this.meadowLife.pan.pan,this._panTo(s,LAKE.x,LAKE.z));
     this.nextDuck-=dt;this.nextMeadowBird-=dt;

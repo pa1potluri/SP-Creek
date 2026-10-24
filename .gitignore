@@ -1,11 +1,11 @@
-# Only Dusty Hollow is tracked here; this folder also holds other projects.
+# Only SP Creek is tracked here; this folder also holds other projects.
 /*
 !/.gitignore
 !/AGENTS.md
 !/CLAUDE.md
 !/tasks/
 !/serve_world.py
-!/Dusty Hollow.bat
+!/SP Creek.bat
 !/world/
 
 # big outputs and other people's work inside world/

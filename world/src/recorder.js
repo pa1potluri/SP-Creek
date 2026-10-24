@@ -22,7 +22,7 @@ export class Recorder {
       const blob = new Blob(chunks, { type: 'video/webm' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `dusty-hollow-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.webm`;
+      a.download = `sp-creek-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.webm`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 10000);
     };

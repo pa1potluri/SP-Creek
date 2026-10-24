@@ -1,10 +1,10 @@
-# AGENTS.md: how we build Dusty Hollow
+# AGENTS.md: how we build SP Creek
 
 Both Claude (Claude Code) and ChatGPT Codex read this file before every task. Follow it exactly.
 
 ## What this is
 
-**Dusty Hollow** is a cosy, child-safe 3D western valley for a **children's YouTube channel**:
+**SP Creek** is a cosy, child-safe 3D western valley for a **children's YouTube channel**:
 calm background videos, "let's build" videos and simple play. It must always feel friendly,
 bright, soft and safe.
 
@@ -64,6 +64,8 @@ the next task.
    what's needed, which files/folders may change, and how it will be checked.
 2. **One Git branch per task**: `area/<name>` (e.g. `area/town-center`). Codex works only on that
    branch and commits there. Never commit to `main`; Claude merges after review.
+   **Push to GitHub** (`origin` = github.com/pa1potluri/SP-Creek): Codex runs `git push -u origin <branch>`
+   after each finished task (and after a WIP save); Claude pushes `main` after each merge.
 3. **Stay inside the task's files.** If something outside them must change, stop and write it in
    the result file as a request instead of changing it.
 4. **Keep the code organised.** New areas live in their own module `world/src/areas/<name>.js`,

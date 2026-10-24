@@ -1,6 +1,6 @@
 // Frame-perfect MP4: the world is stepped exactly 1/fps per frame and every frame is encoded
 // (H.264 + AAC via WebCodecs), so the video is smooth however long each frame takes to draw.
-import { Muxer, ArrayBufferTarget, FileSystemWritableFileStreamTarget } from 'https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.3/build/mp4-muxer.mjs';
+import { Muxer, ArrayBufferTarget, FileSystemWritableFileStreamTarget } from '../vendor/mp4-muxer/mp4-muxer.mjs'; // local copy so the world works offline
 
 // Yield to the browser without timers (timers are throttled to 1/s in background tabs).
 const yieldTask = () => new Promise((r) => {

@@ -9,7 +9,7 @@ calm background videos, "let's build" videos and simple play. It must always fee
 bright, soft and safe.
 
 **Engine:** not Unity/Unreal. It is a **web 3D world in Three.js r0.160** (ES modules from the
-jsdelivr CDN importmap, **no build step, no npm packages in the app**). Run it with
+local copies in `world/vendor/` (works offline), **no build step, no npm packages in the app**). Run it with
 `python serve_world.py 8810` from this folder and open http://localhost:8810.
 Browser tests: `node world/tests/run-browser.cjs <suites…>` (see existing suites in `world/tests/`).
 

@@ -1083,7 +1083,7 @@ export class World {
 
     // Build after the hamlet pads exist, so the new rails use the finished valley ground.
     this.buildTrainSpur=()=>{
-      if(this.trainSpur)return;const root=new THREE.Group();root.name='Willow and seaside railway';this.root.add(root);this.trainSpur={root,halts:[]};
+      if(this.trainSpur)return;const padStart=this.areaPads?.length||0;const root=new THREE.Group();root.name='Willow and seaside railway';this.root.add(root);this.trainSpur={root,halts:[]};
       const count=Math.ceil(TRAIN_SPUR_LENGTH/4),spacing=TRAIN_SPUR_LENGTH/count,raw=Array.from({length:count+1},(_,i)=>{const p=TRAIN_SPUR_CURVE.getPointAt(i/count);return terrainHeight(p.x,p.z)+0.51;});
       trainGrade=raw.map((_,i)=>{let sum=0,n=0;for(let j=Math.max(0,i-5);j<=Math.min(count,i+5);j++){sum+=raw[j];n++;}return sum/n;});trainGrade[0]=raw[0];
       for(let i=1;i<=count;i++)trainGrade[i]=THREE.MathUtils.clamp(trainGrade[i],trainGrade[i-1]-spacing*0.1,trainGrade[i-1]+spacing*0.1);
@@ -1106,6 +1106,8 @@ export class World {
         for(const x of [-5.8,-1.7])this.colliders.rects.push(this._rectOf(g,x,0,0.12,6));
         for(const z of [-6,6])for(const x of [-5,-2.6]){box(1.6,0.12,0.1,x,1.35,z);this.colliders.rects.push(this._rectOf(g,x,z,0.8,0.12));}
       }
+      this.trainSpur.pads=this.areaPads.slice(padStart);
+      this.refreshTrainGrade=()=>{const pads=this.trainSpur.pads;if(userPads.at(-1)===pads.at(-1))return;for(const p of pads){const i=userPads.indexOf(p);if(i>=0)userPads.splice(i,1);userPads.push(p);}this.updateTerrain();};
       this.updateTerrain();
     };
 

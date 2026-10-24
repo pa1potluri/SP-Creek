@@ -13,3 +13,8 @@
 - Still need the completed full-suite outcome and counts before done. Code and all six final day/night previews saved. Warm emissive coach trim makes the night windows readable without new lights.
 - Existing departure whistle is reused at the main station. Audio listener in main.js still assumes rail x=70; spatial following on the branch would require main.js scope (not edited).
 - Current branch area/train-trip, from balloon completion 2d48a57. No merge, push or publication.
+
+## Full-run follow-up
+- First full run passed the other fifteen suites but the final train ground check failed after Hamlet toggles reordered terrain pads (reported burial 7.685m). Not marked done.
+- Fixed railway pad priority in the track module and train update/apply paths; added off/on Hamlet regression checks. Also removed an early Cove-actor hide so its saved visibility remains correct; added Cove cleanup coverage.
+- Focused regression: train 28, sunset-cove 40, moments 35 passed; browser errors empty. Fresh full run follows with train first.

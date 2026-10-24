@@ -221,11 +221,12 @@ class Train {
     this.s = this.stopZ - this.dir * 190;
   }
   updateTrip(time){
+    this.world.refreshTrainGrade?.();
     const f=sampleTrainTrip(time),p0=sampleTrainTrip(Math.max(0,time-0.05)),p1=sampleTrainTrip(Math.min(240,time+0.05));this.v=Math.abs(p1.distance-p0.distance)/0.1;this.s=f.pos.z;this.stopped=f.stopped;this.state=f.stopped?'stopped':'run';
     for(const c of this.cars){const p=sampleTrainTrack(f.distance-c.off);c.g.visible=true;if(c.boardingSteps){c.boardingSteps.visible=c===this.cars[2]&&time<25;c.doors[0].visible=!c.boardingSteps.visible;}c.g.position.copy(p.pos);c.g.rotation.y=p.yaw;for(const {w,r}of c.wheels)w.rotation.x=-f.distance/r;}
     const coach=this.cars[2].g;coach.updateMatrixWorld(true);this.friends.forEach((p,i)=>{p.g.visible=true;const u=THREE.MathUtils.smoothstep(time,3+i*3,18+i*3),local=V(-4.2+3.35*u,-0.16+1.26*u,i?0.55:-0.55);if(u===1){local.x=-0.85+1.7*THREE.MathUtils.smoothstep(time,21,27);local.y=1.1;}const base=coach.localToWorld(local);p.g.position.copy(base);p.g.rotation.y=coach.rotation.y+(Math.PI/2);animatePerson(p,time*4,u<1?0.45:0);if(u===1)gesture(p,'wave',0.3+Math.sin(time*0.3+i)*0.15,time*0.7);});
     this.cars[0].g.updateMatrixWorld(true);this.steam.pos.copy(this.cars[0].g.localToWorld(V(0,4.4,2.6)));this.steam.rate=f.stopped?0.8:3;
-    this.world.trainTripActive=true;for(const p of Object.values(this.world.sunsetCove?.siblings||{}))p.g.visible=false;
+    this.world.trainTripActive=true;
   }
   update(dt) {
     const trip=trainTripReader();if(trip){this.updateTrip(trip.t);return;}this.world.trainTripActive=false;for(const p of this.friends)p.g.visible=false;
@@ -706,6 +707,7 @@ export class Life {
       this.train.remove(this.root);
       this.train = null;
     }
+    this.world.refreshTrainGrade?.();
     this.chickenGroup.visible = !!s.chickens;
     this.tumbleGroup.visible = !!s.tumbleweeds;
   }

@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import * as T from './textures.js';
 import { installCloudLighting, cloudUniforms } from './environment.js';
+import { terrainHeight, walkHeight } from './world.js';
 
 export const PRESETS = {
   golden: {
@@ -291,6 +292,17 @@ export class Atmosphere {
     this.hemi = new THREE.HemisphereLight();
     scene.add(this.sun, this.sun.target, this.hemi);
 
+    this.lightDecor = new THREE.Group(); this.lightDecor.name = 'Soft sunbeams and warm ground pools';
+    scene.add(this.lightDecor);
+    const beamMap=T.glowTexture(),beamGeo=new THREE.PlaneGeometry(1,1);
+    this.beamMaterial=new THREE.MeshBasicMaterial({map:beamMap,color:'#ffd898',transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
+    this.beams=[[-5,-22,0.3],[4,35,-0.2],[-87,-190,0.6],[-103,-202,-0.4]].map(([x,z,angle])=>{
+      const beam=new THREE.Mesh(beamGeo,this.beamMaterial);beam.position.set(x,terrainHeight(x,z)+10,z);beam.scale.set(3.5,24,1);beam.rotation.set(0,angle,-0.35);this.lightDecor.add(beam);return beam;
+    });
+    const poolGeo=new THREE.PlaneGeometry(1,1);poolGeo.rotateX(-Math.PI/2);
+    this.poolMaterial=new THREE.MeshBasicMaterial({map:T.glowTexture(),color:'#ffc778',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    this.groundPools=new THREE.InstancedMesh(poolGeo,this.poolMaterial,256);this.groundPools.frustumCulled=false;this.groundPools.count=0;this.lightDecor.add(this.groundPools);
+    this.poolSources=[];this.poolRootCount=-1;this.roofRim={value:0};
     this.dust = motes(1800, new THREE.Vector3(70, 18, 70), false);
     this.flies = motes(260, new THREE.Vector3(60, 4, 60), true);
     this.flies.material.uniforms.uColor.value.set(0.85, 1.0, 0.45);
@@ -384,6 +396,33 @@ export class Atmosphere {
     this.world.updateWaterMood(c,this.sunDir);
     this.renderer.toneMappingExposure = c.exposure;
     this.world.lanternLevel = c.lanterns;
+    this.beamMaterial.opacity=(this.key==='golden'?0.055:0)*(1-Math.min(1,c.rain+m.rain));
+    this.poolMaterial.opacity=c.lanterns*0.22;
+    // Rebuild when scenery changes; each window facade contributes one soft pool.
+    if(this.poolRootCount!==this.world.root.children.length){
+      this.poolRootCount=this.world.root.children.length;this.poolSources=[];const fronts=new Set();
+      this.world.root.traverse(o=>{
+        if(o.isSprite&&o.material===this.world.haloMat)this.poolSources.push({object:o,lantern:true});
+        if(o.isMesh&&[].concat(o.material).some(mat=>mat.userData.facadeSpec)&&!fronts.has(o.parent)){fronts.add(o.parent);this.poolSources.push({object:o.parent,lantern:false});}
+      });
+    }
+    const matrix=new THREE.Matrix4(),point=new THREE.Vector3();let poolCount=0;
+    for(const source of this.poolSources){let visible=true;for(let o=source.object;o;o=o.parent)if(!o.visible)visible=false;if(!visible||poolCount>=256)continue;
+      if(source.lantern)source.object.getWorldPosition(point);else{point.set(0,0,1.2);source.object.localToWorld(point);}
+      point.y=walkHeight(point.x,point.z)+0.045;
+      matrix.makeRotationY(source.object.rotation.y);matrix.scale(new THREE.Vector3(source.lantern?5:7,1,source.lantern?5:3.8));matrix.setPosition(point);this.groundPools.setMatrixAt(poolCount++,matrix);
+    }
+    this.groundPools.count=poolCount;this.groundPools.instanceMatrix.needsUpdate=true;
+    this.roofRim.value=c.stars*0.12;
+    for(const material of this.world.surfaces){
+      if(material.userData.moonRim)continue;
+      if(material!==this.world.mat.roof&&material.userData.sets?.oil?.image!==this.world.painted.oil.roof&&material.userData.sets?.clean?.image!==this.world.painted.clean.roof)continue;
+      material.userData.moonRim=true;const before=material.onBeforeCompile.bind(material),rim=this.roofRim;
+      material.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);shader.uniforms.uMoonRim=rim;
+        shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vMoonNormal;').replace('#include <begin_vertex>','#include <begin_vertex>\nvMoonNormal=normalize(mat3(modelMatrix)*normal);');
+        shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vMoonNormal; uniform float uMoonRim;').replace('#include <opaque_fragment>','outgoingLight += vec3(0.48,0.62,0.9)*uMoonRim*pow(1.0-abs(dot(normalize(vMoonNormal),normalize(cameraPosition-vCloudWorld))),2.0);\n#include <opaque_fragment>');
+      };material.needsUpdate=true;
+    }
 
     const setMotes = (pts, amount, color) => {
       const uu = pts.material.uniforms;

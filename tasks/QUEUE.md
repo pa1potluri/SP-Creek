@@ -18,7 +18,7 @@ finished. Re-read this file each time; Claude may change it.
 | 7c | `tasks/crystal-polish.md` | `area/crystal-polish` | done |
 | 7d | `tasks/shot-clearance.md` | `area/shot-clearance` | done (from crystal-polish) |
 | 8 | `tasks/watercolor.md` | `area/watercolor` | WIP saved as b0f369b; paused until Thu Oct 29 (do 9–12 first) |
-| 9 | `tasks/atmo-light.md` | `area/atmo-light` | queued |
+| 9 | `tasks/atmo-light.md` | `area/atmo-light` | done |
 | 10 | `tasks/atmo-mist-life.md` | `area/atmo-mist-life` | queued |
 | 11 | `tasks/village-details.md` | `area/village-details` | queued |
 | 12 | `tasks/seasons.md` | `area/seasons` | queued |

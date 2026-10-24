@@ -1,4 +1,4 @@
-# Performance - final verification in progress
+# Performance - complete
 
 ## Built
 - Rigid animal parts and benches share a material batch while all moving joints, original textures, normals and close-up geometry stay intact. Fixed farm rails use one instanced mesh; their 18 collider transforms remain unchanged. Removed a redundant whole-farm matrix traversal before Siri arm targeting.
@@ -16,14 +16,14 @@
 - Mean profiled meadow update 0.2813 -> 0.0209ms/frame; farm 0.0774 -> 0.0180ms/frame (skipped calls counted as zero). Scene mesh objects 2700 -> 2477; farm 238 -> 144. These are scene objects, not measured draw calls.
 - Both benchmark versions reported no browser errors and sound stayed locked. A diagnostic harness readiness timeout was fixed by timed polling because that harness intentionally disables RAF; no application fix was needed.
 
-## Checks / remaining
+## Checks and limitations
 - Targeted checks: **29 passed**, errors []; off-screen/near/visible bounds, immediate absolute-time farm return, sparkle equality and invalidation after placing/removing a cabin, all 18 fixed rail transforms, sound locked. Raw: world/tests/performance-check.json.
 - Animated film previews saved and inspected: performance-{26,27,61,62,63}-{day,night}.png. No camera shot definitions or preset numbers changed.
-- Full suite running on final code: every .js suite in world/tests (19), DH_URL=http://127.0.0.1:8813, command node world/tests/run-browser.cjs with all suite names. Not done until final counts and image inspection are recorded.
+- Full suite on final code: **1446 checks + 2 startup reload checks passed**, all 19 suites, exit 0, Browser errors: []. Every .js suite in world/tests was included with DH_URL=http://127.0.0.1:8813. Per-suite counts and exact command: world/tests/performance-full.json. Targeted 29 checks are additional, not included in that full-suite count.
 - No new child-safety theme or behaviour; original Pavi/Siri models retained. No new libraries, point lights, sound startup or production debug-global dependency.
 - Prior scope-deferred tasks 22/26/28 remain WIP in STUCK.md. main.js listener audio pan is also still out of scope. Nothing merged to main, pushed or published.
 - Stop after task 30 as requested. Task 31 stays paused until Thu Oct 29 (today is earlier).
 
-## Preview inspection / current full-run checkpoint
+## Final handoff
 - Ten day/night images saved for forest 26, meadow 27 and farm 61-63; original siblings, soft rounded animals, fences and close-up shapes retained. First forest image replaced after the loading-overlay fade. No camera definitions changed.
-- Full suite session 83498 is running, Build 200 passed so far after area-shots 7 and balloon-ride 20. Do not count this as full completion yet.
+- Full suite session 83498 finished successfully: 1446 + 2 passed. Task 30 complete; preview inspection complete. No further code work pending for this task. No push or merge to main. Stopped after task 30 as requested; task 31 remains paused until Thu Oct 29.

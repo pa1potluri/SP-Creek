@@ -21,7 +21,7 @@ finished. Re-read this file each time; Claude may change it.
 | 9 | `tasks/atmo-light.md` | `area/atmo-light` | done |
 | 10 | `tasks/atmo-mist-life.md` | `area/atmo-mist-life` | done |
 | 11 | `tasks/village-details.md` | `area/village-details` | done |
-| 12 | `tasks/seasons.md` | `area/seasons` | WIP: 20 focused checks passed and previews saved; full suite running |
+| 12 | `tasks/seasons.md` | `area/seasons` | done |
 | 13 | `tasks/season-presets.md` | `area/season-presets` | queued |
 | 14 | `tasks/build-pieces.md` | `area/build-pieces` | queued |
 | 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | queued |

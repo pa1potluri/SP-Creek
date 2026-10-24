@@ -56,6 +56,13 @@ export function buildCrystalMine(world) {
   for(let i=0;i<7;i++)box(1.98,0.05,1.68,cream,0,0.12+i*0.18,0,balloon);
   const stripes=['#efbac6','#eed39b','#b9d9b1','#a8d9df','#b9c5e5','#d3b7dc','#f0c6b1','#b2d9cf','#efd5ba','#d6c5eb'];
   stripes.forEach((c,i)=>{const bm=mat(c,0.08);balloonMats.push(bm);solid(new THREE.SphereGeometry(4,6,20,i*Math.PI*2/stripes.length,Math.PI*2/stripes.length).scale(1,1.35,1),bm,0,8,0,balloon);});
+  // town name on a cream band around the envelope, three times so it reads from every side
+  const label=document.createElement('canvas');label.width=896;label.height=128;const lc=label.getContext('2d');
+  lc.fillStyle='#fff0d4';lc.fillRect(0,0,896,128);lc.fillStyle='#e9b44c';lc.fillRect(0,0,896,10);lc.fillRect(0,118,896,10);
+  lc.fillStyle='#6a3f2a';lc.font='bold 78px Georgia, serif';lc.textAlign='center';lc.textBaseline='middle';lc.fillText('SP CREEK',448,68);
+  const labelMap=new THREE.CanvasTexture(label);labelMap.colorSpace=THREE.SRGBColorSpace;labelMap.wrapS=THREE.RepeatWrapping;labelMap.repeat.set(3,1);
+  const labelMat=mat('#ffffff',0.08);labelMat.map=labelMap;balloonMats.push(labelMat);
+  const band=new THREE.Mesh(new THREE.CylinderGeometry(4.08,4.08,1.25,48,1,true),labelMat);band.position.y=8;balloon.add(band);
   for(const sx of [-1,1])for(const sz of [-1,1])solid(new THREE.CylinderGeometry(0.025,0.025,3.5,6),cream,sx*0.8,2.7,sz*0.65,balloon);
   const burner=new THREE.Mesh(new THREE.SphereGeometry(0.25,12,8),new THREE.MeshBasicMaterial({color:'#ffe3a6'}));burner.position.y=2.1;balloon.add(burner);
   const ropes=[];for(const sx of [-1,1])for(const sz of [-1,1]){const start=v(202+sx*4,top.y+0.6,-145+sz*3),geo=new THREE.BufferGeometry().setFromPoints([start,start.clone()]);const line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:'#b19c7d'}));root.add(line);box(0.14,1,0.14,wood,start.x,top.y+0.5,start.z);ropes.push({line,start,sx,sz});}

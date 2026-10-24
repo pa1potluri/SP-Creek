@@ -489,6 +489,15 @@ for (const option of $('#buildWall').options) {
   $('#buildSwatches').append(b);
 }
 $('#deleteBuilding').onclick = deleteBuilding;
+const replaySpeed=$('#replaySpeed');replaySpeed.value=LS.get('dh.replaySpeed')||2;replaySpeed.nextElementSibling.textContent=replaySpeed.value;
+replaySpeed.oninput=()=>{replaySpeed.nextElementSibling.textContent=replaySpeed.value;LS.set('dh.replaySpeed',+replaySpeed.value);for(const c of timeline.clips)if(c.shot==='buildReplay')c.replaySpeed=+replaySpeed.value;saveTimeline();if(timeline.playing&&timeline.clips[timeline.index]?.shot==='buildReplay')timeline.start(timeline.index);renderClips();};
+$('#replayBuild').onclick=()=>{
+  if(timeline.playing&&timeline.clips[timeline.index]?.shot==='buildReplay'){timeline.stop();refreshTimeline();return;}
+  if(!world.buildEntries().length)return flash('Place a few pieces first.');
+  game.exit();let index=timeline.clips.findIndex(c=>c.shot==='buildReplay');
+  if(index<0){index=timeline.clips.length;timeline.clips.push({shot:'buildReplay',seconds:1,mood:'keep',move:'cut'});}
+  timeline.clips[index].replaySpeed=+replaySpeed.value;saveTimeline();renderClips();timeline.start(index);refreshTimeline();
+};
 // everything made in Build mode (buildings, hitching posts, fences, roads); Willow Creek and the
 // town stay. "Remove all placed" under Place objects only clears props.
 $('#clearBuilt').onclick = () => {
@@ -619,9 +628,10 @@ const saveTimeline = () => LS.set('dh.timeline', timeline.toJSON());
 timeline.clips = LS.get('dh.timeline') || [];
 
 function renderClips() {
-  const box = $('#clips'), shots = [...director.shots.map((s, i) => [i, s.name]), ['custom', 'Your camera move']];
+  const box = $('#clips'), shots = [...director.shots.map((s, i) => [i, s.name]), ['custom', 'Your camera move'], ['buildReplay','Replay build']];
   box.innerHTML = timeline.clips.length ? '' : '<p class="hint">No clips yet: choose a shot and a mood above, then press + Add clip.</p>';
   timeline.clips.forEach((c, i) => {
+    if(c.shot==='buildReplay')c.seconds=timeline.duration(c);
     const d = document.createElement('div');
     d.className = 'clip';
     d.innerHTML = `<div class="top"><span class="num">${i + 1}.</span><select data-k="shot" title="Shot">${options(shots, c.shot)}</select></div>
@@ -629,6 +639,7 @@ function renderClips() {
       <select data-k="mood" title="Mood for this clip">${options(moodOptions, c.mood)}</select>
       <select data-k="move" title="How the camera gets here">${options([['fly', 'fly'], ['cut', 'cut']], c.move)}</select>
       <span class="tools"><button data-a="-1" title="Move up">↑</button><button data-a="1" title="Move down">↓</button><button data-a="del" title="Remove">✕</button></span></div>`;
+    if(c.shot==='buildReplay'){d.querySelector('[data-k=seconds]').disabled=true;d.querySelector('[data-k=seconds]').title='Replay length follows your piece count and speed';}
     d.querySelectorAll('[data-k]').forEach((el) => (el.onchange = () => {
       c[el.dataset.k] = el.dataset.k === 'seconds' ? Math.max(0.5, +el.value || 0.5) : el.value;
       saveTimeline();
@@ -656,6 +667,7 @@ function refreshTimeline() {
   $('#tlTotal').textContent = `${timeline.clips.length} clip${timeline.clips.length === 1 ? '' : 's'} · ${mmss(timeline.total)}` + (music ? ` · music ${mmss(music)}` : '');
   $('#tlPlay').textContent = timeline.playing ? '■ Stop' : '▶ Play timeline';
   $('#tlPlay').classList.toggle('on', timeline.playing);
+  $('#replayBuild').textContent=timeline.playing&&timeline.clips[timeline.index]?.shot==='buildReplay'?'Stop replay':'Replay build';
   if (!timeline.playing) highlightClip(-1);
 }
 $('#addClip').onclick = () => {

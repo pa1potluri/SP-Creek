@@ -1578,7 +1578,8 @@ export class World {
     return hit ? hit.point.y : terrainHeight(x, z);
   }
 
-  placeProp(type, x, z, yaw = 0, record = true) {
+  placeProp(type, x, z, yaw = 0, record = true, order) {
+    this.endBuildReplay();
     const obj = this.makeProp(type);
     obj.position.set(x, this.surfaceY(x, z), z);
     obj.rotation.y = yaw;
@@ -1616,7 +1617,7 @@ export class World {
     }
     if (entry.flame) this.flames.push(entry.flame);
     this.props.push(entry);
-    if (record) this.placed.push(entry);
+    if (record) {entry.order=this._buildOrder(order);this.placed.push(entry);}
     return entry;
   }
 
@@ -1660,6 +1661,7 @@ export class World {
     if (b >= 0) this.billboards.splice(b, 1);
   }
   undo() {
+    this.endBuildReplay();
     const e = this.placed.pop();
     if (e) this._remove(e);
   }
@@ -1668,14 +1670,16 @@ export class World {
   }
   layout() {
     return [
-      ...this.placed.filter((p) => p.type !== 'cutout').map(({ type, x, z, yaw }) => ({ type, x, z, yaw })),
+      ...this.placed.filter((p) => p.type !== 'cutout').map(({ type, x, z, yaw, order }) => ({ type, x, z, yaw, order })),
       ...this.buildings.map((e) => ({ kind: 'building', ...e.spec })),
-      ...this.roads.map((e) => ({ kind: 'road', points: e.points, width: e.width })),
-      ...this.fences.map((e) => ({ kind: 'fence', points: e.points })),
-    ];
+      ...this.roads.map((e) => ({ kind: 'road', points: e.points, width: e.width, order:e.order })),
+      ...this.fences.map((e) => ({ kind: 'fence', points: e.points, order:e.order })),
+    ].sort((a,b)=>a.order-b.order);
   }
 
   loadLayout(layout = []) {
+    this.endBuildReplay();this.buildOrder=0;
+    layout=layout.map((e,i)=>({...e,order:Number.isFinite(e.order)?e.order:i}));
     this.clearPlaced();
     for (const e of [...this.fences]) this.removeFence(e);
     for (const e of [...this.buildings]) this.removeBuilding(e, false);
@@ -1684,12 +1688,56 @@ export class World {
     for (const e of layout) if (e.kind === 'building') this.placeBuilding(e, false);
     this.updateTerrain();
     for (const e of layout) {
-      if (e.kind === 'road') this.addRoad(e.points, e.width);
-      else if (e.kind === 'fence') this.addFence(e.points);
-      else if (!e.kind) this.placeProp(e.type, e.x, e.z, e.yaw);
+      if (e.kind === 'road') this.addRoad(e.points, e.width, e.order);
+      else if (e.kind === 'fence') this.addFence(e.points, e.order);
+      else if (!e.kind) this.placeProp(e.type, e.x, e.z, e.yaw, true, e.order);
     }
   }
 
+
+  _buildOrder(order) {const n=Number.isFinite(order)?order:(this.buildOrder||0);this.buildOrder=Math.max(this.buildOrder||0,n+1);return n;}
+  buildEntries() {return [...this.placed.filter(e=>e.type!=='cutout'),...this.buildings,...this.roads,...this.fences].sort((a,b)=>a.order-b.order);}
+  replayDuration(speed=2) {return this.buildEntries().length/Math.max(1,Math.min(5,+speed||2))+1;}
+  _replayList(key) {return key==='userFloors'?userFloors:['rects','circles','segs'].includes(key)?this.colliders[key]:this[key];}
+  beginBuildReplay(speed=2) {
+    this.endBuildReplay();const entries=this.buildEntries();if(!entries.length)return false;
+    this.root.updateMatrixWorld(true);const bounds=new THREE.Box3(),physics=[],items=[];
+    for(const entry of entries){
+      const obj=entry.obj,box=new THREE.Box3().setFromObject(obj),center=box.getCenter(V());center.y=box.min.y;bounds.union(box);
+      const item={entry,obj,parent:obj.parent,position:obj.position.clone(),rotation:obj.quaternion.clone(),scale:obj.scale.clone(),visible:obj.visible,lightVisible:entry.light?.light.visible,shown:null,pivot:center};
+      const wrapper=new THREE.Group();wrapper.position.copy(center);this.root.add(wrapper);wrapper.updateMatrixWorld(true);wrapper.attach(obj);item.wrapper=wrapper;items.push(item);
+      const record=(key,values)=>{for(const value of values||[]){const index=this._replayList(key).indexOf(value);physics.push({key,value,index,item});}};
+      for(const [key,values]of Object.entries(entry.additions||{}))record(key,values);
+      record('userFloors',entry.additions?.floors);record('segs',entry.segs);record('circles',entry.collider?[entry.collider]:[]);record('benches',entry.seats);record('emitters',entry.emitters);record('flames',entry.flame?[entry.flame]:[]);record('buildingPOIs',entry.poi?[entry.poi]:[]);
+    }
+    if(!this.buildSparkles){this.buildSparkles=new THREE.InstancedMesh(new THREE.SphereGeometry(1,6,4),new THREE.MeshBasicMaterial({color:'#f8deb0',transparent:true,opacity:0.45,depthWrite:false}),48);this.buildSparkles.frustumCulled=false;this.root.add(this.buildSparkles);}
+    this.buildSparkles.visible=true;this.buildReplay={items,physics,speed:Math.max(1,Math.min(5,+speed||2)),bounds};this.updateBuildReplay(0);return true;
+  }
+  updateBuildReplay(t) {
+    const replay=this.buildReplay;if(!replay)return;let changed=false,count=0;const matrix=new THREE.Matrix4();
+    replay.items.forEach((item,i)=>{
+      const age=t-0.25-i/replay.speed,shown=age>=0;
+      if(shown!==item.shown){item.shown=shown;changed=true;}
+      const u=Math.max(0,Math.min(1,age/0.65)),pop=1-Math.pow(1-u,3)+Math.sin(u*Math.PI)*0.12;
+      item.wrapper.visible=shown&&item.visible;item.wrapper.scale.setScalar(Math.max(0.001,pop));if(item.entry.light)item.entry.light.light.visible=shown&&item.lightVisible;
+      if(age>=0&&age<0.9)for(let k=0;k<8&&count<48;k++){const a=k*2.399+i,r=0.25+age*0.9,size=(1-age/0.9)*0.055;this.buildSparkles.setMatrixAt(count++,matrix.makeScale(size,size,size).setPosition(item.pivot.x+Math.cos(a)*r,item.pivot.y+0.15+age*0.8,item.pivot.z+Math.sin(a)*r));}
+    });
+    if(changed){for(const p of replay.physics){const list=this._replayList(p.key),i=list.indexOf(p.value),show=p.item.shown&&p.index>=0;if(show&&i<0)list.push(p.value);else if(!show&&i>=0)list.splice(i,1);}this.onBuildingsChanged?.();}
+    this.buildSparkles.count=count;this.buildSparkles.instanceMatrix.needsUpdate=true;
+  }
+  buildReplayCamera(t,director) {
+    const replay=this.buildReplay;if(!replay)return;const center=replay.bounds.getCenter(V()),size=replay.bounds.getSize(V()),r=Math.max(12,Math.max(size.x,size.z)*0.9+8),a=0.35+t*0.035;
+    const x=center.x+Math.cos(a)*r,z=center.z+Math.sin(a)*r,y=Math.max(terrainHeight(x,z)+8,replay.bounds.max.y+r*0.55+5);
+    director.state.pos.set(x,y,z);center.y=replay.bounds.min.y+Math.min(size.y,6)*0.5;const d=center.sub(director.state.pos);director.free.yaw=Math.atan2(d.x,d.z);director.free.pitch=Math.atan2(d.y,Math.hypot(d.x,d.z));
+  }
+  endBuildReplay() {
+    const replay=this.buildReplay;if(!replay)return;this.buildReplay=null;
+    // Restore exact transforms and physics without rebuilding or losing the saved layout.
+    for(const item of replay.items){item.parent.add(item.obj);item.obj.position.copy(item.position);item.obj.quaternion.copy(item.rotation);item.obj.scale.copy(item.scale);item.obj.visible=item.visible;item.wrapper.removeFromParent();if(item.entry.light)item.entry.light.light.visible=item.lightVisible;}
+    for(const p of replay.physics){const list=this._replayList(p.key),i=list.indexOf(p.value);if(i>=0)list.splice(i,1);}
+    for(const p of [...replay.physics].sort((a,b)=>a.index-b.index)){if(p.index>=0){const list=this._replayList(p.key);list.splice(Math.min(p.index,list.length),0,p.value);}}
+    this.buildSparkles.visible=false;this.onBuildingsChanged?.();this.root.updateMatrixWorld(true);
+  }
 
   _detailBounds(type) {
     return {gardenFence:[2.6,0.2],vegetablePatch:[2.3,1.5],flowerBox:[1,0.35],laundryLine:[2.7,0.35],waterWell:[1.2,1],woodPile:[1.1,0.8],mailbox:[0.35,0.3],lanternString:[3,0.3],gardenBench:[1.1,0.55],snowman:[0.8,0.75],pumpkinPile:[1.2,0.85],littleBridge:[1.6,3]}[type];
@@ -1826,7 +1874,8 @@ export class World {
   }
 
   placeBuilding(spec, update = true) {
-    const e = this.makeBuilding(spec);
+    this.endBuildReplay();
+    const e = this.makeBuilding(spec);e.order=this._buildOrder(spec.order);e.spec.order=e.order;
     this.buildings.push(e);
     if (e.obj.userData.forge) {
       e.light = this._takeLight();
@@ -1845,6 +1894,7 @@ export class World {
 
   removeBuilding(e, update = true) {
     if (!this.buildings.includes(e)) return; // built-in scenery is not a user selection
+    this.endBuildReplay();
     for (const [k, items] of Object.entries(e.additions)) {
       const a = k === 'rects' || k === 'circles' ? this.colliders[k] : this[k];
       for (const item of items) { const i = a.indexOf(item); if (i >= 0) a.splice(i, 1); }
@@ -1882,27 +1932,30 @@ export class World {
     return g;
   }
 
-  addFence(points) {
+  addFence(points, order) {
+    this.endBuildReplay();
     points = points.filter(([x, z], i) => Number.isFinite(x) && Number.isFinite(z) && (!i || Math.hypot(x - points[i - 1][0], z - points[i - 1][1]) > 0.1));
     if (points.length < 2) return null;
     const start = this.colliders.segs.length;
     const e = { points: points.map(p => [...p]), spec: { type: 'fence' }, obj: this._fence(points, true), segs: this.colliders.segs.slice(start) };
-    this.fences.push(e); this.updateTerrain(); return e;
+    e.order=this._buildOrder(order);this.fences.push(e); this.updateTerrain(); return e;
   }
 
   removeFence(e) {
     if (!this.fences.includes(e)) return;
+    this.endBuildReplay();
     this.colliders.segs = this.colliders.segs.filter(s => !e.segs.includes(s));
     this.root.remove(e.obj); e.obj.geometry.dispose(); this.fences.splice(this.fences.indexOf(e), 1); this.updateTerrain();
   }
 
-  addRoad(points, width) {
+  addRoad(points, width, order) {
+    this.endBuildReplay();
     points = points.filter(([x, z], i) => Number.isFinite(x) && Number.isFinite(z) && (!i || Math.hypot(x - points[i - 1][0], z - points[i - 1][1]) > 0.1));
     if (points.length < 2) return null;
     this.userRoadMat ??= this._pathMaterial();
     const e = { points: points.map((p) => [...p]), width: Math.max(1, Math.min(14, +width || 5)) };
     e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1 });
-    this.roads.push(e);
+    e.order=this._buildOrder(order);this.roads.push(e);
     this.setTextureSet(this.textureSet || 'oil');
     return e;
   }

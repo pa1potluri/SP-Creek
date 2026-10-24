@@ -20,8 +20,11 @@ finished. Re-read this file each time; Claude may change it.
 | 8 | `tasks/watercolor.md` | `area/watercolor` | WIP saved as b0f369b; paused until Thu Oct 29 (do 9–12 first) |
 | 9 | `tasks/atmo-light.md` | `area/atmo-light` | done |
 | 10 | `tasks/atmo-mist-life.md` | `area/atmo-mist-life` | done |
-| 11 | `tasks/village-details.md` | `area/village-details` | queued |
+| 11 | `tasks/village-details.md` | `area/village-details` | in progress: built and smoke checked; full suite running |
 | 12 | `tasks/seasons.md` | `area/seasons` | queued |
+| 13 | `tasks/season-presets.md` | `area/season-presets` | queued |
+| 14 | `tasks/build-pieces.md` | `area/build-pieces` | queued |
+| 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | queued |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

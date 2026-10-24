@@ -3,6 +3,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { LEFT, RIGHT, terrainHeight, walkHeight } from '../world.js';
 import { makeCharacter, CAST, animatePerson, gesture } from '../characters.js';
 import { signTexture } from '../textures.js';
+import { buildVillageDetails } from '../hamlet.js';
 
 // One registration owns the square, street decorations and their clock-driven motion.
 export function buildTownCenter(world, life) {
@@ -182,8 +183,11 @@ export function buildTownCenter(world, life) {
     const geometry=mergeGeometries(geos);const m=new THREE.Mesh(geometry,material);m.castShadow=m.receiveShadow=true;parent.add(m);
     for(const geo of geos)geo.dispose();
   }
+  const homeDetails=buildVillageDetails(world,root,terrainHeight,{gardens:[[-28,24],[-28,-24]],mailboxes:[[-5.1,33],[5.1,31],[-5.1,-29],[5.1,-17]],well:[-27,12],paths:[[[-28,21],[-27,17],[-27,12]],[[-27,12],[-23,12],[-21,8]],[[-28,-22],[-24,-18],[-21,-12]]]});
+  const hamletDetails=buildVillageDetails(world,world.root,terrainHeight,{hamlet:true,gardens:[[-126,92],[-106,38]],mailboxes:[[-130,74],[-109,76],[-87,76],[-106,54]],windows:world.hamlet.buildings.filter(e=>e.spec.type==='house').map(e=>({object:e.obj})),well:[-121,65],paths:[[[-121,65],[-132,65],[-134,73]],[[-121,65],[-113,67],[-113,75]],[[-121,65],[-110,63],[-110,55]],[[-126,90],[-130,88],[-134,82]]]});
   let familyMode=true;
-  const area={root,family,keepers,flags,square,path,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
+  const area={root,family,keepers,flags,square,path,homeDetails,hamletDetails,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
+    homeDetails.update(t);hamletDetails.update(t);
     flags.forEach((f,i)=>{f.rotation.x=Math.sin(t*1.1+i*0.7)*0.13*(world.wind??1);f.rotation.y=Math.sin(t*0.8+i)*0.08*(world.wind??1);});
     streams.forEach(({drop,curve},i)=>drop.position.copy(curve.getPoint((t*0.45+i/8)%1)));
     ripples.forEach((m,i)=>{const s=0.35+((t*0.2+i/3)%1)*1.1;m.scale.setScalar(s);});

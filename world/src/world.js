@@ -1927,7 +1927,20 @@ export class World {
     if (this.hamlet) for (const e of [...this.hamlet.roads, ...this.hamlet.props]) e.obj.visible = this.hamlet.visible;
   }
 
+  _updatePuddles() {
+    if(!this.puddles){
+      const sites=[];for(let i=0;i<18;i++)sites.push([i%2?2.7:-2.6,-48+i*5.7,0.6+(i%3)*0.22,0.3+(i%4)*0.08]);
+      for(let i=0;i<7;i++)sites.push([-140+i*8,65+Math.sin(i*2)*1.4,0.7,0.4]);
+      const geo=new THREE.CircleGeometry(1,24);geo.rotateX(-Math.PI/2);
+      const mat=new THREE.MeshPhysicalMaterial({color:'#8faeb6',roughness:0.12,metalness:0.18,transparent:true,opacity:0,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1});
+      this.puddles=new THREE.InstancedMesh(geo,mat,sites.length);this.puddles.name='Shallow rain puddles';const matrix=new THREE.Matrix4();
+      sites.forEach(([x,z,sx,sz],i)=>this.puddles.setMatrixAt(i,matrix.makeScale(sx,1,sz).setPosition(x,walkHeight(x,z)+0.025,z)));this.puddles.computeBoundingSphere();this.root.add(this.puddles);
+    }
+    this.puddles.visible=(this.wetAmount||0)>0.01;this.puddles.material.opacity=(this.wetAmount||0)*0.42;
+  }
+
   update(dt, t, camera) {
+    this._updatePuddles();
     const L = this.lanternLevel;
     this.waterUniforms.uWaterTime.value = t;
     this.waterUniforms.uWaterWind.value = this.wind ?? 1;

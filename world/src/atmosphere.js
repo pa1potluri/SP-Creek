@@ -132,14 +132,14 @@ function rainLines(count, box) {
   geo.setAttribute('position', new THREE.BufferAttribute(p, 3));
   geo.setAttribute('aEnd', new THREE.BufferAttribute(end, 1));
   const mat = new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 }, uCam: { value: new THREE.Vector3() }, uBox: { value: box }, uAmount: { value: 0 }, uColor: { value: new THREE.Color(0.75, 0.78, 0.82) } },
+    uniforms: { uTime: { value: 0 }, uSpeed:{value:16}, uLength:{value:0.9}, uCam: { value: new THREE.Vector3() }, uBox: { value: box }, uAmount: { value: 0 }, uColor: { value: new THREE.Color(0.75, 0.78, 0.82) } },
     vertexShader: /* glsl */ `
-      attribute float aEnd; uniform float uTime; uniform vec3 uCam, uBox; varying float vA;
+      attribute float aEnd; uniform float uTime,uSpeed,uLength; uniform vec3 uCam, uBox; varying float vA;
       void main() {
         vec3 p = position;
-        p.y = mod(p.y - uTime * 16.0, uBox.y);
+        p.y = mod(p.y - uTime * uSpeed, uBox.y);
         vec3 w = vec3(mod(p.x - uCam.x + uBox.x * 0.5, uBox.x) - uBox.x * 0.5, p.y - uBox.y * 0.35, mod(p.z - uCam.z + uBox.z * 0.5, uBox.z) - uBox.z * 0.5);
-        vec3 world = uCam + w + vec3(aEnd * 0.12, aEnd * 0.9, 0.0);
+        vec3 world = uCam + w + vec3(aEnd * 0.04, aEnd * uLength, 0.0);
         gl_Position = projectionMatrix * viewMatrix * vec4(world, 1.0);
         vA = 1.0 - aEnd * 0.7;
       }`,
@@ -268,6 +268,7 @@ export class Atmosphere {
     this.mountains = mountains;
     this.presets = Object.fromEntries(Object.entries(PRESETS).map(([k, p]) => [k, prepare(p)]));
     this.key = 'golden';
+    this.weather='auto';this.weatherStart=0;this.clock=0;
     this.cur = cloneState(this.presets.golden);
     this.from = null;
     this.to = null;
@@ -312,6 +313,19 @@ export class Atmosphere {
     this.flies = motes(400, new THREE.Vector3(60, 4, 60), true);
     this.flies.material.uniforms.uColor.value.set(0.85, 1.0, 0.45);
     this.rain = rainLines(4000, new THREE.Vector3(40, 25, 40));
+    this.rainbow=new THREE.Group();this.rainbow.name='Soft clearing rainbow';
+    for(const [i,color]of ['#e5a7a0','#ecc291','#eee3a4','#b9d4a3','#a6d5d1','#afbee0','#cfb4dc'].entries()){
+      const band=new THREE.Mesh(new THREE.TorusGeometry(37-i*0.6,0.32,5,80,Math.PI),new THREE.MeshBasicMaterial({color,transparent:true,opacity:0,depthWrite:false}));this.rainbow.add(band);
+    }
+    scene.add(this.rainbow);
+    const geo=new THREE.BufferGeometry(),positions=new Float32Array(220*3),colors=new Float32Array(220*3);
+    for(let i=0;i<220;i++){positions.set([(i*17.31)%60,(i*7.73)%16,(i*23.17)%60],i*3);new THREE.Color(['#e8c088','#d9a6bc','#c8d69e'][i%3]).toArray(colors,i*3);}
+    geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+    this.petals=new THREE.Points(geo,new THREE.ShaderMaterial({vertexColors:true,transparent:true,depthWrite:false,uniforms:{uTime:{value:0},uCam:{value:new THREE.Vector3()},uScale:{value:500}},vertexShader:`uniform float uTime,uScale;uniform vec3 uCam;varying vec3 vColor;varying float vFade;
+      void main(){vec3 p=position;p.x+=uTime*1.7;p.z+=sin(uTime*0.4+position.x)*2.0;p.y-=uTime*0.25;vec3 d=mod(p-uCam+vec3(30.,8.,30.),vec3(60.,16.,60.))-vec3(30.,8.,30.);vec4 mv=viewMatrix*vec4(uCam+d,1.);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(0.09*uScale/max(1.,-mv.z),1.,9.);vColor=color;vFade=smoothstep(30.,18.,length(d.xz));}`,
+      fragmentShader:`varying vec3 vColor;varying float vFade;void main(){vec2 p=gl_PointCoord-.5;float a=smoothstep(.48,.22,length(p*vec2(1.,1.6)));gl_FragColor=vec4(vColor,a*vFade*.65);}`}));
+    this.petals.frustumCulled=false;scene.add(this.petals);
+
     this.birds = new Birds();
     this.smoke = new Particles(500, T.puffTexture(), false);
     this.embers = new Particles(300, T.glowTexture(), true);
@@ -327,8 +341,13 @@ export class Atmosphere {
     if (instant) blendInto(this.cur, this.from, this.to, 1);
   }
 
+  setWeather(key) {
+    this.weather=['auto','drizzle','clearing','windy'].includes(key)?key:'auto';this.weatherStart=this.clock;
+  }
+
   setViewport(height, fov) {
     const s = height / (2 * Math.tan(THREE.MathUtils.degToRad(fov) / 2));
+    this.petals.material.uniforms.uScale.value=s;
     for (const m of [this.dust.material, this.flies.material, this.smoke.material, this.embers.material]) m.uniforms.uScale.value = s;
   }
 
@@ -343,6 +362,7 @@ export class Atmosphere {
   }
 
   update(dt, time, camera) {
+    this.clock=time;
     if (this.blend < 1) {
       this.blend = Math.min(1, this.blend + dt / Math.max(0.1, this.mult.transition));
       const e = this.blend * this.blend * (3 - 2 * this.blend);
@@ -442,7 +462,16 @@ export class Atmosphere {
     for(const {plane,x,z,y,phase} of this.mistPatches){plane.position.set(x+Math.sin(time*0.014+phase)*3,y+Math.sin(time*0.02+phase)*0.12,z+Math.cos(time*0.012+phase)*2);plane.rotation.y=Math.atan2(camera.position.x-plane.position.x,camera.position.z-plane.position.z);}
     setMotes(this.dust, c.dust * m.dust, c.dustColor);
     setMotes(this.flies, Math.min(1,c.fireflies*1.5));
-    const ru = this.rain.material.uniforms, rain = THREE.MathUtils.clamp(c.rain + m.rain, 0, 1);
+    const elapsed=Math.max(0,time-this.weatherStart), clear=this.weather==='clearing';
+    const rain=this.weather==='drizzle'?0.3:clear?0.3*(1-smooth(0,35,elapsed)):this.weather==='windy'?0:THREE.MathUtils.clamp(c.rain+m.rain,0,1);
+    const wet=this.weather==='drizzle'?1:clear?1-smooth(20,120,elapsed):Math.min(1,rain*2);
+    this.world.rainAmount=rain;this.world.wetAmount=wet;
+    const rainbowAmount=clear?smooth(5,22,elapsed)*(1-smooth(85,120,elapsed))*(1-c.stars)*0.22:0;
+    this.rainbow.visible=rainbowAmount>0.001;this.rainbow.children.forEach(b=>b.material.opacity=rainbowAmount);
+    this.rainbow.position.set(camera.position.x-this.sunDir.x*115,terrainHeight(camera.position.x,camera.position.z)+5,camera.position.z-this.sunDir.z*115);
+    this.rainbow.rotation.y=Math.atan2(camera.position.x-this.rainbow.position.x,camera.position.z-this.rainbow.position.z);
+    this.petals.visible=this.weather==='windy';this.petals.material.uniforms.uTime.value=time;this.petals.material.uniforms.uCam.value.copy(camera.position);
+    const ru=this.rain.material.uniforms;ru.uSpeed.value=this.weather==='auto'?16:4;ru.uLength.value=this.weather==='auto'?0.9:0.24;
     ru.uTime.value = time;
     ru.uCam.value.copy(camera.position);
     ru.uAmount.value = rain;

@@ -27,6 +27,7 @@ finished. Re-read this file each time; Claude may change it.
 | 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | done |
 | 16 | `tasks/sky-edge.md` | `area/sky-edge` | done (from main) |
 | 17 | `tasks/soft-wind.md` | `area/soft-wind` | done (from main) |
+| 17a | `tasks/pavi-siri.md` | `area/pavi-siri` | queued (next, after soft-wind) |
 | 17b | `tasks/sunset-cove.md` | `area/sunset-cove` | queued (after Pavi & Siri) |
 | 18 | `tasks/lets-build-replay.md` | `area/lets-build-replay` | queued |
 | 19 | `tasks/playground.md` | `area/playground` | queued |

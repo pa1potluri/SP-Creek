@@ -8,8 +8,8 @@
 
 ## Stopped point / left
 - Corrected station framing, boarding height, level halt decks, retracting steps and closed lower travel doors. Fixed the station/playground visibility ownership interaction.
-- Focused checks passed 24 before adding the final-frame preset check; clearance passed 60 (59 shots / 11,859 samples), browser errors empty. Final preset check running; full suite next.
+- Focused checks: 25 passed, including final rendered preset frame and visibility cleanup. Clearance: 60 passed (59 shots / 11,859 samples), browser errors empty. Graded-route floor clearance at least 0.827m in the sampled longitudinal check. Full suite running (session 69490); not yet complete.
 - All six final Animated film screenshots for shots 56-58 are saved, in day/night.
-- Still need train-focused smoke/continuity/ground checks, full suite once, final Animated film day/night screenshots and result counts before done.
+- Still need the completed full-suite outcome and counts before done. Code and all six final day/night previews saved. Warm emissive coach trim makes the night windows readable without new lights.
 - Existing departure whistle is reused at the main station. Audio listener in main.js still assumes rail x=70; spatial following on the branch would require main.js scope (not edited).
 - Current branch area/train-trip, from balloon completion 2d48a57. No merge, push or publication.

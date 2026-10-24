@@ -36,7 +36,7 @@ finished. Re-read this file each time; Claude may change it.
 | 22 | `tasks/cove-polish.md` | `area/cove-polish` | WIP: side-lane clearance + warm pebbles saved; Episode 1 cuts need presets.js scope (STUCK.md); continue 23 |
 | 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | done; full 1335 + 2 passed; day/night previews 46-52 saved |
 | 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | done; full 1358 + 2 passed; day/night previews 53-55 saved |
-| 25 | `tasks/train-trip.md` | `area/train-trip` | WIP saved; route, halts, passengers and day/night 56-58 built; focused checks + full suite next; branch audio-pan follow-up in STUCK.md |
+| 25 | `tasks/train-trip.md` | `area/train-trip` | WIP saved; route, halts, passengers and day/night 56-58 built; focused 25 and clearance 60 passed; full suite running; branch audio-pan follow-up in STUCK.md |
 | 26 | `tasks/camping-night.md` | `area/camping-night` | queued |
 | 27 | `tasks/pony-farm.md` | `area/pony-farm` | queued |
 | 28 | `tasks/episode-presets.md` | `area/episode-presets` | queued |

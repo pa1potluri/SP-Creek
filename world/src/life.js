@@ -169,7 +169,7 @@ function makeTender() {
 }
 function makeCoachCar(colour) {
   const g = new THREE.Group(), wheels = [];
-  const body=mat(colour),trim=mat([35,30,45]);
+  const body=mat(colour),trim=mat([35,30,45]);body.emissive.set('#6d4d30');body.emissiveIntensity=0.12;trim.emissive.set('#f4d99b');trim.emissiveIntensity=0.12;
   part(new THREE.BoxGeometry(2.7,0.15,9),body,0,1.1,0,g);
   for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,0.85,3.7),body,x,1.55,z,g);part(new THREE.BoxGeometry(0.12,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.12,1.25,0.12),trim,x,2.65,z,g);}
   for(const z of [-4.4,4.4])part(new THREE.BoxGeometry(2.7,2.2,0.12),body,0,2.25,z,g);

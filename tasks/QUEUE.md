@@ -22,7 +22,7 @@ finished. Re-read this file each time; Claude may change it.
 | 10 | `tasks/atmo-mist-life.md` | `area/atmo-mist-life` | done |
 | 11 | `tasks/village-details.md` | `area/village-details` | done |
 | 12 | `tasks/seasons.md` | `area/seasons` | done |
-| 13 | `tasks/season-presets.md` | `area/season-presets` | WIP: implementation + four previews saved; 38 clearance + 6 preset checks passed; full suite interrupted after area-shots 7 / build-mode 100; finish verification after 9:41 AM reset |
+| 13 | `tasks/season-presets.md` | `area/season-presets` | done |
 | 14 | `tasks/build-pieces.md` | `area/build-pieces` | queued |
 | 15 | `tasks/gentle-weather.md` | `area/gentle-weather` | queued |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |

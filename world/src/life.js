@@ -6,7 +6,10 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { terrainHeight, roadX, walkHeight, LEFT, RIGHT, RAIL_X, RANCH, CAMP } from './world.js';
 import * as T from './textures.js';
-import { makeCharacter, randomTownsfolk, animatePerson, seat, gesture, CAST, HIP } from './characters.js';
+import { MOMENTS, buildMomentProps } from './areas/pavi-siri-moments.js';
+import { episodeWalk } from './areas/sunset-cove.js';
+export { MOMENTS } from './areas/pavi-siri-moments.js';
+import { makeCharacter, randomTownsfolk, animatePerson, seat, gesture, CAST, HIP, addCharacterPoseLayer, pointCharacterArm } from './characters.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const C = (h, s, l) => new THREE.Color().setHSL(h / 360, s / 100, l / 100, THREE.SRGBColorSpace);
@@ -590,11 +593,15 @@ export function starCameraFocus() {
   return {pos:a.pos.add(b.pos).multiplyScalar(0.5),yaw:b.yaw};
 }
 
+let momentCameraReader=()=>null;
+export function setMomentCameraReader(reader){momentCameraReader=reader;}
+export function momentFocus(kind,t=starWorld?.waterUniforms.uWaterTime.value||0){const spec=MOMENTS[kind];if(!spec||!starWorld)return {pos:V(),yaw:0};if(kind==='handWalk'){const phase=30+Math.sin(t*0.08)*8,p=episodeWalk('beach',phase);return {pos:V(p.x,p.y,p.z),yaw:p.yaw+(Math.cos(t*0.08)<0?Math.PI:0)};}return {pos:V(spec.x,walkHeight(spec.x,spec.z),spec.z),yaw:0};}
 export class Life {
   constructor(scene, world) {
     this.scene = scene;
     this.world = world;
     starWorld=world;
+    addCharacterPoseLayer(t=>this.updateMoments(t));
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -845,6 +852,22 @@ export class Life {
       return { mesh, x: -40 + i * 27, z: -40 + R() * 90, ph: R() * 6, speed: 0.7 + R() * 0.6 };
     });
     this.root.add(this.tumbleGroup);
+  }
+
+  updateMoments(t){
+    const w=this.world,props=w.momentProps??=buildMomentProps(w),kind=momentCameraReader();w.activeMoment=kind||null;props.update(t,kind);
+    if(!kind){if(this.momentHidden){for(const [p,visible]of this.momentHidden)p.g.visible=visible;this.momentHidden=null;}return;}
+    this.momentHidden??=new Map();for(const p of Object.values(w.sunsetCove?.siblings||{})){if(!this.momentHidden.has(p))this.momentHidden.set(p,p.g.visible);p.g.visible=false;}for(const p of w.playground?.kids||[])if(p.outfit.star)p.g.visible=false;
+    const focus=momentFocus(kind,t),pair=Object.entries(this.stars);for(const [role,p]of pair){const side=role==='pavi'?-0.4:0.4;p.g.visible=true;p.g.position.copy(focus.pos);p.g.position.x+=Math.cos(focus.yaw)*side;p.g.position.z-=Math.sin(focus.yaw)*side;p.g.rotation.y=focus.yaw;animatePerson(p,t*(role==='pavi'?6:4.8),kind==='handWalk'?0.55:0);}
+    const pavi=this.stars.pavi,siri=this.stars.siri;
+    if(kind==='bench'){for(const [role,p]of pair){seat(p,false,1);p.g.position.y=focus.pos.y+0.45-(role==='pavi'?0.43:0.56)*1.42;p.headYaw=Math.sin(t*0.18)*0.08;}}
+    else if(kind==='handWalk'){pavi.arms[1].rotation.z=0.35;siri.arms[0].rotation.z=-0.35;}
+    else if(kind==='castle'){for(const [role,p]of pair){p.g.position.x=focus.pos.x+(role==='pavi'?-1.1:1.1);p.g.position.z=focus.pos.z-0.85;p.g.position.y-=0.12;p.g.rotation.y=role==='pavi'?0.55:-0.55;p.upper.rotation.x=0.3;for(const arm of p.arms)arm.rotation.x=-0.8+Math.sin(t*0.65)*0.12;for(const knee of p.knees)knee.rotation.x=0.8;}}
+    else if(kind==='ducks'){for(const [role,p]of pair){p.arms[role==='pavi'?1:0].rotation.x=-0.65+Math.sin(t*0.8)*0.15;p.elbows[role==='pavi'?1:0].rotation.x=-0.5;p.headPitch=0.12;}}
+    else if(kind==='wave'){gesture(pavi,'wave',0.5+Math.sin(t*0.16)*0.25,t);gesture(siri,'wave',0.5+Math.sin(t*0.13)*0.25,t);}
+    else if(kind==='balloon'){pointCharacterArm(pavi,1,V(202,walkHeight(202,-145)+13,-145),0.8+Math.sin(t*0.3)*0.05);siri.headYaw=0.3;siri.headPitch=-0.15;}
+    else if(kind==='collar'){pavi.g.rotation.y=Math.PI/2;siri.g.rotation.y=-Math.PI/2;siri.upper.rotation.x=0.2;pavi.headPitch=0.08;pavi.g.updateMatrixWorld(true);const collar=pavi.g.localToWorld(V(0,0.69,0.12));pointCharacterArm(siri,0,collar,0.75+Math.sin(t*0.35)*0.12);siri.headPitch=0.1;}
+    w.activeMoment=kind;
   }
 
   updateStars(t) {

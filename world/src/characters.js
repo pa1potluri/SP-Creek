@@ -409,7 +409,7 @@ export function animatePerson(p, phase, amt) {
   p.upper.rotation.set(0, s * 0.07, 0);
   p.headYaw = -s * 0.06;
   p.headPitch = 0;
-  if (p.skirt) p.skirt.rotation.z = Math.sin(phase) * 0.03 * a;
+  if (p.skirt) { if(p.model)p.skirt.rotation.x=0; p.skirt.rotation.z = Math.sin(phase) * 0.03 * a; }
   if (p.hat) p.hat.position.y = p.hatRest.y, p.hat.rotation.x = p.hatRest.rx;
 }
 
@@ -422,7 +422,7 @@ export function seat(p, astride = false, k = 1) {
   if (p.elbows) p.elbows.forEach((e) => e.rotation.set(-0.15 - 0.45 * k, 0, 0));
   p.upper.rotation.set(0, 0, 0);
   p.upper.position.y = 0;
-  if(p.model){if(p.skirt)p.skirt.rotation.set(0,0,0);return;}
+  if(p.model){if(p.skirt)p.skirt.rotation.set(-0.85*k,0,0);return;}
   if (p.skirt) {
     p.skirt.rotation.set(-1.2 * k, 0, 0);
     p.skirt.position.set(0, (HIP - 0.08) * k, 0.12 * k);
@@ -477,7 +477,13 @@ export function gesture(p, kind, k, t) {
 
 // Once per frame (from the world clock, so renders are exact): blinking, and people standing
 // still glance around now and then.
+const poseLayers=new Set();
+export function addCharacterPoseLayer(layer){poseLayers.add(layer);return ()=>poseLayers.delete(layer);}
+export function pointCharacterArm(p,index,target,amount=1){
+  const arm=p.arms[index],elbow=p.elbows[index];p.g.updateMatrixWorld(true);const origin=arm.getWorldPosition(new THREE.Vector3()),current=elbow.getWorldPosition(new THREE.Vector3()).sub(origin).normalize(),desired=target.clone().sub(origin).normalize(),inverse=arm.parent.getWorldQuaternion(new THREE.Quaternion()).invert();current.applyQuaternion(inverse);desired.applyQuaternion(inverse);const q=new THREE.Quaternion().setFromUnitVectors(current,desired).multiply(arm.quaternion);arm.quaternion.slerp(q,amount);elbow.rotation.set(0,0,0);
+}
 export function tickCharacters(t) {
+  for(const layer of poseLayers)layer(t);
   for (const ref of live) {
     const p = ref.deref();
     if (!p) {

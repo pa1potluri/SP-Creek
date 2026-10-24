@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP } from './world.js';
 import { HAMLET } from './hamlet.js';
-import { starCameraFocus } from './life.js';
+import { starCameraFocus, MOMENTS, momentFocus, setMomentCameraReader } from './life.js';
 import { beachWalk, stageCove } from './areas/sunset-cove.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
@@ -159,7 +159,8 @@ function makeShots() {
     {name:'Two small friends on a big beach',duration:35,loop:false,sample(t,out){const p=stageCove('beach',t+15);out.pos.set(-299-t*0.04,55,-5-t*0.08);out.look.set(p.x,p.y,p.z);}},
     {name:'Down the lantern lane',duration:35,loop:false,sample(t,out){const p=stageCove('lane',t),x=p.x+6;out.pos.set(x,Math.max(p.y+3.5,walkHeight(x,p.z)+1.6),p.z);out.look.set(p.x-12,p.y+2,p.z);}},
   ].map(s=>({...s,group:'Sunset Cove',clearance:1.5}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5}];
+  const momentViews=Object.entries(MOMENTS).map(([kind,spec])=>({name:spec.label,moment:kind,group:'Pavi & Siri moments',duration:40,loop:false,clearance:1.5,sample(t,out){const f=momentFocus(kind),drift=Math.sin(t/40*Math.PI)*0.3,x=f.pos.x+spec.offset[0]+drift,z=f.pos.z+spec.offset[2];out.pos.set(x,Math.max(f.pos.y+spec.offset[1],walkHeight(x,z)+1.8),z);out.look.copy(f.pos);out.look.y+=spec.lookY||0.9;}}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');
@@ -167,6 +168,7 @@ const isTyping = (e) => e.target && e.target.closest && e.target.closest('input,
 export class Director {
   constructor(camera, dom) {
     this.camera = camera;
+    setMomentCameraReader(()=>this.mode==='shot'?this.shot?.moment:null);
     this.dom = dom;
     this.shots = makeShots();
     this.speed = 1;

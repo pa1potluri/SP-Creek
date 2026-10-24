@@ -1,19 +1,13 @@
-# Pony farm - WIP
+# Pony farm - complete
 
-## Built
-- New farm at (-180, -80), west of the ranch: red barn, rounded rail paddock and baby-animal pen, hay, vegetable beds and duck pond with an approach barrier.
-- Three rounded unsaddled ponies; two lambs, a calf, two piglets, four chicks and two pond ducks. Pure world-time gentle motion.
-- Supplied Pavi/Siri models feed at the pony rail and pet a lamb. Appended shots 61-63 and five-minute preset.
-- Farm barn, rail, hay bale, vegetable bed and pond registered through existing extraBuildPieces. Existing World builder needs no changes.
-- Registered through Life's allowed animal lifecycle; no main.js changes and camping remains unwired as requested.
-- First three day previews loaded without browser errors. Rounded pony geometry and interaction spacing adjusted after review.
-
-## Left / stopping point
-- Farm smoke: 32 passed. Clearance: 65 passed, 64 shots / 12,864 samples, no failed paths or browser errors; sound remained locked.
-- Final day/night captures saved for farm shots 61-63. Also corrected reserved camping camera 60 in the allowed camera.js to clamp above natural ground while camping is unwired; extra pony-farm-60-day/night.png evidence uses the manual factory harness. Camping startup remains deferred as requested.
-- Full suite next (all eighteen suites, including manual camping-night factory smoke and pony-farm). Record counts, commit result and mark done before task 28.
-- Current branch area/pony-farm from camping WIP faea577. No merge, push or publication.
-
-## Running full-suite checkpoint
-- Session 84491: pony-farm 32, camping-night manual factory 14, train-trip 28, area-shots 7, build-mode 525, clouds-water 227 and family-mode 46 passed (879 so far). Startup reloads and the remaining eleven suites are still pending; this is not a completed full-suite claim.
-- No source changes since this full run started. All eight current-task day/night images are committed.
+- Built at (-180, -80), west of the ranch: red barn, rounded paddock and nursery rails, hay, two vegetable beds and a duck pond with an approach barrier.
+- Three rounded unsaddled ponies; two lambs, a calf, two piglets, four chicks and two pond ducks. World-time motion stays in the pens/pond. Supplied Pavi/Siri models feed a pony and pet a lamb.
+- Appended shots 61-63 and five-minute "A day at the pony farm" preset. Barn, rail, hay, vegetable bed and pond join Build mode through extraBuildPieces; previews add no physics and placed pieces round-trip correctly.
+- Registered through Life's animal lifecycle in the allowed files. No main.js changes. Camping remains startup-unwired by user choice.
+- Corrected reserved camping view 60 in camera.js to clamp above natural ground when its area is unwired; no camping registration was added.
+- Full browser suite: **1440 passed + 2 startup reload checks**, browser errors `[]`; audio stayed locked.
+- Counts: pony-farm 32; camping-night explicit factory smoke 14; train-trip 28; area-shots 7; build-mode 525; clouds-water 227; family-mode 46 (+2 startup); hamlet-shots 47; hamlet 37; more-buildings 155; names-tour-shots 51; pavi-siri 50; shot-clearance 65; sunset-cove 40; playground 35; lantern-evening 26; pavi-siri-moments 35; balloon-ride 20.
+- Clearance: 64 shots / 12,864 samples, no failed paths. Animal bounds, deterministic seeks, dry stars, pond barrier and Build-piece round-trip checks pass.
+- Animated film previews: `world/tests/pony-farm-61-day.png` / `-night.png` through shot 63 (six farm images), plus `pony-farm-60-day.png` / `-night.png` for the stargazing safety correction (manual factory harness). Day/night farm interactions inspected.
+- No unfinished farm work. Camping's 14-check factory test does not make task 26 complete; its normal wiring remains deferred. Claude reviews before acceptance.
+- No merge, push or publication.

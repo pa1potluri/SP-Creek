@@ -68,3 +68,10 @@ west and flows into the bay at its south end.
 - **Paths:** the meadow path continues west to the village; the river mouth at (−360, ~150).
 - **Shots:** Bay overview from above (golden hour), Pavi & Siri on the waterline at sunset, Lantern lane to the sea.
 - **Art:** new texture sets from ChatGPT (white plaster wall, terracotta roof, cobblestones, sand, palm leaves), oil and clean.
+
+## Little train branch line (task 25)
+
+- Branches south of SP Creek station at (70, 60), curves through (40, 105) and (-20, 112), staying south of Willow Creek houses and clear of the pond.
+- Willow Creek halt: locomotive stop (-110, 112), sheltered coach platform slightly north/east of it.
+- Continues through (-170, 105), (-245, 92), ending at the Seaside halt above Cove (-284, 66), east of the cottages.
+- Existing north-south train service remains. The four-minute trip uses the branch with two gentle station pauses.

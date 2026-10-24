@@ -5,7 +5,7 @@ import { familySign } from './family.js';
 // by dt, so it looks the same in the live view and in a frame-by-frame MP4 render.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { terrainHeight, roadX, walkHeight, LEFT, RIGHT, RAIL_X, RANCH, CAMP } from './world.js';
+import { terrainHeight, roadX, walkHeight, LEFT, RIGHT, RAIL_X, RANCH, CAMP, sampleTrainTrack, TRAIN_HALTS, TRAIN_SPUR_LENGTH } from './world.js';
 import * as T from './textures.js';
 import { MOMENTS, buildMomentProps } from './areas/pavi-siri-moments.js';
 import { episodeWalk } from './areas/sunset-cove.js';
@@ -169,24 +169,37 @@ function makeTender() {
 }
 function makeCoachCar(colour) {
   const g = new THREE.Group(), wheels = [];
-  part(new THREE.BoxGeometry(2.7, 2.4, 9), mat(colour), 0, 2.2, 0, g);
-  part(new THREE.BoxGeometry(2.72, 0.6, 7.8), mat([35, 30, 20]), 0, 2.5, 0, g);
+  const body=mat(colour),trim=mat([35,30,45]);
+  part(new THREE.BoxGeometry(2.7,0.15,9),body,0,1.1,0,g);
+  for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,1.1,3.7),body,x,1.7,z,g);part(new THREE.BoxGeometry(0.12,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.12,1.1,0.12),trim,x,2.7,z,g);}
+  for(const z of [-4.4,4.4])part(new THREE.BoxGeometry(2.7,2.2,0.12),body,0,2.25,z,g);
+  for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(2,0.3,0.8),mat([35,40,50]),0,1.5,z,g);
+  const boardingSteps=new THREE.Group();g.add(boardingSteps);for(let i=0;i<5;i++)part(new THREE.BoxGeometry(0.6,0.14,1.5),trim,-3.9+i*0.55,-0.17+i*0.3,0,boardingSteps);
+  const doors=[-1.3,1.3].map(x=>part(new THREE.BoxGeometry(0.12,1.1,2.6),body,x,1.7,0,g));
   part(new THREE.BoxGeometry(2.9, 0.18, 9.4), mat([0, 0, 12]), 0, 3.5, 0, g);
   part(new THREE.BoxGeometry(2.0, 0.12, 9.6), mat([42, 60, 50]), 0, 1.05, 0, g);
   for (const z of [-4.1, -2.7, 2.7, 4.1]) wheelSet(g, wheels, z, 0.45, mat([0, 0, 15]));
-  return { g, wheels };
+  return { g, wheels, boardingSteps, doors };
 }
 
 // Comes in from the south (then from the north), slows into the station, waits, steams away,
 // stays out of sight for a while and returns the other way.
+let trainTripReader=()=>null;
+export function setTrainTripReader(reader){trainTripReader=reader;}
+export function sampleTrainTrip(time){
+ const t=THREE.MathUtils.clamp(time,0,240),ease=u=>{u=THREE.MathUtils.clamp(u,0,1);return u*u*(3-2*u);},halt=TRAIN_HALTS[0].distance;
+ const distance=t<=25?0:t<105?halt*ease((t-25)/80):t<=125?halt:t<195?halt+(TRAIN_SPUR_LENGTH-halt)*ease((t-125)/70):TRAIN_SPUR_LENGTH;
+ return {distance,...sampleTrainTrack(distance),stopped:t<=25||(t>=105&&t<=125)||t>=195};
+}
 class Train {
   constructor(root, world) {
-    this.world = world;
+    this.world = world;world.buildTrainSpur?.();
     this.cars = [
       { ...makeLoco(), off: 0 }, { ...makeTender(), off: 5.4 },
       { ...makeCoachCar([150, 30, 28]), off: 11.4 }, { ...makeCoachCar([0, 45, 32]), off: 21.4 }, { ...makeCoachCar([150, 30, 28]), off: 31.4 },
     ];
     for (const c of this.cars) root.add(c.g);
+    this.friends=['pavi','siri'].map(role=>{const p=makeCharacter(CAST[role]);root.add(p.g);p.g.visible=false;return p;});
     this.steam = { type: 'smoke', pos: V(), rate: 0, acc: 0, life: 6, s0: 1, s1: 6, alpha: 0.35, rise: 2 };
     world.emitters.push(this.steam);
     this.dir = 1;
@@ -207,7 +220,15 @@ class Train {
     this.v = 11;
     this.s = this.stopZ - this.dir * 190;
   }
+  updateTrip(time){
+    const f=sampleTrainTrip(time),p0=sampleTrainTrip(Math.max(0,time-0.05)),p1=sampleTrainTrip(Math.min(240,time+0.05));this.v=Math.abs(p1.distance-p0.distance)/0.1;this.s=f.pos.z;this.stopped=f.stopped;this.state=f.stopped?'stopped':'run';
+    for(const c of this.cars){const p=sampleTrainTrack(f.distance-c.off);c.g.visible=true;if(c.boardingSteps){c.boardingSteps.visible=c===this.cars[2]&&time<25;c.doors[0].visible=!c.boardingSteps.visible;}c.g.position.copy(p.pos);c.g.rotation.y=p.yaw;for(const {w,r}of c.wheels)w.rotation.x=-f.distance/r;}
+    const coach=this.cars[2].g;coach.updateMatrixWorld(true);this.friends.forEach((p,i)=>{p.g.visible=true;const u=THREE.MathUtils.smoothstep(time,3+i*3,18+i*3),local=V(-4.2+3.35*u,-0.16+1.26*u,i?0.55:-0.55);if(u===1){local.x=-0.85+1.7*THREE.MathUtils.smoothstep(time,21,27);local.y=1.1;}const base=coach.localToWorld(local);p.g.position.copy(base);p.g.rotation.y=coach.rotation.y+(Math.PI/2);animatePerson(p,time*4,u<1?0.45:0);if(u===1)gesture(p,'wave',0.3+Math.sin(time*0.3+i)*0.15,time*0.7);});
+    this.cars[0].g.updateMatrixWorld(true);this.steam.pos.copy(this.cars[0].g.localToWorld(V(0,4.4,2.6)));this.steam.rate=f.stopped?0.8:3;
+    this.world.trainTripActive=true;for(const p of Object.values(this.world.sunsetCove?.siblings||{}))p.g.visible=false;
+  }
   update(dt) {
+    const trip=trainTripReader();if(trip){this.updateTrip(trip.t);return;}this.world.trainTripActive=false;for(const p of this.friends)p.g.visible=false;
     const maxV = 11, acc = 0.9;
     if (this.state === 'run') {
       const d = (this.stopZ - this.s) * this.dir;
@@ -236,6 +257,7 @@ class Train {
     const visible = this.state !== 'away';
     for (const c of this.cars) {
       c.g.visible = visible;
+      if(c.boardingSteps){c.boardingSteps.visible=this.state==='stopped';c.doors[0].visible=!c.boardingSteps.visible;}
       c.g.position.set(RAIL_X, 0.51, this.s - this.dir * c.off);
       c.g.rotation.y = this.dir > 0 ? 0 : Math.PI;
       for (const { w, r } of c.wheels) w.rotation.x += (this.v * dt) / r;
@@ -245,6 +267,8 @@ class Train {
   }
   remove(root) {
     for (const c of this.cars) root.remove(c.g);
+    for(const p of this.friends)root.remove(p.g);
+    this.world.trainTripActive=false;
     this.world.emitters = this.world.emitters.filter((e) => e !== this.steam);
   }
 }
@@ -604,6 +628,7 @@ export class Life {
     starWorld=world;
     addCharacterPoseLayer(t=>this.updateMoments(t));
     addCharacterPoseLayer(t=>this.updateBalloonRiders(t));
+    addCharacterPoseLayer(()=>{if(this.world.trainTripActive){this.trainHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.trainHidden.has(p))this.trainHidden.set(p,p.g.visible);p.g.visible=false;}}else if(this.trainHidden){for(const [p,visible]of this.trainHidden)p.g.visible=visible;this.trainHidden=null;}});
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };

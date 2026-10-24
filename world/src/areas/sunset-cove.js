@@ -3,10 +3,13 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { terrainHeight, walkHeight, coastX, WATER_Y } from '../world.js';
 import { makeCharacter, CAST, randomTownsfolk, animatePerson } from '../characters.js';
 
-let coveWorld=null;
-export function beachWalk(t= coveWorld?.waterUniforms.uWaterTime.value||0){const phase=((t%160)+160)%160,u=phase<80?phase/80:2-phase/80,z=-25+u*90;return {x:coastX(z)+8,z,y:coveWorld?coveWorld.surfaceY(coastX(z)+8,z):terrainHeight(coastX(z)+8,z),yaw:phase<80?0:Math.PI};}
+let coveWorld=null,groundHeight=terrainHeight;
+export function beachWalk(t= coveWorld?.waterUniforms.uWaterTime.value||0){const phase=((t%160)+160)%160,u=phase<80?phase/80:2-phase/80,z=-25+u*90,x=coastX(z)+8+18*Math.exp(-Math.pow((z-30)/7,4));return {x,z,y:groundHeight(x,z),yaw:phase<80?0:Math.PI};}
 export function buildSunsetCove(world,life){
-  coveWorld=world;const root=new THREE.Group();root.name='Sunset Cove';world.root.add(root);
+  coveWorld=world;
+  // Interpolate the existing ground triangles directly; per-vertex raycasts stall startup.
+  groundHeight=(x,z)=>{const g=world.ground.geometry,n=g.parameters.widthSegments,m=g.parameters.heightSegments,a=g.attributes.position,px=(x+800)/1600*n,pz=(z+800)/1600*m,i=Math.max(0,Math.min(n-1,Math.floor(px))),j=Math.max(0,Math.min(m-1,Math.floor(pz))),u=px-i,v=pz-j,k=j*(n+1)+i,h00=a.getY(k),h10=a.getY(k+1),h01=a.getY(k+n+1),h11=a.getY(k+n+2);return u+v<=1?h00+(h10-h00)*u+(h01-h00)*v:h11+(h01-h11)*(1-u)+(h10-h11)*(1-v);};
+  const root=new THREE.Group();root.name='Sunset Cove';world.root.add(root);
   const mat=color=>new THREE.MeshLambertMaterial({color}),white=world.paintedMaterial('stone',2,2,{color:'#fff3d7'})||mat('#fff3d7'),roof=world.paintedMaterial('roof',3,3,{color:'#c47a51'})||mat('#c47a51');
   const sand=world.paintedMaterial('stone',6,6,{color:'#e7c585'})||mat('#e7c585'),wood=world.mat.wood,green=mat('#729269'),pink=mat('#d988b0'),cream=mat('#f2dcad'),blue=mat('#71b7c6');
   // Wash the existing painted textures into plaster, clay and fine golden sand placeholders.
@@ -39,7 +42,7 @@ export function buildSunsetCove(world,life){
   instances(new THREE.BoxGeometry(1,1,1),world.mat.darkWood,doors);instances(new THREE.BoxGeometry(1,1,1),windowMat,windows);
   instances(new THREE.SphereGeometry(1,8,6),green,vines);instances(new THREE.SphereGeometry(1,8,6),pink,flowers);instances(new THREE.CylinderGeometry(0.8,1,1,10),roof,pots);instances(new THREE.SphereGeometry(1,10,8),world.mat.lantern,lanterns);
   // A warm sand ribbon covers the ground shader so winter leaves the beach unfrozen.
-  const pos=[],uv=[],idx=[];for(let j=0;j<=150;j++){const z=-110+j*2,edge=coastX(z);for(let i=0;i<=8;i++){const x=edge-0.5+i*3.2;pos.push(x,world.surfaceY(x,z)+0.045,z);uv.push(i/3,j/10);}}
+  const pos=[],uv=[],idx=[];for(let j=0;j<=150;j++){const z=-110+j*2,edge=coastX(z);for(let i=0;i<=8;i++){const x=edge-0.5+i*3.2;pos.push(x,groundHeight(x,z)+0.045,z);uv.push(i/3,j/10);}}
   for(let j=0;j<150;j++)for(let i=0;i<8;i++){const a=j*9+i,b=a+9;idx.push(a,b,a+1,b,b+1,a+1);}const sandGeo=new THREE.BufferGeometry();sandGeo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));sandGeo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));sandGeo.setIndex(idx);sandGeo.computeVertexNormals();const beach=add(sandGeo,sand,0,0,0);beach.name='Warm winter-safe beach sand';
   for(const [points,width]of [[[[ -269,0],[-285,10],[-296,20],[-350,20]],5],[[[-308,-55],[-308,70]],3],[[[-327,-55],[-327,70]],3]]){const road=world._ribbon(points,width,world._pathMaterial(),{lift:0.08,step:1});root.attach(road);}
   const steps=[];for(let i=0;i<21;i++){const x=-300-i*2.4;steps.push([x,terrainHeight(x,20)+0.04,20,2.45,0.12,5]);}instances(new THREE.BoxGeometry(1,1,1),white,steps);

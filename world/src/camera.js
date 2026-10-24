@@ -1,7 +1,7 @@
 // Camera director: slow cinematic shots, smooth flights between them (no cuts, no dissolves),
 // a free-fly camera, and your own key-framed camera moves.
 import * as THREE from 'three';
-import { terrainHeight, walkHeight, riverZ, roadX, coastX as coastXForCamera, RAIL_X, RANCH, CAMP } from './world.js';
+import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP } from './world.js';
 import { HAMLET } from './hamlet.js';
 import { starCameraFocus } from './life.js';
 import { beachWalk } from './areas/sunset-cove.js';
@@ -153,7 +153,7 @@ function makeShots() {
   ].map(s=>({...s,group:'Pavi & Siri',clearance:1.5}));
   const coveViews=[
     pathShot('Sunset Cove from above',[[G(-289,62,118),V(-366,3,25)],[G(-291,65,92),V(-368,3,17)]],100),
-    {name:'Beach walk at sunset',duration:120,loop:true,sample(t,out){const p=beachWalk(),z=p.z+Math.cos(p.yaw)*5,x=coastXForCamera(z)+8;out.pos.set(x,walkHeight(x,z)+1.6,z);out.look.set(p.x,p.y+1,p.z);}},
+    {name:'Beach walk at sunset',duration:120,loop:true,sample(t,out){const p=beachWalk(),z=p.z+Math.cos(p.yaw)*5,x=p.x;out.pos.set(x,walkHeight(x,z)+1.6,z);out.look.set(p.x,p.y+1,p.z);}},
     pathShot('Lantern lane to the sea',[[G(-295,3.2,20),G(-346,1.5,20)],[G(-338,2.8,20),V(-395,0,25)]],100),
   ].map(s=>({...s,group:'Sunset Cove',clearance:1.5}));
   return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews];

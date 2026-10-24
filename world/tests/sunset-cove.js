@@ -13,7 +13,7 @@ export async function runSunsetCoveTests(){
   const z=-45,edge=coastX(z);a.game.pos.set(edge+5,terrainHeight(edge+5,z),z);for(let i=0;i<200;i++)a.game._move(-0.1,0,0.35);check(a.game.pos.x>edge+0.25,'Waterline wall stops walking into sea');
   a.game.pos.set(-351,1.2,30);for(let i=0;i<180;i++)a.game._move(-0.2,0,0.35);check(a.game.pos.x<-380&&Math.abs(walkHeight(-380,30)-1.2)<1e-8,'Pier deck is safely walkable over water');
   for(let i=0;i<120;i++)a.game._move(-0.2,0,0.35);check(a.game.pos.x>-396,'Pier end rail prevents walking off');for(let i=0;i<60;i++)a.game._move(0,0.2,0.35);check(a.game.pos.z<32.5,'Pier side rail prevents walking off');
-  let dry=true;for(let t=0;t<=320;t+=2){const p=beachWalk(t);if(w.inPond(p.x,p.z,0.6))dry=false;}check(dry,'Sibling beach walk stays dry');
+  let dry=true,clear=true;for(let t=0;t<=320;t+=2){const p=beachWalk(t);if(w.inPond(p.x,p.z,0.6))dry=false;if(p.z>27&&p.z<33&&p.x<-349)clear=false;}check(dry,'Sibling beach walk stays dry');check(clear,'Sibling path goes around the landward pier entrance and rails');
   const first=beachWalk(25),repeated=beachWalk(185);check(Math.abs(first.x-repeated.x)<1e-8&&first.z===repeated.z,'Beach routine repeats from world time');
   c.update(25,a.camera,a.atmos.cur);const boat=c.boats[0].position.y;c.update(60,a.camera,a.atmos.cur);c.update(25,a.camera,a.atmos.cur);check(c.boats[0].position.y===boat,'Boat rocking reproduces after seeking');
   a.setSeason('winter');a.step(0);check(!a.seasons.hooked.has(c.sand),'Winter leaves sand outside the snow shader');

@@ -6,7 +6,7 @@ import { familySign } from './family.js';
 // by dt, so it looks the same in the live view and in a frame-by-frame MP4 render.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { terrainHeight, roadX, walkHeight, LEFT, RIGHT, RAIL_X, RANCH, CAMP, sampleTrainTrack, TRAIN_HALTS, TRAIN_SPUR_LENGTH } from './world.js';
+import { terrainHeight, roadX, walkHeight, LEFT, RIGHT, RAIL_X, RANCH, CAMP, sampleTrainTrack, TRAIN_HALTS, TRAIN_SPUR_LENGTH, batchRigidParts } from './world.js';
 import * as T from './textures.js';
 import { MOMENTS, buildMomentProps } from './areas/pavi-siri-moments.js';
 import { episodeWalk } from './areas/sunset-cove.js';
@@ -37,29 +37,6 @@ function joint(parent, x, y, z) {
   g.position.set(x, y, z);
   parent.add(g);
   return g;
-}
-
-// Batch only rigid siblings: animated joints and their exact transforms stay separate.
-function batchAnimalParts(root) {
-  root.traverse(parent => {
-    const batches = new Map();
-    for (const mesh of parent.children) {
-      if (!mesh.isMesh || mesh.isSkinnedMesh || Array.isArray(mesh.material)) continue;
-      const list = batches.get(mesh.material) || [];
-      list.push(mesh); batches.set(mesh.material, list);
-    }
-    for (const [material, meshes] of batches) {
-      if (meshes.length < 2) continue;
-      const pieces = meshes.map(mesh => { mesh.updateMatrix(); return mesh.geometry.clone().applyMatrix4(mesh.matrix); });
-      const geometry = mergeGeometries(pieces);
-      pieces.forEach(piece => piece.dispose());
-      if (!geometry) continue;
-      const merged = new THREE.Mesh(geometry, material);
-      merged.castShadow = merged.receiveShadow = true;
-      parent.add(merged);
-      meshes.forEach(mesh => { parent.remove(mesh); mesh.geometry.dispose(); });
-    }
-  });
 }
 
 const COAT = [[20, 52, 46], [25, 40, 38], [30, 10, 82], [35, 45, 58], [22, 38, 55]];
@@ -106,7 +83,7 @@ function makeHorse(saddled, rounded=false) {
     part(new THREE.BoxGeometry(0.62, 0.04, 0.7), mat(pick([[0, 50, 35], [210, 40, 35], [40, 50, 45]])), 0, 1.7, 0.05, body);
     part(new THREE.BoxGeometry(0.5, 0.12, 0.55), mat([25, 45, 25]), 0, 1.76, 0.05, body);
   }
-  batchAnimalParts(g);
+  batchRigidParts(g);
   return { g, legs, neck, mane, tail, body };
 }
 function makeFarmBaby(kind){
@@ -120,7 +97,7 @@ function makeFarmBaby(kind){
  if(kind==='lamb')for(let i=0;i<9;i++)ball(0.16,cream,Math.sin(i*2.4)*0.25,0.68+Math.cos(i)*0.06,(i%3-1)*0.24);
  if(kind==='calf')for(const x of [-0.29,0.29])for(const z of [-0.2,0.2])ball(0.15,cream,x,0.55,z,[0.2,1,1.2]);
  if(kind==='piglet')add(new THREE.TorusGeometry(0.07,0.022,6,16),coat,0,0.55,-0.48);
- batchAnimalParts(g);
+ batchRigidParts(g);
  return {g,legs,head};
 }
 function animateFarmBaby(p,t,amt){p.legs.forEach((leg,i)=>leg.rotation.x=Math.sin(t+(i%2)*Math.PI)*amt);p.head.rotation.y=Math.sin(t*0.18)*0.1;}

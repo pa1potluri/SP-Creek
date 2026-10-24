@@ -10,3 +10,9 @@
 - main.js edits are only two conditions in step(dt). No camping integration or audio-listener change.
 - After benchmark running; first sample 59.95 fps, meadow update cost reduced from about 0.28ms/frame to 0.04ms/frame. Farm mesh count 238 to 161. Pending: complete after report, previews and full suite.
 - Never merge to main, push or publish. Stop after 30; 31 is not before Oct 29.
+
+## Final batching checkpoint
+- Shared rigid-part helper now lives in world.js and also batches static benches. Farm fixed rails are instanced together, retaining recorded collider transforms; redundant whole-farm matrix traversal removed before Siri arm targeting.
+- Final matched benchmark running; after report will replace the intermediate sample. Pending visual/cache/return checks, final previews and full suite.
+
+- Final live display sample saved as performance-after.json. Frame pacing varied (roughly 55-60 fps rather than a fixed 60Hz sample), so a matched completed-render-cost diagnostic is running before interpreting the before/after FPS difference. Its first attempt only hit a harness readiness timeout (RAF was disabled but readiness used RAF polling); corrected to timed polling. No application failure observed.

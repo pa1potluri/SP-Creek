@@ -7,6 +7,29 @@ import { familySign } from './family.js';
 import { cloudShader, waterMaterial } from './environment.js';
 import { dressHamletHouse, dressPondShore } from './areas/pond-details.js';
 
+// Batch only rigid siblings: animated joints and their exact transforms stay separate.
+export function batchRigidParts(root) {
+  root.traverse(parent => {
+    const batches = new Map();
+    for (const mesh of parent.children) {
+      if (!mesh.isMesh || mesh.isSkinnedMesh || Array.isArray(mesh.material)) continue;
+      const list = batches.get(mesh.material) || [];
+      list.push(mesh); batches.set(mesh.material, list);
+    }
+    for (const [material, meshes] of batches) {
+      if (meshes.length < 2) continue;
+      const pieces = meshes.map(mesh => { mesh.updateMatrix(); return mesh.geometry.clone().applyMatrix4(mesh.matrix); });
+      const geometry = mergeGeometries(pieces);
+      pieces.forEach(piece => piece.dispose());
+      if (!geometry) continue;
+      const merged = new THREE.Mesh(geometry, material);
+      merged.castShadow = merged.receiveShadow = true;
+      parent.add(merged);
+      meshes.forEach(mesh => { parent.remove(mesh); mesh.geometry.dispose(); });
+    }
+  });
+}
+
 export const smoothstep = (a, b, x) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
   return t * t * (3 - 2 * t);
@@ -1623,6 +1646,7 @@ export class World {
         }
         break;
     }
+    if (type === 'bench') batchRigidParts(g);
     return g;
   }
 

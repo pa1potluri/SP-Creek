@@ -4,11 +4,14 @@ import { terrainHeight, walkHeight, coastX, WATER_Y } from '../world.js';
 import { makeCharacter, CAST, randomTownsfolk, animatePerson } from '../characters.js';
 
 let coveWorld=null;
-export function beachWalk(t= coveWorld?.waterUniforms.uWaterTime.value||0){const phase=((t%160)+160)%160,u=phase<80?phase/80:2-phase/80,z=-25+u*90;return {x:coastX(z)+8,z,y:terrainHeight(coastX(z)+8,z),yaw:phase<80?0:Math.PI};}
+export function beachWalk(t= coveWorld?.waterUniforms.uWaterTime.value||0){const phase=((t%160)+160)%160,u=phase<80?phase/80:2-phase/80,z=-25+u*90;return {x:coastX(z)+8,z,y:coveWorld?coveWorld.surfaceY(coastX(z)+8,z):terrainHeight(coastX(z)+8,z),yaw:phase<80?0:Math.PI};}
 export function buildSunsetCove(world,life){
   coveWorld=world;const root=new THREE.Group();root.name='Sunset Cove';world.root.add(root);
   const mat=color=>new THREE.MeshLambertMaterial({color}),white=world.paintedMaterial('stone',2,2,{color:'#fff3d7'})||mat('#fff3d7'),roof=world.paintedMaterial('roof',3,3,{color:'#c47a51'})||mat('#c47a51');
   const sand=world.paintedMaterial('stone',6,6,{color:'#e7c585'})||mat('#e7c585'),wood=world.mat.wood,green=mat('#729269'),pink=mat('#d988b0'),cream=mat('#f2dcad'),blue=mat('#71b7c6');
+  // Wash the existing painted textures into plaster, clay and fine golden sand placeholders.
+  for(const [material,color,detail]of [[white,'vec3(0.92,0.86,0.72)',0.14],[roof,'vec3(0.52,0.21,0.09)',0.35],[sand,'vec3(0.78,0.62,0.37)',0.08]]){const before=material.onBeforeCompile;material.onBeforeCompile=(shader,r)=>{before.call(material,shader,r);shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>\ndiffuseColor.rgb=mix(${color},diffuseColor.rgb,${detail.toFixed(2)});`);};material.customProgramCacheKey=()=> 'cove-wash-'+detail;}
+  world.registerAreaPad({x:-325,z:25,hx:43,hz:90,blend:1,clearOnly:true});
   const windowMat=new THREE.MeshLambertMaterial({color:'#f1c06f',emissive:'#ffd39b',emissiveIntensity:0.1});
   const matrix=new THREE.Matrix4(),q=new THREE.Quaternion(),v=new THREE.Vector3(),scale=new THREE.Vector3(),batches=[];
   function add(geo,m,x,y,z,sx=1,sy=1,sz=1,parent=root){const mesh=new THREE.Mesh(geo,m);mesh.position.set(x,y,z);mesh.scale.set(sx,sy,sz);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -36,7 +39,7 @@ export function buildSunsetCove(world,life){
   instances(new THREE.BoxGeometry(1,1,1),world.mat.darkWood,doors);instances(new THREE.BoxGeometry(1,1,1),windowMat,windows);
   instances(new THREE.SphereGeometry(1,8,6),green,vines);instances(new THREE.SphereGeometry(1,8,6),pink,flowers);instances(new THREE.CylinderGeometry(0.8,1,1,10),roof,pots);instances(new THREE.SphereGeometry(1,10,8),world.mat.lantern,lanterns);
   // A warm sand ribbon covers the ground shader so winter leaves the beach unfrozen.
-  const pos=[],uv=[],idx=[];for(let j=0;j<=150;j++){const z=-110+j*2,edge=coastX(z);for(let i=0;i<=8;i++){const x=edge-0.5+i*3.2;pos.push(x,terrainHeight(x,z)+0.045,z);uv.push(i/3,j/10);}}
+  const pos=[],uv=[],idx=[];for(let j=0;j<=150;j++){const z=-110+j*2,edge=coastX(z);for(let i=0;i<=8;i++){const x=edge-0.5+i*3.2;pos.push(x,world.surfaceY(x,z)+0.045,z);uv.push(i/3,j/10);}}
   for(let j=0;j<150;j++)for(let i=0;i<8;i++){const a=j*9+i,b=a+9;idx.push(a,b,a+1,b,b+1,a+1);}const sandGeo=new THREE.BufferGeometry();sandGeo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));sandGeo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));sandGeo.setIndex(idx);sandGeo.computeVertexNormals();const beach=add(sandGeo,sand,0,0,0);beach.name='Warm winter-safe beach sand';
   for(const [points,width]of [[[[ -269,0],[-285,10],[-296,20],[-350,20]],5],[[[-308,-55],[-308,70]],3],[[[-327,-55],[-327,70]],3]]){const road=world._ribbon(points,width,world._pathMaterial(),{lift:0.08,step:1});root.attach(road);}
   const steps=[];for(let i=0;i<21;i++){const x=-300-i*2.4;steps.push([x,terrainHeight(x,20)+0.04,20,2.45,0.12,5]);}instances(new THREE.BoxGeometry(1,1,1),white,steps);
@@ -55,10 +58,10 @@ export function buildSunsetCove(world,life){
   const actors=new THREE.Group();actors.name='Cove strolls';root.add(actors);const siblings={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};for(const p of Object.values(siblings))actors.add(p.g);
   const walkers=Array.from({length:4},(_,i)=>{const p=makeCharacter(randomTownsfolk(i%2?'townswoman':'shopkeeper'));actors.add(p.g);return p;});
   const area={root,sea:sea.sea,water:sea.area,beach,sand,roof,cottages,palms,boats,actors,siblings,walkers,update(t,camera,cur){
-    const focus=camera.position.x<-280;actors.visible=focus;for(const p of Object.values(life.stars))p.g.visible=!focus;
+    const focus=camera.position.x<-280;actors.visible=focus;
     windowMat.emissiveIntensity=0.1+world.lanternLevel*1.4;beamRoot.visible=cur.stars>0.15;beamRoot.rotation.y=t*0.025;
     boats.forEach((g,i)=>{g.position.y=-0.6+Math.sin(t*0.7+i)*0.06;g.rotation.z=Math.sin(t*0.4+i)*0.035;});
-    for(const [role,p]of Object.entries(siblings)){const point=beachWalk(t+(role==='pavi'?4:0));p.g.position.set(point.x+(role==='pavi'?-0.4:0.4),point.y+0.02,point.z);p.g.rotation.y=point.yaw;animatePerson(p,t*(role==='pavi'?7:4.5),role==='pavi'?0.9:0.5);if(role==='siri'){p.arms[0].rotation.set(-0.3,0,0.15);p.arms[1].rotation.set(-0.3,0,-0.15);p.elbows[0].rotation.set(-0.8,0,0.8);p.elbows[1].rotation.set(-0.8,0,-0.8);}}
+    for(const [role,p]of Object.entries(siblings)){const point=beachWalk(t+(role==='pavi'?1.2:0));p.g.position.set(point.x+(role==='pavi'?-0.4:0.4),point.y+0.02,point.z);p.g.rotation.y=point.yaw;animatePerson(p,t*(role==='pavi'?7:4.5),role==='pavi'?0.9:0.5);if(role==='siri'){p.arms[0].rotation.set(-0.3,0,0.15);p.arms[1].rotation.set(-0.3,0,-0.15);p.elbows[0].rotation.set(-0.8,0,0.8);p.elbows[1].rotation.set(-0.8,0,-0.8);}}
     walkers.forEach((p,i)=>{const x=-323+Math.sin(t*0.017+i*1.7)*24,z=20+(i%2?1.4:-1.4);p.g.position.set(x,terrainHeight(x,z),z);p.g.rotation.y=Math.cos(t*0.017+i*1.7)>0?Math.PI/2:-Math.PI/2;animatePerson(p,t*3.5+i,0.6);});
   }};world.sunsetCove=area;return area;
 }

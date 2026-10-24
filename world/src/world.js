@@ -69,6 +69,7 @@ function applyPond(h, x, z) {
 }
 function applyUserPads(h, x, z) {
   for (const p of userPads) {
+    if(p.clearOnly)continue;
     if (p.basin) {
       if (Math.abs(x-p.x)>p.rx*1.8 || Math.abs(z-p.z)>p.rz*1.8) continue;
       const r = pondRadius(x,z,p);
@@ -943,9 +944,11 @@ export class World {
     for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const a=j*(cols+1)+i,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}
     const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
     const mat=this._waterMaterial(0),before=mat.onBeforeCompile;
+    mat.userData.waterUniforms.uWaterDetail={value:0.22};
     mat.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);shader.fragmentShader=shader.fragmentShader
       .replace('float shore = uWaterKind < 0.5 ? abs(vWaterUV.y * 2.0 - 1.0) * 1.09 : length(vWaterUV * 2.0 - 1.0);','float shore = clamp(1.0-(1.0-vWaterUV.y)*1100.0/14.0+sin(uWaterTime*0.22+wp.y*0.025)*0.025,0.0,1.0);')
       .replace('float banks = smoothstep(0.40, 0.96, shore);','float banks = 0.0;')
+      .replace('glint * 0.22','glint * 0.07').replace('broken) * 0.28;','broken) * 0.45;')
       .replace('outgoingLight = mix(outgoingLight, reflected, 0.90 + fresnel * 0.07);','vec3 seaDeep=uWaterSky*0.16+uWaterHorizon*0.04;reflected=mix(seaDeep,reflected,smoothstep(0.96,1.0,vWaterUV.y));outgoingLight = mix(outgoingLight, reflected, 0.90 + fresnel * 0.07);');};
     mat.customProgramCacheKey=()=> 'cove-sea-v1';const sea=mesh(geo,mat,false,true);sea.name='Sunset Cove sea';sea.renderOrder=2;this.root.add(sea);return {area,sea};
   }

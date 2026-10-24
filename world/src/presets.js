@@ -113,7 +113,7 @@ export const VIDEO_PRESETS = {
   magicCrystalHill:{label:'Magic crystal hill',about:'A bright crystal room and a softly glowing rainbow balloon above the valley.',style: 'film',rain:0,wind:0.2,ambience:0.55,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:28,seconds:90,mood:'golden',move:'cut'},{shot:29,seconds:110,mood:'villageDusk',move:'fly'}]},
   // 2:30 YouTube tour: every area once, 9–15 s each at the shots' own calm pace (natural), joined by cuts
   grandTour: {
-    label: 'Grand tour of Dusty Hollow (2:30)',
+    label: 'Grand tour of SP Creek (2:30)',
     about: 'Every corner of the valley in two and a half minutes: the town, the café, the mill, Willow Creek, Old Hollow, the forest, the meadow and the crystal hill.',
     style: 'film', rain: 0, wind: 0.25, ambience: 0.8,
     life: { people: 14, riders: 2 },

@@ -564,7 +564,7 @@ class RoadTraveller {
 // ---------- the town's life ----------
 const BLADES = {
   GUNSMITH: 'GUNS', BARBER: 'SHAVE & BATH', DOCTOR: 'DOCTOR', HOTEL: 'ROOMS', SHERIFF: 'JAIL',
-  'DUSTY HOLLOW MERCANTILE': 'GOODS', 'THE GOLDEN SPUR SALOON': 'SALOON', 'POST OFFICE': 'MAIL',
+  'SP CREEK MERCANTILE': 'GOODS', 'THE GOLDEN SPUR SALOON': 'SALOON', 'POST OFFICE': 'MAIL',
 };
 
 export class Life {

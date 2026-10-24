@@ -122,12 +122,12 @@ const toBlob = () => new Promise((res) => result.canvas.toBlob(res, 'image/png')
 $('#downloadBtn').onclick = async () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(await toBlob());
-  a.download = 'dusty-hollow-backdrop.png';
+  a.download = 'sp-creek-backdrop.png';
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 10000);
 };
 $('#useBtn').onclick = async () => {
   $('#status').textContent = 'Saving…';
   if (await putFile('backdrop', await toBlob())) location.href = 'index.html';
-  else $('#status').textContent = 'Could not save in this browser – use Download PNG, then Load backdrop in Dusty Hollow.';
+  else $('#status').textContent = 'Could not save in this browser – use Download PNG, then Load backdrop in SP Creek.';
 };

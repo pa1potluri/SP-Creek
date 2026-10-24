@@ -1,5 +1,5 @@
 // Tiny IndexedDB file store, so a stitched backdrop survives reloads and moves between pages.
-const DB = 'dusty-hollow', STORE = 'files';
+const DB = 'dusty-hollow', STORE = 'files'; // old id kept so stored files survive the SP Creek rename
 
 function open() {
   return new Promise((resolve, reject) => {

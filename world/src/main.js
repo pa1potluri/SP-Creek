@@ -714,7 +714,7 @@ function projectData() {
   };
 }
 function loadProject(p) {
-  if (!p || p.app !== 'dusty-hollow') throw new Error('Not a Dusty Hollow project file');
+  if (!p || p.app !== 'dusty-hollow') throw new Error('Not an SP Creek project file');
   timeline.stop();
   setFamilyMode(p.familyMode ?? DEFAULT_FAMILY_MODE, true);
   applyStyle(p.style);
@@ -741,7 +741,7 @@ function loadProject(p) {
 $('#projSave').onclick = () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(projectData(), null, 2)], { type: 'application/json' }));
-  a.download = 'dusty-hollow-project.json';
+  a.download = 'sp-creek-project.json';
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 10000);
 };
@@ -772,7 +772,7 @@ $('#renderBtn').onclick = async () => {
   let writable = null;
   if (window.showSaveFilePicker) {
     try {
-      const handle = await window.showSaveFilePicker({ suggestedName: `dusty-hollow-${h}p.mp4`, types: [{ description: 'MP4 video', accept: { 'video/mp4': ['.mp4'] } }] });
+      const handle = await window.showSaveFilePicker({ suggestedName: `sp-creek-${h}p.mp4`, types: [{ description: 'MP4 video', accept: { 'video/mp4': ['.mp4'] } }] });
       writable = await handle.createWritable();
     } catch (err) {
       if (err.name === 'AbortError') return;
@@ -824,7 +824,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
     if (result instanceof Blob) {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(result);
-      a.download = `dusty-hollow-${h}p.mp4`;
+      a.download = `sp-creek-${h}p.mp4`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 60000);
     }

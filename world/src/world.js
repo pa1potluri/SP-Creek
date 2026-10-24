@@ -1,4 +1,4 @@
-// The town of Dusty Hollow: terrain, road, buildings, landmarks, nature, props.
+// The town of SP Creek: terrain, road, buildings, landmarks, nature, props.
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import * as T from './textures.js';
@@ -169,7 +169,7 @@ function beam(a, b, t, mat) {
 }
 
 export const LEFT = [ // west side of Main Street, facing east (+x)
-  { sign: 'DUSTY HOLLOW MERCANTILE', z: 38, w: 12, floors: 2, wall: [34, 30, 48], trim: [30, 25, 30], signBg: [40, 30, 80], signInk: '#3a2414', chimney: true, hitch: true },
+  { sign: 'SP CREEK MERCANTILE', z: 38, w: 12, floors: 2, wall: [34, 30, 48], trim: [30, 25, 30], signBg: [40, 30, 80], signInk: '#3a2414', chimney: true, hitch: true },
   { sign: 'SHERIFF', z: 22, w: 9, floors: 1, wall: [20, 25, 38], trim: [35, 20, 70], signBg: [25, 30, 22], signInk: '#f0e0c0' },
   { sign: 'BANK', z: 8, w: 10, floors: 2, wall: [205, 12, 52], trim: [40, 30, 80], signBg: [210, 25, 22], signInk: '#e8d9a8' },
   { sign: 'POST OFFICE', z: -6, w: 8, floors: 1, wall: [95, 15, 45], trim: [40, 30, 80], signBg: [40, 35, 85], signInk: '#3a2a1a' },
@@ -636,7 +636,7 @@ export class World {
     {
       const g = new THREE.Group();
       g.add(mesh(mergeGeometries([boxAt(0.45, 6.4, 0.45, -5.6, 3.2, 0), boxAt(0.45, 6.4, 0.45, 5.6, 3.2, 0), boxAt(12.2, 0.45, 0.5, 0, 6.3, 0)]), this.mat.darkWood));
-      const signMat = new THREE.MeshLambertMaterial({ map: T.signTexture('DUSTY HOLLOW') });
+      const signMat = new THREE.MeshLambertMaterial({ map: T.signTexture('SP CREEK') });
       for (const side of [1, -1]) {
         const p = mesh(new THREE.PlaneGeometry(7.2, 1.3), signMat);
         p.position.set(0, 5.3, side * 0.04);
@@ -1026,7 +1026,7 @@ export class World {
     }
 
     // station: its front and platform face the track
-    this._building({ sign: 'DUSTY HOLLOW STATION', z: 10, w: 18, floors: 1, wall: [32, 40, 60], trim: [0, 0, 90], signBg: [210, 30, 25], signInk: '#f2e6c8', chimney: true, x: 60.5, rot: Math.PI / 2 });
+    this._building({ sign: 'SP CREEK STATION', z: 10, w: 18, floors: 1, wall: [32, 40, 60], trim: [0, 0, 90], signBg: [210, 30, 25], signInk: '#f2e6c8', chimney: true, x: 60.5, rot: Math.PI / 2 });
     const platform = mesh(new THREE.BoxGeometry(5.2, 0.35, 34), this.mat.darkWood);
     platform.position.set(65.8, 0.175, 10);
     this.root.add(platform);

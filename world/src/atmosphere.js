@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import * as T from './textures.js';
 import { installCloudLighting, cloudUniforms } from './environment.js';
+import { terrainHeight, walkHeight, riverZ } from './world.js';
 
 export const PRESETS = {
   golden: {
@@ -15,7 +16,7 @@ export const PRESETS = {
   morning: {
     label: 'Misty Morning', skyTop: '#93adc4', skyHorizon: '#e6e1d3', skyGround: '#6f7062', sunColor: '#ffe0b8',
     cloudLit: '#fbf3e8', cloudShade: '#a3acb8', sunElev: 14, sunAzim: 75, sunIntensity: 1.9, sunSize: 0.0016,
-    hemiSky: '#d9e3ec', hemiGround: '#6e7058', hemiIntensity: 1.3, fogColor: '#d8d7cc', fogNear: 4, fogFar: 170,
+    hemiSky: '#d9e3ec', hemiGround: '#6e7058', hemiIntensity: 1.3, fogColor: '#d8d7cc', fogNear: 45, fogFar: 480,
     cloudCover: 0.5, stars: 0, lanterns: 0, dust: 0.5, dustColor: '#fff6e0', fireflies: 0, rain: 0, birds: 1,
     mountain: '#7d8794', exposure: 1.0, warmth: -0.05, sat: 0.9,
   },
@@ -131,14 +132,14 @@ function rainLines(count, box) {
   geo.setAttribute('position', new THREE.BufferAttribute(p, 3));
   geo.setAttribute('aEnd', new THREE.BufferAttribute(end, 1));
   const mat = new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 }, uCam: { value: new THREE.Vector3() }, uBox: { value: box }, uAmount: { value: 0 }, uColor: { value: new THREE.Color(0.75, 0.78, 0.82) } },
+    uniforms: { uTime: { value: 0 }, uSpeed:{value:16}, uLength:{value:0.9}, uCam: { value: new THREE.Vector3() }, uBox: { value: box }, uAmount: { value: 0 }, uColor: { value: new THREE.Color(0.75, 0.78, 0.82) } },
     vertexShader: /* glsl */ `
-      attribute float aEnd; uniform float uTime; uniform vec3 uCam, uBox; varying float vA;
+      attribute float aEnd; uniform float uTime,uSpeed,uLength; uniform vec3 uCam, uBox; varying float vA;
       void main() {
         vec3 p = position;
-        p.y = mod(p.y - uTime * 16.0, uBox.y);
+        p.y = mod(p.y - uTime * uSpeed, uBox.y);
         vec3 w = vec3(mod(p.x - uCam.x + uBox.x * 0.5, uBox.x) - uBox.x * 0.5, p.y - uBox.y * 0.35, mod(p.z - uCam.z + uBox.z * 0.5, uBox.z) - uBox.z * 0.5);
-        vec3 world = uCam + w + vec3(aEnd * 0.12, aEnd * 0.9, 0.0);
+        vec3 world = uCam + w + vec3(aEnd * 0.04, aEnd * uLength, 0.0);
         gl_Position = projectionMatrix * viewMatrix * vec4(world, 1.0);
         vA = 1.0 - aEnd * 0.7;
       }`,
@@ -240,8 +241,9 @@ class Birds {
     right.crossVectors(fwd, up).normalize();
     let o = 0;
     const put = (v) => { this.pos[o++] = v.x; this.pos[o++] = v.y; this.pos[o++] = v.z; };
-    for (const b of this.birds) {
+    for (const [index,b] of this.birds.entries()) {
       p.copy(c).add(b.off);
+      if(index>=8){p.x+=38;p.y+=7;p.z-=34;}
       p.x += Math.sin(t * 0.4 + b.ph) * 2;
       p.y += Math.sin(t * 0.6 + b.ph);
       p.z += Math.cos(t * 0.3 + b.ph) * 2;
@@ -266,6 +268,7 @@ export class Atmosphere {
     this.mountains = mountains;
     this.presets = Object.fromEntries(Object.entries(PRESETS).map(([k, p]) => [k, prepare(p)]));
     this.key = 'golden';
+    this.weather='auto';this.weatherStart=0;this.clock=0;this.festival=false;
     this.cur = cloneState(this.presets.golden);
     this.from = null;
     this.to = null;
@@ -291,10 +294,38 @@ export class Atmosphere {
     this.hemi = new THREE.HemisphereLight();
     scene.add(this.sun, this.sun.target, this.hemi);
 
+    this.lightDecor = new THREE.Group(); this.lightDecor.name = 'Soft sunbeams and warm ground pools';
+    scene.add(this.lightDecor);
+    const beamMap=T.glowTexture(),beamGeo=new THREE.PlaneGeometry(1,1);
+    this.beamMaterial=new THREE.MeshBasicMaterial({map:beamMap,color:'#ffd898',transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
+    this.beams=[[-5,-22,0.3],[4,35,-0.2],[-87,-190,0.6],[-103,-202,-0.4]].map(([x,z,angle])=>{
+      const beam=new THREE.Mesh(beamGeo,this.beamMaterial);beam.position.set(x,terrainHeight(x,z)+10,z);beam.scale.set(3.5,24,1);beam.rotation.set(0,angle,-0.35);this.lightDecor.add(beam);return beam;
+    });
+    const poolGeo=new THREE.PlaneGeometry(1,1);poolGeo.rotateX(-Math.PI/2);
+    this.poolMaterial=new THREE.MeshBasicMaterial({map:T.glowTexture(),color:'#ffc778',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    this.groundPools=new THREE.InstancedMesh(poolGeo,this.poolMaterial,256);this.groundPools.frustumCulled=false;this.groundPools.count=0;this.lightDecor.add(this.groundPools);
+    this.poolSources=[];this.poolRootCount=-1;this.roofRim={value:0};
+    this.morningMist=new THREE.Group();this.morningMist.name='Low morning river and valley mist';scene.add(this.morningMist);
+    this.mistMaterial=new THREE.MeshBasicMaterial({map:T.puffTexture(),color:'#ecf1e5',transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide});
+    const mistSites=[...[-60,-30,10,45,80].map(x=>[x,riverZ(x),true]),[-69,94,true],[-240,-18,true],[-48,110,false],[-35,-95,false]];
+    this.mistPatches=mistSites.map(([x,z,water],i)=>{const plane=new THREE.Mesh(new THREE.PlaneGeometry(1,1),this.mistMaterial);plane.scale.set(water?27:36,2.8,1);this.morningMist.add(plane);return {plane,x,z,y:(water?world.waterLevel(x,z):terrainHeight(x,z))+0.9,phase:i*2.399};});
     this.dust = motes(1800, new THREE.Vector3(70, 18, 70), false);
-    this.flies = motes(260, new THREE.Vector3(60, 4, 60), true);
+    this.flies = motes(400, new THREE.Vector3(60, 4, 60), true);
     this.flies.material.uniforms.uColor.value.set(0.85, 1.0, 0.45);
     this.rain = rainLines(4000, new THREE.Vector3(40, 25, 40));
+    this.rainbow=new THREE.Group();this.rainbow.name='Soft clearing rainbow';
+    for(const [i,color]of ['#e5a7a0','#ecc291','#eee3a4','#b9d4a3','#a6d5d1','#afbee0','#cfb4dc'].entries()){
+      const band=new THREE.Mesh(new THREE.TorusGeometry(37-i*0.6,0.32,5,80,Math.PI),new THREE.MeshBasicMaterial({color,transparent:true,opacity:0,depthWrite:false}));this.rainbow.add(band);
+    }
+    scene.add(this.rainbow);
+    const geo=new THREE.BufferGeometry(),positions=new Float32Array(220*3),colors=new Float32Array(220*3);
+    for(let i=0;i<220;i++){positions.set([(i*17.31)%60,(i*7.73)%16,(i*23.17)%60],i*3);new THREE.Color(['#e8c088','#d9a6bc','#c8d69e'][i%3]).toArray(colors,i*3);}
+    geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+    this.petals=new THREE.Points(geo,new THREE.ShaderMaterial({vertexColors:true,transparent:true,depthWrite:false,uniforms:{uTime:{value:0},uCam:{value:new THREE.Vector3()},uScale:{value:500}},vertexShader:`uniform float uTime,uScale;uniform vec3 uCam;varying vec3 vColor;varying float vFade;
+      void main(){vec3 p=position;p.x+=uTime*1.7;p.z+=sin(uTime*0.4+position.x)*2.0;p.y-=uTime*0.25;vec3 d=mod(p-uCam+vec3(30.,8.,30.),vec3(60.,16.,60.))-vec3(30.,8.,30.);vec4 mv=viewMatrix*vec4(uCam+d,1.);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(0.09*uScale/max(1.,-mv.z),1.,9.);vColor=color;vFade=smoothstep(30.,18.,length(d.xz));}`,
+      fragmentShader:`varying vec3 vColor;varying float vFade;void main(){vec2 p=gl_PointCoord-.5;float a=smoothstep(.48,.22,length(p*vec2(1.,1.6)));gl_FragColor=vec4(vColor,a*vFade*.65);}`}));
+    this.petals.frustumCulled=false;scene.add(this.petals);
+
     this.birds = new Birds();
     this.smoke = new Particles(500, T.puffTexture(), false);
     this.embers = new Particles(300, T.glowTexture(), true);
@@ -310,8 +341,13 @@ export class Atmosphere {
     if (instant) blendInto(this.cur, this.from, this.to, 1);
   }
 
+  setWeather(key) {
+    this.weather=['auto','drizzle','clearing','windy'].includes(key)?key:'auto';this.weatherStart=this.clock;
+  }
+
   setViewport(height, fov) {
     const s = height / (2 * Math.tan(THREE.MathUtils.degToRad(fov) / 2));
+    this.petals.material.uniforms.uScale.value=s;
     for (const m of [this.dust.material, this.flies.material, this.smoke.material, this.embers.material]) m.uniforms.uScale.value = s;
   }
 
@@ -326,6 +362,8 @@ export class Atmosphere {
   }
 
   update(dt, time, camera) {
+    this.world.festival=this.festival;
+    this.clock=time;
     if (this.blend < 1) {
       this.blend = Math.min(1, this.blend + dt / Math.max(0.1, this.mult.transition));
       const e = this.blend * this.blend * (3 - 2 * this.blend);
@@ -369,8 +407,9 @@ export class Atmosphere {
       material.userData.softHorizon = { value: this.scene.fog.color };
       material.onBeforeCompile = shader => {
         shader.uniforms.uBackdropMist = material.userData.softHorizon;
+        shader.uniforms.uBackdropTop = {value:backdrop.geometry.parameters.height*0.5};
         shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nvarying float vBackdropHeight;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvBackdropHeight = position.y;');
-        shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uBackdropMist; varying float vBackdropHeight;').replace('#include <opaque_fragment>', 'outgoingLight = mix(outgoingLight, uBackdropMist, (1.0 - smoothstep(-35.0, 180.0, vBackdropHeight)) * 0.9);\n#include <opaque_fragment>');
+        shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uBackdropMist; uniform float uBackdropTop; varying float vBackdropHeight;').replace('#include <opaque_fragment>', 'outgoingLight = mix(outgoingLight, uBackdropMist, (1.0 - smoothstep(-35.0, 180.0, vBackdropHeight)) * 0.9);\n// Fade the open panorama rim into the procedural sky, including upward views.\ndiffuseColor.a *= 1.0 - smoothstep(uBackdropTop * 0.25, uBackdropTop, vBackdropHeight);\n#include <opaque_fragment>');
       };
       material.needsUpdate = true;
     }
@@ -384,6 +423,33 @@ export class Atmosphere {
     this.world.updateWaterMood(c,this.sunDir);
     this.renderer.toneMappingExposure = c.exposure;
     this.world.lanternLevel = c.lanterns;
+    this.beamMaterial.opacity=(this.key==='golden'?0.055:0)*(1-Math.min(1,c.rain+m.rain));
+    this.poolMaterial.opacity=c.lanterns*0.22;
+    // Rebuild when scenery changes; each window facade contributes one soft pool.
+    if(this.poolRootCount!==this.world.root.children.length){
+      this.poolRootCount=this.world.root.children.length;this.poolSources=[];const fronts=new Set();
+      this.world.root.traverse(o=>{
+        if(o.isSprite&&o.material===this.world.haloMat)this.poolSources.push({object:o,lantern:true});
+        if(o.isMesh&&[].concat(o.material).some(mat=>mat.userData.facadeSpec)&&!fronts.has(o.parent)){fronts.add(o.parent);this.poolSources.push({object:o.parent,lantern:false});}
+      });
+    }
+    const matrix=new THREE.Matrix4(),point=new THREE.Vector3();let poolCount=0;
+    for(const source of this.poolSources){let visible=true;for(let o=source.object;o;o=o.parent)if(!o.visible)visible=false;if(!visible||poolCount>=256)continue;
+      if(source.lantern)source.object.getWorldPosition(point);else{point.set(0,0,1.2);source.object.localToWorld(point);}
+      point.y=walkHeight(point.x,point.z)+0.045;
+      matrix.makeRotationY(source.object.rotation.y);matrix.scale(new THREE.Vector3(source.lantern?5:7,1,source.lantern?5:3.8));matrix.setPosition(point);this.groundPools.setMatrixAt(poolCount++,matrix);
+    }
+    this.groundPools.count=poolCount;this.groundPools.instanceMatrix.needsUpdate=true;
+    this.roofRim.value=c.stars*0.12;
+    for(const material of this.world.surfaces){
+      if(material.userData.moonRim)continue;
+      if(material!==this.world.mat.roof&&material.userData.sets?.oil?.image!==this.world.painted.oil.roof&&material.userData.sets?.clean?.image!==this.world.painted.clean.roof)continue;
+      material.userData.moonRim=true;const before=material.onBeforeCompile.bind(material),rim=this.roofRim;
+      material.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);shader.uniforms.uMoonRim=rim;
+        shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vMoonNormal;').replace('#include <begin_vertex>','#include <begin_vertex>\nvMoonNormal=normalize(mat3(modelMatrix)*normal);');
+        shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vMoonNormal; uniform float uMoonRim;').replace('#include <opaque_fragment>','outgoingLight += vec3(0.48,0.62,0.9)*uMoonRim*pow(1.0-abs(dot(normalize(vMoonNormal),normalize(cameraPosition-vCloudWorld))),2.0);\n#include <opaque_fragment>');
+      };material.needsUpdate=true;
+    }
 
     const setMotes = (pts, amount, color) => {
       const uu = pts.material.uniforms;
@@ -393,9 +459,21 @@ export class Atmosphere {
       if (color) uu.uColor.value.copy(color);
       pts.visible = amount > 0.01;
     };
+    this.mistMaterial.opacity=this.key==='morning'?0.065*(0.45+0.55*Math.exp(-Math.max(0,time)/220)):0;
+    this.mistMaterial.color.copy(c.fogColor).lerp(new THREE.Color('#f2f5e9'),0.4);
+    for(const {plane,x,z,y,phase} of this.mistPatches){plane.position.set(x+Math.sin(time*0.014+phase)*3,y+Math.sin(time*0.02+phase)*0.12,z+Math.cos(time*0.012+phase)*2);plane.rotation.y=Math.atan2(camera.position.x-plane.position.x,camera.position.z-plane.position.z);}
     setMotes(this.dust, c.dust * m.dust, c.dustColor);
-    setMotes(this.flies, c.fireflies);
-    const ru = this.rain.material.uniforms, rain = THREE.MathUtils.clamp(c.rain + m.rain, 0, 1);
+    setMotes(this.flies, Math.min(1,c.fireflies*1.5));
+    const elapsed=Math.max(0,time-this.weatherStart), clear=this.weather==='clearing';
+    const rain=this.weather==='drizzle'?0.3:clear?0.3*(1-smooth(0,35,elapsed)):this.weather==='windy'?0:THREE.MathUtils.clamp(c.rain+m.rain,0,1);
+    const wet=this.weather==='drizzle'?1:clear?1-smooth(20,120,elapsed):Math.min(1,rain*2);
+    this.world.rainAmount=rain;this.world.wetAmount=wet;
+    const rainbowAmount=clear?smooth(5,22,elapsed)*(1-smooth(85,120,elapsed))*(1-c.stars)*0.22:0;
+    this.rainbow.visible=rainbowAmount>0.001;this.rainbow.children.forEach(b=>b.material.opacity=rainbowAmount);
+    this.rainbow.position.set(camera.position.x-this.sunDir.x*115,terrainHeight(camera.position.x,camera.position.z)+5,camera.position.z-this.sunDir.z*115);
+    this.rainbow.rotation.y=Math.atan2(camera.position.x-this.rainbow.position.x,camera.position.z-this.rainbow.position.z);
+    this.petals.visible=this.weather==='windy';this.petals.material.uniforms.uTime.value=time;this.petals.material.uniforms.uCam.value.copy(camera.position);
+    const ru=this.rain.material.uniforms;ru.uSpeed.value=this.weather==='auto'?16:4;ru.uLength.value=this.weather==='auto'?0.9:0.24;
     ru.uTime.value = time;
     ru.uCam.value.copy(camera.position);
     ru.uAmount.value = rain;

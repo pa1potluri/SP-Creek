@@ -39,10 +39,14 @@ export function roadX(z) {
   return z > 60 ? Math.sin((z - 60) * 0.018) * (z - 60) * 0.22 : 0;
 }
 
+let legacyNatureTerrain=false;
+
 // The river crosses the whole valley north of town, flowing east (+x).
 export function riverZ(x) {
-  return 150 + Math.sin(x * 0.012) * 18 + Math.sin(x * 0.031) * 6;
+  const z=150+Math.sin(x*0.012)*18+Math.sin(x*0.031)*6;
+  return legacyNatureTerrain?z:z+(150-z)*(1-smoothstep(-370,-285,x));
 }
+export function coastX(z) {return -350-18*Math.exp(-Math.pow((z-35)/115,2))+8*Math.sin(z*0.007);}
 export const WATER_Y = -1;
 export const RAIL_X = 70; // the railway runs north–south east of town
 
@@ -54,6 +58,7 @@ const userPads = [];
 const userFloors = [];
 let pondPad = null;
 export function pondRadius(x, z, p = HAMLET.pond) {
+  if(p.sea)return 1+(x-coastX(z))/p.rz;
   const dx = (x - p.x) / p.rx, dz = (z - p.z) / p.rz, a = Math.atan2(dz, dx);
   return Math.hypot(dx, dz) / (1 + 0.06 * Math.sin(a * 3 + 0.5) + 0.035 * Math.cos(a * 5));
 }
@@ -66,6 +71,7 @@ function applyPond(h, x, z) {
 }
 function applyUserPads(h, x, z) {
   for (const p of userPads) {
+    if(p.clearOnly)continue;
     if (p.basin) {
       if (Math.abs(x-p.x)>p.rx*1.8 || Math.abs(z-p.z)>p.rz*1.8) continue;
       const r = pondRadius(x,z,p);
@@ -77,7 +83,7 @@ function applyUserPads(h, x, z) {
     }
     const d = padDistance(p, x, z);
     const blend = p.blend || 8;
-    if (d < blend) h += (p.y - h) * (1 - smoothstep(0, blend, d));
+    if (d < blend) h += (p.y + (x-p.x)*(p.slopeX||0) - h) * (1 - smoothstep(0, blend, d));
   }
   return h;
 }
@@ -105,6 +111,8 @@ export function terrainHeight(x, z) {
   const rd = Math.abs(z - riverZ(x));
   h *= smoothstep(13, 60, rd); // broad flat river valley
   h -= 2.6 * (1 - smoothstep(6, 13, rd)); // the channel itself
+  if(!legacyNatureTerrain&&x<-270){const d=x-coastX(z),land=d<0?-1.2+d*0.035:-0.85+d*0.06+d*d*0.0012;
+    const channel=2.2*(1-smoothstep(7,15,Math.abs(z-riverZ(x))));h+=(land-channel-h)*(1-smoothstep(-300,-270,x));}
   return applyPond(applyUserPads(h, x, z), x, z);
 }
 
@@ -262,12 +270,15 @@ export class World {
     this._ranch();
     this._camp();
     const natureStart = this.root.children.length, treeColliderStart = this.colliders.circles.length;
+    // Preserve the existing seeded plant layout before sculpting and clearing the coast.
+    legacyNatureTerrain=true;
     this._nature();
     this.plantColliders = new Set(this.colliders.circles.slice(treeColliderStart));
     this.plantInstances = [];
     for (const g of this.root.children.slice(natureStart)) g.traverse((m) => {
       if (m.isInstancedMesh) this.plantInstances.push({ mesh: m, matrices: m.instanceMatrix.array.slice(), heights: Array.from({ length: m.count }, (_, i) => terrainHeight(m.instanceMatrix.array[i * 16 + 12], m.instanceMatrix.array[i * 16 + 14])) });
     });
+    legacyNatureTerrain=false;
     this._decor();
     this.hamlet = { visible: true, buildings: [], roads: [], props: [], pois: [] };
     this.hamlet.pad = { x: HAMLET.x, z: HAMLET.z, y: terrainHeight(HAMLET.x, HAMLET.z), yaw: 0, hx: 50, hz: 32, blend: 26 };
@@ -473,6 +484,8 @@ export class World {
     if (oil.meadow) groundSets.oil = T.groundDetailFromImage(oil.meadow, 90);
     if (clean.meadow) groundSets.clean = T.groundDetailFromImage(clean.meadow, 90);
     const groundMat = new THREE.MeshLambertMaterial({ vertexColors: true, map: groundSets.oil || groundSets.clean || T.groundDetailTexture() });
+    // Underwater coast ground must not reappear through the distant sea fade.
+    groundMat.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <begin_vertex>','#include <begin_vertex>\nvCoastGround=position;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nfloat edge=-350.0-18.0*exp(-pow((vCoastGround.z-35.0)/115.0,2.0))+8.0*sin(vCoastGround.z*0.007);if(vCoastGround.x < -330.0 && (vCoastGround.y < -1.01 || (vCoastGround.x<edge+8.0 && vCoastGround.z>-115.0 && vCoastGround.z<195.0))) discard;');};
     groundMat.userData.sets = groundSets;
     this.surfaces.add(groundMat);
     this.ground = mesh(geo, groundMat, false, true);
@@ -927,6 +940,39 @@ export class World {
     return this.colliders.water.some(p => Math.abs(x-p.x)<p.rx*1.1*(1+margin/p.rz) && Math.abs(z-p.z)<p.rz*1.1*(1+margin/p.rz) && pondRadius(x,z,p)<1+margin/p.rz);
   }
   waterLevel(x,z) { return this.colliders.water.find(p => pondRadius(x,z,p)<1)?.y ?? WATER_Y; }
+
+  createSea(floors=[]) {
+    const area={x:-1100,z:0,rx:1000,rz:1200,y:WATER_Y,sea:true};this.colliders.water.push(area);
+    this.floors.push(...floors);userFloors.push(...floors);
+    // A soft waterline barrier, with a gap only for the railed, floored pier.
+    for(let z=-800;z<800;z+=4)if(z<28||z>=32)this.colliders.segs.push({ax:coastX(z)+0.6,az:z,bx:coastX(z+4)+0.6,bz:z+4});
+    const pos=[],uv=[],idx=[],cols=96,rows=800;
+    for(let j=0;j<=rows;j++){const z=-1000+j*2.5,edge=coastX(z);for(let i=0;i<=cols;i++){pos.push(edge-3000*Math.pow(1-i/cols,3),WATER_Y,z);uv.push(z/18,1-Math.pow(1-i/cols,3));}}
+    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const a=j*(cols+1)+i,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}
+    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
+    const mat=this._waterMaterial(0),before=mat.onBeforeCompile;
+    mat.userData.waterUniforms.uWaterDetail={value:0.22};mat.fog=false;
+    mat.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);Object.assign(shader.uniforms,mat.userData.covePicture||{});shader.fragmentShader=shader.fragmentShader
+      .replace('#include <common>','#include <common>\nuniform sampler2D uCovePicture; uniform vec3 uCoveTint; uniform float uCoveRotation,uCoveHeight,uCoveFade;')
+      .replace('float shore = uWaterKind < 0.5 ? abs(vWaterUV.y * 2.0 - 1.0) * 1.09 : length(vWaterUV * 2.0 - 1.0);','float shore = clamp(1.0-(1.0-vWaterUV.y)*3000.0/14.0+sin(uWaterTime*0.22+wp.y*0.025)*0.025,0.0,1.0);')
+      .replace('float banks = smoothstep(0.40, 0.96, shore);','float banks = 0.0;')
+      .replace('glint * 0.22','glint * 0.07').replace('float foam = smoothstep(0.88, 0.99, shore) * smoothstep(0.15, 0.75, broken) * 0.28;','float foam = smoothstep(0.88,0.96,shore)*(1.0-smoothstep(0.98,1.0,shore))*0.32;')
+      .replace('#include <opaque_fragment>','vec3 ray=vCloudWorld-cameraPosition;float dist=length(ray.xz);float theta=mod(atan(ray.x,ray.z)-uCoveRotation+6.2831853,6.2831853);vec2 pictureUV=vec2(1.0-(theta-3.14159265)/3.14159265,0.435+ray.y/max(0.1,dist)*1800.0/uCoveHeight);vec3 picture=texture2D(uCovePicture,pictureUV).rgb*uCoveTint;picture=mix(uWaterHorizon*0.45,picture,uCoveFade);outgoingLight=mix(outgoingLight,picture,smoothstep(25.0,140.0,dist)*smoothstep(0.06,0.25,pictureUV.y));diffuseColor.a=1.0;\n#include <opaque_fragment>');};
+    mat.customProgramCacheKey=()=> 'cove-sea-v1';const sea=mesh(geo,mat,false,true);sea.name='Sunset Cove sea';sea.renderOrder=2;this.root.add(sea);return {area,sea};
+  }
+
+  palmGeometry() {
+    const trunk=[],leaves=[];
+    for(let i=0;i<9;i++){const g=new THREE.CylinderGeometry(0.18-i*0.01,0.22-i*0.01,0.9,9);g.translate(Math.sin(i*0.14)*0.7,i*0.82+0.45,0);trunk.push(g);}
+    for(let i=0;i<9;i++){
+      const a=i*Math.PI*2/9,verts=[],uv=[],indices=[];
+      for(let j=0;j<=9;j++){const u=j/9,r=u*4.3,y=7.5+Math.sin(u*Math.PI)*1.1-u*2.2,w=Math.sin(u*Math.PI)*0.42+0.015;
+        for(const side of [-1,1]){verts.push(0.65+Math.cos(a)*r-Math.sin(a)*w*side,y,Math.sin(a)*r+Math.cos(a)*w*side);uv.push(u,side>0?1:0);}
+        if(j){const n=j*2;indices.push(n-2,n,n-1,n-1,n,n+1);}}
+      const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();leaves.push(g);
+    }
+    return {trunk:mergeGeometries(trunk),leaves:mergeGeometries(leaves)};
+  }
 
   _pond() {
     const p=HAMLET.pond, y=terrainHeight(p.x,p.z)-0.3;
@@ -1532,7 +1578,8 @@ export class World {
     return hit ? hit.point.y : terrainHeight(x, z);
   }
 
-  placeProp(type, x, z, yaw = 0, record = true) {
+  placeProp(type, x, z, yaw = 0, record = true, order) {
+    this.endBuildReplay();
     const obj = this.makeProp(type);
     obj.position.set(x, this.surfaceY(x, z), z);
     obj.rotation.y = yaw;
@@ -1570,7 +1617,7 @@ export class World {
     }
     if (entry.flame) this.flames.push(entry.flame);
     this.props.push(entry);
-    if (record) this.placed.push(entry);
+    if (record) {entry.order=this._buildOrder(order);this.placed.push(entry);}
     return entry;
   }
 
@@ -1614,6 +1661,7 @@ export class World {
     if (b >= 0) this.billboards.splice(b, 1);
   }
   undo() {
+    this.endBuildReplay();
     const e = this.placed.pop();
     if (e) this._remove(e);
   }
@@ -1622,14 +1670,16 @@ export class World {
   }
   layout() {
     return [
-      ...this.placed.filter((p) => p.type !== 'cutout').map(({ type, x, z, yaw }) => ({ type, x, z, yaw })),
+      ...this.placed.filter((p) => p.type !== 'cutout').map(({ type, x, z, yaw, order }) => ({ type, x, z, yaw, order })),
       ...this.buildings.map((e) => ({ kind: 'building', ...e.spec })),
-      ...this.roads.map((e) => ({ kind: 'road', points: e.points, width: e.width })),
-      ...this.fences.map((e) => ({ kind: 'fence', points: e.points })),
-    ];
+      ...this.roads.map((e) => ({ kind: 'road', points: e.points, width: e.width, order:e.order })),
+      ...this.fences.map((e) => ({ kind: 'fence', points: e.points, order:e.order })),
+    ].sort((a,b)=>a.order-b.order);
   }
 
   loadLayout(layout = []) {
+    this.endBuildReplay();this.buildOrder=0;
+    layout=layout.map((e,i)=>({...e,order:Number.isFinite(e.order)?e.order:i}));
     this.clearPlaced();
     for (const e of [...this.fences]) this.removeFence(e);
     for (const e of [...this.buildings]) this.removeBuilding(e, false);
@@ -1638,22 +1688,131 @@ export class World {
     for (const e of layout) if (e.kind === 'building') this.placeBuilding(e, false);
     this.updateTerrain();
     for (const e of layout) {
-      if (e.kind === 'road') this.addRoad(e.points, e.width);
-      else if (e.kind === 'fence') this.addFence(e.points);
-      else if (!e.kind) this.placeProp(e.type, e.x, e.z, e.yaw);
+      if (e.kind === 'road') this.addRoad(e.points, e.width, e.order);
+      else if (e.kind === 'fence') this.addFence(e.points, e.order);
+      else if (!e.kind) this.placeProp(e.type, e.x, e.z, e.yaw, true, e.order);
     }
   }
 
 
+  _buildOrder(order) {const n=Number.isFinite(order)?order:(this.buildOrder||0);this.buildOrder=Math.max(this.buildOrder||0,n+1);return n;}
+  buildEntries() {return [...this.placed.filter(e=>e.type!=='cutout'),...this.buildings,...this.roads,...this.fences].sort((a,b)=>a.order-b.order);}
+  replayDuration(speed=2) {return this.buildEntries().length/Math.max(1,Math.min(5,+speed||2))+1;}
+  _replayList(key) {return key==='userFloors'?userFloors:['rects','circles','segs'].includes(key)?this.colliders[key]:this[key];}
+  beginBuildReplay(speed=2) {
+    this.endBuildReplay();const entries=this.buildEntries();if(!entries.length)return false;
+    this.root.updateMatrixWorld(true);const bounds=new THREE.Box3(),physics=[],items=[];
+    for(const entry of entries){
+      const obj=entry.obj,box=new THREE.Box3().setFromObject(obj),center=box.getCenter(V());center.y=box.min.y;bounds.union(box);
+      const item={entry,obj,parent:obj.parent,position:obj.position.clone(),rotation:obj.quaternion.clone(),scale:obj.scale.clone(),visible:obj.visible,lightVisible:entry.light?.light.visible,shown:null,pivot:center};
+      const wrapper=new THREE.Group();wrapper.position.copy(center);this.root.add(wrapper);wrapper.updateMatrixWorld(true);wrapper.attach(obj);item.wrapper=wrapper;items.push(item);
+      const record=(key,values)=>{for(const value of values||[]){const index=this._replayList(key).indexOf(value);physics.push({key,value,index,item});}};
+      for(const [key,values]of Object.entries(entry.additions||{}))record(key,values);
+      record('userFloors',entry.additions?.floors);record('segs',entry.segs);record('circles',entry.collider?[entry.collider]:[]);record('benches',entry.seats);record('emitters',entry.emitters);record('flames',entry.flame?[entry.flame]:[]);record('buildingPOIs',entry.poi?[entry.poi]:[]);
+    }
+    if(!this.buildSparkles){this.buildSparkles=new THREE.InstancedMesh(new THREE.SphereGeometry(1,6,4),new THREE.MeshBasicMaterial({color:'#f8deb0',transparent:true,opacity:0.45,depthWrite:false}),48);this.buildSparkles.frustumCulled=false;this.root.add(this.buildSparkles);}
+    this.buildSparkles.visible=true;this.buildReplay={items,physics,speed:Math.max(1,Math.min(5,+speed||2)),bounds};this.updateBuildReplay(0);return true;
+  }
+  updateBuildReplay(t) {
+    const replay=this.buildReplay;if(!replay)return;let changed=false,count=0;const matrix=new THREE.Matrix4();
+    replay.items.forEach((item,i)=>{
+      const age=t-0.25-i/replay.speed,shown=age>=0;
+      if(shown!==item.shown){item.shown=shown;changed=true;}
+      const u=Math.max(0,Math.min(1,age/0.65)),pop=1-Math.pow(1-u,3)+Math.sin(u*Math.PI)*0.12;
+      item.wrapper.visible=shown&&item.visible;item.wrapper.scale.setScalar(Math.max(0.001,pop));if(item.entry.light)item.entry.light.light.visible=shown&&item.lightVisible;
+      if(age>=0&&age<0.9)for(let k=0;k<8&&count<48;k++){const a=k*2.399+i,r=0.25+age*0.9,size=(1-age/0.9)*0.055;this.buildSparkles.setMatrixAt(count++,matrix.makeScale(size,size,size).setPosition(item.pivot.x+Math.cos(a)*r,item.pivot.y+0.15+age*0.8,item.pivot.z+Math.sin(a)*r));}
+    });
+    if(changed){for(const p of replay.physics){const list=this._replayList(p.key),i=list.indexOf(p.value),show=p.item.shown&&p.index>=0;if(show&&i<0)list.push(p.value);else if(!show&&i>=0)list.splice(i,1);}this.onBuildingsChanged?.();}
+    this.buildSparkles.count=count;this.buildSparkles.instanceMatrix.needsUpdate=true;
+  }
+  buildReplayCamera(t,out) {
+    const replay=this.buildReplay;if(!replay)return;const center=replay.bounds.getCenter(V()),size=replay.bounds.getSize(V()),r=Math.max(12,Math.max(size.x,size.z)*0.9+8),a=0.35+t*0.035;
+    const x=center.x+Math.cos(a)*r,z=center.z+Math.sin(a)*r,y=Math.max(terrainHeight(x,z)+35,replay.bounds.max.y+r*0.55+12);
+    out.pos.set(x,y,z);center.y=replay.bounds.min.y+Math.min(size.y,6)*0.5;out.look.copy(center);
+  }
+  endBuildReplay() {
+    const replay=this.buildReplay;if(!replay)return;this.buildReplay=null;
+    // Restore exact transforms and physics without rebuilding or losing the saved layout.
+    for(const item of replay.items){item.parent.add(item.obj);item.obj.position.copy(item.position);item.obj.quaternion.copy(item.rotation);item.obj.scale.copy(item.scale);item.obj.visible=item.visible;item.wrapper.removeFromParent();if(item.entry.light)item.entry.light.light.visible=item.lightVisible;}
+    for(const p of replay.physics){const list=this._replayList(p.key),i=list.indexOf(p.value);if(i>=0)list.splice(i,1);}
+    for(const p of [...replay.physics].sort((a,b)=>a.index-b.index)){if(p.index>=0){const list=this._replayList(p.key);list.splice(Math.min(p.index,list.length),0,p.value);}}
+    this.buildSparkles.visible=false;this.onBuildingsChanged?.();this.root.updateMatrixWorld(true);
+  }
+
+  _detailBounds(type) {
+    return {gardenFence:[2.6,0.2],vegetablePatch:[2.3,1.5],flowerBox:[1,0.35],laundryLine:[2.7,0.35],waterWell:[1.2,1],woodPile:[1.1,0.8],mailbox:[0.35,0.3],lanternString:[3,0.3],gardenBench:[1.1,0.55],snowman:[0.8,0.75],pumpkinPile:[1.2,0.85],littleBridge:[1.6,3]}[type]||this.extraBuildPieces?.[type]?.bounds;
+  }
+
+  _buildDetail(type, s) {
+    const g=new THREE.Group(), scale=s.w/10, bounds=this._detailBounds(type);
+    g.name=type;g.userData.buildPiece=true;g.position.set(s.x,s.y,s.z);g.rotation.y=s.rot;g.scale.setScalar(scale);this.root.add(g);
+    if(this.extraBuildPieces?.[type]){this.extraBuildPieces[type].build(g);this.colliders.rects.push(this._rectOf(g,0,0,bounds[0]*scale,bounds[1]*scale));return g;}
+    this.detailMats??=Object.fromEntries(Object.entries({cream:'#f2dfb5',green:'#84a477',soil:'#8d7057',pink:'#e6b1c7',blue:'#accbdc',gold:'#ebc676',orange:'#d79450',snow:'#eff3ee',ink:'#5a514b'}).map(([key,color])=>[key,new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide})]));
+    const m=this.detailMats,wood=this.mat.wood,dark=this.mat.darkWood;
+    const add=(geo,mat,x=0,y=0,z=0)=>{const o=mesh(geo,mat);o.position.set(x,y,z);g.add(o);return o;};
+    const box=(w,h,d,mat,x,y,z)=>add(new THREE.BoxGeometry(w,h,d),mat,x,y,z);
+    const ball=(r,mat,x,y,z,sx=1,sy=1,sz=1)=>{const o=add(new THREE.SphereGeometry(r,12,8),mat,x,y,z);o.scale.set(sx,sy,sz);return o;};
+    const post=(x,h=1,z=0)=>add(new THREE.CapsuleGeometry(0.07,h-0.14,4,8),wood,x,h/2,z);
+    const rect=(x,z,hx,hz)=>this.colliders.rects.push(this._rectOf(g,x,z,hx*scale,hz*scale));
+    if(type==='gardenFence') {
+      for(const x of [-2.5,-1.25,0,1.25,2.5])post(x,0.9);
+      for(const y of [0.32,0.65])box(5,0.1,0.1,m.cream,0,y,0);
+    } else if(type==='vegetablePatch') {
+      box(4.4,0.12,2.8,m.soil,0,0.06,0);
+      for(const x of [-1.65,-0.55,0.55,1.65])for(const z of [-0.9,0,0.9]){ball(0.24,z<0?m.orange:z>0?m.pink:m.green,x,0.25,z,1,0.8,1);ball(0.23,m.green,x,0.45,z,1.2,0.35,1);}
+    } else if(type==='flowerBox') {
+      box(1.9,0.35,0.6,wood,0,0.18,0);box(1.7,0.03,0.45,m.soil,0,0.36,0);
+      for(let i=0;i<5;i++){post(-0.72+i*0.36,0.55);ball(0.17,[m.pink,m.gold,m.blue][i%3],-0.72+i*0.36,0.64,0);}
+    } else if(type==='laundryLine') {
+      for(const x of [-2.5,2.5])post(x,2.4);
+      box(5,0.025,0.025,m.cream,0,2.32,0);
+      this.clothMats??=[m.pink,m.blue,m.gold,m.green].map(base=>{const mat=base.clone();mat.onBeforeCompile=shader=>{shader.uniforms.uClothTime=this.waterUniforms.uWaterTime;shader.uniforms.uClothWind=this.waterUniforms.uWaterWind;shader.vertexShader='uniform float uClothTime,uClothWind;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.z += sin(uClothTime*1.1+position.x*2.0)*max(0.0,-position.y)*0.18*uClothWind;');};mat.customProgramCacheKey=()=> 'build-cloth';return mat;});
+      for(let i=0;i<6;i++){const geo=new THREE.PlaneGeometry(0.57,0.8,3,4);geo.translate(0,-0.4,0);add(geo,this.clothMats[i%4],-2+i*0.8,2.26,0);}
+      for(const x of [-2.5,2.5])rect(x,0,0.12,0.12);
+    } else if(type==='waterWell') {
+      add(new THREE.CylinderGeometry(0.85,1,0.9,16),this.mat.stone,0,0.45,0);
+      box(1.7,0.1,1.5,m.green,0,0.95,0);
+      for(const x of [-1,1])post(x,2.6);
+      box(2.5,0.2,1.9,wood,0,2.6,0);
+    } else if(type==='woodPile') {
+      for(let row=0;row<3;row++)for(let i=0;i<3-row;i++){const log=add(new THREE.CylinderGeometry(0.2,0.2,1.8,10),dark,0,0.2+row*0.34,-0.5+i*0.5+row*0.25);log.rotation.z=Math.PI/2;}
+    } else if(type==='mailbox') {
+      post(0,1.2);box(0.6,0.4,0.5,m.blue,0,1.3,0);box(0.48,0.23,0.02,m.cream,0,1.3,0.26);ball(0.08,m.pink,0.36,1.55,0);
+    } else if(type==='lanternString') {
+      for(const x of [-2.8,2.8]){post(x,3);rect(x,0,0.13,0.13);}
+      for(let i=0;i<8;i++){const x=-2.45+i*0.7,y=2.65+0.045*x*x;box(0.72,0.025,0.025,dark,x,y+0.1,0);ball(0.14,this.mat.lantern,x,y-0.12,0);const halo=new THREE.Sprite(this.haloMat);halo.position.set(x,y-0.12,0);halo.scale.setScalar(0.9);g.add(halo);}
+    } else if(type==='gardenBench') {
+      const bench=this.makeProp('bench');g.add(bench);
+    } else if(type==='snowman') {
+      ball(0.68,m.snow,0,0.64,0,1,1.05,1);ball(0.47,m.snow,0,1.5,0);ball(0.34,m.snow,0,2.15,0);
+      add(new THREE.CylinderGeometry(0.4,0.4,0.09,16),m.blue,0,2.43,0);ball(0.3,m.blue,0,2.51,0,1,0.4,1);
+      add(new THREE.TorusGeometry(0.36,0.09,6,16),m.pink,0,1.89,0).rotation.x=Math.PI/2;
+      for(const x of [-0.12,0.12])ball(0.035,m.ink,x,2.23,0.3);
+      ball(0.06,m.gold,0,2.13,0.34,1,1,1.6);
+      for(let i=0;i<5;i++){const a=i/4*Math.PI;ball(0.023,m.ink,Math.cos(a)*0.13,2.08-Math.sin(a)*0.06,0.315);}
+      for(const y of [1.3,1.55,1.74])ball(0.04,m.ink,0,y,0.43);
+      for(const side of [-1,1]){const arm=add(new THREE.CapsuleGeometry(0.045,0.5,4,8),dark,side*0.62,1.58,0);arm.rotation.z=side*0.9;}
+    } else if(type==='pumpkinPile') {
+      for(const [x,y,z,r]of [[-0.55,0.4,0,0.45],[0.4,0.35,0.2,0.4],[0,0.6,-0.35,0.5]]){ball(r,m.orange,x,y,z,1,0.85,1);add(new THREE.CapsuleGeometry(0.045,0.13,3,6),m.green,x,y+r*0.83,z);}
+    } else if(type==='littleBridge') {
+      const deck=box(3,0.18,6,wood,0,0.2,0);this.walkables.push(deck);
+      this.floors.push({...this._rectOf(g,0,0,1.5*scale,3*scale),y:s.y+0.29*scale});
+      for(const side of [-1,1]){for(const z of [-2.8,0,2.8])post(side*1.45,1.2,z);box(0.12,0.12,5.8,m.cream,side*1.45,1.1,0);rect(side*1.45,0,0.13,3);}
+    }
+    if(!['littleBridge','laundryLine','lanternString'].includes(type))rect(0,0,bounds[0],bounds[1]);
+    return g;
+  }
+
   makeBuilding(spec, preview = false) {
-    const type = spec.type;
-    if (!['shop', 'hotel', 'house', 'barn', 'chapel', 'tower', 'windmill', 'cabin', 'brick', 'blacksmith', 'hitch'].includes(type)) throw new Error('Unknown building type');
+    const type = spec.type, detail=this._detailBounds(type);
+    if (!detail && !['shop', 'hotel', 'house', 'barn', 'chapel', 'tower', 'windmill', 'cabin', 'brick', 'blacksmith', 'hitch'].includes(type)) throw new Error('Unknown building type');
     const w = Math.max(6, Math.min(20, +spec.w || 10)), yaw = +spec.yaw || 0;
     const x = +spec.x || 0, z = +spec.z || 0;
-    const offset = ['tower', 'windmill', 'chapel', 'hitch'].includes(type) ? 0 : type === 'cabin' ? -3.7 : -4.7;
+    const offset = detail ? 0 : ['tower', 'windmill', 'chapel', 'hitch'].includes(type) ? 0 : type === 'cabin' ? -3.7 : -4.7;
     const pad = { x: x + Math.sin(yaw) * offset, z: z + Math.cos(yaw) * offset, yaw,
       hx: w / 2 + 2.5, hz: type === 'chapel' ? 10.5 : offset ? 10 : w / 2 + 2.5 };
     if (type === 'hitch') { pad.hx = 2; pad.hz = 0.4; pad.blend = 2; }
+    if(detail){pad.hx=detail[0]*w/10;pad.hz=detail[1]*w/10;pad.blend=1;}
     pad.y = Number.isFinite(spec.y) ? spec.y : terrainHeight(pad.x, pad.z);
     const lists = { rects: this.colliders.rects, circles: this.colliders.circles, floors: this.floors,
       walkables: this.walkables, emitters: this.emitters, flames: this.flames, spinners: this.spinners, windowMats: this.windowMats };
@@ -1663,7 +1822,8 @@ export class World {
     const s = { buildArt: { barn: 'barn_boards', chapel: 'chapel_boards', house: 'house_boards', shop: 'wall_boards', hotel: 'wall_boards', cabin: 'log_wall', brick: 'brick_wall' }[type], x, z, y: pad.y, rot: yaw, w, floors: type === 'cabin' ? 1 : +spec.floors === 2 ? 2 : 1, wall,
       trim: [40, 25, 80], signBg: [30, 30, 22], signInk: '#f0e0c0',
       sign: String(spec.sign ?? (type === 'blacksmith' ? 'BLACKSMITH' : '')).slice(0, 60), signCustom: spec.signCustom ?? (spec.sign != null), balcony: type === 'hotel', barn: type === 'barn', chimney: type === 'house' || type === 'cabin', depth: type === 'cabin' ? 8 : 12 };
-    if (type === 'blacksmith') obj = this._smithy(s);
+    if (detail) obj=this._buildDetail(type,s);
+    else if (type === 'blacksmith') obj = this._smithy(s);
     else if (type === 'hitch') {
       obj = this.makeProp('hitch'); obj.position.set(x, pad.y, z); obj.rotation.y = yaw; this.root.add(obj);
       this.colliders.rects.push(this._rectOf(obj, 0, 0, 1.8, 0.12));
@@ -1715,7 +1875,8 @@ export class World {
   }
 
   placeBuilding(spec, update = true) {
-    const e = this.makeBuilding(spec);
+    this.endBuildReplay();
+    const e = this.makeBuilding(spec);e.order=this._buildOrder(spec.order);e.spec.order=e.order;
     this.buildings.push(e);
     if (e.obj.userData.forge) {
       e.light = this._takeLight();
@@ -1726,7 +1887,7 @@ export class World {
     e.poi = e.obj.localToWorld(V(0, 0, doorZ));
     if (['tower', 'windmill'].includes(e.spec.type)) e.poi.set(e.spec.x + Math.sin(e.spec.yaw) * (e.pad.hz + 1), 0, e.spec.z + Math.cos(e.spec.yaw) * (e.pad.hz + 1));
     e.poi.y = 0;
-    if (e.spec.type !== 'hitch') this.buildingPOIs.push(e.poi);
+    if (e.spec.type !== 'hitch' && !e.obj.userData.buildPiece) this.buildingPOIs.push(e.poi);
     this.onBuildingsChanged?.();
     if (update) this.updateTerrain();
     return e;
@@ -1734,6 +1895,7 @@ export class World {
 
   removeBuilding(e, update = true) {
     if (!this.buildings.includes(e)) return; // built-in scenery is not a user selection
+    this.endBuildReplay();
     for (const [k, items] of Object.entries(e.additions)) {
       const a = k === 'rects' || k === 'circles' ? this.colliders[k] : this[k];
       for (const item of items) { const i = a.indexOf(item); if (i >= 0) a.splice(i, 1); }
@@ -1771,27 +1933,30 @@ export class World {
     return g;
   }
 
-  addFence(points) {
+  addFence(points, order) {
+    this.endBuildReplay();
     points = points.filter(([x, z], i) => Number.isFinite(x) && Number.isFinite(z) && (!i || Math.hypot(x - points[i - 1][0], z - points[i - 1][1]) > 0.1));
     if (points.length < 2) return null;
     const start = this.colliders.segs.length;
     const e = { points: points.map(p => [...p]), spec: { type: 'fence' }, obj: this._fence(points, true), segs: this.colliders.segs.slice(start) };
-    this.fences.push(e); this.updateTerrain(); return e;
+    e.order=this._buildOrder(order);this.fences.push(e); this.updateTerrain(); return e;
   }
 
   removeFence(e) {
     if (!this.fences.includes(e)) return;
+    this.endBuildReplay();
     this.colliders.segs = this.colliders.segs.filter(s => !e.segs.includes(s));
     this.root.remove(e.obj); e.obj.geometry.dispose(); this.fences.splice(this.fences.indexOf(e), 1); this.updateTerrain();
   }
 
-  addRoad(points, width) {
+  addRoad(points, width, order) {
+    this.endBuildReplay();
     points = points.filter(([x, z], i) => Number.isFinite(x) && Number.isFinite(z) && (!i || Math.hypot(x - points[i - 1][0], z - points[i - 1][1]) > 0.1));
     if (points.length < 2) return null;
     this.userRoadMat ??= this._pathMaterial();
     const e = { points: points.map((p) => [...p]), width: Math.max(1, Math.min(14, +width || 5)) };
     e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1 });
-    this.roads.push(e);
+    e.order=this._buildOrder(order);this.roads.push(e);
     this.setTextureSet(this.textureSet || 'oil');
     return e;
   }
@@ -1805,6 +1970,7 @@ export class World {
   }
 
   updateTerrain() {
+    this.endBuildReplay();
     const pos = this.ground.geometry.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i), z = pos.getZ(i);
@@ -1862,7 +2028,20 @@ export class World {
     if (this.hamlet) for (const e of [...this.hamlet.roads, ...this.hamlet.props]) e.obj.visible = this.hamlet.visible;
   }
 
+  _updatePuddles() {
+    if(!this.puddles){
+      const sites=[];for(let i=0;i<18;i++)sites.push([i%2?2.7:-2.6,-48+i*5.7,0.6+(i%3)*0.22,0.3+(i%4)*0.08]);
+      for(let i=0;i<7;i++)sites.push([-140+i*8,65+Math.sin(i*2)*1.4,0.7,0.4]);
+      const geo=new THREE.CircleGeometry(1,24);geo.rotateX(-Math.PI/2);
+      const mat=new THREE.MeshPhysicalMaterial({color:'#8faeb6',roughness:0.12,metalness:0.18,transparent:true,opacity:0,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1});
+      this.puddles=new THREE.InstancedMesh(geo,mat,sites.length);this.puddles.name='Shallow rain puddles';const matrix=new THREE.Matrix4();
+      sites.forEach(([x,z,sx,sz],i)=>this.puddles.setMatrixAt(i,matrix.makeScale(sx,1,sz).setPosition(x,walkHeight(x,z)+0.025,z)));this.puddles.computeBoundingSphere();this.root.add(this.puddles);
+    }
+    this.puddles.visible=(this.wetAmount||0)>0.01;this.puddles.material.opacity=(this.wetAmount||0)*0.42;
+  }
+
   update(dt, t, camera) {
+    this._updatePuddles();
     const L = this.lanternLevel;
     this.waterUniforms.uWaterTime.value = t;
     this.waterUniforms.uWaterWind.value = this.wind ?? 1;

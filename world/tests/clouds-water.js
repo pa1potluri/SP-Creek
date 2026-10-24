@@ -73,13 +73,42 @@ export async function runCloudWaterTests() {
     let arrived=false;
     for(let i=0;i<3000;i++){if(walk._go(0.1)){arrived=true;break;}if(w.inPond(walk.pos.x,walk.pos.z))throw Error('Walker entered pond');}
     check(arrived && walk.pos.x>p.pad.x+14,'Walker takes a dry route around the pond to the opposite bank');
+    // Restore the walker before the style checks yield to live animation.
+    walk.pos.copy(walkStart);walk.state='wait';walk.target=null;walk.wait=1;
     const physics={water:w.colliders.water.length,circles:w.colliders.circles.length,floors:w.floors.length,walkables:w.walkables.length};
     w.setHamlet(false);check(!p.obj.visible && !p.bank.visible && !w.colliders.water.includes(p.area) && !w.inPond(p.pad.x,p.pad.z),'Hamlet off removes pond scenery, basin and water collision');
     w.setHamlet(true);check(w.colliders.water.length===physics.water && w.colliders.circles.length===physics.circles && w.floors.length===physics.floors && w.walkables.length===physics.walkables,'Pond toggle restores physics exactly without duplicates');
     slider('cloudShadows',0.35);const project=JSON.stringify(a.projectData());a.loadProject(JSON.parse(project));
     check(JSON.stringify(a.projectData())===project && JSON.parse(localStorage.getItem('dh.cloudShadows'))===0.35,'Cloud shadow control persists in projects and localStorage');
+    // Stress the real panorama rim with white paint over black, avoiding cloud/terrain edges.
+    const skyRT=new THREE.WebGLRenderTarget(256,128),white=new THREE.DataTexture(new Uint8Array([255,255,255,255]),1,1);
+    white.needsUpdate=true;let skyEdgeWorst=0;
+    try {
+      const skyScene=new THREE.Scene();skyScene.background=new THREE.Color(0);
+      const skyCam=new THREE.PerspectiveCamera(50,2,0.1,4000),pixels=new Uint8Array(256*128*4);
+      for(const style of Object.keys(STYLES)) {
+        a.applyStyle(style);await new Promise(resolve=>requestAnimationFrame(resolve));mood('golden');
+        const backdrop=at.scene.children.find(o=>o.geometry?.type==='CylinderGeometry'&&o.material?.map&&!o.material.fog);
+        if(!backdrop)throw Error('Missing painted panorama');
+        const probe=backdrop.clone();probe.position.set(0,2,0);probe.material=backdrop.material.clone();
+        probe.material.onBeforeCompile=backdrop.material.onBeforeCompile;probe.material.map=white;probe.material.color.set(0xffffff);probe.material.opacity=1;skyScene.add(probe);
+        try {
+          for(const key of Object.keys(at.presets))for(const view of [{name:'moon',height:9,yaw:140,season:'winter'},{name:'rainbow',height:9,yaw:68,season:'autumn'},{name:'balloon',height:35,yaw:250,season:'summer'}]) {
+            a.setSeason(view.season);mood(key);
+            // Put the cylinder's curved rim inside the top half of each upward-looking frame.
+            const pitch=Math.atan2(2+backdrop.geometry.parameters.height/2-view.height,800)-0.30,yaw=view.yaw*Math.PI/180;
+            skyCam.position.set(0,view.height,0);skyCam.lookAt(Math.sin(yaw)*Math.cos(pitch),view.height+Math.sin(pitch),Math.cos(yaw)*Math.cos(pitch));skyCam.updateMatrixWorld(true);
+            renderer.setRenderTarget(skyRT);renderer.render(skyScene,skyCam);renderer.readRenderTargetPixels(skyRT,0,0,256,128,pixels);renderer.setRenderTarget(oldTarget);
+            let worst=0;
+            for(let y=64;y<127;y++){let delta=0;for(let x=8;x<248;x++)for(let c=0;c<3;c++)delta+=Math.abs(pixels[(y*256+x)*4+c]-pixels[((y+1)*256+x)*4+c]);worst=Math.max(worst,delta/(240*3));}
+            skyEdgeWorst=Math.max(skyEdgeWorst,worst);
+            check(worst<10,`${style}/${key}/${view.name}/${view.season}: upward top rows have no sharp brightness step (${worst.toFixed(2)}/255)`);
+          }
+        } finally {skyScene.remove(probe);probe.material.dispose();}
+      }
+    } finally {renderer.setRenderTarget(oldTarget);skyRT.dispose();white.dispose();}
     check(a.audio.ctx===null,'Tests never start sound');
-    return {passed:results.length,clearedPlants:cleared,results};
+    return {passed:results.length,clearedPlants:cleared,skyEdgeWorst,results};
   } finally {
     if(walk&&walkStart){walk.pos.copy(walkStart);walk.state='wait';walk.target=null;walk.wait=1;}
     renderer.setRenderTarget(oldTarget);rt.dispose();plane.geometry.dispose();

@@ -3,6 +3,8 @@
 import * as THREE from 'three';
 import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP } from './world.js';
 import { HAMLET } from './hamlet.js';
+import { starCameraFocus } from './life.js';
+import { beachWalk, stageCove } from './areas/sunset-cove.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const clamp01 = (t) => Math.min(1, Math.max(0, t));
@@ -53,8 +55,8 @@ function makeShots() {
     pathShot('Boardwalk Stroll', [[G(-6.2, 2.05, 46), G(-4.5, 2.1, 30)], [G(-6.2, 2.05, 10), G(-4.5, 2.2, -5)], [G(-6.2, 2.05, -28), G(-3, 2.6, -45)]], 55),
     pathShot('Church Approach', [[G(0, 1.7, -18), G(0, 3.5, -62)], [G(0.4, 1.6, -46), G(0, 10, -64)]], 30),
     pathShot('Crane Reveal', [[G(0, 1.8, 24), G(0, 2.5, -10)], [G(5, 14, 40), G(0, 4, -5)], [G(12, 42, 88), G(0, 0, -40)]], 36),
-    orbitShot('Golden Orbit', V(0, 0, -5), 72, 26, 150, 3),
-    pathShot('Hilltop Vista', [[G(-95, 3.5, 75), G(0, 4, 5)], [G(-108, 3.5, 25), G(0, 4, -10)]], 45),
+    orbitShot('Golden Orbit', V(0, 0, -5), 72, 32, 150, 3),
+    pathShot('Hilltop Vista', [[G(-95, 22, 104), G(0, 4, 5)], [G(-108, 24, 109), G(0, 4, -10)]], 45),
   ].map((s) => ({ ...s, group: 'Town' }));
 
   // New shots are appended after the town ones so saved timelines keep their shot numbers.
@@ -80,9 +82,9 @@ function makeShots() {
   const S = (lx, y, lz) => V(7.5 - lz, y, 8 + lx);
   const cafe = [
     // starts high and a little back so the room shows, not just the doors
-    pathShot('Into the Honey Bun Café', [[S(0, 2.4, 3.2), S(-1.5, 1.3, -8)], [S(0, 2.1, -1.2), S(-2.5, 1.3, -9)], [S(-0.8, 1.9, -5), S(-4.5, 1.3, -11.2)]], 30),
+    pathShot('Into the Honey Bun Café', [[S(0, 2.6, 3.2), S(0, 1.7, -8)], [S(0, 2.6, -1.2), S(0, 1.7, -9)], [S(0, 2.6, -5), S(0, 1.7, -10)]], 30),
     pathShot('At the Counter', [[S(2.6, 1.75, -3.6), S(5.5, 1.5, -5.6)], [S(2.4, 1.75, -8.8), S(5.5, 1.6, -7.4)]], 35),
-    orbitShot('Board Game Table', S(-3.6, 0.35, -7.9), 2.4, 1.3, 60, 0.6),
+    pathShot('Board Game Table', [[S(-2.3, 2.9, -5.8), S(-3.6, 1.15, -7.9)], [S(-1.8, 2.9, -7.2), S(-3.6, 1.15, -7.9)], [S(-2.1, 2.9, -8.6), S(-3.6, 1.15, -7.9)]], 60),
   ].map((s) => ({ ...s, group: 'Café' }));
   // the cast line-up stands across the street at z = 24 (Town life → Cast line-up)
   const cast = [
@@ -114,8 +116,8 @@ function makeShots() {
     [G(4.2, 4.2, -49), G(0, 4, -66)],
   ], 100), group: 'Town center', clearance: 2.2 }];
   const ghostTown = [{ ...pathShot('Old Hollow Stroll', [
-    [G(125,4.5,26),G(125,3,-7)],[G(124,3.5,8),G(135,3,-14)],
-    [G(124,3.5,-16),G(115,3,-35)],[G(125,4,-31),G(133,7,-45)],
+    [G(121.8,4.5,26),G(125,3,-7)],[G(121.8,3.5,8),G(135,3,-14)],
+    [G(121.8,3.5,-16),G(115,3,-35)],[G(121.8,4,-31),G(133,7,-45)],
   ], 100), group:'Ghost town', clearance:2.5 }];
   const fy=terrainHeight(-72,-179),cy=terrainHeight(-90,-204),mh=terrainHeight(-225,0);
   const forest = [{...pathShot('Forest Trail',[
@@ -141,7 +143,23 @@ function makeShots() {
     pathShot('Crystal Mine Tour', [[G(160,32,-94),G(173,3,-115)],[G(157,32,-104),G(173,3,-115)]],12),
     pathShot('Willow Creek Pond Tour', [[G(-53,32,113),G(-69,1,94)],[G(-48,32,98),G(-69,1,94)]],12),
   ].map(s => ({...s, group:'Grand tour', clearance:3}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour];
+  const seasonalViews=[
+    pathShot('Deer at the Forest Edge',[[G(-58,7,-193),G(-66,1.3,-206)],[G(-56,7,-197),G(-66,1.3,-206)]],90),
+    pathShot('Snowman in the Square',[[G(11,3.2,-45),G(4.8,1.4,-53)],[G(13,3.3,-49),G(4.8,1.4,-53)]],100),
+  ].map(s=>({...s,group:'Seasonal views',clearance:1.5}));
+  const starViews=[
+    {name:'Pavi & Siri walk',duration:120,group:'Pavi & Siri',clearance:1.5,loop:true,sample(t,out){const f=starCameraFocus(),x=f.pos.x+Math.sin(f.yaw)*4.8,z=f.pos.z+Math.cos(f.yaw)*4.8;out.pos.set(x,Math.max(walkHeight(x,z)+1.55,f.pos.y+1.55),z);out.look.copy(f.pos);out.look.y+=1.05;}},
+    pathShot('Pavi & Siri at the pond',[[V(-71,walkHeight(-71,78)+2.1,78),V(-69,walkHeight(-69,83.5)+1,83.5)],[V(-67,walkHeight(-67,78)+2.1,78),V(-69,walkHeight(-69,83.5)+1,83.5)]],100),
+  ].map(s=>({...s,group:'Pavi & Siri',clearance:1.5}));
+  const coveViews=[
+    pathShot('Sunset Cove from above',[[G(-289,62,118),V(-366,3,25)],[G(-291,65,92),V(-368,3,17)]],100),
+    {name:'Beach walk at sunset',duration:120,loop:true,sample(t,out){const p=beachWalk(),z=p.z+Math.cos(p.yaw)*5,x=p.x;out.pos.set(x,walkHeight(x,z)+1.6,z);out.look.set(p.x,p.y+1,p.z);}},
+    {name:'Lantern lane to the sea',duration:100,loop:false,sample(t,out){const x=-295-43*smoother(clamp01(t/100));out.pos.set(x,walkHeight(x,20)+3.2,20);out.look.set(-395,0,25);}},
+    {name:'Walking into the sunset',duration:70,loop:false,sample(t,out){const p=stageCove('beach',t),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw);out.pos.set(p.x-dx*6,Math.max(p.y+1.65,walkHeight(p.x-dx*6,p.z-dz*6)+1.6),p.z-dz*6);out.look.set(p.x+dx*4,p.y+1,p.z+dz*4);}},
+    {name:'Two small friends on a big beach',duration:35,loop:false,sample(t,out){const p=stageCove('beach',t+15);out.pos.set(-299-t*0.04,55,-5-t*0.08);out.look.set(p.x,p.y,p.z);}},
+    {name:'Down the lantern lane',duration:35,loop:false,sample(t,out){const p=stageCove('lane',t),x=p.x+6;out.pos.set(x,Math.max(p.y+3.5,walkHeight(x,p.z)+1.6),p.z);out.look.set(p.x-12,p.y+2,p.z);}},
+  ].map(s=>({...s,group:'Sunset Cove',clearance:1.5}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5}];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

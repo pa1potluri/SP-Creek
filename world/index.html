@@ -7,8 +7,8 @@
 <link rel="stylesheet" href="style.css">
 <script type="importmap">
 { "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  "three": "./vendor/three/build/three.module.js",
+  "three/addons/": "./vendor/three/examples/jsm/"
 } }
 </script>
 </head>
@@ -107,6 +107,9 @@
 
   <details open>
     <summary>Atmosphere</summary>
+    <label class="row check"><span>Festival</span><input type="checkbox" id="festival"></label>
+    <label class="row"><span>Season</span><select id="season"><option value="summer">Summer</option><option value="autumn">Autumn</option><option value="winter">Winter</option></select></label>
+    <label class="row"><span>Weather</span><select id="weather"><option value="auto">Follow mood</option><option value="drizzle">Gentle drizzle</option><option value="clearing">Clearing rainbow</option><option value="windy">Breezy day</option></select></label>
     <div id="presets" class="grid"></div>
     <label class="row"><span>Fog</span><input type="range" data-atmos="fog" min="0.3" max="4" step="0.05" value="1"><output></output></label>
     <label class="row"><span>Dust in the air</span><input type="range" data-atmos="dust" min="0" max="3" step="0.05" value="1"><output></output></label>
@@ -174,6 +177,18 @@
       <button data-build="windmill">Windmill</button>
       <button data-build="cabin">Log cabin</button><button data-build="brick">Brick store</button>
       <button data-build="blacksmith">Blacksmith</button><button data-build="hitch">Hitching post</button>
+      <button data-build="gardenFence">Garden fence</button>
+      <button data-build="vegetablePatch">Vegetable patch</button>
+      <button data-build="flowerBox">Flower box</button>
+      <button data-build="laundryLine">Laundry line</button>
+      <button data-build="waterWell">Covered well</button>
+      <button data-build="woodPile">Wood pile</button>
+      <button data-build="mailbox">Mailbox</button>
+      <button data-build="lanternString">Lantern string</button>
+      <button data-build="gardenBench">Garden bench</button>
+      <button data-build="snowman">Winter snowman</button>
+      <button data-build="pumpkinPile">Autumn pumpkins</button>
+      <button data-build="littleBridge">Little bridge</button>
     </div>
     <label class="row"><span>Width (m)</span><input id="buildWidth" type="range" min="6" max="20" step="1" value="10"><output>10</output></label>
     <label class="row"><span>Floors</span><input id="buildFloors" type="range" min="1" max="2" step="1" value="1"><output>1</output></label>
@@ -185,6 +200,8 @@
     <label class="row"><span>Sign text</span><input id="buildSign" type="text" maxlength="60" value="GENERAL STORE"></label>
     <p class="hint">Floors and signs apply to shops, hotels, houses and barns. Width scales the chapel and towers.</p>
     <div class="btnrow"><button id="deleteBuilding" disabled>Delete selected (Delete)</button><button id="clearBuilt">Remove all built</button></div>
+    <div class="btnrow"><button id="replayBuild">Replay build</button></div>
+    <label class="row"><span>Pieces per second</span><input id="replaySpeed" type="range" min="1" max="5" step="0.5" value="2"><output>2</output></label>
     <div id="buildSelection" class="hint">No building selected</div>
     <h3>Dirt roads</h3>
     <label class="row"><span>Road width (m)</span><input id="roadWidth" type="range" min="1" max="14" step="0.5" value="5"><output>5</output></label>
@@ -207,7 +224,7 @@
     <div id="musicName" class="hint">No music loaded</div>
     <div class="btnrow"><button id="musicToggle">Play / pause music</button></div>
     <label class="row"><span>Music volume</span><input type="range" data-audio="music" min="0" max="1" step="0.05" value="0.8"><output></output></label>
-    <label class="row"><span>Wind ambience</span><input type="range" data-audio="wind" min="0" max="1" step="0.05" value="0.35"><output></output></label>
+    <label class="row"><span>Wind ambience</span><input type="range" data-audio="wind" min="0" max="1" step="0.05" value="0.15"><output></output></label>
     <label class="row"><span>Place sounds</span><input type="range" data-audio="ambience" min="0" max="1.5" step="0.05" value="0.8"><output></output></label>
     <div class="hint">Birds by day, crickets and owls at night, the river, mill, train, café piano and rain, following the camera. Click anywhere once to start the sound. Videos get the same sounds.</div>
   </details>

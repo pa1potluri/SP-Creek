@@ -7,7 +7,7 @@ export const VIDEO_PRESETS = {
   golden: {
     label: 'Golden afternoon in town',
     about: 'A slow stroll down the boardwalk, townsfolk about, birds, the piano faint from the café.',
-    style: 'film', rain: 0, wind: 0.3, ambience: 0.8,
+    style: 'film', rain: 0, wind: 0.14, ambience: 0.8,
     life: { people: 14, riders: 2 },
     clips: [
       { shot: 3, seconds: 70, mood: 'golden', move: 'cut' }, // Boardwalk Stroll
@@ -20,7 +20,7 @@ export const VIDEO_PRESETS = {
   rainyNight: {
     label: 'Rainy night at the Honey Bun Café',
     about: 'Rain on the empty street, then in through the café doors to the warm piano and the singer.',
-    style: 'film', rain: 0.75, wind: 0.45, ambience: 0.9,
+    style: 'film', rain: 0.75, wind: 0.2, ambience: 0.9,
     life: { people: 3, riders: 0, coach: 0, chickens: 0, tumbleweeds: 0, wind: 1.3 },
     clips: [
       { shot: 3, seconds: 70, mood: 'night', move: 'cut' }, // Boardwalk Stroll
@@ -33,7 +33,7 @@ export const VIDEO_PRESETS = {
   dawnRiver: {
     label: 'River at dawn',
     about: 'Morning light on the water, the mill wheel turning, the steam train passing the station.',
-    style: 'film', rain: 0, wind: 0.25, ambience: 1,
+    style: 'film', rain: 0, wind: 0.11, ambience: 1,
     life: { people: 6, riders: 1 }, train: true,
     clips: [
       { shot: 10, seconds: 55, mood: 'morning', move: 'cut' }, // River Drift
@@ -46,7 +46,7 @@ export const VIDEO_PRESETS = {
   campfire: {
     label: 'Campfire under the stars',
     about: 'Crickets and owls, fireflies over the corral, the camp fire crackling in the pines.',
-    style: 'film', rain: 0, wind: 0.2, ambience: 1,
+    style: 'film', rain: 0, wind: 0.09, ambience: 1,
     life: { people: 4, riders: 0, coach: 0 },
     clips: [
       { shot: 15, seconds: 60, mood: 'night', move: 'cut' }, // Forest Camp
@@ -57,7 +57,7 @@ export const VIDEO_PRESETS = {
   duskValley: {
     label: 'Dusk over the valley',
     about: 'Long, slow flights over the whole valley as the sun goes down and the lamps come on.',
-    style: 'film', rain: 0, wind: 0.35, ambience: 0.7,
+    style: 'film', rain: 0, wind: 0.16, ambience: 0.7,
     life: {},
     clips: [
       { shot: 7, seconds: 60, mood: 'dusk', move: 'cut' }, // Hilltop Vista
@@ -69,7 +69,7 @@ export const VIDEO_PRESETS = {
   cozyCafe: {
     label: 'Cozy Honey Bun Café (animated film look)',
     about: 'Inside Honey Bun Café: cakes at the counter, board games and piano music, in the soft animated-film style.',
-    style: 'film', rain: 0.4, wind: 0.2, ambience: 1,
+    style: 'film', rain: 0.4, wind: 0.09, ambience: 1,
     life: {},
     clips: [
       { shot: 17, seconds: 40, mood: 'dusk', move: 'cut' }, // Through the Doors
@@ -80,7 +80,7 @@ export const VIDEO_PRESETS = {
   villageDusk: {
     label: 'Village at dusk',
     about: 'Follow the quiet lane into Willow Creek, glide past the chapel, and watch warm windows light the hillside.',
-    style: 'film', rain: 0, wind: 0.2, ambience: 1,
+    style: 'film', rain: 0, wind: 0.09, ambience: 1,
     life: { hamlet: 1, wind: 0.3 },
     clips: [
       { shot: 21, seconds: 90, mood: 'villageDusk', move: 'cut' },
@@ -91,7 +91,7 @@ export const VIDEO_PRESETS = {
   cozyTownCenter: {
     label: 'Cozy town center',
     about: 'Flower-filled boardwalks and a little market, then warm lanterns around the fountain as evening settles.',
-    style: 'film', rain: 0, wind: 0.2, ambience: 0.65,
+    style: 'film', rain: 0, wind: 0.09, ambience: 0.65,
     life: { people: 10, riders: 0, coach: 0, wind: 0.3 },
     clips: [
       { shot: 24, seconds: 100, mood: 'golden', move: 'cut' },
@@ -100,22 +100,22 @@ export const VIDEO_PRESETS = {
   },
   friendlyGhostTown: {
     label: 'Friendly ghost town', about: 'Smiling neighbours, silver mist and gentle bells in sleepy Old Hollow, from warm dusk to soft moonlight.',
-    style: 'film', rain:0, wind:0.15, ambience:0.5,
+    style: 'film', rain:0, wind:0.07, ambience:0.5,
     life:{people:6,riders:0,coach:0,wind:0.25},
     clips:[{shot:25,seconds:100,mood:'villageDusk',move:'cut'},{shot:25,seconds:100,mood:'night',move:'fly'}],
   },
   fireflyForest: {
     label:'Firefly forest',about:'A lantern trail, glowing mushroom rings and sleepy owls as fireflies fill the clearing.',
-    style: 'film',rain:0,wind:0.15,ambience:0.65,life:{people:4,riders:0,coach:0,wind:0.25},
+    style: 'film',rain:0,wind:0.07,ambience:0.65,life:{people:4,riders:0,coach:0,wind:0.25},
     clips:[{shot:26,seconds:100,mood:'villageDusk',move:'cut'},{shot:26,seconds:100,mood:'night',move:'fly'}],
   },
-  dreamyMeadow:{label:'Dreamy meadow',about:'Dreamland flower colours, butterflies and a soft rainbow over a sparkling waterfall lake.',style: 'film',rain:0,wind:0.2,ambience:0.65,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:27,seconds:100,mood:'morning',move:'cut'},{shot:27,seconds:100,mood:'golden',move:'fly'}]},
-  magicCrystalHill:{label:'Magic crystal hill',about:'A bright crystal room and a softly glowing rainbow balloon above the valley.',style: 'film',rain:0,wind:0.2,ambience:0.55,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:28,seconds:90,mood:'golden',move:'cut'},{shot:29,seconds:110,mood:'villageDusk',move:'fly'}]},
+  dreamyMeadow:{label:'Dreamy meadow',about:'Dreamland flower colours, butterflies and a soft rainbow over a sparkling waterfall lake.',style: 'film',rain:0,wind:0.09,ambience:0.65,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:27,seconds:100,mood:'morning',move:'cut'},{shot:27,seconds:100,mood:'golden',move:'fly'}]},
+  magicCrystalHill:{label:'Magic crystal hill',about:'A bright crystal room and a softly glowing rainbow balloon above the valley.',style: 'film',rain:0,wind:0.09,ambience:0.55,life:{people:4,riders:0,coach:0,wind:0.35},clips:[{shot:28,seconds:90,mood:'golden',move:'cut'},{shot:29,seconds:110,mood:'villageDusk',move:'fly'}]},
   // 2:30 YouTube tour: every area once, 9–15 s each at the shots' own calm pace (natural), joined by cuts
   grandTour: {
     label: 'Grand tour of SP Creek (2:30)',
     about: 'Every corner of the valley in two and a half minutes: the town, the café, the mill, Willow Creek, Old Hollow, the forest, the meadow and the crystal hill.',
-    style: 'film', rain: 0, wind: 0.25, ambience: 0.8,
+    style: 'film', rain: 0, wind: 0.11, ambience: 0.8,
     life: { people: 14, riders: 2 },
     clips: [
       { shot: 1, seconds: 15, mood: 'golden', move: 'cut', natural: true }, // 0:00 Arrival
@@ -133,3 +133,22 @@ export const VIDEO_PRESETS = {
     ],
   },
 };
+
+// Long background loops appended after the existing presets; location sound follows the camera.
+const seasonalLife={people:6,riders:0,coach:0,train:0,chickens:1,tumbleweeds:0,wind:0.35,hamlet:1};
+const calmPreset=(label,about,season,mood,shots)=>({label,about,season,style:'film',rain:0,wind:0.07,ambience:0.65,life:{...seasonalLife},clips:shots.map((shot,i)=>({shot,seconds:1200/shots.length,mood,move:i?'fly':'cut'}))});
+VIDEO_PRESETS.mistyValley=calmPreset('Misty morning in the valley','20 minutes of low river and lake mist, water and quiet morning birds.','summer','morning',[10,34,32]);
+VIDEO_PRESETS.sunbeamTown=calmPreset('Golden sunbeams over town','20 minutes of a very slow town stroll, warm light and soft village sounds.','summer','golden',[24]);
+VIDEO_PRESETS.moonlitFireflies=calmPreset('Moonlit night with fireflies','20 minutes among gentle fireflies and sleepy forest sounds.','summer','night',[26]);
+VIDEO_PRESETS.autumnWillow=calmPreset('Autumn leaves in Willow Creek','20 minutes above gold and russet trees, drifting leaves and quiet village life.','autumn','villageDusk',[23]);
+VIDEO_PRESETS.snowyEvening=calmPreset('Snowy winter evening','20 minutes of soft snowfall, cosy windows and the smiling square snowman.','winter','villageDusk',[24,36,4]);
+VIDEO_PRESETS.deerFamily=calmPreset('Deer at the forest edge','20 minutes with the grazing deer family, birds and a gentle breeze.','summer','golden',[35]);
+
+VIDEO_PRESETS.paviSiri={label:'A day with Pavi & Siri',about:'Meet the brother and sister, follow their gentle town walk and rest beside Willow Creek pond.',style:'film',season:'summer',rain:0,wind:0.07,ambience:0.65,life:{people:8,riders:0,coach:0,train:0,chickens:1,tumbleweeds:0,wind:0.35,hamlet:1},clips:[{shot:37,seconds:365,mood:'golden',move:'cut'},{shot:37,seconds:35,mood:'golden',move:'cut'},{shot:37,seconds:280,mood:'villageDusk',move:'cut'}]};
+
+VIDEO_PRESETS.sunsetCove={label:'Sunset at the cove',about:'20 minutes over the warm seaside village, a gentle sibling beach walk and the lantern lane to the sea.',style:'film',season:'summer',rain:0,wind:0.07,ambience:0.65,life:{people:6,riders:0,coach:0,train:0,chickens:1,tumbleweeds:0,wind:0.3,hamlet:1},clips:[{shot:39,seconds:400,mood:'golden',move:'cut'},{shot:40,seconds:400,mood:'golden',move:'cut'},{shot:41,seconds:400,mood:'villageDusk',move:'fly'}]};
+
+VIDEO_PRESETS.episode1Welcome={label:'Episode 1: Welcome to SP Creek',about:'Three quiet minutes introducing Siri and Pavi at Sunset Cove, seen from behind and far away.',style:'film',season:'summer',rain:0,wind:0.05,ambience:0.65,life:{people:6,riders:0,coach:0,train:0,chickens:1,tumbleweeds:0,wind:0.25,hamlet:1},clips:[{shot:39,seconds:20,mood:'golden',move:'cut'},{shot:43,seconds:35,mood:'golden',move:'cut'},{shot:44,seconds:35,mood:'golden',move:'cut'},{shot:41,seconds:20,mood:'golden',move:'cut'},{shot:42,seconds:70,mood:'golden',move:'cut'}]};
+VIDEO_PRESETS.letsBuild={label:"Let's build SP Creek",about:'Replay your own pieces in placement order with a soft settle and a slow orbit. Length follows your build and replay speed.',style:'film',season:'summer',rain:0,wind:0.07,ambience:0.5,life:{people:0,riders:0,coach:0,train:0,chickens:0,tumbleweeds:0,wind:0.35,hamlet:1},clips:[{shot:'buildReplay',seconds:1,replaySpeed:2,mood:'golden',move:'cut'}]};
+
+VIDEO_PRESETS.lanternEvening={label:'Lantern evening by the lake',about:'A quiet lantern-lit street, then warm paper lights rising over the lake with friends and fireflies.',style:'film',season:'summer',festival:true,rain:0,wind:0.05,ambience:0.65,life:{people:8,riders:0,coach:0,train:0,chickens:0,tumbleweeds:0,wind:0.25,hamlet:1},clips:[{shot:24,seconds:200,mood:'villageDusk',move:'cut'},{shot:27,seconds:700,mood:'villageDusk',move:'fly'},{shot:27,seconds:300,mood:'night',move:'cut'}]};

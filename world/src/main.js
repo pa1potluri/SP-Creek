@@ -9,6 +9,9 @@ import { createSky, createMountains } from './sky.js';
 import { Atmosphere, PRESETS } from './atmosphere.js';
 import { OilShader, LookShader, FinalShader } from './painterly.js';
 import { STYLES } from './styles.js';
+import { Seasons } from './seasons.js';
+import { buildSunsetCove } from './areas/sunset-cove.js';
+import { buildPlayground } from './areas/playground.js';
 import * as T from './textures.js';
 import { Director } from './camera.js';
 import { AudioEngine } from './audio.js';
@@ -79,6 +82,18 @@ const ghostTown = buildGhostTown(world);
 const forest = buildForest(world);
 const meadowLake = await buildMeadowLake(world);
 const crystalMine = buildCrystalMine(world);
+const sunsetCove=await buildSunsetCove(world,life);
+const playground=buildPlayground(world,life);
+const seasons=new Seasons(world,atmos,{forest,meadowLake});
+function setSeason(key,save=false){seasons.set(key);$('#season').value=seasons.key;if(save)LS.set('dh.season',seasons.key);}
+$('#season').onchange=()=>setSeason($('#season').value,true);
+setSeason(LS.get('dh.season')||'summer');
+function setWeather(key,save=false){atmos.setWeather(key);$('#weather').value=atmos.weather;if(save)LS.set('dh.weather',atmos.weather);}
+$('#weather').onchange=()=>setWeather($('#weather').value,true);
+setWeather(LS.get('dh.weather')||'auto');
+function setFestival(on,save=false){atmos.festival=world.festival=!!on;$('#festival').checked=atmos.festival;if(save)LS.set('dh.festival',atmos.festival);}
+$('#festival').onchange=()=>setFestival($('#festival').checked,true);
+setFestival(LS.get('dh.festival')??false);
 let familyMode = DEFAULT_FAMILY_MODE;
 // Saved only when the user flips the switch, so the default can still change later. (The old key
 // 'dh.familyMode' was written on every load, not chosen, so it is ignored.)
@@ -459,7 +474,7 @@ buildButtons.forEach((b) => { b.onclick = () => {
   if (b.dataset.build === 'hotel') $('#buildFloors').value = 2;
   $('#buildFloors').nextElementSibling.textContent = $('#buildFloors').value;
   const signs = { shop: 'GENERAL STORE', hotel: 'HOTEL', house: 'HOMESTEAD', barn: 'LIVERY STABLE', chapel: '', tower: '', windmill: '', cabin: '', brick: 'GENERAL STORE', blacksmith: 'BLACKSMITH', hitch: '' };
-  $('#buildSign').value = signs[b.dataset.build]; buildSignCustom = false;
+  $('#buildSign').value = signs[b.dataset.build] || '';  buildSignCustom = false;
   setTool(`build:${b.dataset.build}`);
 }; });
 for (const id of ['buildWidth', 'buildFloors', 'buildWall', 'buildSign', 'roadWidth']) {
@@ -479,10 +494,20 @@ for (const option of $('#buildWall').options) {
   $('#buildSwatches').append(b);
 }
 $('#deleteBuilding').onclick = deleteBuilding;
+const replaySpeed=$('#replaySpeed');replaySpeed.value=LS.get('dh.replaySpeed')||2;replaySpeed.nextElementSibling.textContent=replaySpeed.value;
+replaySpeed.oninput=()=>{replaySpeed.nextElementSibling.textContent=replaySpeed.value;LS.set('dh.replaySpeed',+replaySpeed.value);for(const c of timeline.clips)if(c.shot==='buildReplay')c.replaySpeed=+replaySpeed.value;saveTimeline();if(timeline.playing&&timeline.clips[timeline.index]?.shot==='buildReplay')timeline.start(timeline.index);renderClips();};
+$('#replayBuild').onclick=()=>{
+  if(timeline.playing&&timeline.clips[timeline.index]?.shot==='buildReplay'){timeline.stop();refreshTimeline();return;}
+  if(!world.buildEntries().length)return flash('Place a few pieces first.');
+  game.exit();setTool(null);let index=timeline.clips.findIndex(c=>c.shot==='buildReplay');
+  if(index<0){index=timeline.clips.length;timeline.clips.push({shot:'buildReplay',seconds:1,mood:'keep',move:'cut'});}
+  timeline.clips[index].replaySpeed=+replaySpeed.value;saveTimeline();renderClips();timeline.start(index);refreshTimeline();
+};
 // everything made in Build mode (buildings, hitching posts, fences, roads); Willow Creek and the
 // town stay. "Remove all placed" under Place objects only clears props.
 $('#clearBuilt').onclick = () => {
   if (!confirm('Remove everything you built (buildings, hitching posts, fences and roads)?')) return;
+  world.endBuildReplay();
   selectBuilding(null);
   for (const e of [...world.fences]) world.removeFence(e);
   for (const e of [...world.buildings]) world.removeBuilding(e, false);
@@ -497,6 +522,7 @@ $('#finishFence').onclick = finishRoad;
 $('#undoFence').onclick = () => { const e = world.fences.at(-1); if (e) { world.removeFence(e); if (selectedBuilding === e) selectBuilding(null); saveLayout(); } };
 $('#finishRoad').onclick = finishRoad;
 $('#undoRoad').onclick = () => {
+  world.endBuildReplay();
   const e = world.roads.pop();
   if (e) { world.root.remove(e.obj); e.obj.geometry.dispose(); saveLayout(); }
 };
@@ -609,9 +635,10 @@ const saveTimeline = () => LS.set('dh.timeline', timeline.toJSON());
 timeline.clips = LS.get('dh.timeline') || [];
 
 function renderClips() {
-  const box = $('#clips'), shots = [...director.shots.map((s, i) => [i, s.name]), ['custom', 'Your camera move']];
+  const box = $('#clips'), shots = [...director.shots.map((s, i) => [i, s.name]), ['custom', 'Your camera move'], ['buildReplay','Replay build']];
   box.innerHTML = timeline.clips.length ? '' : '<p class="hint">No clips yet: choose a shot and a mood above, then press + Add clip.</p>';
   timeline.clips.forEach((c, i) => {
+    if(c.shot==='buildReplay')c.seconds=timeline.duration(c);
     const d = document.createElement('div');
     d.className = 'clip';
     d.innerHTML = `<div class="top"><span class="num">${i + 1}.</span><select data-k="shot" title="Shot">${options(shots, c.shot)}</select></div>
@@ -619,8 +646,10 @@ function renderClips() {
       <select data-k="mood" title="Mood for this clip">${options(moodOptions, c.mood)}</select>
       <select data-k="move" title="How the camera gets here">${options([['fly', 'fly'], ['cut', 'cut']], c.move)}</select>
       <span class="tools"><button data-a="-1" title="Move up">↑</button><button data-a="1" title="Move down">↓</button><button data-a="del" title="Remove">✕</button></span></div>`;
+    if(c.shot==='buildReplay'){d.querySelector('[data-k=seconds]').disabled=true;d.querySelector('[data-k=seconds]').title='Replay length follows your piece count and speed';}
     d.querySelectorAll('[data-k]').forEach((el) => (el.onchange = () => {
       c[el.dataset.k] = el.dataset.k === 'seconds' ? Math.max(0.5, +el.value || 0.5) : el.value;
+      if(el.dataset.k==='shot'){if(c.shot==='buildReplay')c.replaySpeed=+replaySpeed.value;renderClips();}
       saveTimeline();
       refreshTimeline();
     }));
@@ -646,6 +675,7 @@ function refreshTimeline() {
   $('#tlTotal').textContent = `${timeline.clips.length} clip${timeline.clips.length === 1 ? '' : 's'} · ${mmss(timeline.total)}` + (music ? ` · music ${mmss(music)}` : '');
   $('#tlPlay').textContent = timeline.playing ? '■ Stop' : '▶ Play timeline';
   $('#tlPlay').classList.toggle('on', timeline.playing);
+  $('#replayBuild').textContent=timeline.playing&&timeline.clips[timeline.index]?.shot==='buildReplay'?'Stop replay':'Replay build';
   if (!timeline.playing) highlightClip(-1);
 }
 $('#addClip').onclick = () => {
@@ -683,6 +713,9 @@ function applyVideoPreset(key) {
   game.exit();
   timeline.stop();
   if ($('#presetStyle').checked) applyStyle(p.style);
+  setSeason(p.season||'summer',true);
+  setWeather(p.weather||'auto',true);
+  setFestival(!!p.festival,true);
   setSlider('atmos', 'rain', p.rain);
   setSlider('audio', 'wind', p.wind);
   setSlider('audio', 'ambience', p.ambience);
@@ -707,7 +740,7 @@ function applyVideoPreset(key) {
 // ---------- project files ----------
 function projectData() {
   return {
-    app: 'dusty-hollow', version: 1, familyMode, style: styleKey, paint: { ...paint }, look: { ...lookParams },
+    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, festival:atmos.festival, style: styleKey, paint: { ...paint }, look: { ...lookParams },
     mood: atmos.key, atmos: { ...atmos.mult }, life: { ...life.settings }, letterbox: fin.uniforms.uLetterbox.value,
     timeline: timeline.toJSON(), keys: director.custom.map((k) => [k.pos.toArray(), k.look.toArray()]), layout: world.layout(),
   };
@@ -717,6 +750,9 @@ function loadProject(p) {
   timeline.stop();
   setFamilyMode(p.familyMode ?? DEFAULT_FAMILY_MODE, true);
   applyStyle(p.style);
+  setSeason(p.season||'summer',true);
+  setWeather(p.weather||'auto',true);
+  setFestival(!!p.festival,true);
   for (const [k, v] of Object.entries(p.paint || {})) setSlider('paint', k, v);
   for (const [k, v] of Object.entries(p.look || {})) setSlider('look', k, v);
   for (const [k, v] of Object.entries(p.atmos || {})) setSlider('atmos', k, v);
@@ -847,7 +883,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { seasons, setSeason, setWeather, setFestival, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;
@@ -945,7 +981,7 @@ function listener() {
   return {
     x: p.x, z: p.z, rx: e[0], rz: e[2], inside, riverZ: riverZ(p.x),
     cafe: cafePos && { x: cafePos.x, z: cafePos.z },
-    night: c.stars, day: 1 - c.stars, rain: THREE.MathUtils.clamp(c.rain + atmos.mult.rain, 0, 1),
+    night: c.stars, day: 1 - c.stars, rain: world.rainAmount ?? THREE.MathUtils.clamp(c.rain + atmos.mult.rain, 0, 1),
     train: t && t.state !== 'away' ? { x: RAIL_X, z: t.s, v: t.v, state: t.state, approaching: t.state === 'run' && !t.stopped } : null,
   };
 }
@@ -957,7 +993,9 @@ function step(dt) {
   if (timeline.update(dt) === 'ended') refreshTimeline();
   if (game.active) game.update(dt);
   else director.update(dt);
+  world.wind=life.settings.wind*(atmos.weather==='windy'?2.2:1);
   atmos.update(dt, time, camera);
+  seasons.update(time,camera);
   world.update(dt, time, camera);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
@@ -966,6 +1004,8 @@ function step(dt) {
   crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(dt, time, camera);
+  sunsetCove.update(time,camera,atmos.cur);
+  playground.update(time,camera);
   cafe.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
   audio.tick(listener(), dt);
@@ -1030,3 +1070,4 @@ function frame() {
 }
 atmos.setPreset('golden', true);
 frame();
+if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));

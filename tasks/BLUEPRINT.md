@@ -91,6 +91,6 @@ west and flows into the bay at its south end.
 
 ## Little growing garden (task 37)
 
-- Uses free grass at (-164, 15), north of Willow Creek and east of the meadow, clear of the railway, camp and pond.
-- Four soft-edged beds: sunflowers, carrots, pumpkins and flowers. A central walking gap and a path from (-145,45) through (-153,35) and (-164,29).
+- Uses free grass at (-151, 10), north of Willow Creek and east of the meadow, clear of the railway, camp and pond.
+- Four soft-edged beds: sunflowers, carrots, pumpkins and flowers. A central walking gap and a path from (-145,45) through (-140,30) and (-151,24).
 - Pure-time seed, growth, watering and harvest story; five bed pieces join the existing Build extension catalogue.

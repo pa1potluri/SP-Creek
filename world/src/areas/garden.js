@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { terrainHeight, batchRigidParts } from '../world.js';
-export const GARDEN={x:-164,z:15};
+export const GARDEN={x:-151,z:10};
 export const GARDEN_PIECES={seedBed:{label:'Little seed bed',bounds:[2.8,1.8]},sunflowerBed:{label:'Sunflower bed',bounds:[2.8,1.8]},carrotBed:{label:'Carrot bed',bounds:[2.8,1.8]},pumpkinBed:{label:'Pumpkin bed',bounds:[2.8,1.8]},flowerBed:{label:'Flower garden bed',bounds:[2.8,1.8]}};
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const material=color=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.07});
@@ -38,7 +38,7 @@ export function buildGarden(world){
  world.extraBuildPieces??={};for(const [type,spec]of Object.entries(GARDEN_PIECES)){world.extraBuildPieces[type]={...spec,build:g=>g.add(makeBed(type,m).root)};const b=document.createElement('button');b.dataset.build=type;b.textContent=spec.label;document.querySelector('#buildCatalogue').append(b);}
  const beds=['sunflowerBed','carrotBed','pumpkinBed','flowerBed'].map((type,i)=>{const bed=makeBed(type,m);bed.root.position.set(i%2?5:-5,0,i<2?-4:4);root.add(bed.root);return bed;});
  root.updateMatrixWorld(true);for(const bed of beds)world.colliders.rects.push(world._rectOf(bed.root,0,0,2.75,1.75));
- world._ribbon([[-145,45],[-153,35],[-164,29],[GARDEN.x,GARDEN.z]],2.3,world._pathMaterial(),{lift:0.07});
+ world._ribbon([[-145,45],[-140,30],[-151,24],[GARDEN.x,GARDEN.z]],2.3,world._pathMaterial(),{lift:0.07});
  const add=(geo,mat,x,y,z,parent=root)=>{const mesh=new THREE.Mesh(geo,mat);mesh.position.set(x,y,z);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);return mesh;};
  const basket=new THREE.Group();basket.position.set(0,0.28,6);root.add(basket);add(new THREE.SphereGeometry(1,12,8,0,Math.PI*2,Math.PI/2,Math.PI/2).scale(0.5,0.4,0.35),m.wood,0,0,0,basket);add(new THREE.TorusGeometry(0.32,0.03,5,18),m.wood,0,0.25,0,basket);const harvest=[];for(let i=0;i<5;i++)harvest.push(add(new THREE.SphereGeometry(0.12,8,6),m.orange,-0.25+i*0.12,0.05,(i%2)*0.1,basket));
  const can=new THREE.Group();can.name='Rounded watering can';add(new THREE.SphereGeometry(1,12,10).scale(0.23,0.22,0.18),m.blue,0,0,0,can);add(new THREE.CapsuleGeometry(0.045,0.36,3,8).rotateZ(-0.8),m.blue,0.27,0.08,0,can);add(new THREE.TorusGeometry(0.18,0.03,5,18),m.blue,-0.19,0.03,0,can);root.add(can);

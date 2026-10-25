@@ -1,4 +1,4 @@
-import { buildGarden } from './areas/garden.js';
+import { buildGarden, GARDEN } from './areas/garden.js';
 import { buildPonyFarm } from './areas/pony-farm.js';
 import { balloonRideState } from './areas/crystal-mine.js';
 import { familySign } from './family.js';
@@ -930,8 +930,8 @@ export class Life {
   updateGarden(time){
     const state=gardenCameraReader(),area=this.garden;if(!area)return;const t=state?.t??((time%240+240)%240);area.update(t);area.pickedCarrot.visible=!!state&&t>=190&&t<210;area.can.visible=!!state&&t>=45&&t<190;area.drops.forEach(g=>g.visible=area.can.visible);area.seeds.forEach(g=>g.visible=!!state&&t<40);if(!state)return;
     this.gardenHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.gardenHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.gardenHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}
-    const planting=t<45,harvest=t>=190,baseX=planting?-169:-159,phase=((t%8)+8)%8/8;
-    Object.values(this.stars).forEach((p,i)=>{p.g.visible=true;p.g.position.set(baseX+(i?0.7:-0.7),area.pad.y,13.8);p.g.rotation.y=Math.PI;animatePerson(p,t*0.5,0);p.upper.rotation.x=planting||harvest?0.22:0.07;p.knees.forEach(k=>k.rotation.x=planting||harvest?0.25:0.05);p.headPitch=0.2;p.g.updateWorldMatrix(true,true);const target=V(baseX+(i?0.7:-0.7),area.pad.y+0.35+Math.sin(t*0.7+i)*0.05,12.3);pointCharacterArm(p,i?0:1,target,0.85);if(harvest){p.arms[i?0:1].rotation.x=-0.7-Math.sin(phase*Math.PI)*0.5;}});
+    const planting=t<45,harvest=t>=190,baseX=GARDEN.x+(planting?-5:5),phase=((t%8)+8)%8/8;
+    Object.values(this.stars).forEach((p,i)=>{p.g.visible=true;p.g.position.set(baseX+(i?0.7:-0.7),area.pad.y,GARDEN.z-1.2);p.g.rotation.y=Math.PI;animatePerson(p,t*0.5,0);p.upper.rotation.x=planting||harvest?0.22:0.07;p.knees.forEach(k=>k.rotation.x=planting||harvest?0.25:0.05);p.headPitch=0.2;p.g.updateWorldMatrix(true,true);const target=V(baseX+(i?0.7:-0.7),area.pad.y+0.35+Math.sin(t*0.7+i)*0.05,GARDEN.z-2.7);pointCharacterArm(p,i?0:1,target,0.85);if(harvest){p.arms[i?0:1].rotation.x=-0.7-Math.sin(phase*Math.PI)*0.5;}});
     const pavi=this.stars.pavi;area.root.updateWorldMatrix(true,false);area.can.position.copy(area.root.worldToLocal(pavi.g.localToWorld(V(-0.28,0.7,0.28))));area.pickedCarrot.position.copy(area.root.worldToLocal(pavi.g.localToWorld(V(-0.27,0.74,0.24))));area.pickedCarrot.rotation.z=Math.sin(t*0.3)*0.15;area.can.rotation.set(0,Math.PI/2,-0.25);area.drops.forEach((g,i)=>{const u=((t*0.8+i/9)%1+1)%1;g.position.copy(area.can.position);g.position.x-=0.2;g.position.z-=0.3+u*0.3;g.position.y-=u*0.65;});area.seeds.forEach((g,i)=>{const u=((t*0.3+i/8)%1+1)%1;g.position.set(-5+(i%3-1)*0.18,0.75-u*0.6,-2.1-u*0.5);});
   }
 

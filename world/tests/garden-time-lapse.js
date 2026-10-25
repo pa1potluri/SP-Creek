@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import { GARDEN, GARDEN_PIECES } from '../src/areas/garden.js';
 import { VIDEO_PRESETS } from '../src/presets.js';
+import { terrainHeight } from '../src/world.js';
 import { STYLES } from '../src/styles.js';
 export async function runGardenTests(){
  const a=window.__app,w=a.world,d=a.director,g=w.garden,original=a.projectData(),results=[],check=(ok,msg)=>{if(!ok)throw Error(msg);results.push(msg);};
  try{
   a.timeline.stop();d.auto=false;d.paused=true;const seek=(shot,t)=>{d.playShot(shot,{cut:true});d.hold=true;d.t=t;a.step(0);};
-  check(!!g&&g.beds.length===4,'Garden registers normally with four different beds');check(!w.inPond(GARDEN.x,GARDEN.z,15),'Garden occupies dry free grass');check(d.shots[75].gardenPhase===0&&d.shots[76].gardenPhase===80&&d.shots[77].gardenPhase===160,'Three views append at 75-77');
+  check(!!g&&g.beds.length===4,'Garden registers normally with four different beds');check(g.beds.every(b=>{const p=b.root.getWorldPosition(new THREE.Vector3());return Math.abs(p.y-terrainHeight(p.x,p.z))<0.05;}),'All bed floors match final terrain after later areas register');check(!w.inPond(GARDEN.x,GARDEN.z,15),'Garden occupies dry free grass');check(d.shots[75].gardenPhase===0&&d.shots[76].gardenPhase===80&&d.shots[77].gardenPhase===160,'Three views append at 75-77');
   const preset=VIDEO_PRESETS.gardenTimeLapse;check(preset.clips.reduce((n,c)=>n+c.seconds,0)===240,'Garden story is four minutes');
   seek(75,10);check(g.k===0&&g.seeds.every(o=>o.visible),'Children plant visible seeds before sprouts');check(Object.values(a.life.stars).every(p=>p.model.isSkinnedMesh&&p.model.material.map&&p.g.visible),'Garden uses original protagonist models and textures');
   const levels=[];for(const [shot,t]of [[75,40],[76,20],[77,0]]){seek(shot,t);levels.push(g.k);}check(levels[0]>0&&levels[0]<levels[1]&&levels[1]<levels[2]&&levels[2]===1,'Scrubbed growth progresses deterministically from sprouts to full plants');

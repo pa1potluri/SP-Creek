@@ -35,3 +35,7 @@
 - New regression checks exercise toSeat/sitDown/sit/getUp release/reactivation and the real Life.update hidden-town-child -> visible-town-child transition.
 - One full attempt reached the integration regression but it assumed family mode was enabled by earlier suites; corrected that test's setup/restore. This was a test precondition, not an additional production edit.
 - Production targeted pass: feedback 113 + area-shots 7 + startup-hang 7 = 127 passed; no browser errors; sound locked. Refreshed Film day/night views 0,15,26,31,35,46. Full suite rerun in progress, then repeat all 48 presets twice. Before-fix stack and failed switch sequence preserved in preview-switching-before.json.
+
+## Full suite completed after approved fix
+- All 31 suites passed: **2015 checks + 2 family startup checks**, exit 0, Browser errors []. This includes 113 feedback regressions and the inactive/reactivated town-child scenario.
+- Final 96-switch diagnostic is running against the approved production fix. Do not mark the reproduced freeze resolved until that result is saved. No further app code edits after this full-suite pass.

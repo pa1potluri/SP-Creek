@@ -1,0 +1,209 @@
+{
+  "probes": 128,
+  "walks": [
+    {
+      "name": "puddles",
+      "mood": "golden",
+      "travelled": 3.5200000000000187,
+      "dry": true,
+      "finite": true,
+      "end": [
+        1.0776891832496709e-16,
+        0,
+        15
+      ]
+    },
+    {
+      "name": "cafe",
+      "mood": "golden",
+      "travelled": 3.5200000000000173,
+      "dry": true,
+      "finite": true,
+      "end": [
+        12.5,
+        0.35,
+        2.8999999999999995
+      ]
+    },
+    {
+      "name": "rainbow",
+      "mood": "golden",
+      "travelled": 3.5209036174945574,
+      "dry": true,
+      "finite": true,
+      "end": [
+        45,
+        0.08311933703586655,
+        -40
+      ]
+    },
+    {
+      "name": "market",
+      "mood": "golden",
+      "travelled": 3.5199999999999334,
+      "dry": true,
+      "finite": true,
+      "end": [
+        1.0776891832496709e-16,
+        0,
+        -43
+      ]
+    },
+    {
+      "name": "lake-shore",
+      "mood": "golden",
+      "travelled": 3.519999999999783,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -220,
+        23.145939308561598,
+        12
+      ]
+    },
+    {
+      "name": "cove-shore",
+      "mood": "golden",
+      "travelled": 3.5199999999996976,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -355.57292438447706,
+        -0.04480000000000217,
+        -45
+      ]
+    },
+    {
+      "name": "garden",
+      "mood": "golden",
+      "travelled": 3.519999999999783,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -151,
+        19.314407341017606,
+        10
+      ]
+    },
+    {
+      "name": "puddles",
+      "mood": "night",
+      "travelled": 3.5200000000000187,
+      "dry": true,
+      "finite": true,
+      "end": [
+        1.0776891832496709e-16,
+        0,
+        15
+      ]
+    },
+    {
+      "name": "cafe",
+      "mood": "night",
+      "travelled": 3.5200000000000173,
+      "dry": true,
+      "finite": true,
+      "end": [
+        12.5,
+        0.35,
+        2.8999999999999995
+      ]
+    },
+    {
+      "name": "rainbow",
+      "mood": "night",
+      "travelled": 3.5209036174945574,
+      "dry": true,
+      "finite": true,
+      "end": [
+        45,
+        0.08311933703586655,
+        -40
+      ]
+    },
+    {
+      "name": "market",
+      "mood": "night",
+      "travelled": 3.5199999999999334,
+      "dry": true,
+      "finite": true,
+      "end": [
+        1.0776891832496709e-16,
+        0,
+        -43
+      ]
+    },
+    {
+      "name": "lake-shore",
+      "mood": "night",
+      "travelled": 3.519999999999783,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -220,
+        23.145939308561598,
+        12
+      ]
+    },
+    {
+      "name": "cove-shore",
+      "mood": "night",
+      "travelled": 3.5199999999996976,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -355.57292438447706,
+        -0.04480000000000217,
+        -45
+      ]
+    },
+    {
+      "name": "garden",
+      "mood": "night",
+      "travelled": 3.519999999999783,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -151,
+        19.314407341017606,
+        10
+      ]
+    }
+  ],
+  "screenshots": [
+    "world/tests/self-review-2-34-day.png",
+    "world/tests/self-review-2-34-night.png",
+    "world/tests/self-review-2-34-oil.png",
+    "world/tests/self-review-2-35-day.png",
+    "world/tests/self-review-2-35-night.png",
+    "world/tests/self-review-2-35-oil.png",
+    "world/tests/self-review-2-36-day.png",
+    "world/tests/self-review-2-36-night.png",
+    "world/tests/self-review-2-36-oil.png",
+    "world/tests/self-review-2-37-day.png",
+    "world/tests/self-review-2-37-night.png",
+    "world/tests/self-review-2-37-oil.png",
+    "world/tests/self-review-2-75-day.png",
+    "world/tests/self-review-2-75-night.png",
+    "world/tests/self-review-2-75-oil.png",
+    "world/tests/self-review-2-38-day.png",
+    "world/tests/self-review-2-38-night.png",
+    "world/tests/self-review-2-38-oil.png",
+    "world/tests/self-review-2-walk-puddles-day.png",
+    "world/tests/self-review-2-walk-cafe-day.png",
+    "world/tests/self-review-2-walk-rainbow-day.png",
+    "world/tests/self-review-2-walk-market-day.png",
+    "world/tests/self-review-2-walk-lake-shore-day.png",
+    "world/tests/self-review-2-walk-cove-shore-day.png",
+    "world/tests/self-review-2-walk-garden-day.png",
+    "world/tests/self-review-2-walk-puddles-night.png",
+    "world/tests/self-review-2-walk-cafe-night.png",
+    "world/tests/self-review-2-walk-rainbow-night.png",
+    "world/tests/self-review-2-walk-market-night.png",
+    "world/tests/self-review-2-walk-lake-shore-night.png",
+    "world/tests/self-review-2-walk-cove-shore-night.png",
+    "world/tests/self-review-2-walk-garden-night.png"
+  ],
+  "errors": [],
+  "audioLocked": true
+}

@@ -1050,6 +1050,9 @@ function step(dt) {
   l.uLayers.value = lookParams.layers;
   l.uPaperShadow.value = lookParams.paperShadow;
   l.uPixel.value = lookParams.pixel;
+  l.uWash.value = lookParams.wash;
+  l.uPigment.value = lookParams.pigment;
+  l.uPaper.value = lookParams.paper;
   // focus follows whatever the camera is looking at, eased so it racks smoothly
   const focusTarget = camera.position.distanceTo(director.state.look);
   l.uFocus.value += (focusTarget - l.uFocus.value) * Math.min(1, dt * 2.5);

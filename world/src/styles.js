@@ -1,5 +1,5 @@
-﻿// Art styles: each sets the brush/finish sliders plus the depth-based look.
-// look.mode: 0 none, 1 animated film, 2 blocky toy, 3 paper cut, 4 pixel art (see LookShader).
+// Art styles: each sets the brush/finish sliders plus the depth-based look.
+// look.mode: 0 none, 1 animated film, 2 blocky toy, 3 paper cut, 4 pixel art, 5 watercolour (see LookShader).
 // textures: which texture set the world wears (World.setTextureSet): oil, clean or flat.
 // plants: which trees and grass stand in the world (World.setPlants): painted, blocks or lowpoly.
 // Nothing here animates by itself: with a still camera every style gives a perfectly still picture.
@@ -33,5 +33,10 @@ export const STYLES = {
     label: 'Pixel art', textures: 'flat', plants: 'lowpoly',
     paint: { radius: 1, strength: 0.6, wobble: 0, boil: 0, impasto: 0, canvas: 0, sat: 1.1, warmth: 0, contrast: 1.05, vignette: 0.15, grain: 0 },
     look: { mode: 4, poster: 8, pixel: 4 }, fxaa: false, weave: 0,
+  },
+  watercolor: {
+    label: 'Watercolour (preview)', textures: 'clean', plants: 'painted',
+    paint: { radius: 3, strength: 0.6, wobble: 0.15, boil: 0, impasto: 0, canvas: 0, sat: 0.9, warmth: 0.02, contrast: 0.94, vignette: 0.08, grain: 0 },
+    look: { mode: 5, wash: 0.65, pigment: 0.45, paper: 0.55 }, fxaa: true, weave: 0,
   },
 };

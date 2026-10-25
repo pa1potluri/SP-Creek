@@ -61,21 +61,23 @@ export const OilShader = {
     }`,
 };
 
-// Art styles that need the depth map. uMode: 0 none, 1 animated film, 2 blocky toy, 3 paper cut, 4 pixel art.
+// Art styles that need the depth map. uMode: 0 none, 1 animated film, 2 blocky toy, 3 paper cut, 4 pixel art, 5 watercolour.
 export const LookShader = {
   uniforms: {
     tDiffuse: { value: null }, tDepth: { value: null }, uRes: { value: new THREE.Vector2(1, 1) },
     uNear: { value: 0.1 }, uFar: { value: 4000 }, uMode: { value: 0 },
     uPoster: { value: 6 }, uOutline: { value: 1 }, uDof: { value: 0 }, uFocus: { value: 10 }, uBloom: { value: 0 },
     uLayers: { value: 7 }, uPaperShadow: { value: 1 }, uPixel: { value: 4 },
+    uWash: { value: 0.65 }, uPigment: { value: 0.45 }, uPaper: { value: 0.55 },
   },
   vertexShader: vert,
   fragmentShader: /* glsl */ `
     #include <packing>
     uniform sampler2D tDiffuse, tDepth; uniform vec2 uRes; uniform float uNear, uFar;
     uniform int uMode;
-    uniform float uPoster, uOutline, uDof, uFocus, uBloom, uLayers, uPaperShadow, uPixel;
+    uniform float uPoster, uOutline, uDof, uFocus, uBloom, uLayers, uPaperShadow, uPixel, uWash, uPigment, uPaper;
     varying vec2 vUv;
+    ${noiseFns}
     float dist(vec2 uv) { return -perspectiveDepthToViewZ(texture2D(tDepth, uv).x, uNear, uFar); }
     // step the brightness into bands but keep each colour's hue and saturation
     vec3 poster(vec3 c, float n) {
@@ -137,6 +139,33 @@ export const LookShader = {
         if (ze > z * 1.12) c = mix(c, vec3(1.0, 0.97, 0.92), 0.4);
         // the far land is laid in a few flat sheets, each a touch paler with distance
         c = mix(c, vec3(0.95, 0.9, 0.82), layerOf(uv) / max(uLayers, 1.0) * 0.18);
+      } else if (uMode == 5) {
+        // Screen-fixed paper and blooms have no clock input: frozen frames stay exact.
+        vec2 paperPos = uv * uRes / max(k, 1.0);
+        vec2 bleed = vec2(noise(paperPos * 0.035), noise(paperPos * 0.035 + 23.0)) - 0.5;
+        vec2 washUV = uv + bleed * px * max(k, 1.0) * uWash * 1.4;
+        vec3 wash = texture2D(tDiffuse, washUV).rgb;
+        float colorEdge = 0.0;
+        for (int i = 0; i < 12; i++) {
+          float a = float(i) * 2.39996;
+          vec2 offset = vec2(cos(a), sin(a)) * (1.0 + float(i) / 12.0) * (1.0 + uWash * 3.0) * max(k, 1.0) * px;
+          vec3 neighbour = texture2D(tDiffuse, washUV + offset).rgb;
+          wash += neighbour;
+          colorEdge = max(colorEdge, length(c - neighbour));
+        }
+        wash /= 13.0;
+        c = mix(c, wash, uWash * 0.7);
+        c = mix(c, poster(c, 18.0), 0.18);
+        float light = dot(c, vec3(0.299, 0.587, 0.114));
+        c = mix(vec3(light), c, 0.9);
+        c = mix(c, vec3(1.0, 0.985, 0.95), 0.07);
+        float rim = max(depthEdge(uv, px * max(k, 1.0) * 1.3), smoothstep(0.06, 0.42, colorEdge));
+        c *= 1.0 - rim * uPigment * 0.22;
+        float tooth = (noise(paperPos * 0.8) - 0.5) * 0.07 + (noise(paperPos * 0.18) - 0.5) * 0.045;
+        float bloom = noise(paperPos * 0.018 + noise(paperPos * 0.006) * 7.0) - 0.5;
+        c += tooth * uPaper * (0.35 + light * 0.65);
+        c *= 1.0 + bloom * uWash * 0.10;
+        c = mix(c, vec3(1.0, 0.99, 0.97), smoothstep(0.65, 1.0, light) * uPaper * (0.05 + max(tooth, 0.0)));
       } else if (uMode == 4) {
         c = poster(c, uPoster);
       }

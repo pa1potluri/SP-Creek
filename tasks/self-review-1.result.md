@@ -6,5 +6,6 @@
 - Contact-sheet inspection found normal walking-view protagonists absent after balloon -> train -> walking scene switching. Reproduced both hidden on shot 37: the playground captured the balloon's temporary false visibility, then the train reused it.
 - Fixed life.js: release outgoing balloon/train ownership before the next scene/playground snapshots visibility, and update the playground's saved baseline when restoring. Added four scene-handoff regressions to train-trip.js (32 now); focused train 32 + balloon 20 + moments 35 = 87 passed, errors [].
 - Refreshing all review screenshots/walks after the fix, with an explicit assertion that the walking-view protagonists render after the whole probe sequence.
-- Pending: reproduce and fix visibility handoff within life.js, regression checks, refresh review images, full suite once, SELF-REVIEW-1 report and final result/QUEUE commit. Then continue task 34.
+- Refreshed evidence passed after the fix: 272 probes, 26 finite/dry Play walks, no errors, audio locked. All twelve oil views inspected; walking-view protagonists now present. SELF-REVIEW-1.md written with per-task branch heads, findings, pictures and historical counts.
+- Full 20-suite run now underway (session 94102). Pending final counts, final report/result/QUEUE commit, then task 34.
 - No merge, push or publication.

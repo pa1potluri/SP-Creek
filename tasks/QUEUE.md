@@ -59,7 +59,7 @@ finished. Re-read this file each time; Claude may change it.
 | 44 | `tasks/BIG-QUEUE-40-47.md` (snow-day) | `area/snow-day` | done; four scenes 82-85 + 240s preset; full 1822 + 2; snow checks 31; eight day/night + Oil previews |
 | 45 | `tasks/BIG-QUEUE-40-47.md` (kite-picnic) | `area/kite-picnic` | done; six views 86-91 + two 240s presets; full 1861 + 2; outing checks 33; 12 day/night + Oil previews |
 | 46 | `tasks/BIG-QUEUE-40-47.md` (episode-presets-3) | `area/episode-presets-3` | done; Episodes 10-13 at 180s + wide views 92-95; full 1900 + 2; episode checks 35; day/night + Oil saved; inherited cove band open |
-| 47 | `tasks/BIG-QUEUE-40-47.md` (self-review-3) | `area/self-review-3` | queued |
+| 47 | `tasks/BIG-QUEUE-40-47.md` (self-review-3) | `area/self-review-3` | WIP; review poses/walks passed; no-GLB static checks 138 passed; final captures/report/full suite pending |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -72,3 +72,5 @@ meadow & lake, crystal mine & balloon.
 > If a task gets stuck, write it in STUCK.md and go to the next one. Then tasks 32-39 (added 2026-10-25, again a 3-day queue); task 31 timing wait lifted by user after review of 32-39; stop after task 31.
 
 > Queue extension 2026-10-25: task 31 completed in 988845b; continue 40-47 on stacked branches, then stop. Never merge, push or publish.
+
+> User style direction (2026-10-25): STYLE*.png images are final-output references; current world is the foundation. Shared Claude handoff and tentative visual timeline: `tasks/STYLE-TIMELINE.md`. Finish review 47, then stop; no new visual-expansion work started.

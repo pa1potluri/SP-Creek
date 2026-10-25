@@ -1,19 +1,9 @@
-# Episodes 6 to 9 - WIP
+# Episodes 6 to 9 - complete
 
-- Branch area/episode-presets-2 from garden completion a458ffe. Rules, queue, blueprint and task read.
-- Four appended three-minute presets: A rainy day, Market day, A little boat trip, Let's grow a garden. Natural pacing, quiet cuts, wide opening and ending, original scene settings retained.
-- Appended establishing views 78-81: rainy town, clearing rainbow, wide cove boat, completed garden harvest. Existing views and preset entries remain in place. Garden ending uses phase 210-240 so grown beds and harvest stay visible.
-- Scoped app changes only camera.js and presets.js. Focused smoke and eight required day/night previews underway.
-- Left: inspect previews, full suite once on final code, counts and final result/QUEUE commit. Stopped at initial verification. No merge, push or publication.
-
-- Focused smoke: **25 passed**, browser errors [], sound locked. Eight final Animated film day/night previews 78-81 saved and inspected, with actual drizzle for 78 and clearing weather for 79. Full 25-suite run underway on unchanged final code; remaining final counts/result and completion commit.
-
-- Night preview finding: new wide cove view faced a large dark hillside. Turned only appended view 80 toward open water for a calmer night composition. Initial full run interrupted and not counted; refreshed 80 day/night and final full rerun follow.
-
-- Final view 80 is a higher seaward aerial with open water for end-card text and a narrow shoreline. Final day/night pair inspected: boat and jackets visible, dark hillside and hard palm shadows outside frame. Final full 25-suite rerun starts on this committed code; remaining counts and completion commit.
-
-- Full rerun found view 79 inside a church roof cone under the suite lighting direction. Raised this appended wide view from 14m to 26m above terrain. Refreshing its day/night pair and checking episode + clearance suites before the final full rerun. No failed/partial full run counted as passing.
-
-- Corrected episode + full camera-clearance check: **25 + 83 = 108 passed**, 82 views / 16,482 samples, no collisions or browser errors, sound locked. Refreshing the day image after the UI fully hides; full 25-suite rerun remains the final requirement.
-
-- Final rainbow pair inspected at raised height; day image refreshed after panel transition. Full 25-suite rerun underway on corrected code, with all eight final previews saved. Remaining: final full counts and completion commit.
+- Branch area/episode-presets-2 from garden completion a458ffe. Four appended presets, each **180 seconds** with natural pacing, quiet cuts and wide starts/ends: Episode 6 A rainy day; Episode 7 Market day; Episode 8 A little boat trip; Episode 9 Let's grow a garden.
+- Appended views 78-81 only: rainy town, wide clearing rainbow, cove boat end card and completed garden harvest. Existing shots/presets keep their numbers and definitions. Scoped app changes only camera.js and presets.js.
+- Rain episode inherits clearing weather; market enables its switch; boat ending continues the cove route; garden ending holds phase 210-240 and the full harvest. No face close-ups or audio changes.
+- Full suite: **1633 passed + 2 startup reload checks**, all 25 suites, browser errors []. Episode checks: **25**. Counts: world/tests/episode-presets-2-full.json. All **82 views / 16,482 samples** pass clearance.
+- Before the successful full run: reframed cove view 80 above open water so night hills/shadows stay outside the end-card composition; lifted rainbow view 79 above the church roof after clearance found a cone collision. Corrected focused episode + clearance checks: **108 passed**. Failed/partial runs are not counted as passing.
+- Eight final Animated film previews saved and inspected: world/tests/episode-presets-2-78-day.png / -night.png; episode-presets-2-79-day.png / -night.png; episode-presets-2-80-day.png / -night.png; episode-presets-2-81-day.png / -night.png. Rain views use actual drizzle/clearing weather; controls fully hidden.
+- Nothing unfinished. Tests keep sound locked. No merge, push or publication; Claude review pending.

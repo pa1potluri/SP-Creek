@@ -28,3 +28,10 @@
 - No abandoned Playwright headless browsers found. Diagnostic browsers have exited; no full suite is running. Keep the preview server running for the user's review.
 - FULL SUITE STILL PENDING for this branch. Old 1900 + 2 result belongs to prior app checkpoint, not this WIP. No task completion claim.
 - Resume: inspect remaining visible plant-footprint gaps; profile rapid menu/style/preset switching serially; verify raised-walkable equivalence and global vegetation impact; then full suite plus affected screenshots before done. Never push/merge.
+
+## Follow-up loading/menu profile (2026-10-25)
+- Isolated silent Chrome, 1280x720: readiness 21,558ms. Two main-thread long tasks measured 9,905ms and 10,103ms. Slowest listed image transfer ~250ms; local file serving is not the dominant delay in this sample.
+- Separate startup CPU sample: applyUserPads ~10,202ms self time; withinPad ~2,847ms; Three.js shader onFirstUse ~3,981ms; texture upload ~724ms. These are sampled CPU totals, not an exact wall-clock partition. Terrain pad calculations and first-render shader preparation are confirmed startup hotspots.
+- Four synthetic ready-made preset selections (Dreamy meadow, Firefly forest, Golden afternoon, Dreamy meadow): handlers 2.9 / 2.2 / 37.8 / 2.2ms. Each subsequent two-second frame sample produced 121-122 frames; largest frame gap 33.4ms. No actual intermittent freeze reproduced at 720p. Browser closed after each diagnostic run; no audio unlocked.
+- User screenshot shows a substantially larger preview. Rendering cost at that size, real user's persisted state, GPU/browser state and longer sequences remain unmeasured. Do not claim the freeze fixed or blame its playback timer.
+- No app code changed in this diagnostic pass; no new full-suite run or screenshots. Next: optimise repeated terrain pad work with equivalent-height checks, then measure at the user's viewport and longer preset switching. Remains WIP.

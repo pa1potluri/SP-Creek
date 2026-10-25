@@ -79,3 +79,4 @@ meadow & lake, crystal mine & balloon.
 
 > Small user-requested health pass (2026-10-25): app unchanged; server 8811 and 20 local review URLs verified; saved 1900 + 2 evidence and 28 new-shot PNGs checked. Review landing page: `http://localhost:8811/tests/self-review-3-index.html`. Two visual follow-ups remain open; no larger task started.
 
+> Loading diagnosis follow-up: 21.558s startup at 720p; terrain pad calculations and first-use shaders dominate CPU samples. Four preset clicks responsive in isolated test; user freeze still unresolved. Task 48 remains WIP; see its result.

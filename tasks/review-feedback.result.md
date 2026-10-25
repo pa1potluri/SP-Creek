@@ -18,3 +18,13 @@
 - Verify native plants after the latest one-line grounding change. Inspect Forest Trail 26, Firefly Forest Tour 31 and Deer at the Forest Edge 35 in day/night; save proper final Film screenshots.
 - Full suite has NOT been run on this WIP. Prior 1900 + 2 result applies to the previous app checkpoint only. Keep task 48 WIP until the full suite and affected screenshots pass.
 - Next: collect targeted result, inspect remaining tree-foot placement, update exact WIP status, commit everything before usage runs out. Current scope intentionally avoids new content or a renderer rewrite.
+
+## Explicit usage-stop handoff
+- User requested stop/save now. Stop new work on area/review-feedback.
+- Latest targeted run on current code: review-feedback **96**, area-shots **7**, startup-hang **5** = **108 passed**; no browser errors, audio locked. Evidence review-feedback-check.json and review-feedback-static.json.
+- Rendered-terrain interpolation max error against raycasts: 0.00001094m. Native plant height error against retained offsets: 0.00000189m. Added forest tree roots sit about 0.1m below the sampled mesh at their centres.
+- Eight Film day/night screenshots saved for shots 15, 26, 31, 35. Deer family is now visible. Some steep-slope tree cards/roots and rocks still look detached in the pictures despite centre-height checks; investigate visible footprint/geometry grounding rather than declaring the whole forest fixed.
+- Startup measurement improved from 37.964s to 25.026s before the final native-plant adjustment. No final timing claim for the last adjustment. Actual intermittent menu hang remains unconfirmed; sample clicks were quick but start 10-second flights.
+- No abandoned Playwright headless browsers found. Diagnostic browsers have exited; no full suite is running. Keep the preview server running for the user's review.
+- FULL SUITE STILL PENDING for this branch. Old 1900 + 2 result belongs to prior app checkpoint, not this WIP. No task completion claim.
+- Resume: inspect remaining visible plant-footprint gaps; profile rapid menu/style/preset switching serially; verify raised-walkable equivalence and global vegetation impact; then full suite plus affected screenshots before done. Never push/merge.

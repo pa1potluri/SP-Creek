@@ -13,7 +13,9 @@ export async function runReviewFeedbackTests(){
  a.timeline.stop();a.director.auto=false;a.director.playShot(35,{cut:true});a.step(0);
  let maxGap=-Infinity;for(const {im}of a.forest.variants)for(let i=0;i<im.count;i++){im.getMatrixAt(i,matrix);const gap=matrix.elements[13]-w.groundY(matrix.elements[12],matrix.elements[14]);maxGap=Math.max(maxGap,gap);}
  check(maxGap<.001,'Forest roots no longer float above rendered terrain');
+ let nativeError=0;for(const record of w.plantInstances)for(let i=0;i<record.mesh.count;i+=Math.max(1,Math.floor(record.mesh.count/8))){record.mesh.getMatrixAt(i,matrix);if(matrix.getMaxScaleOnAxis()===0)continue;const x=record.matrices[i*16+12],z=record.matrices[i*16+14],expected=record.matrices[i*16+13]+w.groundY(x,z)-record.heights[i];nativeError=Math.max(nativeError,Math.abs(matrix.elements[13]-expected));}
+ check(nativeError<.0002,'Native plant roots retain their offset on rendered terrain');
  check(a.forest.deer.every(({x,z})=>Math.abs(x+65)<=10&&Math.abs(z+201)<=12),'Deer family has a clear viewing glade');
  check(a.audio.ctx===null,'Feedback checks never start sound');
- return {passed:results.length,maxTerrainError:maxError,maxRootGap:maxGap,results};
+ return {passed:results.length,maxTerrainError:maxError,maxRootGap:maxGap,maxNativeHeightError:nativeError,results};
 }

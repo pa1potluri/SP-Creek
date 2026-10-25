@@ -4,7 +4,7 @@ import { gardenViews, GARDEN } from './areas/garden.js';
 import * as THREE from 'three';
 import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP, sampleTrainTrack } from './world.js';
 import { HAMLET } from './hamlet.js';
-import { starCameraFocus, MOMENTS, momentFocus, setMomentCameraReader, sampleTrainTrip, setTrainTripReader, rainyFocus, setRainyCameraReader, marketFocus, setMarketCameraReader, rowingFocus, setRowingCameraReader, setGardenCameraReader } from './life.js';
+import { starCameraFocus, MOMENTS, momentFocus, setMomentCameraReader, sampleTrainTrip, setTrainTripReader, rainyFocus, setRainyCameraReader, marketFocus, setMarketCameraReader, rowingFocus, setRowingCameraReader, setGardenCameraReader, snowDayFocus, setSnowDayCameraReader } from './life.js';
 import { sampleBalloonRide, setBalloonRideReader } from './areas/crystal-mine.js';
 import { farmViews } from './areas/pony-farm.js';
 import { campingViews } from './areas/camping.js';
@@ -175,7 +175,8 @@ function makeShots() {
     {name:'Cove boat from above',rowing:'cove',rowingPhase:65,sample(t,out){const f=rowingFocus('cove',65+t);out.pos.set(f.pos.x-14,f.pos.y+34,f.pos.z+15);out.look.copy(f.pos);out.look.x-=16;out.look.y+=1;}},
     {name:'A garden full of good things',gardenPhase:210,sample(t,out){out.pos.copy(G(GARDEN.x+21,17,GARDEN.z+22));out.look.copy(G(GARDEN.x,0.7,GARDEN.z));}}
   ].map(view=>({...view,duration:40,loop:false,group:'Episode establishing views',clearance:1.8,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews,...balloonViews,...trainViews,...campingViews().map(view=>({...view,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}})),...farmViews(),{name:'SP Creek station from above',group:'Episode establishing views',duration:40,loop:true,clearance:1.5,sample(t,out){const x=97+Math.sin(t/40*Math.PI*2)*0.7;out.pos.copy(G(x,25,50));out.look.set(66,2,10);}},{name:'Welcome to SP Creek: one cove walk',group:'Sunset Cove',duration:180,loop:false,clearance:1.8,sample(t,out){const u=clamp01(t/180),wide=Math.cos(u*Math.PI)**2,p=stageCove('beach',u*70),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw),distance=8+38*wide,x=p.x-dx*distance,z=p.z-dz*distance;out.pos.set(x,Math.max(p.y+2.8+35*wide,walkHeight(x,z)+1.8),z);out.look.set(p.x+dx*3,p.y+1,p.z+dz*3);}},...rainyViews,...marketViews,...rowingViews,...gardenViews(),...episodeViews];
+  const snowDayViews=[['A snowman with friends','snowman'],['Soft snow angels','angels'],['A gentle sled ride','sled'],['Cocoa by the window','cocoa']].map(([name,kind])=>({name,snowDay:kind,group:'Snow day',duration:60,loop:false,clearance:1.5,sample(t,out){const f=snowDayFocus(kind);if(kind==='cocoa'){out.pos.copy(f.camera);out.look.copy(f.pos);out.look.y+=0.95;}else{out.pos.set(f.pos.x+8,f.pos.y+(kind==='angels'?9:6),f.pos.z+11);out.look.copy(f.pos);out.look.y+=kind==='angels'?0.1:0.9;}}}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews,...balloonViews,...trainViews,...campingViews().map(view=>({...view,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}})),...farmViews(),{name:'SP Creek station from above',group:'Episode establishing views',duration:40,loop:true,clearance:1.5,sample(t,out){const x=97+Math.sin(t/40*Math.PI*2)*0.7;out.pos.copy(G(x,25,50));out.look.set(66,2,10);}},{name:'Welcome to SP Creek: one cove walk',group:'Sunset Cove',duration:180,loop:false,clearance:1.8,sample(t,out){const u=clamp01(t/180),wide=Math.cos(u*Math.PI)**2,p=stageCove('beach',u*70),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw),distance=8+38*wide,x=p.x-dx*distance,z=p.z-dz*distance;out.pos.set(x,Math.max(p.y+2.8+35*wide,walkHeight(x,z)+1.8),z);out.look.set(p.x+dx*3,p.y+1,p.z+dz*3);}},...rainyViews,...marketViews,...rowingViews,...gardenViews(),...episodeViews,...snowDayViews];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');
@@ -190,6 +191,7 @@ export class Director {
     setGardenCameraReader(()=>this.mode==='shot'&&this.shot?.gardenPhase!=null?{t:this.shot.gardenPhase+Math.min(this.t,this.shot.duration)}:null);
     setRowingCameraReader(()=>this.mode==='shot'&&this.shot?.rowing?{kind:this.shot.rowing,t:this.shot.rowingPhase+Math.min(this.t,this.shot.duration)}:null);
     setMarketCameraReader(()=>this.mode==='shot'&&this.shot?.market?{kind:this.shot.market,t:Math.min(this.t,this.shot.duration)}:null);
+    setSnowDayCameraReader(()=>this.mode==='shot'&&this.shot?.snowDay?{kind:this.shot.snowDay,t:Math.min(this.t,this.shot.duration)}:null);
     this.dom = dom;
     this.shots = makeShots();
     this.speed = 1;

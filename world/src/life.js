@@ -1,4 +1,5 @@
 import { buildGarden, GARDEN } from './areas/garden.js';
+import { SNOW_DAY } from './areas/town-center.js';
 import { buildPonyFarm } from './areas/pony-farm.js';
 import { balloonRideState } from './areas/crystal-mine.js';
 import { familySign } from './family.js';
@@ -655,6 +656,9 @@ export function setMarketCameraReader(reader){marketCameraReader=reader;}
 export function marketFocus(kind){const x=kind==='balloon'?0.9:kind==='bun'?-1.5:0,z=kind==='balloon'?-27:kind==='bun'?-23:-43;return V(x,walkHeight(x,z),z);}
 
 let gardenCameraReader=()=>null;
+let snowDayCameraReader=()=>null;
+export function setSnowDayCameraReader(reader){snowDayCameraReader=reader;}
+export function snowDayFocus(kind){if(kind==='cocoa')return rainyFocus('window');const p=SNOW_DAY[kind];return {pos:V(p.x,walkHeight(p.x,p.z),p.z),yaw:0};}
 export function setGardenCameraReader(reader){gardenCameraReader=reader;}
 let rowingCameraReader=()=>null;
 export function setRowingCameraReader(reader){rowingCameraReader=reader;}
@@ -672,6 +676,7 @@ export class Life {
     addCharacterPoseLayer(t=>this.updateRainy(t));
     addCharacterPoseLayer(t=>this.updateRowing(t));
     addCharacterPoseLayer(t=>this.updateGarden(t));
+    addCharacterPoseLayer(t=>this.updateSnowDay(t));
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -927,6 +932,24 @@ export class Life {
     this.root.add(this.tumbleGroup);
   }
 
+  updateSnowDay(time){
+    const state=snowDayCameraReader(),area=this.world.snowDay;if(!area)return;area.setKind(state?.kind);
+    if(!state)return;
+    const {kind,t}=state,f=snowDayFocus(kind);
+    this.snowHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.snowHidden.has(p))this.snowHidden.set(p,p.g.visible);p.g.visible=false;}
+    if(!this.snowAdults){this.snowAdults=[makeCharacter(CAST.teacher),makeCharacter(CAST.rancher)];this.snowAdults.forEach(p=>this.scene.add(p.g));}
+    const u=(1-Math.cos(t/20*Math.PI*2))/2,z=-3+6*u,sledY=0.05+0.42*Math.sqrt(1-z*z/25);area.sled.position.set(0,sledY,z);
+    area.balls.forEach((ball,i)=>{ball.scale.setScalar(i===0?1:THREE.MathUtils.lerp(0.18,1,THREE.MathUtils.smoothstep(t,i*8,i*8+14)));});area.scarf.visible=t>=20;
+    for(const [i,p]of Object.values(this.stars).entries()){
+      p.g.visible=true;p.g.rotation.set(0,0,0);seat(p,false,0);animatePerson(p,t*0.8,0);p.g.position.copy(f.pos);p.g.position.x+=(i?1:-1)*(kind==='angels'?1.2:0.9);p.g.position.z+=1.3;
+      if(kind==='snowman'){p.g.rotation.y=i?-Math.PI+0.6:Math.PI-0.6;p.upper.rotation.x=0.15;for(const arm of p.arms)arm.rotation.x=-0.8-Math.sin(t*0.7)*0.1;for(const elbow of p.elbows)elbow.rotation.x=-0.7;}
+      if(kind==='angels'){p.g.position.z=f.pos.z;p.g.position.y=f.pos.y+0.28;p.g.rotation.x=-Math.PI/2;const sweep=0.35+0.35*(1+Math.sin(t*0.8));p.arms.forEach((arm,j)=>arm.rotation.z=(j?1:-1)*sweep);p.legs.forEach((leg,j)=>leg.rotation.z=(j?1:-1)*(0.1+0.16*(1+Math.sin(t*0.8))));}
+      if(kind==='sled'){const hip=(p.bones?.[0].position.y??HIP)*p.g.scale.y;p.g.position.set(f.pos.x,f.pos.y+sledY+0.26-hip,f.pos.z+z+(i?0.35:-0.35));seat(p,false,1);p.arms.forEach(arm=>arm.rotation.x=-0.65);}
+      if(kind==='cocoa'){const it=this.world.interiors.cafe,localZ=-Math.min(it.depth*0.45,5);p.g.position.copy(it.group.localToWorld(V(-it.hx+1.8,0.02,localZ+(i?0.65:-0.65))));p.g.rotation.y=it.group.rotation.y-Math.PI/2;for(const arm of p.arms)arm.rotation.x=-0.7;for(const elbow of p.elbows)elbow.rotation.x=-0.9;const r=this.rainy??=this._buildRainy();r.window.visible=true;r.drops.forEach(g=>g.visible=false);if(r.rain)r.rain.visible=false;}
+    }
+    this.snowAdults.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f.pos).add(V((i?1:-1)*3,0,-1.5));p.g.rotation.y=i?-0.4:0.4;animatePerson(p,t*0.3,0);if(kind==='cocoa')p.g.visible=false;});
+  }
+
   updateGarden(time){
     const state=gardenCameraReader(),area=this.garden;if(!area)return;const t=state?.t??((time%240+240)%240);area.update(t);area.pickedCarrot.visible=!!state&&t>=190&&t<210;area.can.visible=!!state&&t>=52&&t<190;area.drops.forEach(g=>g.visible=area.can.visible);area.seeds.forEach(g=>g.visible=!!state&&t<38);if(!state)return;
     this.gardenHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.gardenHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.gardenHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}
@@ -1036,6 +1059,11 @@ export class Life {
     if(!trainTripReader()&&this.trainHidden){this._restoreSceneStars(this.trainHidden);this.trainHidden=null;}
     if(!balloonRideState()&&this.balloonHidden){this._restoreSceneStars(this.balloonHidden);this.balloonHidden=null;}
     if(!gardenCameraReader()&&this.gardenHidden){this._restoreSceneStars(this.gardenHidden);this.gardenHidden=null;}
+    if(!snowDayCameraReader()){
+      if(this.snowHidden){this._restoreSceneStars(this.snowHidden);this.snowHidden=null;for(const p of Object.values(this.stars)){p.g.rotation.x=p.g.rotation.z=0;seat(p,false,0);}}
+      this.snowAdults?.forEach(p=>p.g.visible=false);
+      this.rainy?.drops.forEach(g=>g.visible=true);
+    }
     if(!rowingCameraReader()&&this.rowHidden){this._restoreSceneStars(this.rowHidden);this.rowHidden=null;}
     if(!rainyCameraReader()&&this.rainHidden){this._restoreSceneStars(this.rainHidden);this.rainHidden=null;}
     this.marketNear=camera.position.x>-35&&camera.position.x<40&&camera.position.z>-75&&camera.position.z< -15;

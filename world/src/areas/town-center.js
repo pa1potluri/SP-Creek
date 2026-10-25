@@ -6,6 +6,28 @@ import { signTexture } from '../textures.js';
 import { buildVillageDetails } from '../hamlet.js';
 
 export const MARKET_PIECES={marketFruit:'Fruit stall',marketFlowers:'Flower stall',marketBread:'Bakery stall',marketToys:'Toy stall',marketBalloons:'Balloon stall'};
+export const SNOW_DAY={snowman:{x:-36,z:-66},angels:{x:-36,z:-53},sled:{x:-36,z:-37}};
+function buildSnowDay(world){
+ const root=new THREE.Group();root.name='A gentle snow day';world.root.add(root);
+ const groups={},snow=new THREE.MeshLambertMaterial({color:'#edf2ee'}),dent=new THREE.MeshLambertMaterial({color:'#c4d5db'}),pink=new THREE.MeshLambertMaterial({color:'#dca3b8'}),wood=world.mat.wood;
+ const add=(parent,geo,material,x,y,z)=>{const m=new THREE.Mesh(geo,material);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;parent.add(m);return m;};
+ for(const [kind,p]of Object.entries(SNOW_DAY)){world.registerAreaPad({...p,hx:7,hz:7,blend:1,clearOnly:true});const g=new THREE.Group();g.position.set(p.x,walkHeight(p.x,p.z),p.z);root.add(g);groups[kind]=g;}
+ world.updateTerrain();
+ const balls=[0.6,0.44,0.32].map((r,i)=>add(groups.snowman,new THREE.SphereGeometry(r,18,12),snow,0,[0.58,1.42,2.06][i],0));
+ for(const x of [-0.1,0.1])add(balls[2],new THREE.SphereGeometry(0.028,8,6),wood,x,0.04,0.30);
+ const nose=add(balls[2],new THREE.SphereGeometry(0.06,8,6),pink,0,-0.05,0.32);nose.scale.z=1.4;
+ for(let i=0;i<5;i++)add(balls[2],new THREE.SphereGeometry(0.016,6,4),wood,(i-2)*0.045,-0.15+Math.abs(i-2)*0.012,0.28);
+ const scarf=add(groups.snowman,new THREE.TorusGeometry(0.37,0.065,8,20),pink,0,1.77,0);scarf.rotation.x=Math.PI/2;
+ const angels=[];for(const x of [-1.2,1.2]){const g=new THREE.Group();g.position.set(x,0.035,0);groups.angels.add(g);for(const side of [-1,1]){const wing=add(g,new THREE.SphereGeometry(1,16,8),dent,side*0.45,0,-0.85);wing.scale.set(0.65,0.025,0.42);const hem=add(g,new THREE.SphereGeometry(1,16,8),dent,side*0.25,0,-0.23);hem.scale.set(0.33,0.025,0.50);}angels.push(g);}
+ const slope=add(groups.sled,new THREE.SphereGeometry(1,24,12),snow,0,0.05,0);slope.scale.set(2.2,0.42,5);
+ const sled=new THREE.Group();groups.sled.add(sled);const seat=add(sled,new THREE.CapsuleGeometry(0.35,0.8,6,14),pink,0,0.23,0);seat.rotation.x=Math.PI/2;seat.scale.z=0.28;
+ for(const x of [-0.36,0.36]){const runner=add(sled,new THREE.CapsuleGeometry(0.045,1.5,4,10),wood,x,0.08,0);runner.rotation.x=Math.PI/2;}
+ const cocoa=new THREE.Group(),it=world.interiors.cafe,z=-Math.min(it.depth*0.45,5);it.group.add(cocoa);groups.cocoa=cocoa;
+ const table=add(cocoa,new THREE.CylinderGeometry(0.7,0.7,0.12,20),wood,-it.hx+1.1,0.9,z);add(cocoa,new THREE.CylinderGeometry(0.09,0.15,0.85,12),wood,-it.hx+1.1,0.43,z);
+ const cups=[];for(const side of [-1,1]){const cup=add(cocoa,new THREE.CylinderGeometry(0.11,0.09,0.17,16),pink,-it.hx+1.1,1.045,z+side*0.34);add(cup,new THREE.CircleGeometry(0.09,16).rotateX(-Math.PI/2),new THREE.MeshLambertMaterial({color:'#946e58'}),0,0.086,0);cups.push(cup);}
+ root.visible=false;cocoa.visible=false;
+ return world.snowDay={root,groups,balls,scarf,angels,sled,cups,table,setKind(kind){root.visible=!!kind;for(const [key,g]of Object.entries(groups))g.visible=key===kind;}};
+}
 function marketPiece(type,wood){
  const g=new THREE.Group(),palette=['#e8b1ba','#afccd3','#ecd89e','#b6cfa6','#c6bbdc'],cache=new Map(),m=color=>{if(!cache.has(color))cache.set(color,new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.06}));return cache.get(color);},cream=m('#f1e3c7');
  const add=(geo,mat,x,y,z)=>{const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;g.add(o);return o;},box=(w,h,d,x,y,z,mat=wood)=>add(new THREE.BoxGeometry(w,h,d),mat,x,y,z),ball=(r,x,y,z,mat)=>add(new THREE.SphereGeometry(r,12,8),mat,x,y,z);
@@ -215,9 +237,9 @@ export function buildTownCenter(world, life) {
   const cord=new THREE.Mesh(mergeGeometries(cords),mat('#a38a68'));cords.forEach(g=>g.dispose());
   const glowGeometry=new THREE.BufferGeometry().setFromPoints(hanging),glow=new THREE.Points(glowGeometry,new THREE.PointsMaterial({map:world.tex.glow,color:'#ffd49a',size:1.5,transparent:true,opacity:0.15,blending:THREE.AdditiveBlending,depthWrite:false}));festivalRoot.add(cord,lanterns,caps,glow);
   const festival={root:festivalRoot,lanterns,caps,glow,hanging};
-  const market=buildMarket(world);
+  const market=buildMarket(world),snowDay=buildSnowDay(world);
   let familyMode=true;
-  const area={root,family,keepers,flags,square,path,homeDetails,hamletDetails,festival,market,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
+  const area={root,family,keepers,flags,square,path,homeDetails,hamletDetails,festival,market,snowDay,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
     market.update(t);
     festivalRoot.visible=!!world.festival;paper.emissiveIntensity=0.3+world.lanternLevel*0.8;glow.material.opacity=0.04+world.lanternLevel*0.2;
     homeDetails.update(t);hamletDetails.update(t);

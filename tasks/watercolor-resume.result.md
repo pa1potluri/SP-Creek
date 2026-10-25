@@ -1,15 +1,24 @@
-# Watercolour preview resume - WIP
+# Watercolour preview resume - WIP / saved at user usage stop
 
-- Branch area/watercolor-resume from area/self-review-2 tip b046535, as requested. User explicitly lifted the Thursday wait; read AGENTS, queue, blueprint and both watercolour task files.
-- Ported only the four scoped app-file changes from saved area/watercolor WIP b0f369b; no merge or cherry-pick of historical world code. Painterly/styles baselines match that WIP parent exactly.
-- Optional Watercolour (preview) choice uses clean textures/painted plants, soft washes, pigment rims, static paper tooth and wet blooms. Three controls appear only for this style. Animated film remains the fresh-start default; no preset changes. First review area: Sunset Cove at golden hour, with day/night and oil comparisons to follow.
-- Before changing shaders, recorded six original style definitions and fixed-buffer pixel baselines for all five original Look modes in world/tests/watercolor-legacy.json.
-- Left: focused shader/UI/project/static-frame checks, inspect Cove comparisons, full suite once on final code, result/counts/QUEUE completion commit. Stop after task 31. Never merge or push.
+## Done
 
-- Focused smoke: **25 passed**, no browser errors; six original style definitions unchanged and all five original Look modes render byte-identical fixed-input pixels. Preview controls/project round-trip and preset exclusion pass; sound locked. Frozen-frame Cove day/night comparison captures underway; full suite and final visual review remain.
+- Current branch area/watercolor-resume, from area/self-review-2 tip b046535. User lifted Thursday wait and requested Sunset Cove at golden hour first. No merge or push.
+- Resumed only scoped app files: styles.js, painterly.js, main.js style uniforms, index.html controls. Optional **Watercolour (preview)** choice; clean textures and painted plants; pastel washes, pigment rims, static paper tooth/blooms; three style-only sliders with project save/load. Fresh-start default remains Animated film. No camera or preset changes.
+- Reduced the saved WIP's doubled character edges using a smaller, non-wobbling base brush and colour/depth-aware wash weights. Latest app code is in 02674e3.
+- Six old style definitions and all five old Look modes passed fixed-buffer byte comparisons in the initial **25-check focused smoke**, before the final silhouette refinement. Final full verification must rerun these checks on current code.
+- Final-code captures confirm default film, identical world time across style comparisons, sound locked, browser errors [], and byte-identical frozen Watercolour screenshots 400ms apart. Proof: world/tests/watercolor-resume-check.json.
+- **12 raw matched-pose film/oil/watercolour day/night previews** for existing Cove shots 39 and 40, plus comparison sheets watercolor-resume-39-comparison.png and -40-comparison.png. All saved under world/tests/ and inspected. Golden-hour preview is soft and readable; original models/assets unchanged. Inherited navy night-waterline strip remains as already recorded in STUCK.md.
 
-- First Cove comparison: pastel/paper look works, but the old WIP over-softened and doubled character outlines. Reduced only the new style brush radius/strength and removed its wobble; wash weights now respect strong colour/depth boundaries. Final refreshed comparisons and static-frame check next, then full suite.
+## Full-suite status / exactly where stopped
 
-- Final Cove captures: 12 matched-pose film/oil/watercolour day/night images for existing views 39 and 40, plus two comparison sheets. Fresh-start default verified film; paper/wash frozen screenshot byte-identical 400ms apart, same-pose time identical across comparisons, sound locked, browser errors []. Faces remain readable after the scoped wash correction. Full suite starts on final code next.
+- First full attempt passed area-shots 7, balloon-ride 20, boat-trip 22, then printed Build progress through 400 and failed `watercolor/shop: placed through canvas`. No completed Build count and no passing full suite.
+- Cause: Build test assumed Pixel art was the final style and retained its seven buildings before appended Watercolour. **70bd17d** fixes only test fixture cleanup to retain the actual final style's buildings. App placement code unchanged. Searched other suites for the same order assumption; none found.
+- A fresh full 26-suite rerun was launched after that correction, then **stopped immediately at the user's usage-stop request, before any new suite output**. No tests remain running. TEMP/sp-watercolor-resume-full.log may still contain the FIRST failure because the replacement run had not emitted output; do not treat that stale log as a failure of 70bd17d.
 
-- First full run stopped in Build mode: the suite assumed Pixel art was the final style and retained its seven buildings before Watercolour started. Corrected test-fixture cleanup to retain only the actual final style fixture; app placement/rendering code unchanged. Checking for similar order assumptions; fresh full run required. No partial run counted as passing.
+## Left after reset
+
+1. Re-read rules, queue and this handoff. Keep working on area/watercolor-resume; no new branch/merge.
+2. Start/reuse local test server (8813 used here). Run every .js suite explicitly with run-browser.cjs; no-argument runner runs none. Verify the Build fixture correction and final Watercolour 25 checks, including old-mode pixel equivalence. Record actual final counts only after a complete passing run.
+3. App code and final previews are already saved. If code changes, refresh affected previews and repeat relevant/full checks. Write final result/count JSON, mark task 31 and superseded task 8 done in QUEUE, commit, then STOP. Never push.
+
+No finished full-suite result is claimed. Current source/test checkpoint: 70bd17d; this handoff is committed separately as WIP.

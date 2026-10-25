@@ -43,7 +43,7 @@ finished. Re-read this file each time; Claude may change it.
 | 28a | `tasks/startup-hang.md` | `area/startup-hang` | done; server launcher + terrain startup fix; full 1446 + 2 passed; queue chat continues from here |
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
-| 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | WIP: Cove previews + static-frame proof saved; full run found Pixel-last Build fixture assumption; test cleanup corrected; fresh full run next |
+| 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | WIP SAVED / user usage stop: app + 12 previews + 2 comparisons committed; 70bd17d fixes Pixel-last Build fixture; fresh full run interrupted before output; no full pass; resume same branch, finish verification then stop |
 | 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
 | 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | done; SELF-REVIEW-1 report + day/night/oil and Play captures; visibility handoff fixed; full 1464 + 2 passed |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | done; full 1493 + 2 passed; rainy suite 26; six day/night previews 66-68 |

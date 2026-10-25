@@ -1,0 +1,27 @@
+{
+  "status": "WIP saved at explicit user usage stop",
+  "branch": "area/watercolor-resume",
+  "base": "b046535",
+  "appCheckpoint": "02674e3",
+  "testCheckpoint": "70bd17d",
+  "focusedBeforeFinalRefinement": 25,
+  "finalCaptureProof": "watercolor-resume-check.json",
+  "fullSuitePassed": false,
+  "firstFullAttempt": {
+    "completedSuites": {
+      "area-shots": 7,
+      "balloon-ride": 20,
+      "boat-trip": 22
+    },
+    "buildProgressOnly": 400,
+    "error": "watercolor/shop: placed through canvas",
+    "cause": "Pixel-last test-fixture assumption",
+    "fix": "70bd17d"
+  },
+  "secondFullAttempt": {
+    "status": "interrupted at user request before any suite output",
+    "completedSuites": {},
+    "running": false
+  },
+  "resume": "Run all 26 browser suites on current branch, record final counts, finalize result and QUEUE, commit, stop. Never push."
+}

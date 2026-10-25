@@ -27,3 +27,8 @@ Task 32 resolved Cove continuity, camping startup, Episode 4 and branch-train so
 - Centre-height correction and downhill root-footprint samples improve grounding; forest rocks and deer clearance improved. However, Film Forest Trail 26 still has tree-card/root silhouettes that appear detached along steep banks (review-feedback-26-day.png).
 - Tried analytic-to-rendered terrain sampling, native/added instance revision updates, and downhill-footprint burial. Avoid progressively burying whole trees or speculative terrain redesign. Needs deliberate trunk/card geometry or local slope placement review next.
 - Menu freeze: 720p repeat switching stayed responsive; at 2560x1440 a first meadow entry produced a 1.8s frame gap, repeat entry smooth. Program reuse and preview pixel cap address measured pressure, but indefinite user-reported hanging remains unconfirmed. Next inspect actual Chrome GPU/context state if it persists after reload.
+
+## Resolved: reproduced preset-switching render freeze (task 50)
+- Captured Walker.update life.js:505 reading a null seat after an inactive town child was shown again. User approved life.js scope extension; leaveSeat now cancels seating states.
+- Full 2015 + 2 checks and all 48 presets twice (96 selections) passed, no browser errors or WebGL context losses. Before/after sequence in preview-switching-before.json / preview-switching.json. This supersedes the earlier unconfirmed-hang note for this specific failure.
+- First-use shader pauses still occur; second warm pass max frame gap was 66.7ms. Forest steep-bank root silhouettes, cove night band and wide public picnic readability remain open visuals above.

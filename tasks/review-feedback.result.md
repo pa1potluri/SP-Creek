@@ -1,4 +1,12 @@
-# Preview feedback - WIP
+# Preview feedback — WIP forest visual follow-up
+
+## Latest status
+- The reproduced menu/render freeze is fixed in the user-approved life.js seating-state reset. All 48 presets selected twice (96 switches) passed with zero browser errors/context losses; sound stayed locked.
+- Full suite **2015 + 2 passed**, 31 suites; targeted **127 passed**; twelve refreshed Film day/night views (0,15,26,31,35,46). See tasks/preview-performance.result.md for final evidence and timing limits.
+- Startup improved materially; brief first-use shader pauses remain. Do not promise instant loading or every possible GPU/session problem eliminated.
+- Remaining task 48 WIP is visual: steep forest tree-card/root silhouettes still need deliberate geometry/slope review, as logged in STUCK.md. Deer view is clear; other old cove/picnic follow-ups remain separate.
+
+## Earlier investigation history (superseded where noted above)
 
 ## Reported by the user
 - Right-side menu hangs after several clicks; reload slow or seemingly stuck.

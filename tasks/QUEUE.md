@@ -60,9 +60,9 @@ finished. Re-read this file each time; Claude may change it.
 | 45 | `tasks/BIG-QUEUE-40-47.md` (kite-picnic) | `area/kite-picnic` | done feature; six views 86-91 + two 240s presets; full 1861 + 2; outing 33; previews saved; wide public picnic follow-up in 47 |
 | 46 | `tasks/BIG-QUEUE-40-47.md` (episode-presets-3) | `area/episode-presets-3` | done; Episodes 10-13 at 180s + wide views 92-95; full 1900 + 2; episode checks 35; day/night + Oil saved; inherited cove band open |
 | 47 | `tasks/BIG-QUEUE-40-47.md` (self-review-3) | `area/self-review-3` | done; SELF-REVIEW-3; full 1900 + 2; normal/static 132 poses + 14 walks each; 35 raw + 3 contacts; two visual follow-ups open; stopped after 47 |
-| 48 | `tasks/review-feedback.md` | `area/review-feedback` | WIP partial fix saved on area/preview-performance; full 2001 + 2 passed, 31 suites; 8 refreshed day/night frames; deer clear; steep-bank tree silhouettes and indefinite hang remain open in STUCK; normal shutdown requested by user |
+| 48 | `tasks/review-feedback.md` | `area/review-feedback` | WIP visual follow-up; reproduced bench-state freeze fixed in task 50; full 2015 + 2 passed, 31 suites; 96 preset switches clean; 12 Film day/night views; deer clear; steep-bank tree silhouettes remain in STUCK |
 | 49 | `tasks/preview-autostart.md` | `area/preview-autostart` | done; restart/sign-in verified 2026-10-25 19:27; watchdog/server launched automatically; HTTP 200; isolated restart passed; unchanged checkpoint full 2001 + 2; no camera changes; task 48 remains WIP |
-| 50 | `tasks/preview-performance.md` | `area/preview-performance` | WIP partial fix saved; startup 21.558s to 8.215s; material reuse + bounded preview; full 2001 + 2 passed; updated day/night; remaining task 48 visuals/hang in STUCK; shutdown handoff saved |
+| 50 | `tasks/preview-performance.md` | `area/preview-performance` | done, awaiting lead review; bench-state render freeze fixed; full 2015 + 2 passed, 31 suites; 96 preset switches clean; 12 Film day/night views; startup about 8.6s in final diagnostic; task 48 forest visuals still open |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -80,5 +80,5 @@ meadow & lake, crystal mine & balloon.
 
 > Small user-requested health pass (2026-10-25): app unchanged; server 8811 and 20 local review URLs verified; saved 1900 + 2 evidence and 28 new-shot PNGs checked. Review landing page: `http://localhost:8811/tests/self-review-3-index.html`. Two visual follow-ups remain open; no larger task started.
 
-> Loading diagnosis follow-up: 21.558s startup at 720p; terrain pad calculations and first-use shaders dominate CPU samples. Four preset clicks responsive in isolated test; user freeze still unresolved. Task 48 remains WIP; see its result.
-> Current follow-up: reproduced null-seat render-loop freeze, user approved life.js state-reset fix; targeted 127 passed and 12 Film day/night frames saved. Full rerun and 96-switch check in progress; keep WIP until final evidence is written.
+> Loading diagnosis follow-up: 21.558s startup at 720p; terrain pad calculations and first-use shaders dominate CPU samples. Four preset clicks responsive in isolated test; the later reproduced bench-state freeze is now fixed and validated in task 50. Task 48 retains its forest visual follow-up; see its result.
+> Follow-up complete: user-approved life.js state reset fixes the reproduced null-seat freeze; full 2015 + 2 and 96 preset switches passed; 12 Film day/night frames saved. Task 48 retains only the unresolved forest visual follow-up. No new content queued.

@@ -9,3 +9,5 @@
 - Refreshed evidence passed after the fix: 272 probes, 26 finite/dry Play walks, no errors, audio locked. All twelve oil views inspected; walking-view protagonists now present. SELF-REVIEW-1.md written with per-task branch heads, findings, pictures and historical counts.
 - Full 20-suite run now underway (session 94102). Pending final counts, final report/result/QUEUE commit, then task 34.
 - No merge, push or publication.
+
+- Windows case collision resolved: original task instructions preserved as tasks/self-review-1.task.md; report uses the requested tasks/SELF-REVIEW-1.md path and QUEUE points to the task file.

@@ -50,7 +50,7 @@ finished. Re-read this file each time; Claude may change it.
 | 35 | `tasks/market-day.md` | `area/market-day` | done; full 1537 + 2 passed; market suite 41; six day/night previews 69-71; inactive-balloon cleanup fixed |
 | 36 | `tasks/boat-trip.md` | `area/boat-trip` | done; full 1561 + 2 passed; boat suite 21; six day/night previews 72-74 |
 | 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | done; full 1604 + 2 passed; garden suite 40; six day/night previews 75-77; terrain and raw-path clearance corrected |
-| 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | queued |
+| 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | WIP: Episodes 6-9 and wide views 78-81 built; smoke/eight previews underway; full suite pending |
 | 39 | `tasks/self-review-2.md` | `area/self-review-2` | queued; then stop (31 only from Thu Oct 29) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |

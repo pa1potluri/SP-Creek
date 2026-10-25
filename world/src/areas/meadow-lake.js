@@ -20,11 +20,36 @@ export function makeRowingBoat(world,parent,sample,keepWater){
   api.update(0);return api;
 }
 export const MEADOW={x:-225,z:0}, LAKE={x:-240,z:-18,rx:12,rz:8.5};
+export const MEADOW_OUTING={kite:{x:-205,z:6},picnic:{x:-224,z:2}};
+const outingClear=(x,z)=>Object.values(MEADOW_OUTING).some(p=>Math.abs(x-p.x)<6&&Math.abs(z-p.z)<5);
+function buildMeadowOuting(world,parent){
+ const root=new THREE.Group();root.name='Kite day and waterfall picnic';parent.add(root);
+ const groups={},colors=['#e6aabd','#a9ced0','#efcf8d','#b6cfa0','#bcb1d6'],mat=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}),cream=mat('#f5e5bf'),wood=world.mat.wood;
+ const add=(g,geo,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;g.add(o);return o;};
+ for(const [kind,p]of Object.entries(MEADOW_OUTING)){world.registerAreaPad({...p,hx:6,hz:5,blend:1,clearOnly:true});const g=new THREE.Group();g.position.set(p.x,terrainHeight(p.x,p.z),p.z);root.add(g);groups[kind]=g;}
+ world.updateTerrain();
+ const hill=add(groups.kite,new THREE.SphereGeometry(1,28,14),mat('#b4cf98'),0,-0.12,0);hill.scale.set(8,1.1,6);
+ const shape=new THREE.Shape();shape.moveTo(0,1.1);shape.quadraticCurveTo(.15,1.1,.28,.85);shape.lineTo(.75,.15);shape.quadraticCurveTo(.88,0,.74,-.16);shape.lineTo(.15,-.95);shape.quadraticCurveTo(0,-1.1,-.15,-.95);shape.lineTo(-.74,-.16);shape.quadraticCurveTo(-.88,0,-.75,.15);shape.lineTo(-.28,.85);shape.quadraticCurveTo(-.15,1.1,0,1.1);
+ const kiteGeometry=new THREE.ShapeGeometry(shape),kites=[],strings=[];
+ for(let i=0;i<5;i++){const g=new THREE.Group();groups.kite.add(g);add(g,kiteGeometry,mat(colors[i]));const tails=[];for(let j=0;j<5;j++){const tail=add(g,new THREE.CapsuleGeometry(.055,.25,3,6),mat(colors[(i+j+1)%5]),0,-1.35-j*.34,0);tails.push(tail);}kites.push({g,tails});const geo=new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(17*3),3)),line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:'#d7c9ac',transparent:true,opacity:.8}));line.frustumCulled=false;groups.kite.add(line);strings.push(line);}
+ const blanket=add(groups.picnic,new THREE.BoxGeometry(4,.06,3.2),mat('#a9c8cf'),0,.08,0);
+ for(let x=0;x<8;x++)for(let z=0;z<6;z++)if((x+z)%2===0)add(groups.picnic,new THREE.BoxGeometry(.48,.008,.48),mat('#e9d3bd'),-1.75+x*.5,.115,-1.25+z*.5);
+ const basket=add(groups.picnic,new THREE.SphereGeometry(.55,18,10,0,Math.PI*2,Math.PI/2,Math.PI/2),wood,0,.42,0);basket.scale.set(1,.75,.7);
+ const handle=add(groups.picnic,new THREE.TorusGeometry(.4,.045,6,20,Math.PI),wood,0,.44,0);handle.scale.z=.5;
+ const fruit=[];for(let i=0;i<9;i++){const a=i*2.399,r=.13+(i%3)*.1;fruit.push(add(groups.picnic,new THREE.SphereGeometry(.13,12,8),mat(i%2?'#e9bc77':'#dba6a4'),Math.sin(a)*r,.48+(i%2)*.1,Math.cos(a)*r));}
+ const ducks=[];for(let i=0;i<3;i++){const g=new THREE.Group();groups.picnic.add(g);const body=add(g,new THREE.SphereGeometry(.20,12,8),cream,0,.18,0);body.scale.set(.8,.8,1.3);add(g,new THREE.SphereGeometry(.12,12,8),cream,0,.37,.17);const bill=add(g,new THREE.SphereGeometry(.07,8,6),mat('#e4bc75'),0,.33,.3);bill.scale.set(1,.4,1.4);for(const x of [-.075,.075])add(g,new THREE.SphereGeometry(.018,6,4),mat('#56636b'),x,.4,.23);ducks.push(g);}
+ root.visible=false;
+ return world.meadowOuting={root,groups,kites,strings,blanket,fruit,ducks,update(kind,t){root.visible=!!kind;groups.kite.visible=kind==='kite';groups.picnic.visible=kind==='picnic';if(!kind)return;
+  kites.forEach(({g,tails},i)=>{g.position.set((i-2)*3+Math.sin(t*.23+i)*.65,7+(i%3)*1.3+Math.sin(t*.3+i)*.35,-3-(i%2)*2);g.rotation.set(.08,0,Math.sin(t*.28+i)*.12);tails.forEach((tail,j)=>{tail.position.x=Math.sin(t*.65+i-j*.4)*.10;tail.rotation.z=Math.sin(t*.65+i-j*.4)*.35;});const a=strings[i].geometry.attributes.position;for(let j=0;j<=16;j++){const u=j/16;a.setXYZ(j,(i-2)*1.3*(1-u)+g.position.x*u,1.9*(1-u)+g.position.y*u-Math.sin(u*Math.PI)*.35,g.position.z*u);}a.needsUpdate=true;});
+  ducks.forEach((g,i)=>{g.position.set((i-1)*.65+Math.sin(t*.25+i)*.12,.02,-2.2+Math.cos(t*.2+i)*.18);g.rotation.y=Math.sin(t*.2+i)*.2;});
+ }};
+}
 export async function buildMeadowLake(world) {
   const root=new THREE.Group();root.name='Dreamland meadow and lake';world.root.add(root);
   const pad=world.registerAreaPad({...MEADOW,hx:46,hz:32,blend:18}),y=pad.y;
   const floor={cx:-227,cz:-18,ax:1,az:0,bx:0,bz:1,hx:5,hz:1.1,y:y+0.2};
   const lake=world.registerWaterArea({...LAKE,y:y-0.25,depth:2.2},[floor]);world.updateTerrain();
+  const outing=buildMeadowOuting(world,root);
   world.meadowBoat=makeRowingBoat(world,root,t=>{const a=t/240*Math.PI*2;return {pos:new THREE.Vector3(lake.x+Math.sin(a)*3.8,lake.y+0.15,lake.z+4.5+Math.cos(a)*1.4),yaw:Math.atan2(3.8*Math.cos(a),-1.4*Math.sin(a))};},p=>{const dx=(p.x-lake.x)/lake.rx,dz=(p.z-lake.z)/lake.rz,r=Math.hypot(dx,dz);if(r>0.85){p.x=lake.x+dx/r*lake.rx*0.85;p.z=lake.z+dz/r*lake.rz*0.85;}});
   const names=['flowers_blue','flowers_purple','flowers_pink','flowers_yellow','bush','grass','tree_blossom','tree_wisteria'];
   const imgs=Object.fromEntries(await Promise.all([...names,'meadow'].map(name=>new Promise(resolve=>{const img=new Image();img.onload=()=>resolve([name,img]);img.onerror=()=>resolve([name,null]);img.src=name==='meadow'?'assets/textures/dream/meadow.png':`assets/foliage/dream/${name}.png`;}))));
@@ -45,8 +70,8 @@ export async function buildMeadowLake(world) {
   const water=new THREE.Mesh(wg,world._waterMaterial(1));water.position.set(lake.x,lake.y,lake.z);water.renderOrder=2;root.add(water);
   function cutouts(name,list,height){const img=imgs[name];if(!img)return;const geo=new THREE.PlaneGeometry(height*img.width/img.height,height);geo.translate(0,height/2,0);const geo2=geo.clone().rotateY(Math.PI/2),cross=mergeGeometries([geo,geo2]);const mat=new THREE.MeshLambertMaterial({map:imageTexture(img),alphaTest:0.5,side:THREE.DoubleSide});world._sway(mat,height,height>3?0.16:0.07);const im=new THREE.InstancedMesh(cross,mat,list.length),matrix=new THREE.Matrix4();list.forEach(([x,z,s],i)=>im.setMatrixAt(i,matrix.makeRotationY(i*2.399).scale(v(s,s,s)).setPosition(x,terrainHeight(x,z),z)));im.castShadow=height>3;im.receiveShadow=true;im.computeBoundingSphere();root.add(im);plants.push(im);}
   const zones=[[-217,21,'flowers_blue','#9fbae7'],[-196,2,'flowers_purple','#b9a0d8'],[-217,-18,'flowers_pink','#e7b2d1'],[-244,18,'flowers_yellow','#efdb96']];
-  const fallback=[];for(const [cx,cz,name,color]of zones){const list=[];for(let i=0;i<650;i++){const a=r()*Math.PI*2,d=Math.sqrt(r()),x=cx+Math.cos(a)*d*17,z=cz+Math.sin(a)*d*12;if(world.inPond(x,z,3)||Math.abs(x-(-190+(z-28)*0.9))<2.1)continue;list.push([x,z,0.8+r()*0.5]);}cutouts(name,list,0.8);const im=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.14,0),m(color),list.length),matrix=new THREE.Matrix4();list.forEach(([x,z,s],i)=>im.setMatrixAt(i,matrix.makeScale(s,s,s).setPosition(x,terrainHeight(x,z)+0.4,z)));root.add(im);fallback.push(im);}
-  const grass=[];for(let i=0;i<750;i++){const x=MEADOW.x+(r()-0.5)*82,z=(r()-0.5)*54;if(!world.inPond(x,z,2))grass.push([x,z,0.65+r()*0.55]);}cutouts('grass',grass,0.6);cutouts('bush',grass.filter((_,i)=>i%31===0),1.5);
+  const fallback=[];for(const [cx,cz,name,color]of zones){const list=[];for(let i=0;i<650;i++){const a=r()*Math.PI*2,d=Math.sqrt(r()),x=cx+Math.cos(a)*d*17,z=cz+Math.sin(a)*d*12;if(outingClear(x,z)||world.inPond(x,z,3)||Math.abs(x-(-190+(z-28)*0.9))<2.1)continue;list.push([x,z,0.8+r()*0.5]);}cutouts(name,list,0.8);const im=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.14,0),m(color),list.length),matrix=new THREE.Matrix4();list.forEach(([x,z,s],i)=>im.setMatrixAt(i,matrix.makeScale(s,s,s).setPosition(x,terrainHeight(x,z)+0.4,z)));root.add(im);fallback.push(im);}
+  const grass=[];for(let i=0;i<750;i++){const x=MEADOW.x+(r()-0.5)*82,z=(r()-0.5)*54;if(!outingClear(x,z)&&!world.inPond(x,z,2))grass.push([x,z,0.65+r()*0.55]);}cutouts('grass',grass,0.6);cutouts('bush',grass.filter((_,i)=>i%31===0),1.5);
   const trees=[[-262,22],[-251,34],[-225,33],[-192,27],[-181,9],[-185,-21],[-213,-31],[-263,-9]];
   cutouts('tree_blossom',trees.filter((_,i)=>i%2===0).map(([x,z])=>[x,z,1]),9);cutouts('tree_wisteria',trees.filter((_,i)=>i%2).map(([x,z])=>[x,z,1]),9);
   const flatTrees=new THREE.InstancedMesh(world.treeGeos[0],world.mat.foliage,trees.length),tm=new THREE.Matrix4();trees.forEach(([x,z],i)=>{flatTrees.setMatrixAt(i,tm.makeTranslation(x,terrainHeight(x,z),z));world.colliders.circles.push({x,z,r:0.5});});flatTrees.computeBoundingSphere();root.add(flatTrees);fallback.push(flatTrees);
@@ -88,7 +113,7 @@ export async function buildMeadowLake(world) {
     for(let i=0;i<40;i++){const a=i*2.399;fliesPos.set([lake.x+Math.sin(a)*10+Math.sin(t*0.2+i)*0.4,lake.y+0.7+(i%4)*0.5+Math.sin(t*0.5+i)*0.25,lake.z+Math.cos(a)*7+Math.cos(t*0.2+i)*0.4],i*3);}fliesGeo.attributes.position.needsUpdate=true;
     crowd.forEach((p,i)=>{animatePerson(p,t*0.6+i,0);gesture(p,i%2?'listen':'talk',((t+i*2)%18)/18,t);});
   }};
-  return {root,pad,lake,water,plants,ducks,rabbits,rainbows,festival,update(t,camera,atmos,key){
+  return {root,pad,lake,water,plants,ducks,rabbits,rainbows,festival,outing,update(t,camera,atmos,key){
     festival.update(t,camera,atmos);
     const flat=world.textureSet==='flat';plants.forEach(p=>p.visible=!flat);fallback.forEach(p=>p.visible=flat);
     fallMat.map.offset.y=-t*0.12;fallMat.color.copy(world.waterUniforms.uWaterHorizon.value).lerp(new THREE.Color('#cce4df'),0.55);foamMat.color.copy(world.waterUniforms.uWaterFoamColor.value);foam.scale.setScalar(1+Math.sin(t*0.7)*0.06);

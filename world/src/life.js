@@ -1,5 +1,6 @@
 import { buildGarden, GARDEN } from './areas/garden.js';
 import { SNOW_DAY } from './areas/town-center.js';
+import { MEADOW_OUTING } from './areas/meadow-lake.js';
 import { buildPonyFarm } from './areas/pony-farm.js';
 import { balloonRideState } from './areas/crystal-mine.js';
 import { familySign } from './family.js';
@@ -657,6 +658,9 @@ export function marketFocus(kind){const x=kind==='balloon'?0.9:kind==='bun'?-1.5
 
 let gardenCameraReader=()=>null;
 let snowDayCameraReader=()=>null;
+let meadowOutingCameraReader=()=>null;
+export function setMeadowOutingCameraReader(reader){meadowOutingCameraReader=reader;}
+export function meadowOutingFocus(kind){const p=MEADOW_OUTING[kind];return V(p.x,terrainHeight(p.x,p.z)+(kind==='kite'?.98:.12),p.z);}
 export function setSnowDayCameraReader(reader){snowDayCameraReader=reader;}
 export function snowDayFocus(kind){if(kind==='cocoa')return rainyFocus('window');const p=SNOW_DAY[kind];return {pos:V(p.x,walkHeight(p.x,p.z),p.z),yaw:0};}
 export function setGardenCameraReader(reader){gardenCameraReader=reader;}
@@ -677,6 +681,7 @@ export class Life {
     addCharacterPoseLayer(t=>this.updateRowing(t));
     addCharacterPoseLayer(t=>this.updateGarden(t));
     addCharacterPoseLayer(t=>this.updateSnowDay(t));
+    addCharacterPoseLayer(t=>this.updateMeadowOuting(t));
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -932,6 +937,19 @@ export class Life {
     this.root.add(this.tumbleGroup);
   }
 
+  updateMeadowOuting(time){
+    const state=meadowOutingCameraReader(),area=this.world.meadowOuting;if(!area)return;area.update(state?.kind,state?.t??time);if(!state)return;
+    const {kind,t}=state,f=meadowOutingFocus(kind);
+    this.outingHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.outingHidden.has(p))this.outingHidden.set(p,p.g.visible);p.g.visible=false;}
+    this.outingFriends??=[CAST.teacher,CAST.rancher,CAST.kid].map(o=>{const p=makeCharacter(o);this.scene.add(p.g);return p;});
+    for(const [i,p]of Object.values(this.stars).entries()){
+      seat(p,false,0);animatePerson(p,t*.65,0);p.g.visible=true;p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);p.g.position.copy(f).add(V((i?1:-1)*1.3,0,kind==='kite'?0:1.15));
+      if(kind==='kite'){pointCharacterArm(p,i?1:0,f.clone().add(V((i?1:-1)*1.3,1.27,0)));p.elbows[i?1:0].rotation.x=-.25;}
+      else{p.arms.forEach((arm,j)=>arm.rotation.x=-.5+Math.sin(t*.45+j)*.08);p.elbows.forEach(elbow=>elbow.rotation.x=-.8);}
+    }
+    this.outingFriends.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f).add(V((i-1)*2.6,0,kind==='kite'?-1.1:-2.0));p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);animatePerson(p,t*.4+i,0);if(kind==='kite')p.arms[0].rotation.x=-1.0;});
+  }
+
   updateSnowDay(time){
     const state=snowDayCameraReader(),area=this.world.snowDay;if(!area)return;area.setKind(state?.kind);
     if(!state)return;
@@ -1063,6 +1081,10 @@ export class Life {
       if(this.snowHidden){this._restoreSceneStars(this.snowHidden);this.snowHidden=null;for(const p of Object.values(this.stars)){p.g.rotation.x=p.g.rotation.z=0;seat(p,false,0);}}
       this.snowAdults?.forEach(p=>p.g.visible=false);
       this.rainy?.drops.forEach(g=>g.visible=true);
+    }
+    if(!meadowOutingCameraReader()){
+      if(this.outingHidden){this._restoreSceneStars(this.outingHidden);this.outingHidden=null;}
+      this.outingFriends?.forEach(p=>p.g.visible=false);
     }
     if(!rowingCameraReader()&&this.rowHidden){this._restoreSceneStars(this.rowHidden);this.rowHidden=null;}
     if(!rainyCameraReader()&&this.rainHidden){this._restoreSceneStars(this.rainHidden);this.rainHidden=null;}

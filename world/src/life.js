@@ -11,7 +11,7 @@ import * as T from './textures.js';
 import { MOMENTS, buildMomentProps } from './areas/pavi-siri-moments.js';
 import { episodeWalk } from './areas/sunset-cove.js';
 export { MOMENTS } from './areas/pavi-siri-moments.js';
-import { makeCharacter, randomTownsfolk, animatePerson, seat, gesture, CAST, HIP, addCharacterPoseLayer, pointCharacterArm } from './characters.js';
+import { makeCharacter, randomTownsfolk, animatePerson, seat, gesture, CAST, HIP, addCharacterPoseLayer, pointCharacterArm, addRainGear } from './characters.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const C = (h, s, l) => new THREE.Color().setHSL(h / 360, s / 100, l / 100, THREE.SRGBColorSpace);
@@ -640,6 +640,15 @@ export function starCameraFocus() {
 let momentCameraReader=()=>null;
 export function setMomentCameraReader(reader){momentCameraReader=reader;}
 export function momentFocus(kind,t=starWorld?.waterUniforms.uWaterTime.value||0){const spec=MOMENTS[kind];if(!spec||!starWorld)return {pos:V(),yaw:0};if(kind==='handWalk'){const phase=30+Math.sin(t*0.08)*8,p=episodeWalk('beach',phase);return {pos:V(p.x,p.y,p.z),yaw:p.yaw+(Math.cos(t*0.08)<0?Math.PI:0)};}return {pos:V(spec.x,walkHeight(spec.x,spec.z),spec.z),yaw:0};}
+let rainyCameraReader=()=>null;
+export function setRainyCameraReader(reader){rainyCameraReader=reader;}
+export function rainyFocus(kind){
+ const w=starWorld;if(kind==='window'&&w){const it=w.interiors.cafe,z=-Math.min(it.depth*0.45,5);it.group.updateWorldMatrix(true,false);return {pos:it.group.localToWorld(V(-it.hx+1.2,0.35,z)),yaw:it.group.rotation.y-Math.PI/2,localZ:z,camera:it.group.localToWorld(V(-it.hx+4.3,2.0,z+2.6))};}
+ const x=kind==='puddles'?0:45,z=kind==='puddles'?15:-40,pos=V(x,walkHeight(x,z),z),direction=V(1,0,0.35),sun=w?.rainy?.sun||w?.root.parent.children.find(o=>o.isDirectionalLight);
+ if(sun){const delta=sun.target.position.clone().sub(sun.position);delta.y=0;if(delta.lengthSq()>0.001)direction.copy(delta);}direction.normalize();
+ return {pos,yaw:Math.atan2(direction.x,direction.z),direction};
+}
+
 export class Life {
   constructor(scene, world) {
     this.scene = scene;
@@ -648,6 +657,7 @@ export class Life {
     addCharacterPoseLayer(t=>this.updateMoments(t));
     addCharacterPoseLayer(t=>this.updateBalloonRiders(t));
     addCharacterPoseLayer(()=>{if(this.world.trainTripActive){this.trainHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.trainHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.trainHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}}});
+    addCharacterPoseLayer(t=>this.updateRainy(t));
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -902,6 +912,31 @@ export class Life {
     this.root.add(this.tumbleGroup);
   }
 
+  _buildRainy(){
+    const root=new THREE.Group();root.name='Rainy day puddles and splashes';this.world.root.add(root);
+    const water=new THREE.MeshLambertMaterial({color:'#9ccbd2',transparent:true,opacity:0.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
+    const puddles=[],splashes=[];for(const x of [-0.65,0.65]){const g=new THREE.Mesh(new THREE.CircleGeometry(0.8,40),water);g.rotation.x=-Math.PI/2;g.scale.y=0.72;g.position.set(x,walkHeight(x,15)+0.09,15);root.add(g);puddles.push(g);}
+    for(let i=0;i<12;i++){const m=new THREE.MeshBasicMaterial({color:'#c0e5e7',transparent:true,opacity:0.5,depthWrite:false}),g=new THREE.Mesh(new THREE.SphereGeometry(0.035,8,6),m);g.scale.set(0.65,1.3,0.65);root.add(g);splashes.push(g);}
+    const it=this.world.interiors.cafe,window=new THREE.Group();window.name='Rain on cafe window';window.position.set(-it.hx+0.24,1.85,-Math.min(it.depth*0.45,5));window.rotation.y=Math.PI/2;it.group.add(window);
+    const view=this.world.painted.clean.backdrop?T.imageTexture(this.world.painted.clean.backdrop):null;const cream=new THREE.MeshLambertMaterial({color:'#e8d9b7'}),glass=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.4),new THREE.MeshLambertMaterial({map:view,emissiveMap:view,color:'#b9d0d4',emissive:'#9ab4bb',emissiveIntensity:0.2,side:THREE.DoubleSide}));window.add(glass);
+    for(const x of [-1,1]){const bar=new THREE.Mesh(new THREE.CapsuleGeometry(0.055,1.4,3,8),cream);bar.position.x=x;window.add(bar);}for(const y of [-0.75,0.75]){const bar=new THREE.Mesh(new THREE.CapsuleGeometry(0.055,1.9,3,8),cream);bar.rotation.z=Math.PI/2;bar.position.y=y;window.add(bar);}
+    const drops=[];for(let i=0;i<18;i++){const g=new THREE.Mesh(new THREE.SphereGeometry(0.027,8,6),new THREE.MeshBasicMaterial({color:'#d6f0f2',transparent:true,opacity:0.7}));g.scale.set(0.6,1.7,0.3);window.add(g);drops.push(g);}
+    const gear=Object.values(this.stars).map(addRainGear);return {root,puddles,splashes,window,glass,drops,gear,rainbow:this.scene.getObjectByName('Soft clearing rainbow'),sun:this.scene.children.find(o=>o.isDirectionalLight)};
+  }
+
+  updateRainy(time){
+    const state=rainyCameraReader(),r=this.rainy;if(!state){if(r){r.root.visible=r.window.visible=false;r.gear.forEach(g=>g.setVisible(false));}return;}
+    const area=this.rainy??=this._buildRainy(),t=state.t,kind=state.kind,focus=rainyFocus(kind);this.world.rainy=area;area.root.visible=kind==='puddles';area.window.visible=kind==='window';area.glass.material.color.set('#b9d0d4').lerp(new THREE.Color('#748ea9'),this.world.lanternLevel*0.6);
+    this.rainHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.rainHidden.has(p))this.rainHidden.set(p,p.g.visible);p.g.visible=false;}
+    Object.values(this.stars).forEach((p,i)=>{const side=(i?1:-1)*0.65,phase=((t+i*1.8)%6+6)%6,jump=kind==='puddles'&&phase<1.2?Math.sin(phase/1.2*Math.PI)*0.16:0;p.g.visible=true;p.g.position.copy(focus.pos);const yaw=kind==='puddles'?0:focus.yaw;p.g.position.x+=Math.cos(yaw)*side;p.g.position.z-=Math.sin(yaw)*side;p.g.position.y+=jump;p.g.rotation.y=kind==='puddles'?0:focus.yaw;animatePerson(p,t*1.4,0);const gear=area.gear[i];gear.setVisible(true,kind==='puddles');gear.umbrella.position.set((i?1:-1)*0.45,1.52,0);gear.umbrella.rotation.z=Math.sin(t*0.4+i)*0.02;
+      if(kind==='puddles'){p.knees.forEach(k=>k.rotation.x=jump*1.4);p.g.updateWorldMatrix(true,true);pointCharacterArm(p,i?1:0,p.g.localToWorld(V((i?1:-1)*0.45,0.95,0)),0.85);}
+      if(kind==='rainbow'){const band=area.rainbow;if(band){const target=band.position.clone();target.y+=18;p.g.updateWorldMatrix(true,true);pointCharacterArm(p,i?0:1,target,0.85);p.headPitch=-0.15;}}
+    });
+    area.splashes.forEach((g,i)=>{const child=i%2,u=((t+child*1.8-1.2)%6+6)%6,fade=1-THREE.MathUtils.smoothstep(u,0,0.9),a=i*2.399;g.visible=u<0.9;g.position.set((child?0.65:-0.65)+Math.cos(a)*u*0.45,walkHeight(0,15)+0.05+Math.sin(Math.min(1,u/0.9)*Math.PI)*0.15,15+Math.sin(a)*u*0.45);g.material.opacity=fade*0.6;});
+    area.drops.forEach((g,i)=>g.position.set(-0.8+(i%6)*0.31,0.62-((t*0.11+i*0.173)%1)*1.25,0.025));
+    if(kind==='rainbow'){const band=area.rainbow;if(band){band.position.y=Math.max(band.position.y,terrainHeight(band.position.x,band.position.z)+8);band.visible=true;const opacity=0.32*(1-THREE.MathUtils.smoothstep(t,180,190))*(1-this.world.lanternLevel*0.45);band.children.forEach(m=>m.material.opacity=opacity);}}
+  }
+
   _restoreSceneStars(hidden) {
     for(const [p,visible] of hidden){
       p.g.visible=visible;
@@ -956,6 +991,7 @@ export class Life {
     // Release outgoing scene ownership before the playground or the next scene snapshots it.
     if(!trainTripReader()&&this.trainHidden){this._restoreSceneStars(this.trainHidden);this.trainHidden=null;}
     if(!balloonRideState()&&this.balloonHidden){this._restoreSceneStars(this.balloonHidden);this.balloonHidden=null;}
+    if(!rainyCameraReader()&&this.rainHidden){this._restoreSceneStars(this.rainHidden);this.rainHidden=null;}
     const wind = this.settings.wind;
     this.world.wind = wind; // painted plants sway with the same wind
     this._socialise(dt, t);

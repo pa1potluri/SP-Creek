@@ -171,7 +171,7 @@ function makeShots() {
   const rowingViews=[['A little boat on the lake','lake',0,80],['Drifting past the waterfall','lake',80,80],['A little boat at Sunset Cove','cove',0,80]].map(([name,kind,phase,duration],i)=>({name,duration,rowing:kind,rowingPhase:phase,loop:false,group:'A little boat trip',clearance:1.5,sample(t,out){const f=rowingFocus(kind,phase+t),x=f.pos.x+(i===2?-8:i===1?7:11),z=f.pos.z+(i===2?8:i===1?5:13);out.pos.set(x,Math.max(f.pos.y+(i===0?10:3.5),walkHeight(x,z)+1.8),z);out.look.copy(f.pos);out.look.y+=0.9;}}));
   const episodeViews=[
     {name:'Rain over SP Creek',rainy:'puddles',sample(t,out){out.pos.copy(G(22,23,40));out.look.copy(G(0,1,15));}},
-    {name:'A wide clearing rainbow',rainy:'rainbow',sample(t,out){const f=rainyFocus('rainbow'),x=f.pos.x-f.direction.x*30,z=f.pos.z-f.direction.z*30;out.pos.copy(G(x,14,z));out.look.set(x+f.direction.x*115,terrainHeight(x,z)+23,z+f.direction.z*115);}},
+    {name:'A wide clearing rainbow',rainy:'rainbow',sample(t,out){const f=rainyFocus('rainbow'),x=f.pos.x-f.direction.x*30,z=f.pos.z-f.direction.z*30;out.pos.copy(G(x,26,z));out.look.set(x+f.direction.x*115,terrainHeight(x,z)+23,z+f.direction.z*115);}},
     {name:'Cove boat from above',rowing:'cove',rowingPhase:65,sample(t,out){const f=rowingFocus('cove',65+t);out.pos.set(f.pos.x-14,f.pos.y+34,f.pos.z+15);out.look.copy(f.pos);out.look.x-=16;out.look.y+=1;}},
     {name:'A garden full of good things',gardenPhase:210,sample(t,out){out.pos.copy(G(GARDEN.x+21,17,GARDEN.z+22));out.look.copy(G(GARDEN.x,0.7,GARDEN.z));}}
   ].map(view=>({...view,duration:40,loop:false,group:'Episode establishing views',clearance:1.8,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}}));

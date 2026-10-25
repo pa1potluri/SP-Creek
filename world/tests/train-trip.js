@@ -16,6 +16,12 @@ export function runTrainTripTests(){
   seek(80);const p=train.friends[0].g.position.clone();seek(220);seek(80);check(p.distanceTo(train.friends[0].g.position)<1e-8,'Seeking returns to identical passenger poses and position');
   d.playShot(0,{cut:true});a.step(0);check(train.friends.every(p=>!p.g.visible)&&a.life.stars.pavi.g.visible,'Leaving trip restores normal stars and hides passengers '+JSON.stringify({friends:train.friends.map(p=>p.g.visible),pavi:a.life.stars.pavi.g.visible,active:w.trainTripActive,hidden:a.life.trainHidden&&[...a.life.trainHidden].map(([p,v])=>[p.outfit.star,v]),shot:d.index,train:!!a.life.train}));
   check(Object.values(w.sunsetCove.siblings).every(p=>p.g.visible),'Leaving trip restores Cove siblings too');
+  for(const start of [0,45]){
+   d.playShot(start,{cut:true});a.step(0);
+   for(const id of [53,54,55,56,57,58,59,37]){d.playShot(id,{cut:true});d.t=d.shot.duration*0.5;a.step(0);}
+   check(Object.values(a.life.stars).every(p=>p.g.visible),'Balloon to train to walking view restores both protagonists from '+start);
+   check(!a.life.trainHidden&&!a.life.balloonHidden&&train.friends.every(p=>!p.g.visible),'Scene handoff clears hidden snapshots and passengers from '+start);
+  }
   check(VIDEO_PRESETS.trainTrip.clips.reduce((n,c)=>n+c.seconds,0)===240,'Train preset lasts four minutes');const button=[...document.querySelectorAll('#videoPresets button')].find(b=>b.textContent.includes(VIDEO_PRESETS.trainTrip.label));button.click();a.timeline.loop=false;d.locked=true;for(let i=0;i<479;i++){a.timeline.update(0.5);d.update(0.5);a.life.train.update(0.5);}d.locked=false;check(a.life.train.cars[2].g.position.distanceTo(sampleTrainTrack(TRAIN_SPUR_LENGTH-11.4).pos)<1e-8,'Last rendered preset frame is parked at the seaside halt');check(a.audio.ctx===null,'Train checks never start sound');
   console.log('Train route:',JSON.stringify({length:TRAIN_SPUR_LENGTH,maxHalfSecondStep:step,maxBurial}));return {passed:results.length,length:TRAIN_SPUR_LENGTH,maxBurial,results};
  }finally{a.timeline.stop();a.timeline.loop=loop;document.querySelector("#tlLoop").checked=loop;d.locked=false;a.loadProject(original);d.playShot(0,{cut:true});a.step(0);}

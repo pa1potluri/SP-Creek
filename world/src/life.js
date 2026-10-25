@@ -902,12 +902,20 @@ export class Life {
     this.root.add(this.tumbleGroup);
   }
 
+  _restoreSceneStars(hidden) {
+    for(const [p,visible] of hidden){
+      p.g.visible=visible;
+      const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);
+      if(park)park.visible=visible;
+    }
+  }
+
   updateBalloonRiders(t){
     const ride=balloonRideState(),basket=this.world.balloonRide?.balloon;
     if(!basket)return;
     if(!this.balloonRiders){this.balloonRiders=['pavi','siri'].map(role=>{const p=makeCharacter(CAST[role]);basket.add(p.g);return p;});}
     this.balloonRiders.forEach((p,i)=>{p.g.visible=!!ride;if(!ride)return;p.g.position.set(i?-0.37:0.37,0.18,0);p.g.rotation.set(0,0,0);animatePerson(p,t*0.6,0);gesture(p,'wave',0.35+Math.sin(t*0.25+i)*0.15,t*0.6+i);});
-    if(ride){this.balloonHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.balloonHidden.has(p))this.balloonHidden.set(p,p.g.visible);p.g.visible=false;}}else if(this.balloonHidden){for(const [p,visible]of this.balloonHidden)p.g.visible=visible;this.balloonHidden=null;}
+    if(ride){this.balloonHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.balloonHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.balloonHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}}else if(this.balloonHidden){this._restoreSceneStars(this.balloonHidden);this.balloonHidden=null;}
   }
 
   updateMoments(t){
@@ -945,8 +953,9 @@ export class Life {
   }
 
   update(dt, t, camera) {
-    // Release the train's visibility override before the playground applies its own.
-    if(!trainTripReader()&&this.trainHidden){for(const [p,visible]of this.trainHidden)p.g.visible=visible;this.trainHidden=null;}
+    // Release outgoing scene ownership before the playground or the next scene snapshots it.
+    if(!trainTripReader()&&this.trainHidden){this._restoreSceneStars(this.trainHidden);this.trainHidden=null;}
+    if(!balloonRideState()&&this.balloonHidden){this._restoreSceneStars(this.balloonHidden);this.balloonHidden=null;}
     const wind = this.settings.wind;
     this.world.wind = wind; // painted plants sway with the same wind
     this._socialise(dt, t);

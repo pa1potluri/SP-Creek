@@ -1,10 +1,8 @@
-# Little boat trip - WIP
+# Little boat trip - complete
 
-- Branch area/boat-trip from market completion 2ffb852. Rules, queue, blueprint and task read.
-- Two rounded open rowing boats, meadow lake and Sunset Cove; bright removable life jackets on original Pavi/Siri models, gentle oars, three following ducks and three tiny fish per boat.
-- Pure-time near-shore routes, no new walking-water access; original stars hide while riding and restore on scene changes. Shared boat construction lives in meadow-lake.js and is reused by the cove boat only.
-- Appended shots 72-74, four-minute A little boat trip preset. Existing shot numbers unchanged; no audio changes.
-- Focused browser check underway; first test lookup corrected from nonexistent waterAreas to existing colliders.water. Six Animated film day/night captures underway.
-- Left: inspect captures, fix any actual smoke findings, full suite once on final code, counts and final result/QUEUE commit. Stopped at verification, no merge or push.
-
-- Final focused smoke: **21 passed**, browser errors [], sound locked. Pure-time routes, near-shore water, original models and jackets, seeks, six styles and boat/balloon/train/walk cleanup verified. Endpoint holding is applied after each shot selection. Six refreshed day/night previews saved and inspected; ducks trail behind, jackets remain clear at night. Full 23-suite verification next.
+- Branch area/boat-trip from market completion 2ffb852. Rounded open boats on the meadow lake and at Sunset Cove, with slow near-shore loops, gentle rowing, trailing ducks and tiny soft fish jumps. Existing walking-water boundaries remain.
+- Original Pavi/Siri models and textures, seated with bright orange/yellow life jackets. Riders and normal stars restore correctly across boat, balloon, train and walking scenes. All motion and poses reproduce from world/story time.
+- Appended views 72-74 and the four-minute A little boat trip preset. Shared boat construction in meadow-lake.js, reused only by the new cove boat. No new libraries or audio changes.
+- Focused smoke: **21 passed**, no browser errors, sound locked. Full suite: **1561 passed + 2 startup reload checks**, all 23 suites, browser errors []. Counts: world/tests/boat-trip-full.json. Clearance: 75 views / 15,075 samples, no failures.
+- Six Animated film previews saved and inspected: world/tests/boat-trip-72-day.png / -night.png, boat-trip-73-day.png / -night.png, boat-trip-74-day.png / -night.png. Bright jackets, calm water, soft waterfall and safe shore distances.
+- Nothing unfinished. No merge, push or publication. Claude review pending.

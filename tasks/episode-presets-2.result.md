@@ -15,3 +15,5 @@
 - Full rerun found view 79 inside a church roof cone under the suite lighting direction. Raised this appended wide view from 14m to 26m above terrain. Refreshing its day/night pair and checking episode + clearance suites before the final full rerun. No failed/partial full run counted as passing.
 
 - Corrected episode + full camera-clearance check: **25 + 83 = 108 passed**, 82 views / 16,482 samples, no collisions or browser errors, sound locked. Refreshing the day image after the UI fully hides; full 25-suite rerun remains the final requirement.
+
+- Final rainbow pair inspected at raised height; day image refreshed after panel transition. Full 25-suite rerun underway on corrected code, with all eight final previews saved. Remaining: final full counts and completion commit.

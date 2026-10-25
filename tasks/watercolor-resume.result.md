@@ -1,27 +1,28 @@
-# Watercolour preview resume - WIP / saved at user usage stop
+# Watercolour preview resume — complete
 
-## Done
+- Branch: `area/watercolor-resume`, stacked from `area/self-review-2` at b046535. User explicitly lifted the Thursday wait. No merge, push or publication. Stopped after task 31.
 
-- Current branch area/watercolor-resume, from area/self-review-2 tip b046535. User lifted Thursday wait and requested Sunset Cove at golden hour first. No merge or push.
-- Resumed only scoped app files: styles.js, painterly.js, main.js style uniforms, index.html controls. Optional **Watercolour (preview)** choice; clean textures and painted plants; pastel washes, pigment rims, static paper tooth/blooms; three style-only sliders with project save/load. Fresh-start default remains Animated film. No camera or preset changes.
-- Reduced the saved WIP's doubled character edges using a smaller, non-wobbling base brush and colour/depth-aware wash weights. Latest app code is in 02674e3.
-- Six old style definitions and all five old Look modes passed fixed-buffer byte comparisons in the initial **25-check focused smoke**, before the final silhouette refinement. Final full verification must rerun these checks on current code.
-- Final-code captures confirm default film, identical world time across style comparisons, sound locked, browser errors [], and byte-identical frozen Watercolour screenshots 400ms apart. Proof: world/tests/watercolor-resume-check.json.
-- **12 raw matched-pose film/oil/watercolour day/night previews** for existing Cove shots 39 and 40, plus comparison sheets watercolor-resume-39-comparison.png and -40-comparison.png. All saved under world/tests/ and inspected. Golden-hour preview is soft and readable; original models/assets unchanged. Inherited navy night-waterline strip remains as already recorded in STUCK.md.
+## Built
 
-## Full-suite status / exactly where stopped
+- Optional **Watercolour (preview)** art style, demonstrated first at Sunset Cove in golden-hour light. Animated film remains the fresh-start default; no video preset selects Watercolour.
+- Clean textures, painted plants, pastel washes, pigment edges, static paper tooth and blooms. Three style-only sliders (wash softness, edge pigment, paper texture) use existing project save/load.
+- Smaller non-wobbling base brush and colour/depth-aware wash weights preserve character silhouettes. Original character models/assets, camera IDs and preset IDs are unchanged.
+- App changes stay in styles.js, painterly.js, main.js style uniforms and index.html controls. Existing six style definitions and five old Look shader paths remain unchanged.
 
-- First full attempt passed area-shots 7, balloon-ride 20, boat-trip 22, then printed Build progress through 400 and failed `watercolor/shop: placed through canvas`. No completed Build count and no passing full suite.
-- Cause: Build test assumed Pixel art was the final style and retained its seven buildings before appended Watercolour. **70bd17d** fixes only test fixture cleanup to retain the actual final style's buildings. App placement code unchanged. Searched other suites for the same order assumption; none found.
-- A fresh full 26-suite rerun was launched after that correction, then **stopped immediately at the user's usage-stop request, before any new suite output**. No tests remain running. TEMP/sp-watercolor-resume-full.log may still contain the FIRST failure because the replacement run had not emitted output; do not treat that stale log as a failure of 70bd17d.
+## Checked
 
-## Left after reset
+- **Full suite: 1773 passed + 2 startup reload checks, all 26 suites, exit 0, browser errors []**, on localhost:8811. Per-suite counts: `world/tests/watercolor-resume-full.json`.
+- Includes **25 final Watercolour checks**: original style definitions, byte-identical fixed-buffer output from all five existing Look modes, optional preview label, controls, project round-trip, golden/night rendering and sound still locked.
+- Final capture proof in `world/tests/watercolor-resume-check.json`: fresh default film; same world time/pose for each comparison; sound locked; no browser errors; frozen Watercolour screenshots byte-identical 400 ms apart.
+- Appending a seventh style exposed two Build test fixture assumptions: Pixel was last, and six iterations accumulated pi rotation. Fixture cleanup now uses the actual final style; rotation expectation uses the actual style count. App placement/rotation code unchanged. Final Build suite: **583 passed**.
 
-1. Re-read rules, queue and this handoff. Keep working on area/watercolor-resume; no new branch/merge.
-2. Start/reuse local test server (8813 used here). Run every .js suite explicitly with run-browser.cjs; no-argument runner runs none. Verify the Build fixture correction and final Watercolour 25 checks, including old-mode pixel equivalence. Record actual final counts only after a complete passing run.
-3. App code and final previews are already saved. If code changes, refresh affected previews and repeat relevant/full checks. Write final result/count JSON, mark task 31 and superseded task 8 done in QUEUE, commit, then STOP. Never push.
+## Preview screenshots
 
-No finished full-suite result is claimed. Current source/test checkpoint: 70bd17d; this handoff is committed separately as WIP.
+- Existing Cove shots **39 and 40**: `world/tests/watercolor-resume-<shot>-day.png` and `-night.png` in Animated film; `-oil-day.png` / `-oil-night.png`; `-watercolor-day.png` / `-watercolor-night.png`. **12 raw captures**, all inspected.
+- Matched-pose comparison sheets: `world/tests/watercolor-resume-39-comparison.png` and `watercolor-resume-40-comparison.png`. Soft golden-hour washes; original faces readable; night remains visible and calm.
 
-## Reset verification progress
-- Fresh full run reached Build rotation assertion after 450 checks: a second six-style fixture assumption expected pi after six style iterations. Updated expected cumulative yaw to styles.length * pi / 6; no app change. Full 26-suite rerun in progress on localhost:8811.
+## Remaining / review notes
+
+- No unfinished task 31 implementation or verification. Historical task 8 WIP is superseded by this completed preview.
+- Inherited navy strip along the Cove night waterline appears in Film, Oil and Watercolour; already recorded in STUCK.md during task 39. No global renderer changes made for it.
+- Claude review remains required. Queue updated; no further task started.

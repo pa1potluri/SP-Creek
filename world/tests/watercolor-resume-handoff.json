@@ -1,12 +1,12 @@
 {
-  "status": "WIP saved at explicit user usage stop",
+  "status": "complete; stopped after task 31",
   "branch": "area/watercolor-resume",
   "base": "b046535",
   "appCheckpoint": "02674e3",
   "testCheckpoint": "70bd17d",
   "focusedBeforeFinalRefinement": 25,
   "finalCaptureProof": "watercolor-resume-check.json",
-  "fullSuitePassed": false,
+  "fullSuitePassed": true,
   "firstFullAttempt": {
     "completedSuites": {
       "area-shots": 7,
@@ -23,5 +23,6 @@
     "completedSuites": {},
     "running": false
   },
-  "resume": "Run all 26 browser suites on current branch, record final counts, finalize result and QUEUE, commit, stop. Never push."
+  "resume": "No remaining task work. Await Claude review; never push or merge.",
+  "finalFullResult": "watercolor-resume-full.json"
 }

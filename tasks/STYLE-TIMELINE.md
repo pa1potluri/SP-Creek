@@ -28,8 +28,8 @@ Assumptions: regular build time, approved assets, timely lead/user reviews and a
 ## Proposed process for the next visual batch
 
 1. Finish the current queue through self-review 47 and save its results. Task 40's Cove night band remains a known unresolved issue; do not treat passing tests as a visual fix.
-2. Claude scopes one hero composition against the references, such as village/bridge/balloon, and identifies the approved asset/material/lighting work. Review one benchmark before applying it broadly.
+2. The user or Claude scopes one hero composition against the references, such as village/bridge/balloon, and identifies the approved asset/material/lighting work. Review one benchmark before applying it broadly.
 3. Refine the main filming areas using that approved benchmark, keeping camera IDs, public-model fallback, all styles and deterministic animation intact.
 4. Complete the wider-world pass with day/night and Oil comparisons, full regression checks and user review.
 
-This is a local shared handoff, not an email or an external message. No separate spreadsheet or email details were identified in this chat; a specific sheet path/link is still needed to update one outside the repository. No new visual-expansion task has been started after 47.
+The user will handle the separate sheet update and any onward communication. The user will guide the work while Claude is unavailable (their estimate: roughly 2–3 days, possibly 3–4). This local shared handoff preserves the direction for Claude to read later. No new visual-expansion task has been started after 47.

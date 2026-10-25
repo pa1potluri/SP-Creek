@@ -1,5 +1,6 @@
 import { VIDEO_PRESETS } from '../src/presets.js';
 import { STYLES } from '../src/styles.js';
+import { terrainHeight } from '../src/world.js';
 export async function runKitePicnicTests(){
  const a=window.__app,original=a.projectData(),results=[],check=(ok,msg)=>{if(!ok)throw Error(msg);results.push(msg);};
  const stage=(shot,t)=>{a.director.playShot(shot,{cut:true});a.director.paused=true;a.director.t=t;a.step(0);};
@@ -15,6 +16,8 @@ export async function runKitePicnicTests(){
    check(Object.values(a.life.stars).every(p=>!a.world.inPond(p.g.position.x,p.g.position.z,.8)),shot+': stars remain on dry ground');
   }
   stage(89,30);a.world.meadowOuting.root.updateMatrixWorld(true);
+  const picnic=a.world.meadowOuting.groups.picnic;
+  check([-1.8,0,1.8].every(dx=>[-1.4,0,1.4].every(dz=>Math.abs(terrainHeight(picnic.position.x+dx,picnic.position.z+dz)-picnic.position.y)<1e-5)),'Blanket footprint remains level above the blended lake bank');
   const T=await import('three');check(a.world.meadowOuting.ducks.every(g=>{const p=g.getWorldPosition(new T.Vector3());return !a.world.inPond(p.x,p.z,.5);}),'Picnic ducks stay on the dry grass');
   check(a.life.outingFriends.every(p=>p.g.visible),'Three friendly neighbours join the outing');
   for(const style of Object.keys(STYLES)){a.applyStyle(style);stage(86,30);check(a.world.meadowOuting.root.visible,style+': outing renders');}

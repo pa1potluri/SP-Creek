@@ -6,5 +6,7 @@
 - Episode 4 appended, 180s, natural cuts: wide clearing 59, sky 60, wide clearing 59, calm night throughout.
 - Episode 1's five abrupt camera/staging cuts replaced by one appended cove view 65: wide start, slow from-behind beach walk, wide end, 180s. Existing views 0-64 remain numbered unchanged and still available. No face close-ups or character redesign.
 - Added finish-wip regression checks and updated the old fixed Episode 1 shot-order assertion to the new uninterrupted-take contract.
-- Smoke currently running. Pending: fix any smoke issues, save day/night 59/60/65, full suite once, update old WIP result files and QUEUE, remove solved STUCK items, commit and continue self-review 33.
+- Smoke: 13 passed, errors [], sound locked. Full Episode 1 simulation: 1800 samples at 10Hz; maximum camera step 0.10817m and actor step 0.02177m. No visible staged townsfolk cross the recording path.
+- Normal-startup day/night captures 59, 60 and 65 saved and inspected (six images): warm tents and guarded fire, nearby grown-ups and friendly owl, readable nights, original siblings from behind on dry sand. No hidden preview factory used.
+- Full suite running (20 suites). Pending final counts, old WIP result/status updates and solved STUCK removal, then commit and self-review 33.
 - No merge, push or publication.

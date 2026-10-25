@@ -6,3 +6,5 @@
 - Left: focused checks, day/night/oil and short Play walks for tasks 34-38, full suite once on final code, report/result/QUEUE completion commit. Then stop; task 31 remains paused until Thu Oct 29. No merge/push/publication.
 
 - Focused regressions: **rain 28 + garden 41 = 69 passed**, browser errors []. Maximum garden actor movement over one-second samples: 1.064m. Review capture completed: **128 camera poses**, **14 dry finite Play walks**, **32 day/night/oil and walk screenshots**, no browser errors, sound locked. Contact sheets/visual inspection next, then full 25-suite run and final report.
+
+- Film/oil/walk contact sheets inspected. New content is calm and original models remain intact. An inherited solid navy cove night waterline is confirmed against the first review capture; logged in STUCK.md as a separate shoreline/sea-rendering scope request. New episode view 80 frames it out. Full 25-suite run next; final report will flag this visual follow-up rather than claiming it fixed.

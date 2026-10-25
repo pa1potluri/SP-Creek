@@ -1,0 +1,32 @@
+{
+  "passed": 1561,
+  "startupReloadChecks": 2,
+  "suites": {
+    "area-shots": 7,
+    "balloon-ride": 20,
+    "boat-trip": 21,
+    "build-mode": 525,
+    "camping-night": 14,
+    "clouds-water": 227,
+    "family-mode": 46,
+    "finish-wip": 13,
+    "hamlet-shots": 47,
+    "hamlet": 37,
+    "lantern-evening": 26,
+    "market-day": 41,
+    "more-buildings": 155,
+    "names-tour-shots": 51,
+    "pavi-siri-moments": 35,
+    "pavi-siri": 50,
+    "playground": 35,
+    "pony-farm": 32,
+    "rainy-day-fun": 26,
+    "shot-clearance": 76,
+    "startup-hang": 5,
+    "sunset-cove": 40,
+    "train-trip": 32
+  },
+  "browserErrors": [],
+  "exitCode": 0,
+  "url": "http://127.0.0.1:8813"
+}

@@ -1,0 +1,40 @@
+{
+  "duration": 180,
+  "simulatedFrames": 1800,
+  "sampleHz": 10,
+  "minimumVisibleTownspersonDistance": 26.804,
+  "pebbles": 12,
+  "warmPebbles": true,
+  "cameraCuts": [
+    {
+      "at": 20,
+      "from": 0,
+      "to": 1,
+      "metres": 100.936,
+      "move": "cut"
+    },
+    {
+      "at": 55,
+      "from": 1,
+      "to": 2,
+      "metres": 49.027,
+      "move": "cut"
+    },
+    {
+      "at": 90.1,
+      "from": 2,
+      "to": 3,
+      "metres": 45.35,
+      "move": "cut"
+    },
+    {
+      "at": 110.1,
+      "from": 3,
+      "to": 4,
+      "metres": 92.835,
+      "move": "cut"
+    }
+  ],
+  "audioLocked": true,
+  "browserErrors": []
+}

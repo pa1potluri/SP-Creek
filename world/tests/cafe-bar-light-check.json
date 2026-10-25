@@ -1,0 +1,18 @@
+[
+  {
+    "mood": "golden",
+    "width": 960,
+    "height": 600,
+    "meanLuma": 141.87986805555556,
+    "nearBlackPct": 0,
+    "median": 120
+  },
+  {
+    "mood": "night",
+    "width": 960,
+    "height": 600,
+    "meanLuma": 159.98889756944445,
+    "nearBlackPct": 0,
+    "median": 141
+  }
+]

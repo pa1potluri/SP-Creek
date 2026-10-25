@@ -1,9 +1,13 @@
+import { gardenViews, GARDEN } from './areas/garden.js';
 // Camera director: slow cinematic shots, smooth flights between them (no cuts, no dissolves),
 // a free-fly camera, and your own key-framed camera moves.
 import * as THREE from 'three';
-import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP } from './world.js';
+import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP, sampleTrainTrack } from './world.js';
 import { HAMLET } from './hamlet.js';
-import { starCameraFocus } from './life.js';
+import { starCameraFocus, MOMENTS, momentFocus, setMomentCameraReader, sampleTrainTrip, setTrainTripReader, rainyFocus, setRainyCameraReader, marketFocus, setMarketCameraReader, rowingFocus, setRowingCameraReader, setGardenCameraReader } from './life.js';
+import { sampleBalloonRide, setBalloonRideReader } from './areas/crystal-mine.js';
+import { farmViews } from './areas/pony-farm.js';
+import { campingViews } from './areas/camping.js';
 import { beachWalk, stageCove } from './areas/sunset-cove.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
@@ -159,7 +163,19 @@ function makeShots() {
     {name:'Two small friends on a big beach',duration:35,loop:false,sample(t,out){const p=stageCove('beach',t+15);out.pos.set(-299-t*0.04,55,-5-t*0.08);out.look.set(p.x,p.y,p.z);}},
     {name:'Down the lantern lane',duration:35,loop:false,sample(t,out){const p=stageCove('lane',t),x=p.x+6;out.pos.set(x,Math.max(p.y+3.5,walkHeight(x,p.z)+1.6),p.z);out.look.set(p.x-12,p.y+2,p.z);}},
   ].map(s=>({...s,group:'Sunset Cove',clearance:1.5}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5}];
+  const momentViews=Object.entries(MOMENTS).map(([kind,spec])=>({name:spec.label,moment:kind,group:'Pavi & Siri moments',duration:40,loop:false,clearance:1.5,sample(t,out){const f=momentFocus(kind),drift=Math.sin(t/40*Math.PI)*0.3,x=f.pos.x+spec.offset[0]+drift,z=f.pos.z+spec.offset[2];out.pos.set(x,Math.max(f.pos.y+spec.offset[1],walkHeight(x,z)+1.8),z);out.look.copy(f.pos);out.look.y+=spec.lookY||0.9;}}));
+  const balloonViews=[['Lift off',0,30],['Over the valley',30,180],['Coming home',210,30]].map(([name,phase,duration])=>({name,duration,balloonPhase:phase,group:'Balloon ride',loop:false,clearance:1.5,sample(t,out){const p=sampleBalloonRide(phase+t);out.pos.set(p.x-14,Math.max(p.y+6,walkHeight(p.x-14,p.z+23)+2),p.z+23);out.look.copy(p);out.look.y+=6;}}));
+  const trainViews=[['All aboard',0,30],['Window view',30,150],['Seaside halt',180,60]].map(([name,phase,duration],i)=>({name,duration,trainPhase:phase,group:'Little train trip',loop:false,clearance:1.5,sample(t,out){const trip=sampleTrainTrip(phase+t),focus=sampleTrainTrack(trip.distance-11.4),side=i===0?-4.5:7,x=i===2?focus.pos.x+25:focus.pos.x+Math.cos(focus.yaw)*side,z=i===2?focus.pos.z+20:focus.pos.z-Math.sin(focus.yaw)*side+(i===0?9:2);out.pos.set(x,Math.max(focus.pos.y+(i===2?12:2.6),walkHeight(x,z)+1.5),z);out.look.copy(focus.pos);out.look.y+=2.5;}}));
+  const rainyViews=[['Puddle smiles','puddles',30],['Raindrops on the cafe window','window',20],['A rainbow after the rain','rainbow',190]].map(([name,kind,duration])=>({name,duration,rainy:kind,group:'Rainy day fun',loop:false,clearance:1.5,sample(t,out){const f=rainyFocus(kind);if(kind==='window'){out.pos.copy(f.camera);out.look.copy(f.pos);out.look.y+=1.15;}else if(kind==='rainbow'){const distance=9+12*THREE.MathUtils.smoothstep(t,140,185),x=f.pos.x-f.direction.x*distance,z=f.pos.z-f.direction.z*distance;out.pos.copy(G(x,2+0.5*THREE.MathUtils.smoothstep(t,140,185),z));out.look.set(x+f.direction.x*115,terrainHeight(x,z)+23,z+f.direction.z*115);}else{out.pos.copy(G(f.pos.x+5,2.7,f.pos.z+6));out.look.copy(f.pos);out.look.y+=1.1;}}}));
+  const marketViews=[{name:'Market day in the square',market:'wide',duration:100,loop:true,group:'Market day',clearance:1.5,sample(t,out){out.pos.copy(G(28+Math.sin(t*0.02),26,-12));out.look.copy(G(0,1,-43));}},{name:'A balloon for Pavi',market:'balloon',duration:80,loop:false,group:'Market day',clearance:1.5,sample(t,out){out.pos.copy(G(-4.5,2.9,-20));out.look.copy(marketFocus('balloon'));out.look.y+=1.5;}},{name:'Sharing a bakery bun',market:'bun',duration:110,loop:false,group:'Market day',clearance:1.5,sample(t,out){out.pos.copy(G(3.5,2.4,-17.5));out.look.copy(marketFocus('bun'));out.look.y+=1.1;}}];
+  const rowingViews=[['A little boat on the lake','lake',0,80],['Drifting past the waterfall','lake',80,80],['A little boat at Sunset Cove','cove',0,80]].map(([name,kind,phase,duration],i)=>({name,duration,rowing:kind,rowingPhase:phase,loop:false,group:'A little boat trip',clearance:1.5,sample(t,out){const f=rowingFocus(kind,phase+t),x=f.pos.x+(i===2?-8:i===1?7:11),z=f.pos.z+(i===2?8:i===1?5:13);out.pos.set(x,Math.max(f.pos.y+(i===0?10:3.5),walkHeight(x,z)+1.8),z);out.look.copy(f.pos);out.look.y+=0.9;}}));
+  const episodeViews=[
+    {name:'Rain over SP Creek',rainy:'puddles',sample(t,out){out.pos.copy(G(22,23,40));out.look.copy(G(0,1,15));}},
+    {name:'A wide clearing rainbow',rainy:'rainbow',sample(t,out){const f=rainyFocus('rainbow'),x=f.pos.x-f.direction.x*30,z=f.pos.z-f.direction.z*30;out.pos.copy(G(x,26,z));out.look.set(x+f.direction.x*115,terrainHeight(x,z)+23,z+f.direction.z*115);}},
+    {name:'Cove boat from above',rowing:'cove',rowingPhase:65,sample(t,out){const f=rowingFocus('cove',65+t);out.pos.set(f.pos.x-14,f.pos.y+34,f.pos.z+15);out.look.copy(f.pos);out.look.x-=16;out.look.y+=1;}},
+    {name:'A garden full of good things',gardenPhase:210,sample(t,out){out.pos.copy(G(GARDEN.x+21,17,GARDEN.z+22));out.look.copy(G(GARDEN.x,0.7,GARDEN.z));}}
+  ].map(view=>({...view,duration:40,loop:false,group:'Episode establishing views',clearance:1.8,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews,...balloonViews,...trainViews,...campingViews().map(view=>({...view,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}})),...farmViews(),{name:'SP Creek station from above',group:'Episode establishing views',duration:40,loop:true,clearance:1.5,sample(t,out){const x=97+Math.sin(t/40*Math.PI*2)*0.7;out.pos.copy(G(x,25,50));out.look.set(66,2,10);}},{name:'Welcome to SP Creek: one cove walk',group:'Sunset Cove',duration:180,loop:false,clearance:1.8,sample(t,out){const u=clamp01(t/180),wide=Math.cos(u*Math.PI)**2,p=stageCove('beach',u*70),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw),distance=8+38*wide,x=p.x-dx*distance,z=p.z-dz*distance;out.pos.set(x,Math.max(p.y+2.8+35*wide,walkHeight(x,z)+1.8),z);out.look.set(p.x+dx*3,p.y+1,p.z+dz*3);}},...rainyViews,...marketViews,...rowingViews,...gardenViews(),...episodeViews];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');
@@ -167,6 +183,13 @@ const isTyping = (e) => e.target && e.target.closest && e.target.closest('input,
 export class Director {
   constructor(camera, dom) {
     this.camera = camera;
+    setMomentCameraReader(()=>this.mode==='shot'?this.shot?.moment:null);
+    setBalloonRideReader(()=>this.mode==='shot'&&this.shot?.balloonPhase!=null?{t:this.shot.balloonPhase+Math.min(this.t,this.shot.duration)}:null);
+    setTrainTripReader(()=>this.mode==='shot'&&this.shot?.trainPhase!=null?{t:this.shot.trainPhase+Math.min(this.t,this.shot.duration)}:null);
+    setRainyCameraReader(()=>this.mode==='shot'&&this.shot?.rainy?{kind:this.shot.rainy,t:Math.min(this.t,this.shot.duration),camera:this.camera}:null);
+    setGardenCameraReader(()=>this.mode==='shot'&&this.shot?.gardenPhase!=null?{t:this.shot.gardenPhase+Math.min(this.t,this.shot.duration)}:null);
+    setRowingCameraReader(()=>this.mode==='shot'&&this.shot?.rowing?{kind:this.shot.rowing,t:this.shot.rowingPhase+Math.min(this.t,this.shot.duration)}:null);
+    setMarketCameraReader(()=>this.mode==='shot'&&this.shot?.market?{kind:this.shot.market,t:Math.min(this.t,this.shot.duration)}:null);
     this.dom = dom;
     this.shots = makeShots();
     this.speed = 1;

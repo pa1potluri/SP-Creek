@@ -1,12 +1,27 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { terrainHeight } from '../world.js';
+import { terrainHeight, walkHeight } from '../world.js';
 import { signTexture } from '../textures.js';
 
 export const CRYSTAL_HILL={x:173,z:-115,topX:202,topZ:-145};
+let rideReader=()=>null,rideHomeY=0;
+export const BALLOON_RIDE_SECONDS=240;
+export function setBalloonRideReader(reader){rideReader=reader;}
+export function balloonRideState(){return rideReader();}
+const rideCurve=new THREE.CatmullRomCurve3([[202,-145],[-90,-204],[0,-35],[40,150],[-225,0],[-375,-50],[202,-145]].map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
+const ease=u=>{u=THREE.MathUtils.clamp(u,0,1);return u*u*u*(u*(u*6-15)+10);};
+// Ease only the departure/return, then travel at an even pace along the curve.
+const travel=u=>{const ramp=v=>0.1*(v*v*v-0.5*v*v*v*v)/0.9;return u<0.1?ramp(u/0.1):u>0.9?1-ramp((1-u)/0.1):(u-0.05)/0.9;};
+export function sampleBalloonRide(time){
+  const t=THREE.MathUtils.clamp(time,0,BALLOON_RIDE_SECONDS),u=THREE.MathUtils.clamp((t-30)/180,0,1),p=rideCurve.getPointAt(travel(u));
+  const cruise=Math.max(82,rideHomeY+28),lift=t<30?ease(t/30):t>210?1-ease((t-210)/30):1;
+  p.y=rideHomeY+0.2+(cruise-rideHomeY-0.2)*lift;
+  return p;
+}
 export function buildCrystalMine(world) {
   const root=new THREE.Group();root.name='Crystal hill';world.root.add(root);
   const y=terrainHeight(173,-115),top=world.registerAreaPad({x:202,z:-145,y:y+12,hx:10,hz:10,blend:16});
+  rideHomeY=top.y;
   const pad=world.registerAreaPad({x:173,z:-115,y,hx:9,hz:10,blend:9});world.updateTerrain();
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),mat=(color,glow=0)=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:glow});
   const wood=mat('#ae9070'),stone=world.paintedMaterial('stone',1,1,{color:'#938776'}) || mat('#938776'),cream=mat('#fff0d4'),moss=mat('#91ae80');
@@ -51,9 +66,13 @@ export function buildCrystalMine(world) {
   for(const dx of [-0.4,0.4])world.benches.push({x:206+dx,y:top.y+0.65,z:-144,yaw:0,who:null});
   const balloon=group(202,top.y+4.5,-145);
   const wicker=mat('#d8b77f');
-  box(1.9,1.25,1.6,wicker,0,0.65,0,balloon);
+  box(1.9,0.15,1.6,wicker,0,0.1,0,balloon);
+  for(const z of [-0.75,0.75])box(1.9,1.15,0.12,wicker,0,0.7,z,balloon);
+  for(const x of [-0.89,0.89])box(0.12,1.15,1.6,wicker,x,0.7,0,balloon);
+  for(const z of [-0.8,0.8])solid(new THREE.CylinderGeometry(0.075,0.075,1.98,12),cream,0,1.3,z,balloon,[0,0,Math.PI/2]);
+  for(const x of [-0.95,0.95])solid(new THREE.CylinderGeometry(0.075,0.075,1.6,12),cream,x,1.3,0,balloon,[Math.PI/2,0,0]);
   for(let i=0;i<10;i++){const x=-0.88+i*0.196;for(const z of [-0.81,0.81])box(0.035,1.15,0.025,cream,x,0.65,z,balloon);}
-  for(let i=0;i<7;i++)box(1.98,0.05,1.68,cream,0,0.12+i*0.18,0,balloon);
+  for(let i=0;i<7;i++){for(const z of [-0.8,0.8])box(1.98,0.05,0.06,cream,0,0.12+i*0.18,z,balloon);for(const x of [-0.95,0.95])box(0.06,0.05,1.68,cream,x,0.12+i*0.18,0,balloon);}
   const stripes=['#efbac6','#eed39b','#b9d9b1','#a8d9df','#b9c5e5','#d3b7dc','#f0c6b1','#b2d9cf','#efd5ba','#d6c5eb'];
   stripes.forEach((c,i)=>{const bm=mat(c,0.08);balloonMats.push(bm);solid(new THREE.SphereGeometry(4,6,20,i*Math.PI*2/stripes.length,Math.PI*2/stripes.length).scale(1,1.35,1),bm,0,8,0,balloon);});
   // town name on a cream band around the envelope, three times so it reads from every side
@@ -69,13 +88,16 @@ export function buildCrystalMine(world) {
   for(const [x,z]of [[198,-149],[206,-149],[198,-141]]){box(0.08,2.1,0.08,wood,x,top.y+1.1,z);const g=group(x,top.y+1.9,z);solid(new THREE.PlaneGeometry(0.8,0.45),crystalMats[flags.length%4],0.4,0,0,g);flags.push(g);}
   const positions=new Float32Array(90*3),geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));const sparkles=new THREE.Points(geo,new THREE.PointsMaterial({color:'#f6e5f5',size:0.1,transparent:true,opacity:0.7,depthWrite:false,blending:THREE.AdditiveBlending}));sparkles.frustumCulled=false;root.add(sparkles);
   for(const {parent,m,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),m);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}root.updateMatrixWorld(true);
+  world.balloonRide={balloon,top};
   return {root,pad,top,balloon,crystalMats,clusters,sparkles,ropes,update(t,atmos){
     const night=Math.max(atmos.stars,world.lanternLevel),wind=Math.min(1.5,Math.abs(world.wind??1));
     crystalMats.forEach((m,i)=>m.emissiveIntensity=0.65+night*0.2+Math.sin(t*0.6+i)*0.06);
     glowMats.forEach((m,i)=>m.opacity=0.12+night*0.08+Math.sin(t*0.6+i)*0.015);
+    const ride=balloonRideState();
     balloon.position.set(202+Math.sin(t*0.19)*0.25*wind,top.y+4.5+Math.sin(t*0.35)*0.25,-145+Math.cos(t*0.17)*0.2*wind);balloon.rotation.z=Math.sin(t*0.2)*0.025*wind;
+    if(ride){balloon.position.copy(sampleBalloonRide(ride.t));balloon.rotation.z=0;}
     const burn=Math.pow(0.5+0.5*Math.sin(t*0.28),8);burner.scale.setScalar(0.6+burn*0.8);balloonMats.forEach(m=>m.emissiveIntensity=0.06+night*0.12+burn*0.07);
-    balloon.updateMatrixWorld(true);ropes.forEach(({line,start,sx,sz})=>{const end=balloon.localToWorld(v(sx*0.85,0.15,sz*0.7)),p=line.geometry.attributes.position;p.setXYZ(0,start.x,start.y,start.z);p.setXYZ(1,end.x,end.y,end.z);p.needsUpdate=true;line.geometry.computeBoundingSphere();});
+    balloon.updateMatrixWorld(true);ropes.forEach(({line,start,sx,sz})=>{line.visible=!ride;const end=balloon.localToWorld(v(sx*0.85,0.15,sz*0.7)),p=line.geometry.attributes.position;p.setXYZ(0,start.x,start.y,start.z);p.setXYZ(1,end.x,end.y,end.z);p.needsUpdate=true;line.geometry.computeBoundingSphere();});
     flags.forEach((g,i)=>g.rotation.y=Math.sin(t*0.9+i)*0.13*wind);
     for(let i=0;i<90;i++){const hill=i>55,phase=(t*0.045+i/90)%1;positions[i*3]=(hill?202:173)+Math.sin(i*2.399+t*0.1)*(hill?6:3.2);positions[i*3+1]=(hill?top.y:y)+0.4+phase*(hill?5:3.3);positions[i*3+2]=(hill?-145:-114)+Math.cos(i*2.399+t*0.09)*(hill?5:6);}geo.attributes.position.needsUpdate=true;
   }};

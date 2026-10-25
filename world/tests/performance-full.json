@@ -1,0 +1,29 @@
+{
+  "suites": {
+    "area-shots": 7,
+    "balloon-ride": 20,
+    "build-mode": 525,
+    "camping-night": 14,
+    "clouds-water": 227,
+    "family-mode": 46,
+    "hamlet-shots": 47,
+    "hamlet": 37,
+    "lantern-evening": 26,
+    "more-buildings": 155,
+    "names-tour-shots": 51,
+    "pavi-siri-moments": 35,
+    "pavi-siri": 50,
+    "playground": 35,
+    "pony-farm": 32,
+    "shot-clearance": 66,
+    "startup-hang": 5,
+    "sunset-cove": 40,
+    "train-trip": 28
+  },
+  "passed": 1446,
+  "startupReloadChecks": 2,
+  "browserErrors": [],
+  "exitCode": 0,
+  "url": "http://127.0.0.1:8813",
+  "command": "node world/tests/run-browser.cjs area-shots balloon-ride build-mode camping-night clouds-water family-mode hamlet-shots hamlet lantern-evening more-buildings names-tour-shots pavi-siri-moments pavi-siri playground pony-farm shot-clearance startup-hang sunset-cove train-trip"
+}

@@ -7,6 +7,29 @@ import { familySign } from './family.js';
 import { cloudShader, waterMaterial } from './environment.js';
 import { dressHamletHouse, dressPondShore } from './areas/pond-details.js';
 
+// Batch only rigid siblings: animated joints and their exact transforms stay separate.
+export function batchRigidParts(root) {
+  root.traverse(parent => {
+    const batches = new Map();
+    for (const mesh of parent.children) {
+      if (!mesh.isMesh || mesh.isSkinnedMesh || Array.isArray(mesh.material)) continue;
+      const list = batches.get(mesh.material) || [];
+      list.push(mesh); batches.set(mesh.material, list);
+    }
+    for (const [material, meshes] of batches) {
+      if (meshes.length < 2) continue;
+      const pieces = meshes.map(mesh => { mesh.updateMatrix(); return mesh.geometry.clone().applyMatrix4(mesh.matrix); });
+      const geometry = mergeGeometries(pieces);
+      pieces.forEach(piece => piece.dispose());
+      if (!geometry) continue;
+      const merged = new THREE.Mesh(geometry, material);
+      merged.castShadow = merged.receiveShadow = true;
+      parent.add(merged);
+      meshes.forEach(mesh => { parent.remove(mesh); mesh.geometry.dispose(); });
+    }
+  });
+}
+
 export const smoothstep = (a, b, x) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
   return t * t * (3 - 2 * t);
@@ -49,6 +72,16 @@ export function riverZ(x) {
 export function coastX(z) {return -350-18*Math.exp(-Math.pow((z-35)/115,2))+8*Math.sin(z*0.007);}
 export const WATER_Y = -1;
 export const RAIL_X = 70; // the railway runs north–south east of town
+export const TRAIN_SPUR_POINTS=[[70,28],[70,60],[40,105],[-20,112],[-110,112],[-170,105],[-245,92],[-284,66]];
+export const TRAIN_SPUR_CURVE=new THREE.CatmullRomCurve3(TRAIN_SPUR_POINTS.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
+export const TRAIN_SPUR_LENGTH=TRAIN_SPUR_CURVE.getLength();
+export const TRAIN_HALTS=[{name:'Willow Creek halt',distance:TRAIN_SPUR_CURVE.getLengths(1400)[800]},{name:'Seaside halt',distance:TRAIN_SPUR_LENGTH}];
+let trainGrade=null;
+export function sampleTrainTrack(distance){
+ const u=THREE.MathUtils.clamp(distance/TRAIN_SPUR_LENGTH,0,1),p=distance<0?new THREE.Vector3(70,0,28+distance):TRAIN_SPUR_CURVE.getPointAt(u),t=distance<0?new THREE.Vector3(0,0,1):TRAIN_SPUR_CURVE.getTangentAt(u);
+ if(distance>=0&&trainGrade){const v=u*(trainGrade.length-1),i=Math.min(trainGrade.length-2,Math.floor(v));p.y=THREE.MathUtils.lerp(trainGrade[i],trainGrade[i+1],v-i);}else p.y=terrainHeight(p.x,p.z)+0.51;return {pos:p,yaw:Math.atan2(t.x,t.z)};
+}
+
 
 // Level ground for the ranch and the forest camp (each keeps its natural height).
 export const RANCH = { x: -95, z: -55, r: 32, blend: 30 };
@@ -81,15 +114,28 @@ function applyUserPads(h, x, z) {
       }
       continue;
     }
-    const d = padDistance(p, x, z);
     const blend = p.blend || 8;
+    // Most pads belong to distant railway segments; avoid trigonometry for those.
+    const reach = p.hx + p.hz + blend * Math.SQRT2;
+    if (Math.abs(x - p.x) > reach || Math.abs(z - p.z) > reach) continue;
+    const d = padDistance(p, x, z);
     if (d < blend) h += (p.y + (x-p.x)*(p.slopeX||0) - h) * (1 - smoothstep(0, blend, d));
   }
   return h;
 }
+const padRotations = new WeakMap();
 function padDistance(p, x, z) {
-  const dx = x - p.x, dz = z - p.z, c = Math.cos(p.yaw), a = Math.sin(p.yaw);
+  let rotation = padRotations.get(p);
+  if (!rotation || rotation.yaw !== p.yaw) {
+    rotation = { yaw: p.yaw, c: Math.cos(p.yaw), a: Math.sin(p.yaw) };
+    padRotations.set(p, rotation);
+  }
+  const dx = x - p.x, dz = z - p.z, { c, a } = rotation;
   return Math.max(Math.abs(c * dx - a * dz) - p.hx, Math.abs(a * dx + c * dz) - p.hz);
+}
+function withinPad(p, x, z, margin) {
+  const reach = p.hx + p.hz + Math.max(0, margin) * Math.SQRT2;
+  return Math.abs(x - p.x) <= reach && Math.abs(z - p.z) <= reach && padDistance(p, x, z) < margin;
 }
 
 // Flat valley floor for the town, rolling hills around it.
@@ -826,7 +872,7 @@ export class World {
   }
 
   _reserved(x, z, pad = 0) {
-    if (this.areaPads?.some(p => padDistance(p, x, z) < pad)) return true;
+    if (this.areaPads?.some(p => withinPad(p, x, z, pad))) return true;
     if (this.hamlet?.visible && pondRadius(x,z) < 1.18 + pad / HAMLET.pond.rz) return true;
     if (Math.abs(z - riverZ(x)) < 14 + pad) return true;
     if (Math.abs(x - RAIL_X) < 9 + pad) return true;
@@ -1070,6 +1116,36 @@ export class World {
     for (let z = rz - 15; z < rz + 15; z += 3.5) {
       for (const sx of [-1, 1]) this.root.add(beam(V(X + sx * 1.1, -2.6, z), V(X - sx * 1.1, 0, z + 3.5), 0.12, this.mat.darkWood));
     }
+
+    // Build after the hamlet pads exist, so the new rails use the finished valley ground.
+    this.buildTrainSpur=()=>{
+      if(this.trainSpur)return;const padStart=this.areaPads?.length||0;const root=new THREE.Group();root.name='Willow and seaside railway';this.root.add(root);this.trainSpur={root,halts:[]};
+      const count=Math.ceil(TRAIN_SPUR_LENGTH/4),spacing=TRAIN_SPUR_LENGTH/count,raw=Array.from({length:count+1},(_,i)=>{const p=TRAIN_SPUR_CURVE.getPointAt(i/count);return terrainHeight(p.x,p.z)+0.51;});
+      trainGrade=raw.map((_,i)=>{let sum=0,n=0;for(let j=Math.max(0,i-5);j<=Math.min(count,i+5);j++){sum+=raw[j];n++;}return sum/n;});trainGrade[0]=raw[0];
+      for(let i=1;i<=count;i++)trainGrade[i]=THREE.MathUtils.clamp(trainGrade[i],trainGrade[i-1]-spacing*0.1,trainGrade[i-1]+spacing*0.1);
+      // Smooth only the new railway corridor, keeping coaches clear of steep natural banks.
+      for(let i=1;i<=count;i++){const p=sampleTrainTrack(i*spacing);this.registerAreaPad({x:p.pos.x,z:p.pos.z,y:p.pos.y-0.51,hx:2.5,hz:2.2,yaw:p.yaw,blend:5});}
+      for(let d=30;d<=TRAIN_SPUR_LENGTH;d+=8){const p=sampleTrainTrack(d).pos;this.registerAreaPad({x:p.x,z:p.z,hx:6,hz:6,blend:0,clearOnly:true});}
+      this._ribbon(TRAIN_SPUR_POINTS,4.6,this._pathMaterial(),{lift:0.18});
+      const ties=[],rails=[],up=V(0,1,0);for(let d=0;d<TRAIN_SPUR_LENGTH;d+=0.8){const f=sampleTrainTrack(d);ties.push(new THREE.BoxGeometry(2.6,0.14,0.26).rotateY(f.yaw).translate(f.pos.x,f.pos.y-0.21,f.pos.z));}
+      for(let d=0;d<TRAIN_SPUR_LENGTH;d+=2){const a=sampleTrainTrack(d),b=sampleTrainTrack(Math.min(TRAIN_SPUR_LENGTH,d+2));for(const side of [-1,1]){const p=a.pos.clone().add(V(Math.cos(a.yaw)*side*0.72,-0.07,-Math.sin(a.yaw)*side*0.72)),q=b.pos.clone().add(V(Math.cos(b.yaw)*side*0.72,-0.07,-Math.sin(b.yaw)*side*0.72)),delta=q.clone().sub(p);rails.push(new THREE.CylinderGeometry(0.055,0.055,delta.length(),6).applyQuaternion(new THREE.Quaternion().setFromUnitVectors(up,delta.clone().normalize())).translate(...p.add(q).multiplyScalar(0.5).toArray()));}}
+      root.add(mesh(mergeGeometries(ties),this.mat.darkWood),mesh(mergeGeometries(rails),this.mat.iron));for(const g of [...ties,...rails])g.dispose();
+      for(const halt of TRAIN_HALTS){const f=sampleTrainTrack(halt.distance-11.4),g=new THREE.Group();g.position.copy(f.pos);g.rotation.y=f.yaw;root.add(g);
+        const box=(w,h,d,x,y,z,m=this.mat.wood)=>{const o=mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);g.add(o);return o;};
+        const platform=box(4.2,0.3,12,-3.8,0.15,0);platform.updateWorldMatrix(true,false);this.walkables.push(platform);this.floors.push({...this._rectOf(platform,0,0,2.1,6),y:f.pos.y+0.3});
+        for(const z of [-4.5,4.5]){box(0.14,2.8,0.14,-5.5,1.7,z);box(0.14,2.8,0.14,-2.2,1.7,z);}box(4,0.18,11,-3.8,3.1,0,this.mat.roof);
+        for(let z=-5;z<=5;z+=1){box(0.12,1.1,0.12,-5.8,0.85,z);box(0.12,1.1,0.12,-1.7,0.85,z);}for(const x of [-5.8,-1.7])box(0.1,0.12,12,x,1.35,0);
+        const sign=mesh(new THREE.BoxGeometry(0.08,0.8,6),new THREE.MeshLambertMaterial({map:T.signTexture(halt.name.toUpperCase(),768,128)}));sign.position.set(-2.2,2.5,0);g.add(sign);
+        const bench=this.makeProp('bench');bench.position.set(-4.2,0.3,0);bench.rotation.y=Math.PI/2;g.add(bench);
+        this.trainSpur.halts.push({name:halt.name,root:g,platform,pos:f.pos.clone(),yaw:f.yaw});
+        g.updateWorldMatrix(true,false);const deckCenter=g.localToWorld(V(-3.8,0,0));this.registerAreaPad({x:deckCenter.x,z:deckCenter.z,hx:2.1,hz:6,blend:1,y:f.pos.y-0.25,yaw:f.yaw});
+        for(const x of [-5.8,-1.7])this.colliders.rects.push(this._rectOf(g,x,0,0.12,6));
+        for(const z of [-6,6])for(const x of [-5,-2.6]){box(1.6,0.12,0.1,x,1.35,z);this.colliders.rects.push(this._rectOf(g,x,z,0.8,0.12));}
+      }
+      this.trainSpur.pads=this.areaPads.slice(padStart);
+      this.refreshTrainGrade=()=>{const pads=this.trainSpur.pads;if(userPads.at(-1)===pads.at(-1))return;for(const p of pads){const i=userPads.indexOf(p);if(i>=0)userPads.splice(i,1);userPads.push(p);}this.updateTerrain();};
+      this.updateTerrain();
+    };
 
     // station: its front and platform face the track
     this._building({ sign: 'SP CREEK STATION', z: 10, w: 18, floors: 1, wall: [32, 40, 60], trim: [0, 0, 90], signBg: [210, 30, 25], signInk: '#f2e6c8', chimney: true, x: 60.5, rot: Math.PI / 2 });
@@ -1396,7 +1472,7 @@ export class World {
   // Bend a plant with the wind: nothing at the base, most at the top.
   _sway(mat, height, amount) {
     const u = this.foliageUniforms;
-    mat.customProgramCacheKey = () => `sway-${height}-${amount}`;
+    mat.customProgramCacheKey = () => `sway-lod-${height}-${amount}`;
     mat.onBeforeCompile = (shader) => {
       cloudShader(shader);
       shader.uniforms.uTime = u.uTime;
@@ -1412,7 +1488,8 @@ export class World {
           #endif
           float sway = (sin(uTime * 1.6 + swayBase.x * 0.31 + swayBase.z * 0.23) + 0.4 * sin(uTime * 3.1 + swayBase.z * 0.5)) * uWind * ${amount.toFixed(3)} * swayH * swayH;
           transformed.x += sway;
-          transformed.z += sway * 0.6;`);
+          transformed.z += sway * 0.6;
+          ${height <= 0.6 ? 'transformed *= 1.0 - smoothstep(100.0, 180.0, distance(cameraPosition.xz, (modelMatrix * vec4(swayBase, 1.0)).xz));' : ''}`);
     };
   }
 
@@ -1569,6 +1646,7 @@ export class World {
         }
         break;
     }
+    if (type === 'bench') batchRigidParts(g);
     return g;
   }
 
@@ -1970,6 +2048,7 @@ export class World {
   }
 
   updateTerrain() {
+    this.terrainRevision = (this.terrainRevision || 0) + 1;
     this.endBuildReplay();
     const pos = this.ground.geometry.attributes.position;
     for (let i = 0; i < pos.count; i++) {
@@ -1992,7 +2071,7 @@ export class World {
       for (let i = 0; i < m.count; i++) {
         matrix.fromArray(matrices, i * 16);
         const x = matrix.elements[12], z = matrix.elements[14];
-        const hidden = userPads.some((p) => padDistance(p, x, z) < 1) || this._insideFence(x, z) || this.inPond(x,z,2.5);
+        const hidden = userPads.some((p) => withinPad(p, x, z, 1)) || this._insideFence(x, z) || this.inPond(x,z,2.5);
         // Keep the original vertical offset (flower heads, buried tree roots).
         const base = matrix.elements[13];
         matrix.elements[13] = base + applyPond(applyUserPads(heights[i], x, z),x,z) - heights[i];
@@ -2003,10 +2082,10 @@ export class World {
       m.computeBoundingSphere();
     }
     this.colliders.circles = this.colliders.circles.filter((c) => !this.plantColliders.has(c));
-    for (const c of this.plantColliders) if (!userPads.some((p) => padDistance(p, c.x, c.z) < 1) && !this._insideFence(c.x, c.z) && !this.inPond(c.x,c.z,2.5)) this.colliders.circles.push(c);
+    for (const c of this.plantColliders) if (!userPads.some((p) => withinPad(p, c.x, c.z, 1)) && !this._insideFence(c.x, c.z) && !this.inPond(c.x,c.z,2.5)) this.colliders.circles.push(c);
     for (const e of this.props) {
       e.obj.position.y = this.surfaceY(e.x, e.z);
-      e.obj.visible = !userPads.some((p) => padDistance(p, e.x, e.z) < 0) && !this.inPond(e.x,e.z);
+      e.obj.visible = !userPads.some((p) => withinPad(p, e.x, e.z, 0)) && !this.inPond(e.x,e.z);
       e.obj.updateMatrixWorld(true);
       for (const seat of e.seats || []) seat.y = e.obj.position.y + 0.45;
       for (const emitter of e.emitters) if (emitter.local) emitter.pos.copy(e.obj.localToWorld(emitter.local.clone()));
@@ -2014,7 +2093,7 @@ export class World {
     }
     for (const m of this.billboards) {
       m.position.y = this.surfaceY(m.position.x, m.position.z);
-      m.visible = !userPads.some((p) => padDistance(p, m.position.x, m.position.z) < 0) && !this.inPond(m.position.x,m.position.z);
+      m.visible = !userPads.some((p) => withinPad(p, m.position.x, m.position.z, 0)) && !this.inPond(m.position.x,m.position.z);
     }
     for (const e of [...this.roads, ...(this.hamlet?.roads || [])]) {
       this.root.remove(e.obj); e.obj.geometry.dispose();
@@ -2038,6 +2117,17 @@ export class World {
       sites.forEach(([x,z,sx,sz],i)=>this.puddles.setMatrixAt(i,matrix.makeScale(sx,1,sz).setPosition(x,walkHeight(x,z)+0.025,z)));this.puddles.computeBoundingSphere();this.root.add(this.puddles);
     }
     this.puddles.visible=(this.wetAmount||0)>0.01;this.puddles.material.opacity=(this.wetAmount||0)*0.42;
+  }
+
+  areaAnimationVisible(camera, x, y, z, radius) {
+    if (!camera) return true;
+    const view = this._areaView ??= { center: V(), matrix: new THREE.Matrix4(), frustum: new THREE.Frustum() };
+    view.center.set(x,y,z);
+    // Keep nearby animation and potential shadow casters exact, even behind the camera.
+    if (camera.position.distanceToSquared(view.center) < (radius+120)**2) return true;
+    camera.updateMatrixWorld();
+    view.frustum.setFromProjectionMatrix(view.matrix.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse));
+    return view.frustum.intersectsSphere(new THREE.Sphere(view.center,radius));
   }
 
   update(dt, t, camera) {

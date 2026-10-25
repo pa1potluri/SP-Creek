@@ -4,12 +4,28 @@ import { terrainHeight, pondRadius, smoothstep } from '../world.js';
 import { makeCharacter, CAST, animatePerson, gesture } from '../characters.js';
 import { imageTexture, rng } from '../textures.js';
 
+// Shared only by the lake and cove: an open, rounded hull with quiet water friends.
+export function makeRowingBoat(world,parent,sample,keepWater){
+  const root=new THREE.Group(),boat=new THREE.Group();root.name='Little rowing boat and water friends';parent.add(root);root.add(boat);
+  const material=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}),blue=material('#91c8cc'),cream=material('#f6e4bd'),wood=material('#c69b70'),gold=material('#edc171'),ink=material('#465d65');
+  const add=(geo,mat,x,y,z,g=boat)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;g.add(m);return m;};
+  add(new THREE.SphereGeometry(1,24,12,0,Math.PI*2,Math.PI/2,Math.PI/2).scale(1,0.5,2.1),blue,0,0.35,0);
+  add(new THREE.SphereGeometry(1,24,12,0,Math.PI*2,Math.PI/2,Math.PI/2).scale(0.88,0.35,1.9),cream,0,0.36,0);
+  add(new THREE.TorusGeometry(1,0.065,6,40).rotateX(Math.PI/2).scale(1,1,2.1),cream,0,0.35,0);
+  for(const z of [-0.7,0.7])add(new THREE.CapsuleGeometry(0.08,1.5,4,12).rotateZ(Math.PI/2),wood,0,0.38,z);
+  const paddles=[-1,1].map(side=>{const g=new THREE.Group();g.position.set(side*0.85,0.42,0);boat.add(g);add(new THREE.CapsuleGeometry(0.035,1.65,3,8).rotateZ(Math.PI/2),wood,side*0.55,0,0,g);add(new THREE.SphereGeometry(1,10,8).scale(0.32,0.035,0.14),cream,side*1.38,0,0,g);return g;});
+  const ducks=Array.from({length:3},()=>{const g=new THREE.Group();root.add(g);add(new THREE.SphereGeometry(0.19,10,8).scale(0.8,0.85,1.35),cream,0,0.14,0,g);add(new THREE.SphereGeometry(0.11,10,8),cream,0,0.32,0.17,g);add(new THREE.SphereGeometry(0.065,8,6).scale(1,0.45,1.4),gold,0,0.29,0.29,g);for(const x of [-0.07,0.07])add(new THREE.SphereGeometry(0.018,6,6),ink,x,0.34,0.25,g);return g;});
+  const fish=Array.from({length:3},(_,i)=>{const g=new THREE.Group();root.add(g);add(new THREE.SphereGeometry(0.12,10,8).scale(0.7,0.7,1.8),i%2?gold:blue,0,0,0,g);add(new THREE.SphereGeometry(0.08,8,6).scale(1.5,0.5,1),cream,0,0,-0.21,g);return g;});
+  const api={root,boat,paddles,ducks,fish,sample,update(t){const p=sample(t);boat.position.copy(p.pos);boat.rotation.set(0,p.yaw,Math.sin(t*0.45)*0.012);paddles.forEach((g,i)=>{g.rotation.y=Math.sin(t*0.85)*0.23;g.rotation.z=(i?1:-1)*(0.12+Math.cos(t*0.85)*0.1);});ducks.forEach((g,i)=>{const q=sample(t-42-i*12);g.position.copy(q.pos);g.position.x+=(i-1)*0.4;keepWater(g.position);g.position.y=p.pos.y-0.12;g.rotation.y=q.yaw;});fish.forEach((g,i)=>{const q=sample(t+12+i*7),u=((t+i*8)%25+25)%25;g.visible=u<1.8;g.position.copy(q.pos);g.position.x+=1.8;keepWater(g.position);g.position.y=p.pos.y-0.1+Math.sin(Math.min(1,u/1.8)*Math.PI)*0.22;g.rotation.set(Math.cos(u/1.8*Math.PI)*0.35,q.yaw,0);});}};
+  api.update(0);return api;
+}
 export const MEADOW={x:-225,z:0}, LAKE={x:-240,z:-18,rx:12,rz:8.5};
 export async function buildMeadowLake(world) {
   const root=new THREE.Group();root.name='Dreamland meadow and lake';world.root.add(root);
   const pad=world.registerAreaPad({...MEADOW,hx:46,hz:32,blend:18}),y=pad.y;
   const floor={cx:-227,cz:-18,ax:1,az:0,bx:0,bz:1,hx:5,hz:1.1,y:y+0.2};
   const lake=world.registerWaterArea({...LAKE,y:y-0.25,depth:2.2},[floor]);world.updateTerrain();
+  world.meadowBoat=makeRowingBoat(world,root,t=>{const a=t/240*Math.PI*2;return {pos:new THREE.Vector3(lake.x+Math.sin(a)*3.8,lake.y+0.15,lake.z+4.5+Math.cos(a)*1.4),yaw:Math.atan2(3.8*Math.cos(a),-1.4*Math.sin(a))};},p=>{const dx=(p.x-lake.x)/lake.rx,dz=(p.z-lake.z)/lake.rz,r=Math.hypot(dx,dz);if(r>0.85){p.x=lake.x+dx/r*lake.rx*0.85;p.z=lake.z+dz/r*lake.rz*0.85;}});
   const names=['flowers_blue','flowers_purple','flowers_pink','flowers_yellow','bush','grass','tree_blossom','tree_wisteria'];
   const imgs=Object.fromEntries(await Promise.all([...names,'meadow'].map(name=>new Promise(resolve=>{const img=new Image();img.onload=()=>resolve([name,img]);img.onerror=()=>resolve([name,null]);img.src=name==='meadow'?'assets/textures/dream/meadow.png':`assets/foliage/dream/${name}.png`;}))));
   const r=rng(471),v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide});
@@ -45,6 +61,7 @@ export async function buildMeadowLake(world) {
   const foamMat=new THREE.MeshLambertMaterial({color:'#eff9ed',transparent:true,opacity:0.5,side:THREE.DoubleSide});const foam=new THREE.Mesh(new THREE.RingGeometry(1.2,2.2,40),foamMat);foam.rotation.x=-Math.PI/2;foam.position.set(-247,lake.y+0.05,-23);root.add(foam);
   const rainbows=[];['#e9a4af','#ecc49a','#eee0a0','#c4dfad','#aad6d6','#b6bde5','#d4b4dc'].forEach((color,i)=>{const mat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.18,side:THREE.DoubleSide,depthWrite:false});const arc=new THREE.Mesh(new THREE.RingGeometry(3.4+i*0.1,3.49+i*0.1,48,1,0,Math.PI),mat);arc.rotation.y=Math.PI/2;arc.position.set(-247,y+0.8,-23);root.add(arc);rainbows.push(arc);});
   const sprayPos=new Float32Array(70*3),sprayGeo=new THREE.BufferGeometry();sprayGeo.setAttribute('position',new THREE.BufferAttribute(sprayPos,3));const spray=new THREE.Points(sprayGeo,new THREE.PointsMaterial({color:'#f0fbf3',size:0.16,transparent:true,opacity:0.45,depthWrite:false}));spray.frustumCulled=false;root.add(spray);
+  let sparkRevision=-1;const sparkHeights=new Float64Array(80);
   const sparkPos=new Float32Array(80*3),sparkGeo=new THREE.BufferGeometry();sparkGeo.setAttribute('position',new THREE.BufferAttribute(sparkPos,3));const sparkles=new THREE.Points(sparkGeo,new THREE.PointsMaterial({color:'#fff4c7',size:0.1,transparent:true,opacity:0.5,depthWrite:false}));sparkles.frustumCulled=false;root.add(sparkles);
   for(let i=0;i<3;i++){const g=group(0,0,0);ball(0.28,cream,0,0.15,0,g,[0.8,0.8,1.3]);ball(0.16,cream,0,0.4,0.23,g);ball(0.09,gold,0,0.36,0.4,g,[1,0.4,1.4]);for(const sx of [-1,1])ball(0.025,m('#435b61'),sx*0.1,0.43,0.34,g);ducks.push(g);}
   for(const [i,[x,z]] of [[-211,13],[-205,16],[-216,20]].entries()){
@@ -77,7 +94,8 @@ export async function buildMeadowLake(world) {
     fallMat.map.offset.y=-t*0.12;fallMat.color.copy(world.waterUniforms.uWaterHorizon.value).lerp(new THREE.Color('#cce4df'),0.55);foamMat.color.copy(world.waterUniforms.uWaterFoamColor.value);foam.scale.setScalar(1+Math.sin(t*0.7)*0.06);
     rainbows.forEach(a=>a.material.opacity=(key==='golden'||key==='morning')?0.19:0);
     for(let i=0;i<70;i++){const phase=(t*0.3+i/70)%1;sprayPos[i*3]=-247+Math.sin(i*2.4)*phase*2;sprayPos[i*3+1]=lake.y+Math.sin(phase*Math.PI)*1.4;sprayPos[i*3+2]=-23+Math.cos(i*2.4)*phase*2;}sprayGeo.attributes.position.needsUpdate=true;
-    for(let i=0;i<80;i++){const x=MEADOW.x+Math.sin(i*2.399)*((i%7)+1)*4,z=Math.cos(i*2.399)*((i%6)+1)*3;sparkPos[i*3]=x;sparkPos[i*3+1]=terrainHeight(x,z)+0.7+Math.sin(t*0.3+i)*0.3;sparkPos[i*3+2]=z;}sparkGeo.attributes.position.needsUpdate=true;
+    if(sparkRevision!==world.terrainRevision){for(let i=0;i<80;i++){const x=MEADOW.x+Math.sin(i*2.399)*((i%7)+1)*4,z=Math.cos(i*2.399)*((i%6)+1)*3;sparkPos[i*3]=x;sparkPos[i*3+2]=z;sparkHeights[i]=terrainHeight(x,z);}sparkRevision=world.terrainRevision;}
+    for(let i=0;i<80;i++)sparkPos[i*3+1]=sparkHeights[i]+0.7+Math.sin(t*0.3+i)*0.3;sparkGeo.attributes.position.needsUpdate=true;
     ducks.forEach((g,i)=>{const a=t*0.04+i*2.094;g.position.set(lake.x+Math.sin(a)*4,lake.y+0.03+Math.sin(t+i)*0.02,lake.z+Math.cos(a)*3);g.rotation.y=Math.PI/2+a;});
     rabbits.forEach(({g,x,z},i)=>{const phase=(t+i*4)%22,hop=phase<3?Math.sin(phase/3*Math.PI)*0.16:0;g.position.set(x,terrainHeight(x,z)+hop,z);g.rotation.y=Math.sin(t*0.1+i)*0.3;g.visible=atmos.stars<0.65;});
     butterflies.forEach(({g,wings},i)=>{g.visible=atmos.stars<0.65;g.position.set(-212+Math.sin(t*0.2+i)*15,y+1+Math.sin(t*0.4+i)*0.6,8+Math.cos(t*0.17+i)*13);wings.forEach((w,k)=>w.rotation.y=Math.sin(t*6+i)*(k?1:-1)*0.7);});

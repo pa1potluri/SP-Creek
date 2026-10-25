@@ -1,0 +1,2266 @@
+[
+  {
+    "width": 1920,
+    "height": 1080,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5060 Ti (0x00002D04) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "method": "Manual 30fps world-time steps; live RAF disabled; five locations per clip; six warm-up renders and ten timed renders with gl.finish at each location; all areas including explicit test-only camping loaded. Throughput measures completed rendering, not display refresh FPS.",
+    "rows": [
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0,
+        "meanMs": 16.020000000298023,
+        "maxMs": 17.600000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.25,
+        "meanMs": 15.679999999701977,
+        "maxMs": 18.700000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.5,
+        "meanMs": 15.710000000149012,
+        "maxMs": 16.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.75,
+        "meanMs": 15.059999999403953,
+        "maxMs": 15.800000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.9,
+        "meanMs": 15.139999999850989,
+        "maxMs": 16
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0,
+        "meanMs": 11.489999999850989,
+        "maxMs": 12.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.25,
+        "meanMs": 11.369999999552965,
+        "maxMs": 11.700000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.5,
+        "meanMs": 12.290000000596047,
+        "maxMs": 12.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.75,
+        "meanMs": 54.71000000014901,
+        "maxMs": 208
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.9,
+        "meanMs": 14.389999999850989,
+        "maxMs": 20.599999994039536
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0,
+        "meanMs": 15.329999999701977,
+        "maxMs": 16.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.25,
+        "meanMs": 14.490000000596046,
+        "maxMs": 15.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.5,
+        "meanMs": 14.6,
+        "maxMs": 15.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.75,
+        "meanMs": 14.480000000447035,
+        "maxMs": 15.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.9,
+        "meanMs": 14.679999999701977,
+        "maxMs": 15.299999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0,
+        "meanMs": 12.139999999850989,
+        "maxMs": 13.900000005960464
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.25,
+        "meanMs": 11.7,
+        "maxMs": 13.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.5,
+        "meanMs": 11.140000000596046,
+        "maxMs": 11.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.75,
+        "meanMs": 11.180000000447034,
+        "maxMs": 12
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.9,
+        "meanMs": 11.15,
+        "maxMs": 12
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0,
+        "meanMs": 5.130000000447035,
+        "maxMs": 5.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.25,
+        "meanMs": 5.229999999701977,
+        "maxMs": 5.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.5,
+        "meanMs": 5.15,
+        "maxMs": 5.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.75,
+        "meanMs": 5.289999999850989,
+        "maxMs": 5.800000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.9,
+        "meanMs": 5.4199999995529655,
+        "maxMs": 5.800000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0,
+        "meanMs": 12.010000000149011,
+        "maxMs": 12.300000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.25,
+        "meanMs": 11.689999999850988,
+        "maxMs": 12.299999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.5,
+        "meanMs": 11.75,
+        "maxMs": 12.300000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.75,
+        "meanMs": 11.629999999701976,
+        "maxMs": 11.800000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.9,
+        "meanMs": 11.319999999552966,
+        "maxMs": 11.600000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0,
+        "meanMs": 8.369999999552965,
+        "maxMs": 9.199999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.25,
+        "meanMs": 9.45,
+        "maxMs": 11
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.5,
+        "meanMs": 9.019999999552965,
+        "maxMs": 9.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.75,
+        "meanMs": 8.739999999850989,
+        "maxMs": 9.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.9,
+        "meanMs": 8.729999999701977,
+        "maxMs": 9.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0,
+        "meanMs": 5.15,
+        "maxMs": 5.399999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.25,
+        "meanMs": 5.030000000447035,
+        "maxMs": 5.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.5,
+        "meanMs": 5.139999999850988,
+        "maxMs": 5.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.75,
+        "meanMs": 5.410000000149012,
+        "maxMs": 5.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.9,
+        "meanMs": 5.189999999850988,
+        "maxMs": 5.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0,
+        "meanMs": 8.360000000149011,
+        "maxMs": 9.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.25,
+        "meanMs": 7.85,
+        "maxMs": 8.199999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.5,
+        "meanMs": 7.670000000298023,
+        "maxMs": 8.200000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.75,
+        "meanMs": 7.739999999850989,
+        "maxMs": 8.199999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.9,
+        "meanMs": 7.65,
+        "maxMs": 7.800000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0,
+        "meanMs": 3.7600000001490117,
+        "maxMs": 4.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.25,
+        "meanMs": 3.7100000001490114,
+        "maxMs": 3.9000000059604645
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.5,
+        "meanMs": 3.779999999701977,
+        "maxMs": 4.200000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.75,
+        "meanMs": 3.6899999998509885,
+        "maxMs": 3.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.9,
+        "meanMs": 3.6700000002980233,
+        "maxMs": 3.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0,
+        "meanMs": 3.860000000149012,
+        "maxMs": 4
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.25,
+        "meanMs": 3.8800000004470347,
+        "maxMs": 4
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.5,
+        "meanMs": 3.9,
+        "maxMs": 4.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.75,
+        "meanMs": 3.9100000001490116,
+        "maxMs": 4.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.9,
+        "meanMs": 3.95,
+        "maxMs": 4.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0,
+        "meanMs": 18.5,
+        "maxMs": 19.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.25,
+        "meanMs": 18.91000000014901,
+        "maxMs": 20.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.5,
+        "meanMs": 18.56000000014901,
+        "maxMs": 19.600000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.75,
+        "meanMs": 18.5,
+        "maxMs": 19
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.9,
+        "meanMs": 18.86000000014901,
+        "maxMs": 19.299999997019768
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0,
+        "meanMs": 4.6,
+        "maxMs": 4.799999997019768
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.25,
+        "meanMs": 4.769999999552965,
+        "maxMs": 5.5
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.5,
+        "meanMs": 4.829999999701977,
+        "maxMs": 5.0999999940395355
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.75,
+        "meanMs": 4.820000000298023,
+        "maxMs": 4.899999998509884
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.9,
+        "meanMs": 4.960000000149011,
+        "maxMs": 5.299999997019768
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0,
+        "meanMs": 6.179999999701977,
+        "maxMs": 6.800000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.25,
+        "meanMs": 5.85,
+        "maxMs": 6.5
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.5,
+        "meanMs": 5.690000000596046,
+        "maxMs": 6
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.75,
+        "meanMs": 5.739999999850989,
+        "maxMs": 6.100000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.9,
+        "meanMs": 5.8,
+        "maxMs": 6.200000002980232
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0,
+        "meanMs": 4.730000000447035,
+        "maxMs": 5
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.25,
+        "meanMs": 4.5,
+        "maxMs": 4.600000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.5,
+        "meanMs": 4.329999999701977,
+        "maxMs": 4.5
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.75,
+        "meanMs": 4.0800000004470345,
+        "maxMs": 4.300000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.9,
+        "meanMs": 4.020000000298023,
+        "maxMs": 4.200000002980232
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0,
+        "meanMs": 4.960000000149011,
+        "maxMs": 5.199999995529652
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.25,
+        "meanMs": 4.860000000149012,
+        "maxMs": 5.100000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.5,
+        "meanMs": 4.489999999850989,
+        "maxMs": 4.799999997019768
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.75,
+        "meanMs": 4.089999999850988,
+        "maxMs": 4.199999995529652
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.9,
+        "meanMs": 4.130000000447035,
+        "maxMs": 4.300000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0,
+        "meanMs": 4.810000000149012,
+        "maxMs": 4.9000000059604645
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.25,
+        "meanMs": 4.710000000149011,
+        "maxMs": 4.899999998509884
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.5,
+        "meanMs": 4.869999999552965,
+        "maxMs": 5.300000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.75,
+        "meanMs": 4.789999999850989,
+        "maxMs": 5
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.9,
+        "meanMs": 4.989999999850989,
+        "maxMs": 5.200000002980232
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0,
+        "meanMs": 2.9599999994039536,
+        "maxMs": 3.6999999955296516
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.25,
+        "meanMs": 2.9200000002980233,
+        "maxMs": 3.100000001490116
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.5,
+        "meanMs": 2.9,
+        "maxMs": 3
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.75,
+        "meanMs": 2.970000000298023,
+        "maxMs": 4.200000002980232
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.9,
+        "meanMs": 2.7700000002980234,
+        "maxMs": 3
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0,
+        "meanMs": 2.7599999994039535,
+        "maxMs": 2.7999999970197678
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.25,
+        "meanMs": 3.4400000005960463,
+        "maxMs": 3.7999999970197678
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.5,
+        "meanMs": 7.510000000149011,
+        "maxMs": 7.700000002980232
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.75,
+        "meanMs": 6.709999999403953,
+        "maxMs": 7
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.9,
+        "meanMs": 4.75,
+        "maxMs": 4.899999998509884
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0,
+        "meanMs": 2.720000000298023,
+        "maxMs": 2.7999999970197678
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.25,
+        "meanMs": 2.7099999994039536,
+        "maxMs": 2.8000000044703484
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.5,
+        "meanMs": 2.75,
+        "maxMs": 2.899999998509884
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.75,
+        "meanMs": 2.7899999998509886,
+        "maxMs": 2.9000000059604645
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.9,
+        "meanMs": 2.8,
+        "maxMs": 2.9000000059604645
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0,
+        "meanMs": 9.930000000447034,
+        "maxMs": 10.200000002980232
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.25,
+        "meanMs": 10.160000000149012,
+        "maxMs": 11.100000001490116
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.5,
+        "meanMs": 10.060000000149012,
+        "maxMs": 10.5
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.75,
+        "meanMs": 10.079999999701977,
+        "maxMs": 10.600000001490116
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.9,
+        "meanMs": 9.920000000298023,
+        "maxMs": 10.200000002980232
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0,
+        "meanMs": 8.05,
+        "maxMs": 8.200000002980232
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.25,
+        "meanMs": 8.060000000149012,
+        "maxMs": 9.399999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.5,
+        "meanMs": 7.960000000149011,
+        "maxMs": 8.100000001490116
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.75,
+        "meanMs": 7.870000000298023,
+        "maxMs": 8.099999994039536
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.9,
+        "meanMs": 7.979999999701977,
+        "maxMs": 8.100000001490116
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0,
+        "meanMs": 17.329999999701975,
+        "maxMs": 18.299999997019768
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.25,
+        "meanMs": 17.460000000149012,
+        "maxMs": 18
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.5,
+        "meanMs": 12.389999999850989,
+        "maxMs": 13
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.75,
+        "meanMs": 11.229999999701977,
+        "maxMs": 11.699999995529652
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.9,
+        "meanMs": 10.870000000298024,
+        "maxMs": 11.300000004470348
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0,
+        "meanMs": 5.710000000149011,
+        "maxMs": 6.299999997019768
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.25,
+        "meanMs": 5.519999999552965,
+        "maxMs": 5.600000001490116
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.5,
+        "meanMs": 5.560000000149012,
+        "maxMs": 5.899999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.75,
+        "meanMs": 5.860000000149012,
+        "maxMs": 6.299999997019768
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.9,
+        "meanMs": 5.870000000298023,
+        "maxMs": 6.199999995529652
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0,
+        "meanMs": 7.739999999850989,
+        "maxMs": 8
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.25,
+        "meanMs": 7.589999999850988,
+        "maxMs": 8.299999997019768
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.5,
+        "meanMs": 7.629999999701977,
+        "maxMs": 8.199999995529652
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.75,
+        "meanMs": 7.420000000298023,
+        "maxMs": 7.600000001490116
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.9,
+        "meanMs": 7.610000000149012,
+        "maxMs": 7.800000004470348
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0,
+        "meanMs": 7.7,
+        "maxMs": 7.800000004470348
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.25,
+        "meanMs": 7.769999999552965,
+        "maxMs": 8
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.5,
+        "meanMs": 7.719999999552965,
+        "maxMs": 7.800000004470348
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.75,
+        "meanMs": 7.7,
+        "maxMs": 7.899999998509884
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.9,
+        "meanMs": 7.459999999403953,
+        "maxMs": 7.899999998509884
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0,
+        "meanMs": 7.929999999701977,
+        "maxMs": 8.600000001490116
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.25,
+        "meanMs": 7.720000000298024,
+        "maxMs": 7.800000004470348
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.5,
+        "meanMs": 8.05,
+        "maxMs": 8.200000002980232
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.75,
+        "meanMs": 8.009999999403954,
+        "maxMs": 8.199999995529652
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.9,
+        "meanMs": 7.879999999701977,
+        "maxMs": 8.100000001490116
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0,
+        "meanMs": 7.329999999701977,
+        "maxMs": 7.700000002980232
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.25,
+        "meanMs": 8.119999999552965,
+        "maxMs": 9.199999995529652
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.5,
+        "meanMs": 7.45,
+        "maxMs": 8
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.75,
+        "meanMs": 7.55,
+        "maxMs": 8.300000004470348
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.9,
+        "meanMs": 7.2,
+        "maxMs": 7.300000004470348
+      }
+    ],
+    "meanMs": 8.248714285700446,
+    "audioLocked": true,
+    "errors": [],
+    "phase": "before"
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5060 Ti (0x00002D04) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "method": "Manual 30fps world-time steps; live RAF disabled; five locations per clip; six warm-up renders and ten timed renders with gl.finish at each location; all areas including explicit test-only camping loaded. Throughput measures completed rendering, not display refresh FPS.",
+    "rows": [
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0,
+        "meanMs": 15.160000000149012,
+        "maxMs": 16.700000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.25,
+        "meanMs": 14.760000000149011,
+        "maxMs": 16.100000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.5,
+        "meanMs": 14.15,
+        "maxMs": 15.199999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.75,
+        "meanMs": 13.930000000447034,
+        "maxMs": 15.199999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 0,
+        "shot": 1,
+        "fraction": 0.9,
+        "meanMs": 13.810000000149012,
+        "maxMs": 15.399999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0,
+        "meanMs": 10.239999999850989,
+        "maxMs": 10.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.25,
+        "meanMs": 10.270000000298023,
+        "maxMs": 10.699999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.5,
+        "meanMs": 11.140000000596046,
+        "maxMs": 11.600000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.75,
+        "meanMs": 27.91000000014901,
+        "maxMs": 132.30000000447035
+      },
+      {
+        "preset": "grandTour",
+        "clip": 1,
+        "shot": 0,
+        "fraction": 0.9,
+        "meanMs": 13.060000000149012,
+        "maxMs": 16
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0,
+        "meanMs": 13.819999999552966,
+        "maxMs": 16
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.25,
+        "meanMs": 12.969999999552964,
+        "maxMs": 13.800000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.5,
+        "meanMs": 13.730000000447035,
+        "maxMs": 16
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.75,
+        "meanMs": 13.15,
+        "maxMs": 13.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 2,
+        "shot": 24,
+        "fraction": 0.9,
+        "meanMs": 13.569999999552966,
+        "maxMs": 14.700000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0,
+        "meanMs": 10.129999999701976,
+        "maxMs": 10.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.25,
+        "meanMs": 10.85,
+        "maxMs": 12.699999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.5,
+        "meanMs": 10.820000000298023,
+        "maxMs": 13.399999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.75,
+        "meanMs": 10.669999999552966,
+        "maxMs": 13.299999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 3,
+        "shot": 17,
+        "fraction": 0.9,
+        "meanMs": 9.960000000149012,
+        "maxMs": 10.300000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0,
+        "meanMs": 4.429999999701977,
+        "maxMs": 4.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.25,
+        "meanMs": 4.460000000149011,
+        "maxMs": 5.0999999940395355
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.5,
+        "meanMs": 4.460000000149011,
+        "maxMs": 4.9000000059604645
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.75,
+        "meanMs": 4.309999999403954,
+        "maxMs": 4.699999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 4,
+        "shot": 8,
+        "fraction": 0.9,
+        "meanMs": 4.240000000596046,
+        "maxMs": 4.399999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0,
+        "meanMs": 12.909999999403954,
+        "maxMs": 16.19999999552965
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.25,
+        "meanMs": 10.639999999850989,
+        "maxMs": 11.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.5,
+        "meanMs": 10.170000000298023,
+        "maxMs": 10.599999994039536
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.75,
+        "meanMs": 10.920000000298023,
+        "maxMs": 13.200000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 5,
+        "shot": 21,
+        "fraction": 0.9,
+        "meanMs": 10.2,
+        "maxMs": 10.699999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0,
+        "meanMs": 7.9,
+        "maxMs": 8.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.25,
+        "meanMs": 9.439999999850988,
+        "maxMs": 12.399999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.5,
+        "meanMs": 8.179999999701977,
+        "maxMs": 8.700000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.75,
+        "meanMs": 8.070000000298023,
+        "maxMs": 8.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 6,
+        "shot": 25,
+        "fraction": 0.9,
+        "meanMs": 8.310000000149012,
+        "maxMs": 9
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0,
+        "meanMs": 5.029999999701976,
+        "maxMs": 5.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.25,
+        "meanMs": 4.979999999701977,
+        "maxMs": 5.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.5,
+        "meanMs": 4.789999999850989,
+        "maxMs": 4.9000000059604645
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.75,
+        "meanMs": 4.8,
+        "maxMs": 5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 7,
+        "shot": 15,
+        "fraction": 0.9,
+        "meanMs": 6.6,
+        "maxMs": 8.800000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0,
+        "meanMs": 7.6,
+        "maxMs": 8.199999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.25,
+        "meanMs": 7.410000000149012,
+        "maxMs": 7.699999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.5,
+        "meanMs": 7.029999999701976,
+        "maxMs": 7.600000001490116
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.75,
+        "meanMs": 7.989999999850989,
+        "maxMs": 11.699999995529652
+      },
+      {
+        "preset": "grandTour",
+        "clip": 8,
+        "shot": 27,
+        "fraction": 0.9,
+        "meanMs": 7.039999999850989,
+        "maxMs": 7.300000004470348
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0,
+        "meanMs": 3.2,
+        "maxMs": 3.3000000044703484
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.25,
+        "meanMs": 3.269999999552965,
+        "maxMs": 3.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.5,
+        "meanMs": 3.269999999552965,
+        "maxMs": 3.6999999955296516
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.75,
+        "meanMs": 3.279999999701977,
+        "maxMs": 3.5
+      },
+      {
+        "preset": "grandTour",
+        "clip": 9,
+        "shot": 28,
+        "fraction": 0.9,
+        "meanMs": 3.220000000298023,
+        "maxMs": 3.3000000044703484
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0,
+        "meanMs": 3.580000000447035,
+        "maxMs": 3.7000000029802322
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.25,
+        "meanMs": 3.569999999552965,
+        "maxMs": 3.8000000044703484
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.5,
+        "meanMs": 3.610000000149012,
+        "maxMs": 3.7000000029802322
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.75,
+        "meanMs": 3.5799999997019767,
+        "maxMs": 3.7999999970197678
+      },
+      {
+        "preset": "grandTour",
+        "clip": 10,
+        "shot": 29,
+        "fraction": 0.9,
+        "meanMs": 3.6600000001490116,
+        "maxMs": 4.200000002980232
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0,
+        "meanMs": 18.090000000596046,
+        "maxMs": 18.80000000447035
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.25,
+        "meanMs": 17.13999999985099,
+        "maxMs": 17.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.5,
+        "meanMs": 17.18999999985099,
+        "maxMs": 17.799999997019768
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.75,
+        "meanMs": 17.120000000298024,
+        "maxMs": 17.899999998509884
+      },
+      {
+        "preset": "grandTour",
+        "clip": 11,
+        "shot": 6,
+        "fraction": 0.9,
+        "meanMs": 17.330000000447036,
+        "maxMs": 19.100000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0,
+        "meanMs": 4.520000000298023,
+        "maxMs": 4.800000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.25,
+        "meanMs": 4.469999999552965,
+        "maxMs": 5.299999997019768
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.5,
+        "meanMs": 4.6,
+        "maxMs": 5.5999999940395355
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.75,
+        "meanMs": 4.570000000298023,
+        "maxMs": 4.700000002980232
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 0,
+        "shot": 39,
+        "fraction": 0.9,
+        "meanMs": 4.8300000004470345,
+        "maxMs": 5.5999999940395355
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0,
+        "meanMs": 5.719999999552965,
+        "maxMs": 6.5
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.25,
+        "meanMs": 5.529999999701976,
+        "maxMs": 6
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.5,
+        "meanMs": 5.519999999552965,
+        "maxMs": 5.800000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.75,
+        "meanMs": 5.6,
+        "maxMs": 6.300000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 1,
+        "shot": 43,
+        "fraction": 0.9,
+        "meanMs": 5.370000000298023,
+        "maxMs": 5.600000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0,
+        "meanMs": 4.470000000298024,
+        "maxMs": 4.600000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.25,
+        "meanMs": 4.25,
+        "maxMs": 4.399999998509884
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.5,
+        "meanMs": 4.119999999552965,
+        "maxMs": 4.4000000059604645
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.75,
+        "meanMs": 3.8,
+        "maxMs": 4
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 2,
+        "shot": 44,
+        "fraction": 0.9,
+        "meanMs": 3.7399999998509883,
+        "maxMs": 4
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0,
+        "meanMs": 4.760000000149011,
+        "maxMs": 5
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.25,
+        "meanMs": 4.529999999701976,
+        "maxMs": 4.799999997019768
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.5,
+        "meanMs": 4.179999999701977,
+        "maxMs": 4.700000002980232
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.75,
+        "meanMs": 3.85,
+        "maxMs": 4.100000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 3,
+        "shot": 41,
+        "fraction": 0.9,
+        "meanMs": 3.85,
+        "maxMs": 4.100000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0,
+        "meanMs": 4.3900000005960464,
+        "maxMs": 4.600000001490116
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.25,
+        "meanMs": 4.229999999701977,
+        "maxMs": 4.300000004470348
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.5,
+        "meanMs": 4.189999999850988,
+        "maxMs": 4.399999998509884
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.75,
+        "meanMs": 4.130000000447035,
+        "maxMs": 4.4000000059604645
+      },
+      {
+        "preset": "episode1Welcome",
+        "clip": 4,
+        "shot": 42,
+        "fraction": 0.9,
+        "meanMs": 4.190000000596046,
+        "maxMs": 4.4000000059604645
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0,
+        "meanMs": 2.5600000001490115,
+        "maxMs": 2.8000000044703484
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.25,
+        "meanMs": 2.5100000001490117,
+        "maxMs": 2.600000001490116
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.5,
+        "meanMs": 2.5399999998509886,
+        "maxMs": 2.8000000044703484
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.75,
+        "meanMs": 2.430000000447035,
+        "maxMs": 2.5
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 0,
+        "shot": 53,
+        "fraction": 0.9,
+        "meanMs": 2.4,
+        "maxMs": 2.5
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0,
+        "meanMs": 2.4399999998509885,
+        "maxMs": 2.5
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.25,
+        "meanMs": 3.0700000002980232,
+        "maxMs": 3.2000000029802322
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.5,
+        "meanMs": 7.310000000149012,
+        "maxMs": 7.700000002980232
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.75,
+        "meanMs": 6.929999999701977,
+        "maxMs": 7.299999997019768
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 1,
+        "shot": 54,
+        "fraction": 0.9,
+        "meanMs": 4.6,
+        "maxMs": 4.700000002980232
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0,
+        "meanMs": 2.4399999998509885,
+        "maxMs": 2.5999999940395355
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.25,
+        "meanMs": 2.4299999997019768,
+        "maxMs": 2.5
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.5,
+        "meanMs": 2.4899999998509883,
+        "maxMs": 2.600000001490116
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.75,
+        "meanMs": 2.5100000001490117,
+        "maxMs": 2.600000001490116
+      },
+      {
+        "preset": "episode2Balloon",
+        "clip": 2,
+        "shot": 55,
+        "fraction": 0.9,
+        "meanMs": 2.480000000447035,
+        "maxMs": 2.6999999955296516
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0,
+        "meanMs": 9.6,
+        "maxMs": 9.899999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.25,
+        "meanMs": 9.85,
+        "maxMs": 10.800000004470348
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.5,
+        "meanMs": 9.660000000149012,
+        "maxMs": 10
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.75,
+        "meanMs": 9.560000000149012,
+        "maxMs": 10.100000001490116
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 0,
+        "shot": 64,
+        "fraction": 0.9,
+        "meanMs": 9.35,
+        "maxMs": 9.899999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0,
+        "meanMs": 7.889999999850988,
+        "maxMs": 8.199999995529652
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.25,
+        "meanMs": 7.629999999701977,
+        "maxMs": 7.700000002980232
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.5,
+        "meanMs": 7.769999999552965,
+        "maxMs": 8.299999997019768
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.75,
+        "meanMs": 7.660000000149012,
+        "maxMs": 7.899999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 1,
+        "shot": 56,
+        "fraction": 0.9,
+        "meanMs": 7.760000000149011,
+        "maxMs": 7.899999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0,
+        "meanMs": 16.2,
+        "maxMs": 17.30000000447035
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.25,
+        "meanMs": 15.959999999403953,
+        "maxMs": 16.600000001490116
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.5,
+        "meanMs": 11.569999999552966,
+        "maxMs": 12.699999995529652
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.75,
+        "meanMs": 10.360000000149011,
+        "maxMs": 10.899999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 2,
+        "shot": 57,
+        "fraction": 0.9,
+        "meanMs": 10.129999999701976,
+        "maxMs": 10.699999995529652
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0,
+        "meanMs": 5.439999999850988,
+        "maxMs": 5.5
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.25,
+        "meanMs": 5.470000001043081,
+        "maxMs": 5.700000002980232
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.5,
+        "meanMs": 5.260000000149011,
+        "maxMs": 5.399999998509884
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.75,
+        "meanMs": 5.210000000149011,
+        "maxMs": 5.300000004470348
+      },
+      {
+        "preset": "episode3Train",
+        "clip": 3,
+        "shot": 58,
+        "fraction": 0.9,
+        "meanMs": 5.240000000596046,
+        "maxMs": 5.4000000059604645
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0,
+        "meanMs": 6.480000000447035,
+        "maxMs": 6.600000001490116
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.25,
+        "meanMs": 6.410000000149012,
+        "maxMs": 6.700000002980232
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.5,
+        "meanMs": 6.779999999701976,
+        "maxMs": 7.700000002980232
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.75,
+        "meanMs": 6.520000000298023,
+        "maxMs": 6.700000002980232
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 0,
+        "shot": 61,
+        "fraction": 0.9,
+        "meanMs": 6.439999999850988,
+        "maxMs": 6.799999997019768
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0,
+        "meanMs": 7.360000000149012,
+        "maxMs": 10.5
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.25,
+        "meanMs": 6.870000000298023,
+        "maxMs": 7.299999997019768
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.5,
+        "meanMs": 6.610000000149012,
+        "maxMs": 6.899999998509884
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.75,
+        "meanMs": 6.769999999552965,
+        "maxMs": 6.899999998509884
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 1,
+        "shot": 62,
+        "fraction": 0.9,
+        "meanMs": 6.869999999552965,
+        "maxMs": 7.100000001490116
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0,
+        "meanMs": 7.520000000298023,
+        "maxMs": 11
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.25,
+        "meanMs": 7.060000000149012,
+        "maxMs": 7.299999997019768
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.5,
+        "meanMs": 6.920000000298023,
+        "maxMs": 7.299999997019768
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.75,
+        "meanMs": 6.929999999701977,
+        "maxMs": 7
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 2,
+        "shot": 63,
+        "fraction": 0.9,
+        "meanMs": 7.170000000298023,
+        "maxMs": 7.399999998509884
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0,
+        "meanMs": 6.3900000005960464,
+        "maxMs": 6.699999995529652
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.25,
+        "meanMs": 7.289999999850989,
+        "maxMs": 8.399999998509884
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.5,
+        "meanMs": 6.639999999850988,
+        "maxMs": 6.899999998509884
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.75,
+        "meanMs": 6.3900000005960464,
+        "maxMs": 7
+      },
+      {
+        "preset": "episode5Farm",
+        "clip": 3,
+        "shot": 61,
+        "fraction": 0.9,
+        "meanMs": 6.3,
+        "maxMs": 6.399999998509884
+      }
+    ],
+    "meanMs": 7.449714285731321,
+    "audioLocked": true,
+    "errors": [],
+    "phase": "after"
+  }
+]

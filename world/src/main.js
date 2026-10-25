@@ -12,6 +12,7 @@ import { STYLES } from './styles.js';
 import { Seasons } from './seasons.js';
 import { buildSunsetCove } from './areas/sunset-cove.js';
 import { buildPlayground } from './areas/playground.js';
+import { buildCamping } from './areas/camping.js';
 import * as T from './textures.js';
 import { Director } from './camera.js';
 import { AudioEngine } from './audio.js';
@@ -84,6 +85,7 @@ const meadowLake = await buildMeadowLake(world);
 const crystalMine = buildCrystalMine(world);
 const sunsetCove=await buildSunsetCove(world,life);
 const playground=buildPlayground(world,life);
+const camping=buildCamping(world);
 const seasons=new Seasons(world,atmos,{forest,meadowLake});
 function setSeason(key,save=false){seasons.set(key);$('#season').value=seasons.key;if(save)LS.set('dh.season',seasons.key);}
 $('#season').onchange=()=>setSeason($('#season').value,true);
@@ -94,6 +96,9 @@ setWeather(LS.get('dh.weather')||'auto');
 function setFestival(on,save=false){atmos.festival=world.festival=!!on;$('#festival').checked=atmos.festival;if(save)LS.set('dh.festival',atmos.festival);}
 $('#festival').onchange=()=>setFestival($('#festival').checked,true);
 setFestival(LS.get('dh.festival')??false);
+function setMarket(on,save=false){world.marketDay=!!on;world.market?.setActive(world.marketDay);$('#marketDay').checked=world.marketDay;if(save)LS.set('dh.marketDay',world.marketDay);}
+$('#marketDay').onchange=()=>setMarket($('#marketDay').checked,true);
+setMarket(LS.get('dh.marketDay')??false);
 let familyMode = DEFAULT_FAMILY_MODE;
 // Saved only when the user flips the switch, so the default can still change later. (The old key
 // 'dh.familyMode' was written on every load, not chosen, so it is ignored.)
@@ -716,6 +721,7 @@ function applyVideoPreset(key) {
   setSeason(p.season||'summer',true);
   setWeather(p.weather||'auto',true);
   setFestival(!!p.festival,true);
+  setMarket(!!p.market,true);
   setSlider('atmos', 'rain', p.rain);
   setSlider('audio', 'wind', p.wind);
   setSlider('audio', 'ambience', p.ambience);
@@ -740,7 +746,7 @@ function applyVideoPreset(key) {
 // ---------- project files ----------
 function projectData() {
   return {
-    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, festival:atmos.festival, style: styleKey, paint: { ...paint }, look: { ...lookParams },
+    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, festival:atmos.festival, market:!!world.marketDay, style: styleKey, paint: { ...paint }, look: { ...lookParams },
     mood: atmos.key, atmos: { ...atmos.mult }, life: { ...life.settings }, letterbox: fin.uniforms.uLetterbox.value,
     timeline: timeline.toJSON(), keys: director.custom.map((k) => [k.pos.toArray(), k.look.toArray()]), layout: world.layout(),
   };
@@ -753,6 +759,7 @@ function loadProject(p) {
   setSeason(p.season||'summer',true);
   setWeather(p.weather||'auto',true);
   setFestival(!!p.festival,true);
+  setMarket(!!p.market,true);
   for (const [k, v] of Object.entries(p.paint || {})) setSlider('paint', k, v);
   for (const [k, v] of Object.entries(p.look || {})) setSlider('look', k, v);
   for (const [k, v] of Object.entries(p.atmos || {})) setSlider('atmos', k, v);
@@ -978,11 +985,12 @@ function listener() {
     inside = Math.abs(_v.x) < cafeIt.hx && _v.z < 0 && _v.z > -cafeIt.depth && _v.y < 3.8;
   }
   const c = atmos.cur, t = life.train;
+  const trainPos=t&&t.state!=='away'?t.cars[0].g.getWorldPosition(_v):null;
   return {
     x: p.x, z: p.z, rx: e[0], rz: e[2], inside, riverZ: riverZ(p.x),
     cafe: cafePos && { x: cafePos.x, z: cafePos.z },
     night: c.stars, day: 1 - c.stars, rain: world.rainAmount ?? THREE.MathUtils.clamp(c.rain + atmos.mult.rain, 0, 1),
-    train: t && t.state !== 'away' ? { x: RAIL_X, z: t.s, v: t.v, state: t.state, approaching: t.state === 'run' && !t.stopped } : null,
+    train: trainPos ? { x: trainPos.x, z: trainPos.z, v: t.v, state: t.state, approaching: t.state === 'run' && !t.stopped } : null,
   };
 }
 
@@ -999,13 +1007,14 @@ function step(dt) {
   world.update(dt, time, camera);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
-  forest.update(time, camera, atmos.cur);
-  meadowLake.update(time, camera, atmos.cur, atmos.key);
+  if (world.areaAnimationVisible(camera,-90,forest.pad.y+10,-204,90)) forest.update(time, camera, atmos.cur);
+  if (world.areaAnimationVisible(camera,-225,meadowLake.pad.y+10,0,110)) meadowLake.update(time, camera, atmos.cur, atmos.key);
   crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(dt, time, camera);
   sunsetCove.update(time,camera,atmos.cur);
   playground.update(time,camera);
+  camping.update(time,camera,atmos.cur);
   cafe.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
   audio.tick(listener(), dt);

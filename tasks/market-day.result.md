@@ -9,3 +9,5 @@
 - Six Animated film previews 69-71 saved and inspected: clear stalls/balloon/bun, soft night lanterns and friendly pianist. No browser errors.
 - Full 22-suite run underway. Pending final counts and result/QUEUE commit; then task 36.
 - No merge, push or publication.
+
+- First full run found a cleanup regression at pavi-siri child-proportions: an invisible market balloon remained parented to Pavi and enlarged bounds. Fixed by detaching it when inactive and reattaching only while used; added a body-bounds cleanup regression. Focused market -> original-model check pending, then rerun the full suite. No partial run claimed as success.

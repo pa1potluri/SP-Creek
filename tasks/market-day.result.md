@@ -11,3 +11,5 @@
 - No merge, push or publication.
 
 - First full run found a cleanup regression at pavi-siri child-proportions: an invisible market balloon remained parented to Pavi and enlarged bounds. Fixed by detaching it when inactive and reattaching only while used; added a body-bounds cleanup regression. Focused market -> original-model check pending, then rerun the full suite. No partial run claimed as success.
+
+- Cleanup verification passed: market 41 + original-character 50 = 91 focused checks, errors []. Active appearance unchanged, so six inspected previews remain final. Fresh full 22-suite run now underway on the corrected code.

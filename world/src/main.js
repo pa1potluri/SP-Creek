@@ -96,6 +96,9 @@ setWeather(LS.get('dh.weather')||'auto');
 function setFestival(on,save=false){atmos.festival=world.festival=!!on;$('#festival').checked=atmos.festival;if(save)LS.set('dh.festival',atmos.festival);}
 $('#festival').onchange=()=>setFestival($('#festival').checked,true);
 setFestival(LS.get('dh.festival')??false);
+function setMarket(on,save=false){world.marketDay=!!on;world.market?.setActive(world.marketDay);$('#marketDay').checked=world.marketDay;if(save)LS.set('dh.marketDay',world.marketDay);}
+$('#marketDay').onchange=()=>setMarket($('#marketDay').checked,true);
+setMarket(LS.get('dh.marketDay')??false);
 let familyMode = DEFAULT_FAMILY_MODE;
 // Saved only when the user flips the switch, so the default can still change later. (The old key
 // 'dh.familyMode' was written on every load, not chosen, so it is ignored.)
@@ -718,6 +721,7 @@ function applyVideoPreset(key) {
   setSeason(p.season||'summer',true);
   setWeather(p.weather||'auto',true);
   setFestival(!!p.festival,true);
+  setMarket(!!p.market,true);
   setSlider('atmos', 'rain', p.rain);
   setSlider('audio', 'wind', p.wind);
   setSlider('audio', 'ambience', p.ambience);
@@ -742,7 +746,7 @@ function applyVideoPreset(key) {
 // ---------- project files ----------
 function projectData() {
   return {
-    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, festival:atmos.festival, style: styleKey, paint: { ...paint }, look: { ...lookParams },
+    app: 'dusty-hollow', version: 1, familyMode, season:seasons.key, weather:atmos.weather, festival:atmos.festival, market:!!world.marketDay, style: styleKey, paint: { ...paint }, look: { ...lookParams },
     mood: atmos.key, atmos: { ...atmos.mult }, life: { ...life.settings }, letterbox: fin.uniforms.uLetterbox.value,
     timeline: timeline.toJSON(), keys: director.custom.map((k) => [k.pos.toArray(), k.look.toArray()]), layout: world.layout(),
   };
@@ -755,6 +759,7 @@ function loadProject(p) {
   setSeason(p.season||'summer',true);
   setWeather(p.weather||'auto',true);
   setFestival(!!p.festival,true);
+  setMarket(!!p.market,true);
   for (const [k, v] of Object.entries(p.paint || {})) setSlider('paint', k, v);
   for (const [k, v] of Object.entries(p.look || {})) setSlider('look', k, v);
   for (const [k, v] of Object.entries(p.atmos || {})) setSlider('atmos', k, v);

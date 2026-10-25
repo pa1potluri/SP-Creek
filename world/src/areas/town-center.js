@@ -1,9 +1,31 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { LEFT, RIGHT, terrainHeight, walkHeight } from '../world.js';
+import { LEFT, RIGHT, terrainHeight, walkHeight, batchRigidParts } from '../world.js';
 import { makeCharacter, CAST, animatePerson, gesture } from '../characters.js';
 import { signTexture } from '../textures.js';
 import { buildVillageDetails } from '../hamlet.js';
+
+export const MARKET_PIECES={marketFruit:'Fruit stall',marketFlowers:'Flower stall',marketBread:'Bakery stall',marketToys:'Toy stall',marketBalloons:'Balloon stall'};
+function marketPiece(type,wood){
+ const g=new THREE.Group(),palette=['#e8b1ba','#afccd3','#ecd89e','#b6cfa6','#c6bbdc'],cache=new Map(),m=color=>{if(!cache.has(color))cache.set(color,new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.06}));return cache.get(color);},cream=m('#f1e3c7');
+ const add=(geo,mat,x,y,z)=>{const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;g.add(o);return o;},box=(w,h,d,x,y,z,mat=wood)=>add(new THREE.BoxGeometry(w,h,d),mat,x,y,z),ball=(r,x,y,z,mat)=>add(new THREE.SphereGeometry(r,12,8),mat,x,y,z);
+ box(3.2,0.16,1.7,0,0.9,0,cream);box(3,0.7,1.45,0,0.45,0);for(const x of [-1.45,1.45])for(const z of [-0.75,0.75])add(new THREE.CapsuleGeometry(0.06,2.45,3,8),wood,x,1.35,z);
+ const color=m(palette[Object.keys(MARKET_PIECES).indexOf(type)]),canopy=add(new THREE.SphereGeometry(1,20,10,0,Math.PI*2,0,Math.PI/2),color,0,2.65,0);canopy.scale.set(1.85,0.38,1.2);
+ if(type==='marketFruit'){for(let i=0;i<18;i++)ball(0.13,-1.1+(i%6)*0.43,1.05,Math.floor(i/6)*0.35-0.35,m(i%3?'#e9b875':'#d99a91'));}
+ if(type==='marketBread'){const loaf=m('#d4ad70');for(let i=0;i<8;i++)add(new THREE.CapsuleGeometry(0.13,0.24,4,10),loaf,-1.1+(i%4)*0.7,1.1,Math.floor(i/4)*0.5-0.25).rotation.z=Math.PI/2;}
+ if(type==='marketFlowers'){for(let i=0;i<7;i++){const x=-1.1+i*0.37,z=(i%2-0.5)*0.4,green=m('#9ab07b');add(new THREE.CylinderGeometry(0.012,0.012,0.45,5),green,x,1.2,z);for(let k=0;k<5;k++)ball(0.055,x+Math.cos(k*1.257)*0.08,1.44+Math.sin(k*1.257)*0.08,z,m(palette[i%5]));}}
+ if(type==='marketToys'){for(let i=0;i<5;i++){const x=-1.1+i*0.55,toy=m(palette[i]);ball(0.15,x,1.08,0,toy);ball(0.11,x,1.31,0,toy);for(const dx of [-0.09,0.09])ball(0.045,x+dx,1.42,0,toy);}}
+ if(type==='marketBalloons'){for(let i=0;i<6;i++){const x=-1.1+i*0.43,h=1.6+(i%2)*0.2;add(new THREE.CylinderGeometry(0.008,0.008,h-0.9,5),cream,x,(h+0.9)/2,0);const b=ball(0.2,x,h+0.2,0,m(palette[i%5]));b.scale.y=1.25;}}
+ batchRigidParts(g);return g;
+}
+function buildMarket(world){
+ const root=new THREE.Group();root.name='Market day in the square';world.root.add(root);const wood=world.mat.darkWood,stalls=[],rects=[],flags=[];
+ const positions=[[-18,-48],[-18,-60],[18,-48],[18,-60],[4.8,-27]];
+ for(const [i,type]of Object.keys(MARKET_PIECES).entries()){const g=marketPiece(type,wood),[x,z]=positions[i];g.position.set(x,terrainHeight(x,z),z);root.add(g);root.updateMatrixWorld(true);rects.push(world._rectOf(g,0,0,1.8,1.1));stalls.push({type,root:g});world.extraBuildPieces??={};world.extraBuildPieces[type]={label:MARKET_PIECES[type],bounds:[1.8,1.1],build:target=>{target.add(marketPiece(type,wood));}};const b=document.createElement('button');b.dataset.build=type;b.textContent=MARKET_PIECES[type];document.querySelector('#buildCatalogue').append(b);}
+ for(const z of [-40,-57]){for(const x of [-20,20]){const post=new THREE.Mesh(new THREE.CapsuleGeometry(0.045,5.1,3,8),wood);post.position.set(x,2.6,z);root.add(post);root.updateMatrixWorld(true);rects.push(world._rectOf(post,0,0,0.06,0.06));}const points=[];for(let i=0;i<=24;i++){const u=i/24;points.push(new THREE.Vector3(-20+40*u,5.2-Math.sin(u*Math.PI)*0.7,z));}const cord=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),32,0.02,5,false),wood);root.add(cord);for(let i=0;i<16;i++){const u=(i+0.5)/16,g=new THREE.Group();g.position.set(-20+40*u,4.9-Math.sin(u*Math.PI)*0.7,z);const flag=new THREE.Mesh(new THREE.CapsuleGeometry(0.13,0.2,3,8),new THREE.MeshLambertMaterial({color:['#e8b1ba','#afccd3','#ecd89e','#b6cfa6'][i%4]}));flag.scale.z=0.12;g.add(flag);root.add(g);flags.push(g);}}
+ const musician=makeCharacter(CAST.pianist);musician.g.position.set(-3.3,walkHeight(-3.3,-27),-27);root.add(musician.g);const piano=new THREE.Group();piano.position.set(-3.3,walkHeight(-3.3,-26.4),-26.4);root.add(piano);const body=new THREE.Mesh(new THREE.BoxGeometry(1.45,0.25,0.6),wood);body.position.y=0.9;piano.add(body);for(const x of [-0.55,0.55]){const leg=new THREE.Mesh(new THREE.CapsuleGeometry(0.05,0.8,3,8),wood);leg.position.set(x,0.42,0);piano.add(leg);}for(let i=0;i<12;i++){const key=new THREE.Mesh(new THREE.BoxGeometry(0.095,0.035,0.35),new THREE.MeshLambertMaterial({color:i%3?'#eee3ca':'#625b54'}));key.position.set(-0.6+i*0.11,1.045,-0.02);piano.add(key);}root.updateMatrixWorld(true);rects.push(world._rectOf(piano,0,0,0.8,0.4));batchRigidParts(piano);
+ const market={root,stalls,rects,flags,musician,setActive(on){root.visible=!!on;for(const r of rects){const index=world.colliders.rects.indexOf(r);if(on&&index<0)world.colliders.rects.push(r);else if(!on&&index>=0)world.colliders.rects.splice(index,1);}},update(t){if(!root.visible)return;flags.forEach((g,i)=>g.rotation.z=Math.sin(t*0.45+i)*0.04);animatePerson(musician,t*0.4,0);musician.arms.forEach((g,i)=>g.rotation.x=-0.7+Math.sin(t*0.8+i)*0.035);musician.elbows.forEach(g=>g.rotation.x=-0.7);}};market.setActive(false);world.market=market;return market;
+}
 
 // One registration owns the square, street decorations and their clock-driven motion.
 export function buildTownCenter(world, life) {
@@ -193,8 +215,10 @@ export function buildTownCenter(world, life) {
   const cord=new THREE.Mesh(mergeGeometries(cords),mat('#a38a68'));cords.forEach(g=>g.dispose());
   const glowGeometry=new THREE.BufferGeometry().setFromPoints(hanging),glow=new THREE.Points(glowGeometry,new THREE.PointsMaterial({map:world.tex.glow,color:'#ffd49a',size:1.5,transparent:true,opacity:0.15,blending:THREE.AdditiveBlending,depthWrite:false}));festivalRoot.add(cord,lanterns,caps,glow);
   const festival={root:festivalRoot,lanterns,caps,glow,hanging};
+  const market=buildMarket(world);
   let familyMode=true;
-  const area={root,family,keepers,flags,square,path,homeDetails,hamletDetails,festival,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
+  const area={root,family,keepers,flags,square,path,homeDetails,hamletDetails,festival,market,setFamilyMode(on){familyMode=!!on;family.visible=familyMode;},update(t){
+    market.update(t);
     festivalRoot.visible=!!world.festival;paper.emissiveIntensity=0.3+world.lanternLevel*0.8;glow.material.opacity=0.04+world.lanternLevel*0.2;
     homeDetails.update(t);hamletDetails.update(t);
     flags.forEach((f,i)=>{f.rotation.x=Math.sin(t*1.1+i*0.7)*0.13*(world.wind??1);f.rotation.y=Math.sin(t*0.8+i)*0.08*(world.wind??1);});

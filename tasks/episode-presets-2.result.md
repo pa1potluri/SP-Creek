@@ -7,3 +7,7 @@
 - Left: inspect previews, full suite once on final code, counts and final result/QUEUE commit. Stopped at initial verification. No merge, push or publication.
 
 - Focused smoke: **25 passed**, browser errors [], sound locked. Eight final Animated film day/night previews 78-81 saved and inspected, with actual drizzle for 78 and clearing weather for 79. Full 25-suite run underway on unchanged final code; remaining final counts/result and completion commit.
+
+- Night preview finding: new wide cove view faced a large dark hillside. Turned only appended view 80 toward open water for a calmer night composition. Initial full run interrupted and not counted; refreshed 80 day/night and final full rerun follow.
+
+- Final view 80 is a higher seaward aerial with open water for end-card text and a narrow shoreline. Final day/night pair inspected: boat and jackets visible, dark hillside and hard palm shadows outside frame. Final full 25-suite rerun starts on this committed code; remaining counts and completion commit.

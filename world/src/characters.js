@@ -371,7 +371,10 @@ export function addRainGear(p) {
   const shaft=new THREE.Mesh(new THREE.CapsuleGeometry(0.012,0.8,3,6),new THREE.MeshLambertMaterial({color:'#c8bca5'}));shaft.position.y=-0.42;umbrella.add(shaft);
   const tip=new THREE.Mesh(new THREE.SphereGeometry(0.035,8,6),new THREE.MeshLambertMaterial({color:colors[0]}));tip.position.y=0.26;umbrella.add(tip);
   const boots=p.feet.map(foot=>{const g=new THREE.Group();g.name='Rounded rain boot';foot.add(g);const m=new THREE.MeshLambertMaterial({color:colors[0],emissive:colors[0],emissiveIntensity:0.06});const toe=new THREE.Mesh(new THREE.SphereGeometry(0.095,12,8),m);toe.scale.set(0.72,0.8,1.3);toe.position.set(0,0.02,0.035);const cuff=new THREE.Mesh(new THREE.CylinderGeometry(0.075,0.08,0.15,12),m);cuff.position.y=0.12;g.add(toe,cuff);return g;});
-  const gear={umbrella,boots,setVisible(on,open=on){umbrella.visible=!!open;boots.forEach(g=>g.visible=!!on);}};gear.setVisible(false);p.rainGear=gear;return gear;
+  const gear={umbrella,boots,setVisible(on,open=on){
+    umbrella.visible=!!open;if(open){if(umbrella.parent!==p.g)p.g.add(umbrella);}else umbrella.removeFromParent();
+    boots.forEach((g,i)=>{g.visible=!!on;if(on){if(g.parent!==p.feet[i])p.feet[i].add(g);}else g.removeFromParent();});
+  }};gear.setVisible(false);p.rainGear=gear;return gear;
 }
 
 // Returns the hat's joint (it can be tipped), or null for no hat or a bonnet.

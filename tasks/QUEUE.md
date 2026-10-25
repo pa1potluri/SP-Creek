@@ -51,7 +51,7 @@ finished. Re-read this file each time; Claude may change it.
 | 36 | `tasks/boat-trip.md` | `area/boat-trip` | done; full 1561 + 2 passed; boat suite 21; six day/night previews 72-74 |
 | 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | done; full 1604 + 2 passed; garden suite 40; six day/night previews 75-77; terrain and raw-path clearance corrected |
 | 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | done; Episodes 6-9; full 1633 + 2 passed; episode suite 25; eight final day/night previews 78-81 |
-| 39 | `tasks/self-review-2.md` | `area/self-review-2` | queued; then stop (31 only from Thu Oct 29) |
+| 39 | `tasks/self-review-2.task.md` | `area/self-review-2` | WIP: rain-prop bounds and garden walk corrected; focused/visual/full checks pending; then stop (31 only from Thu Oct 29) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

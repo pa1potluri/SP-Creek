@@ -60,6 +60,7 @@ finished. Re-read this file each time; Claude may change it.
 | 45 | `tasks/BIG-QUEUE-40-47.md` (kite-picnic) | `area/kite-picnic` | done feature; six views 86-91 + two 240s presets; full 1861 + 2; outing 33; previews saved; wide public picnic follow-up in 47 |
 | 46 | `tasks/BIG-QUEUE-40-47.md` (episode-presets-3) | `area/episode-presets-3` | done; Episodes 10-13 at 180s + wide views 92-95; full 1900 + 2; episode checks 35; day/night + Oil saved; inherited cove band open |
 | 47 | `tasks/BIG-QUEUE-40-47.md` (self-review-3) | `area/self-review-3` | done; SELF-REVIEW-3; full 1900 + 2; normal/static 132 poses + 14 walks each; 35 raw + 3 contacts; two visual follow-ups open; stopped after 47 |
+| 48 | `tasks/review-feedback.md` | `area/review-feedback` | WIP; deer clearing + rendered-ground sampling built; measured startup 38s to 25s; latest native-plant grounding needs targeted rerun; actual hang unconfirmed; full suite/day-night pending |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

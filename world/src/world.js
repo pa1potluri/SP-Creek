@@ -1650,10 +1650,19 @@ export class World {
     return g;
   }
 
+  groundY(x,z) {
+    if(Math.abs(x)>800||Math.abs(z)>800)return terrainHeight(x,z);
+    const g=this.ground.geometry,n=g.parameters.widthSegments,m=g.parameters.heightSegments,a=g.attributes.position;
+    const px=(x+800)/1600*n,pz=(z+800)/1600*m,i=Math.min(n-1,Math.floor(px)),j=Math.min(m-1,Math.floor(pz)),u=px-i,v=pz-j,k=j*(n+1)+i;
+    const h00=a.getY(k),h10=a.getY(k+1),h01=a.getY(k+n+1),h11=a.getY(k+n+2);
+    return u+v<=1?h00+(h10-h00)*u+(h01-h00)*v:h11+(h01-h11)*(1-u)+(h10-h11)*(1-v);
+  }
+
   surfaceY(x, z) {
+    // Sample the regular terrain triangles directly; only raised walkables need raycasts.
     this._ray.set(V(x, 300, z), V(0, -1, 0));
-    const hit = this._ray.intersectObjects(this.walkables, false)[0];
-    return hit ? hit.point.y : terrainHeight(x, z);
+    const hit = this._ray.intersectObjects(this.walkables.filter(m=>m!==this.ground), false)[0];
+    return Math.max(this.groundY(x,z),hit?.point.y??-Infinity);
   }
 
   placeProp(type, x, z, yaw = 0, record = true, order) {
@@ -2074,7 +2083,7 @@ export class World {
         const hidden = userPads.some((p) => withinPad(p, x, z, 1)) || this._insideFence(x, z) || this.inPond(x,z,2.5);
         // Keep the original vertical offset (flower heads, buried tree roots).
         const base = matrix.elements[13];
-        matrix.elements[13] = base + applyPond(applyUserPads(heights[i], x, z),x,z) - heights[i];
+        matrix.elements[13] = base + this.groundY(x,z) - heights[i];
         if (hidden) matrix.scale(V(0, 0, 0));
         m.setMatrixAt(i, matrix);
       }

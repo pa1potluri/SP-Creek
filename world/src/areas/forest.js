@@ -15,6 +15,7 @@ export function buildForest(world) {
     const u=i/steps,p=curve.getPointAt(u),tangent=curve.getTangentAt(u);routeSamples.push(p);
     world.registerAreaPad({x:p.x,z:p.z,y:startY+(y-startY)*u,yaw:Math.atan2(tangent.x,tangent.z),hx:6,hz:3.5,blend:3});
   }
+  world.registerAreaPad({x:-65,z:-201,hx:10,hz:12,blend:0,clearOnly:true});
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color});
   const bark=m('#8c7056'),moss=m('#759b6f'),cream=m('#f5ebd5'),dark=m('#455c62'),pink=m('#e8b6cb');
   const glows=['#a4ded8','#e6b8d7','#f4dda1'].map(color=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.1}));
@@ -29,25 +30,25 @@ export function buildForest(world) {
   const spots=[];
   for(let i=0;i<65;i++){
     const a=r()*Math.PI*2,d=13+r()*28,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d;
-    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||routeSamples.some(p=>Math.hypot(x-p.x,z-p.z)<8))continue;
-    spots.push([x,terrainHeight(x,z)-0.1,z,0.85+r()*0.5]);world.colliders.circles.push({x,z,r:0.45});
+    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||routeSamples.some(p=>Math.hypot(x-p.x,z-p.z)<8)||(Math.abs(x+65)<12&&Math.abs(z+201)<14))continue;
+    spots.push([x,world.groundY(x,z)-0.1,z,0.85+r()*0.5]);world.colliders.circles.push({x,z,r:0.45});
   }
   function instances(source,list,visibleSource){if(!source||!list.length)return;const im=new THREE.InstancedMesh(source.geometry,source.material,list.length),matrix=new THREE.Matrix4();list.forEach(([x,h,z,s],i)=>im.setMatrixAt(i,matrix.makeScale(s,s,s).setPosition(x,h,z)));im.castShadow=source.castShadow;im.receiveShadow=true;im.computeBoundingSphere();root.add(im);variants.push({im,source:visibleSource});}
   for(const set of ['oil','clean']){
     const g=world.foliage?.[set];if(!g)continue;
     instances(g.children[1]||g.children[0],spots,g);
-    const bushes=spots.filter((_,i)=>i%2===0).map(([x,h,z])=>[x+1,h,z+0.7,0.8]);
+    const bushes=spots.filter((_,i)=>i%2===0).map(([x,h,z])=>[x+1,world.groundY(x+1,z+0.7)-0.1,z+0.7,0.8]);
     instances(g.children[4],bushes,g);
   }
   const low={geometry:world.treeGeos[3],material:world.mat.foliage,castShadow:true};instances(low,spots,world.lowPoly[0]);
   instances(world.blocky[3]||world.blocky[0],spots,world.blocky[0]);
   for(let i=0;i<34;i++){
-    const a=r()*Math.PI*2,d=6+r()*23,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=terrainHeight(x,z);
+    const a=r()*Math.PI*2,d=6+r()*23,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=world.groundY(x,z);
     const rock=new THREE.DodecahedronGeometry(0.7+r()*0.5,0).scale(1.5,0.5,1);solid(rock,moss,x,h+0.2,z);
     for(let k=0;k<5;k++){const angle=k*1.257;solid(new THREE.SphereGeometry(0.25,6,4).scale(0.4,0.17,2.1),moss,x+Math.cos(angle)*0.4,h+0.15,z+Math.sin(angle)*0.4,root,[0,-angle,0.25]);}
   }
   for(const [x,z]of [[-88,-175],[-115,-190],[-105,-216]]){
-    const g=group(x,terrainHeight(x,z),z);box(0.1,2.3,0.1,bark,0,1.15,0,g);box(0.25,0.4,0.25,world.mat.lantern,0,2.1,0,g);
+    const g=group(x,world.groundY(x,z),z);box(0.1,2.3,0.1,bark,0,1.15,0,g);box(0.25,0.4,0.25,world.mat.lantern,0,2.1,0,g);
     const halo=new THREE.Sprite(world.haloMat);halo.position.y=2.1;halo.scale.setScalar(2);g.add(halo);world.colliders.circles.push({x,z,r:0.15});
   }
   const sign=group(CAMP.x-7,terrainHeight(CAMP.x-7,CAMP.z-7),CAMP.z-7);
@@ -63,13 +64,13 @@ export function buildForest(world) {
   solid(new THREE.SphereGeometry(0.34,12,8).scale(0.85,1.25,0.15),glows[1],0,0.43,0.78,stump);ball(0.05,cream,0.16,0.4,0.84,stump);
   world.colliders.circles.push({x:FOREST.x+5,z:FOREST.z-3,r:0.9});
   for(let i=0;i<36;i++){
-    const a=i*Math.PI*2/18,d=i<18?4.4:7.7,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=terrainHeight(x,z),s=0.7+(i%4)*0.16;
+    const a=i*Math.PI*2/18,d=i<18?4.4:7.7,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=world.groundY(x,z),s=0.7+(i%4)*0.16;
     solid(new THREE.CylinderGeometry(0.06*s,0.09*s,0.45*s,8),cream,x,h+0.23*s,z);
     solid(new THREE.SphereGeometry(0.3*s,12,8,0,Math.PI*2,0,Math.PI/2),glows[i%3],x,h+0.43*s,z);
     for(let j=0;j<3;j++)ball(0.04,cream,x+Math.cos(j*2.094)*0.15*s,h+0.64*s,z+Math.sin(j*2.094)*0.15*s);
   }
   for(let i=0;i<3;i++){
-    const x=FOREST.x-8+i*8,z=FOREST.z-15,h=terrainHeight(x,z),perch=group(x,h,z);
+    const x=FOREST.x-8+i*8,z=FOREST.z-15,h=world.groundY(x,z),perch=group(x,h,z);
     solid(new THREE.CylinderGeometry(0.22,0.35,4,8),bark,0,2,0,perch);box(2,0.15,0.2,bark,0.5,3.8,0,perch);
     const owl=group(0.65,4.15,0,perch);ball(0.38,bark,0,0.25,0,owl,[0.9,1.2,0.8]);ball(0.3,cream,0,0.25,0.19,owl,[0.8,1.1,0.4]);
     const head=group(0,0.67,0,owl),eyes=[];ball(0.38,bark,0,0,0,head,[1.1,1,0.9]);
@@ -78,7 +79,7 @@ export function buildForest(world) {
   }
   const deerCoat=m('#b58a62');deerCoat.emissive.set('#b58a62');deerCoat.emissiveIntensity=0.08;
   for(const [i,[x,z,scale]] of [[-67,-204,1],[-64,-206,0.95],[-66,-208,0.62]].entries()){
-    const g=group(x,terrainHeight(x,z),z);g.scale.setScalar(scale);g.rotation.y=-0.6+i*0.35;
+    const g=group(x,world.groundY(x,z),z);g.scale.setScalar(scale);g.rotation.y=-0.6+i*0.35;
     ball(0.6,deerCoat,0,1.05,0,g,[0.85,0.7,1.4]);
     for(const sx of [-1,1])for(const sz of [-1,1])ball(0.095,deerCoat,sx*0.29,0.43,sz*0.5,g,[1,4.4,1]);
     const head=group(0,1.4,0.55,g);ball(0.29,deerCoat,0,0,0.12,head,[0.9,1,1.25]);ball(0.15,cream,0,-0.08,0.37,head,[1,0.7,0.9]);
@@ -99,8 +100,9 @@ export function buildForest(world) {
   const shafts=[];for(let i=0;i<4;i++){const g=new THREE.Mesh(new THREE.PlaneGeometry(3,14),new THREE.MeshBasicMaterial({map:tex,color:'#fff0b7',transparent:true,opacity:0.08,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));g.position.set(FOREST.x-9+i*6,y+7,FOREST.z-2+i%2*5);root.add(g);shafts.push(g);}
   const nightGlow=new THREE.Mesh(new THREE.PlaneGeometry(22,22),new THREE.MeshBasicMaterial({map:tex,color:'#a4cbbb',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));nightGlow.rotation.x=-Math.PI/2;nightGlow.position.set(FOREST.x,y+0.07,FOREST.z);root.add(nightGlow);
   for(const {parent,mat,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),mat);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}
-  root.updateMatrixWorld(true);
+  root.updateMatrixWorld(true);let groundRevision=-1;const groundMatrix=new THREE.Matrix4();
   return {root,pad,owls,rabbit,deer,fireflies,variants,trail,update(t,camera,atmos){
+    if(groundRevision!==world.terrainRevision){for(const {im}of variants){for(let i=0;i<im.count;i++){im.getMatrixAt(i,groundMatrix);groundMatrix.elements[13]=world.groundY(groundMatrix.elements[12],groundMatrix.elements[14])-0.1;im.setMatrixAt(i,groundMatrix);}im.instanceMatrix.needsUpdate=true;im.computeBoundingSphere();}groundRevision=world.terrainRevision;}
     const night=Math.max(atmos.stars,world.lanternLevel*0.8),day=1-smoothstep(0.2,0.75,night);
     variants.forEach(({im,source})=>im.visible=source.visible);
     glows.forEach(mat=>mat.emissiveIntensity=0.1+night*0.9);fireflies.material.opacity=night*0.8;

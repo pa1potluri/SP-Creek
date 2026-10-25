@@ -88,3 +88,9 @@ west and flows into the bay at its south end.
 - Red barn, rounded fenced paddock, protected baby-animal pen, vegetable beds and a shallow-looking duck pond with a collision barrier.
 - Pavi feeds at the paddock rail; Siri pets a lamb through the nursery rail. Path links from ranch (-125, -55) through (-145, -42) and (-164, -43).
 - Farm barn, rounded rail, hay bale, vegetable bed and pond join Build mode through its existing extension catalogue.
+
+## Little growing garden (task 37)
+
+- Uses free grass at (-164, 15), north of Willow Creek and east of the meadow, clear of the railway, camp and pond.
+- Four soft-edged beds: sunflowers, carrots, pumpkins and flowers. A central walking gap and a path from (-145,45) through (-153,35) and (-164,29).
+- Pure-time seed, growth, watering and harvest story; five bed pieces join the existing Build extension catalogue.

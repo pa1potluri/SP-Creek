@@ -22,3 +22,6 @@
 3. App code and final previews are already saved. If code changes, refresh affected previews and repeat relevant/full checks. Write final result/count JSON, mark task 31 and superseded task 8 done in QUEUE, commit, then STOP. Never push.
 
 No finished full-suite result is claimed. Current source/test checkpoint: 70bd17d; this handoff is committed separately as WIP.
+
+## Reset verification progress
+- Fresh full run reached Build rotation assertion after 450 checks: a second six-style fixture assumption expected pi after six style iterations. Updated expected cumulative yaw to styles.length * pi / 6; no app change. Full 26-suite rerun in progress on localhost:8811.

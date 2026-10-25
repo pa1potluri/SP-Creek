@@ -81,7 +81,7 @@ export async function runBuildTests() {
       if (styleIndex < styles.length-1) for (const e of [...world.buildings]) world.removeBuilding(e);
     }
     const shop = world.buildings[0];
-    check(Math.abs(shop.spec.yaw - initialYaw - Math.PI) < 1e-6, 'R and wheel rotation persisted');
+    check(Math.abs(shop.spec.yaw - initialYaw - styles.length * Math.PI / 6) < 1e-6, 'R and wheel rotation persisted');
     const instance = world.plantInstances.find(({ mesh }) => mesh.count > 100);
     const matrix = new THREE.Matrix4();
     const plantIndex = Array.from({ length: instance.mesh.count }, (_, i) => i).find((i) => {

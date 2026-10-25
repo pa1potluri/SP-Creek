@@ -46,7 +46,7 @@ finished. Re-read this file each time; Claude may change it.
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | paused until Thu Oct 29; stopped after task 30 per user |
 | 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
 | 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | done; SELF-REVIEW-1 report + day/night/oil and Play captures; visibility handoff fixed; full 1464 + 2 passed |
-| 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | WIP: routine + views 66-68 + 240s preset saved; smoke 18 and six day/night captures passed; final full 21-suite run underway |
+| 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | done; full 1493 + 2 passed; rainy suite 26; six day/night previews 66-68 |
 | 35 | `tasks/market-day.md` | `area/market-day` | queued |
 | 36 | `tasks/boat-trip.md` | `area/boat-trip` | queued |
 | 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | queued |

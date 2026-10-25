@@ -1,15 +1,13 @@
-# Rainy day fun - WIP
+# Rainy day fun - complete
 
-- Branch area/rainy-day-fun from self-review completion b15a569. Read rules, queue, task and current blueprint.
-- Built removable pastel umbrellas and rounded rain boots on the supplied models, deterministic low puddle hops and twelve soft splash drops, warm cafe window with eighteen sliding droplets, then pointing toward the existing clearing rainbow.
-- Appended views 66-68 and four-minute preset: puddles 30s, cafe window 20s, rainbow 190s. Existing clearing weather gently stops its drizzle over 35s (during the window scene). The pointing scene keeps the existing rainbow softly visible until its ending fade; no duplicate sky/rainbow system, thunder or automatic sound.
-- Rain routine runs through the ordinary Life pose layer; original mesh/textures unchanged. Scene visibility cleanup follows the self-review handoff fix. No main.js or atmosphere.js source edit.
-- Initial smoke: 18 passed, errors [], audio locked. Added a camera-seek regression after making the rainbow view depend on the scene sun direction rather than previous camera position.
-- Preview corrections: shallow puddles raised above the road surface, compact rounded boots, existing approved backdrop reused behind window droplets, rainbow lifted above distant hill ground and framed with the protagonists. Cached existing scene rainbow/sun references. First two scenes and final scene keep the same morning sun to avoid an unintended fast orbit during a mood change.
-- Final six film day/night previews saving. Pending inspection, full 21-suite run and final result/QUEUE commit; then task 35.
-- No merge, push or publication.
+- Removable pastel umbrellas and rounded rain boots keep the supplied Pavi/Siri models and textures intact. Low 0.16m puddle hops, twelve soft splash drops and shallow-looking puddles stay on dry street ground.
+- The cafe scene has a rounded, divided window, the existing approved backdrop and eighteen sliding pane droplets. Umbrellas close indoors; the existing global rain-line object is hidden for this indoor shot while pane drops and soft rain ambience remain.
+- Existing gentle clearing weather starts with drizzle and stops over 35 seconds, during the window scene. Then the children point at the existing soft rainbow, raised above distant terrain and kept visible for the scene until its end fade. Cached sun/rainbow references; no second sky system, thunder, new point lights or automatic sound.
+- Appended shots 66-68: Puddle smiles; Raindrops on the cafe window; A rainbow after the rain. Four-minute preset A rainy day in SP Creek uses 30 / 20 / 190 seconds, natural pace and one morning sun direction to avoid an unintended orbit during mood changes.
+- Files: characters.js (removable props), life.js (routine/window/splashes), camera.js and presets.js. No main.js or atmosphere.js source changes.
 
-- Final window inspection caught global drizzle streaks inside the room. Window routine now hides only the existing rain-line object indoors; pane droplets and outdoor rain sound remain. Restarted the early full run on this final correction; no partial run claimed as completion.
+Checks: **1493 + 2 startup reload checks passed**, all 21 browser suites, exit 0, errors []. Rainy suite **26 passed**, including deterministic seeks, bounded/dry hops, cafe staging, indoor rain suppression, all six styles and cleanup through balloon/train/walking handoffs. Clearance 70 passed: 69 views / 13,869 samples, no failed paths. Per-suite data: world/tests/rainy-day-fun-full.json. Sound stayed locked.
 
-- Final previews saved and inspected: rainy-day-fun-{66,67,68}-{day,night}.png. Puddles visible above the transparent road layer; window has rounded mullions and approved backdrop; indoor rain-line effect suppressed while pane droplets remain; rainbow visible above distant terrain with protagonists fully framed. No browser errors in captures.
-- Fresh full suite session 77592 running: Build 525, camping 14, weather/water 227, family 46 already passed. New rainy suite includes all six art styles and camera-seek/indoor-rain regressions.
+Final Animated film day/night images saved and inspected: world/tests/rainy-day-fun-{66,67,68}-{day,night}.png (six). Puddles visible above the road layer; window readable; rainbow and protagonists framed together, no face close-up. The full run was restarted after the final indoor-rain correction; only the completed final run is counted.
+
+No unfinished task-34 work. Continue task 35 on a stacked branch. No merge, push or publication.

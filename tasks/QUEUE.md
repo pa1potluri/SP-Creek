@@ -52,14 +52,14 @@ finished. Re-read this file each time; Claude may change it.
 | 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | done; full 1604 + 2 passed; garden suite 40; six day/night previews 75-77; terrain and raw-path clearance corrected |
 | 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | done; Episodes 6-9; full 1633 + 2 passed; episode suite 25; eight final day/night previews 78-81 |
 | 39 | `tasks/self-review-2.task.md` | `area/self-review-2` | done; SELF-REVIEW-2 report; full 1636 + 2 passed; 128 poses, 14 dry walks, 32 captures + contacts; inherited cove night-strip follow-up in STUCK; stopped after 39 |
-| 40 | `tasks/BIG-QUEUE-40-47.md` (cove-night-strip) | `area/cove-night-strip` | STUCK; probes reverted; diagnosis and next check in STUCK.md; task 41 next |
-| 41 | `tasks/BIG-QUEUE-40-47.md` (public-ready) | `area/public-ready` | done; full 1787 + 2 passed; no-GLB static copy 14 passed; four fallback day/night previews |
+| 40 | `tasks/BIG-QUEUE-40-47.md` (cove-night-strip) | `area/cove-night-strip` | STUCK; review 47 confirms night band; no app fix retained; diagnosis in STUCK.md |
+| 41 | `tasks/BIG-QUEUE-40-47.md` (public-ready) | `area/public-ready` | done for startup/fallback; full 1787 + 2; static copy validated again in 47; wide picnic visual follow-up in STUCK |
 | 42 | `tasks/BIG-QUEUE-40-47.md` (showcase-media) | `area/showcase-media` | done; six 3.8s 640px loops under 728KB; no Pavi/Siri; full 1787 + 2; 12 day/night stills |
 | 43 | `tasks/BIG-QUEUE-40-47.md` (contributing) | `area/contributing` | done; contribution guide + 10 draft ideas; links checked; full 1787 + 2; day/night baseline saved |
 | 44 | `tasks/BIG-QUEUE-40-47.md` (snow-day) | `area/snow-day` | done; four scenes 82-85 + 240s preset; full 1822 + 2; snow checks 31; eight day/night + Oil previews |
-| 45 | `tasks/BIG-QUEUE-40-47.md` (kite-picnic) | `area/kite-picnic` | done; six views 86-91 + two 240s presets; full 1861 + 2; outing checks 33; 12 day/night + Oil previews |
+| 45 | `tasks/BIG-QUEUE-40-47.md` (kite-picnic) | `area/kite-picnic` | done feature; six views 86-91 + two 240s presets; full 1861 + 2; outing 33; previews saved; wide public picnic follow-up in 47 |
 | 46 | `tasks/BIG-QUEUE-40-47.md` (episode-presets-3) | `area/episode-presets-3` | done; Episodes 10-13 at 180s + wide views 92-95; full 1900 + 2; episode checks 35; day/night + Oil saved; inherited cove band open |
-| 47 | `tasks/BIG-QUEUE-40-47.md` (self-review-3) | `area/self-review-3` | WIP; review poses/walks passed; no-GLB static checks 138 passed; final captures/report/full suite pending |
+| 47 | `tasks/BIG-QUEUE-40-47.md` (self-review-3) | `area/self-review-3` | done; SELF-REVIEW-3; full 1900 + 2; normal/static 132 poses + 14 walks each; 35 raw + 3 contacts; two visual follow-ups open; stopped after 47 |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

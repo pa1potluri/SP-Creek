@@ -1,9 +1,10 @@
-# Self-review 3 - WIP final verification
+# Self-review 3 - complete / stopped after 47
 
-- Branch area/self-review-3 from 2fd7bcc. App/test probe was reverted; net app state remains 2fd7bcc. No merge/push/upload/publication.
-- SELF-REVIEW-3.md now has per-task branch hashes, scoped files, historical suite counts, fresh review evidence and candid visual findings for 31/40-46.
-- Normal and no-GLB static versions each passed 132 Film day/night poses, 78 land-actor checks and 14 moving/dry/finite Play checks. Static focused suite total 138. Sound locked; no JavaScript errors (expected optional GLB 404 resource messages are excluded by the runner).
-- Review captured 35 raw Film/Oil/Play images plus three contact sheets. Original assets unchanged. Cove night band unresolved. Wide public picnic prop readability also logged; measured blanket above both ground surfaces, so the unproven level-pad probe and added test were reverted.
-- User style references, tentative progress/timeline and proposed process saved in STYLE-TIMELINE.md and QUEUE note. User will handle their separate sheet update and guide work while Claude is unavailable.
-- Fresh final 30-suite run in progress on localhost:8811 (session 29587). Previous review run was interrupted for the probe and is not a final pass. Affected picnic/public pictures are refreshing on restored app state.
-- Remaining: finish full suite, save actual counts, ensure final captures/contact sheets match restored state, finalize report/result/QUEUE, commit everything, verify clean tree, STOP after 47. No new tasks beyond 47.
+- Branch area/self-review-3 from 2fd7bcc. No net app/test changes from the reviewed task 46 checkpoint. The unproven picnic leveling probe was reverted. No merge, push, upload, post or publication.
+- SELF-REVIEW-3.md covers tasks 31 and 40-46 with branch hashes, scoped files, historical counts, evidence, first checks and candid visual findings.
+- Final full suite: **1900 passed + 2 startup reload checks**, all 30 suites, exit 0, browser errors []. Per-suite data: world/tests/self-review-3-full.json. All 96 cameras / 19296 clearance samples passed. Earlier interrupted review run is not counted as a pass.
+- Normal and no-GLB static versions each passed 132 Film day/night poses, 78 land-scene checks of both actors and 14 short moving/dry/finite Play checks. Static focused checks total 138. Proof JSONs self-review-3-check.json / -public.json / -media-docs.json. Expected missing optional-model 404 resources are filtered by the browser runner; no JavaScript startup errors.
+- Saved and inspected 35 raw Film/Oil/Play frames plus three contact sheets under world/tests/self-review-3-*.png. Refreshed affected outing and episode-wide previews on the restored app state. Sound stayed locked; audio quality was not auditioned automatically. Original GLBs unchanged.
+- Still open: task 40's broad navy Cove night shoreline band; and low blanket/basket readability in the wide static fallback picnic view. Measurements did not establish burial, and the speculative pad/test changes were reverted. Both findings are in STUCK.md. No visual fix is claimed for either.
+- User's final STYLE references, tentative progress/timeline and proposed visual process are saved in STYLE-TIMELINE.md and the QUEUE note. The user will handle their separate sheet update and guide work while Claude is unavailable. No external message/email sent.
+- No remaining task 47 review work. QUEUE updated, all work saved; STOPPED after 47. Await the user's next scoped work; do not start another experiment or push anything.

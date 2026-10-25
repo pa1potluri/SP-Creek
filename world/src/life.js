@@ -653,6 +653,10 @@ let marketCameraReader=()=>null;
 export function setMarketCameraReader(reader){marketCameraReader=reader;}
 export function marketFocus(kind){const x=kind==='balloon'?0.9:kind==='bun'?-1.5:0,z=kind==='balloon'?-27:kind==='bun'?-23:-43;return V(x,walkHeight(x,z),z);}
 
+let rowingCameraReader=()=>null;
+export function setRowingCameraReader(reader){rowingCameraReader=reader;}
+export function rowingFocus(kind,t){const area=kind==='cove'?starWorld?.sunsetCove?.rowingBoat:starWorld?.meadowBoat;return area?.sample(t)||{pos:V(-240,0,-14),yaw:0};}
+
 export class Life {
   constructor(scene, world) {
     this.scene = scene;
@@ -663,6 +667,7 @@ export class Life {
     addCharacterPoseLayer(()=>{if(this.world.trainTripActive){this.trainHidden??=new Map();const friends=[...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)];for(const p of friends){if(!this.trainHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.trainHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}}});
     addCharacterPoseLayer(t=>this.updateMarket(t));
     addCharacterPoseLayer(t=>this.updateRainy(t));
+    addCharacterPoseLayer(t=>this.updateRowing(t));
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -917,8 +922,17 @@ export class Life {
     this.root.add(this.tumbleGroup);
   }
 
+  updateRowing(time){
+    const state=rowingCameraReader(),areas=[this.world.meadowBoat,this.world.sunsetCove?.rowingBoat];
+    areas.forEach((area,i)=>{if(!area)return;const active=state?.kind===(i?'cove':'lake');area.update(active?state.t:time);if(!area.riders){area.riders=[CAST.pavi,CAST.siri].map((outfit,j)=>{const p=makeCharacter(outfit);area.boat.add(p.g);const jacket=new THREE.Group();jacket.name='Bright life jacket';const orange=new THREE.MeshLambertMaterial({color:j?'#f7ce58':'#f59e62'}),cream=new THREE.MeshLambertMaterial({color:'#fff4c9'});for(const x of [-0.105,0.105]){const m=new THREE.Mesh(new THREE.CapsuleGeometry(0.09,0.16,4,10),orange);m.position.set(x,0.62,0.16);jacket.add(m);}const back=new THREE.Mesh(new THREE.SphereGeometry(1,10,8).scale(0.2,0.18,0.05),orange);back.position.set(0,0.62,-0.1);jacket.add(back);for(const y of [0.57,0.67]){const band=new THREE.Mesh(new THREE.CapsuleGeometry(0.012,0.3,3,6).rotateZ(Math.PI/2),cream);band.position.set(0,y,0.245);jacket.add(band);}p.g.add(jacket);p.lifeJacket=jacket;return p;});}
+      area.riders.forEach((p,j)=>{p.g.visible=active;if(!active)return;animatePerson(p,state.t,0);seat(p);p.g.position.set(0,0.47-(j?0.56:0.43)*1.42,j?-0.7:0.7);p.g.rotation.y=0;p.headYaw=Math.sin(state.t*0.12+j)*0.08;p.g.updateWorldMatrix(true,true);for(const side of [0,1]){const target=area.paddles[side].localToWorld(V(side? -0.25:0.25,0,0));pointCharacterArm(p,side,target,0.85);} });
+    });
+    if(!state)return;
+    this.rowHidden??=new Map();for(const p of [...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.rowHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.rowHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}
+  }
+
   updateMarket(time){
-    const market=this.world.market,state=marketCameraReader(),active=!!this.world.marketDay&&!rainyCameraReader()&&!momentCameraReader()&&!balloonRideState()&&!trainTripReader()&&(!!state||this.marketNear);
+    const market=this.world.market,state=marketCameraReader(),active=!!this.world.marketDay&&!rowingCameraReader()&&!rainyCameraReader()&&!momentCameraReader()&&!balloonRideState()&&!trainTripReader()&&(!!state||this.marketNear);
     if(!active){if(this.marketProps){this.marketProps.balloon.visible=this.marketProps.bun.visible=false;this.marketProps.balloon.removeFromParent();}return;}if(!market)return;
     if(!this.marketProps){const balloon=new THREE.Group();balloon.name='Pavi market balloon';const mat=new THREE.MeshLambertMaterial({color:'#e5b1c3',emissive:'#e5b1c3',emissiveIntensity:0.08}),top=new THREE.Mesh(new THREE.SphereGeometry(0.2,14,10),mat);top.scale.y=1.25;top.position.y=1.95;balloon.add(top);const string=new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,1,5),new THREE.MeshLambertMaterial({color:'#e5dbc4'}));string.position.y=1.2;balloon.add(string);balloon.position.x=-0.35;this.stars.pavi.g.add(balloon);const bun=new THREE.Mesh(new THREE.CapsuleGeometry(0.12,0.12,4,12),new THREE.MeshLambertMaterial({color:'#d9b57c'}));bun.rotation.z=Math.PI/2;this.world.root.add(bun);const shoppers=Array.from({length:6},(_,i)=>{const p=makeCharacter(randomTownsfolk(i%2?'townswoman':'shopkeeper'));market.root.add(p.g);return p;});this.marketProps={balloon,bun,shoppers};}
     const props=this.marketProps,t=state?.t??time,kind=state?.kind||'wide',focus=marketFocus(kind),phase=(Math.sin(t*0.025)+1)/2;
@@ -1008,6 +1022,7 @@ export class Life {
     // Release outgoing scene ownership before the playground or the next scene snapshots it.
     if(!trainTripReader()&&this.trainHidden){this._restoreSceneStars(this.trainHidden);this.trainHidden=null;}
     if(!balloonRideState()&&this.balloonHidden){this._restoreSceneStars(this.balloonHidden);this.balloonHidden=null;}
+    if(!rowingCameraReader()&&this.rowHidden){this._restoreSceneStars(this.rowHidden);this.rowHidden=null;}
     if(!rainyCameraReader()&&this.rainHidden){this._restoreSceneStars(this.rainHidden);this.rainHidden=null;}
     this.marketNear=camera.position.x>-35&&camera.position.x<40&&camera.position.z>-75&&camera.position.z< -15;
     const wind = this.settings.wind;

@@ -4,12 +4,28 @@ import { terrainHeight, pondRadius, smoothstep } from '../world.js';
 import { makeCharacter, CAST, animatePerson, gesture } from '../characters.js';
 import { imageTexture, rng } from '../textures.js';
 
+// Shared only by the lake and cove: an open, rounded hull with quiet water friends.
+export function makeRowingBoat(world,parent,sample,keepWater){
+  const root=new THREE.Group(),boat=new THREE.Group();root.name='Little rowing boat and water friends';parent.add(root);root.add(boat);
+  const material=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}),blue=material('#91c8cc'),cream=material('#f6e4bd'),wood=material('#c69b70'),gold=material('#edc171'),ink=material('#465d65');
+  const add=(geo,mat,x,y,z,g=boat)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=m.receiveShadow=true;g.add(m);return m;};
+  add(new THREE.SphereGeometry(1,24,12,0,Math.PI*2,Math.PI/2,Math.PI/2).scale(1,0.5,2.1),blue,0,0.35,0);
+  add(new THREE.SphereGeometry(1,24,12,0,Math.PI*2,Math.PI/2,Math.PI/2).scale(0.88,0.35,1.9),cream,0,0.36,0);
+  add(new THREE.TorusGeometry(1,0.065,6,40).rotateX(Math.PI/2).scale(1,1,2.1),cream,0,0.35,0);
+  for(const z of [-0.7,0.7])add(new THREE.CapsuleGeometry(0.08,1.5,4,12).rotateZ(Math.PI/2),wood,0,0.38,z);
+  const paddles=[-1,1].map(side=>{const g=new THREE.Group();g.position.set(side*0.85,0.42,0);boat.add(g);add(new THREE.CapsuleGeometry(0.035,1.65,3,8).rotateZ(Math.PI/2),wood,side*0.55,0,0,g);add(new THREE.SphereGeometry(1,10,8).scale(0.32,0.035,0.14),cream,side*1.38,0,0,g);return g;});
+  const ducks=Array.from({length:3},()=>{const g=new THREE.Group();root.add(g);add(new THREE.SphereGeometry(0.19,10,8).scale(0.8,0.85,1.35),cream,0,0.14,0,g);add(new THREE.SphereGeometry(0.11,10,8),cream,0,0.32,0.17,g);add(new THREE.SphereGeometry(0.065,8,6).scale(1,0.45,1.4),gold,0,0.29,0.29,g);for(const x of [-0.07,0.07])add(new THREE.SphereGeometry(0.018,6,6),ink,x,0.34,0.25,g);return g;});
+  const fish=Array.from({length:3},(_,i)=>{const g=new THREE.Group();root.add(g);add(new THREE.SphereGeometry(0.12,10,8).scale(0.7,0.7,1.8),i%2?gold:blue,0,0,0,g);add(new THREE.SphereGeometry(0.08,8,6).scale(1.5,0.5,1),cream,0,0,-0.21,g);return g;});
+  const api={root,boat,paddles,ducks,fish,sample,update(t){const p=sample(t);boat.position.copy(p.pos);boat.rotation.set(0,p.yaw,Math.sin(t*0.45)*0.012);paddles.forEach((g,i)=>{g.rotation.y=Math.sin(t*0.85)*0.23;g.rotation.z=(i?1:-1)*(0.12+Math.cos(t*0.85)*0.1);});ducks.forEach((g,i)=>{const q=sample(t-9-i*5);g.position.copy(q.pos);g.position.x+=(i-1)*0.4;keepWater(g.position);g.position.y=p.pos.y-0.12;g.rotation.y=q.yaw;});fish.forEach((g,i)=>{const q=sample(t+12+i*7),u=((t+i*8)%25+25)%25;g.visible=u<1.8;g.position.copy(q.pos);g.position.x+=1.8;keepWater(g.position);g.position.y=p.pos.y-0.1+Math.sin(Math.min(1,u/1.8)*Math.PI)*0.22;g.rotation.set(Math.cos(u/1.8*Math.PI)*0.35,q.yaw,0);});}};
+  api.update(0);return api;
+}
 export const MEADOW={x:-225,z:0}, LAKE={x:-240,z:-18,rx:12,rz:8.5};
 export async function buildMeadowLake(world) {
   const root=new THREE.Group();root.name='Dreamland meadow and lake';world.root.add(root);
   const pad=world.registerAreaPad({...MEADOW,hx:46,hz:32,blend:18}),y=pad.y;
   const floor={cx:-227,cz:-18,ax:1,az:0,bx:0,bz:1,hx:5,hz:1.1,y:y+0.2};
   const lake=world.registerWaterArea({...LAKE,y:y-0.25,depth:2.2},[floor]);world.updateTerrain();
+  world.meadowBoat=makeRowingBoat(world,root,t=>{const a=t/240*Math.PI*2;return {pos:new THREE.Vector3(lake.x+Math.sin(a)*3.8,lake.y+0.15,lake.z+4.5+Math.cos(a)*1.4),yaw:Math.atan2(3.8*Math.cos(a),-1.4*Math.sin(a))};},p=>{const dx=(p.x-lake.x)/lake.rx,dz=(p.z-lake.z)/lake.rz,r=Math.hypot(dx,dz);if(r>0.85){p.x=lake.x+dx/r*lake.rx*0.85;p.z=lake.z+dz/r*lake.rz*0.85;}});
   const names=['flowers_blue','flowers_purple','flowers_pink','flowers_yellow','bush','grass','tree_blossom','tree_wisteria'];
   const imgs=Object.fromEntries(await Promise.all([...names,'meadow'].map(name=>new Promise(resolve=>{const img=new Image();img.onload=()=>resolve([name,img]);img.onerror=()=>resolve([name,null]);img.src=name==='meadow'?'assets/textures/dream/meadow.png':`assets/foliage/dream/${name}.png`;}))));
   const r=rng(471),v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide});

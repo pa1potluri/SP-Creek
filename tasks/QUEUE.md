@@ -44,7 +44,7 @@ finished. Re-read this file each time; Claude may change it.
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | paused until Thu Oct 29; stopped after task 30 per user |
-| 32 | `tasks/finish-wip.md` | `area/finish-wip` | queued: branch from area/performance (tip) |
+| 32 | `tasks/finish-wip.md` | `area/finish-wip` | WIP: camping/listener wiring and Episode presets built; continuous cove take 65 appended; smoke running |
 | 33 | `tasks/self-review-1.md` | `area/self-review-1` | queued |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | queued |
 | 35 | `tasks/market-day.md` | `area/market-day` | queued |

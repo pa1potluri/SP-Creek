@@ -12,6 +12,7 @@ import { STYLES } from './styles.js';
 import { Seasons } from './seasons.js';
 import { buildSunsetCove } from './areas/sunset-cove.js';
 import { buildPlayground } from './areas/playground.js';
+import { buildCamping } from './areas/camping.js';
 import * as T from './textures.js';
 import { Director } from './camera.js';
 import { AudioEngine } from './audio.js';
@@ -84,6 +85,7 @@ const meadowLake = await buildMeadowLake(world);
 const crystalMine = buildCrystalMine(world);
 const sunsetCove=await buildSunsetCove(world,life);
 const playground=buildPlayground(world,life);
+const camping=buildCamping(world);
 const seasons=new Seasons(world,atmos,{forest,meadowLake});
 function setSeason(key,save=false){seasons.set(key);$('#season').value=seasons.key;if(save)LS.set('dh.season',seasons.key);}
 $('#season').onchange=()=>setSeason($('#season').value,true);
@@ -978,11 +980,12 @@ function listener() {
     inside = Math.abs(_v.x) < cafeIt.hx && _v.z < 0 && _v.z > -cafeIt.depth && _v.y < 3.8;
   }
   const c = atmos.cur, t = life.train;
+  const trainPos=t&&t.state!=='away'?t.cars[0].g.getWorldPosition(_v):null;
   return {
     x: p.x, z: p.z, rx: e[0], rz: e[2], inside, riverZ: riverZ(p.x),
     cafe: cafePos && { x: cafePos.x, z: cafePos.z },
     night: c.stars, day: 1 - c.stars, rain: world.rainAmount ?? THREE.MathUtils.clamp(c.rain + atmos.mult.rain, 0, 1),
-    train: t && t.state !== 'away' ? { x: RAIL_X, z: t.s, v: t.v, state: t.state, approaching: t.state === 'run' && !t.stopped } : null,
+    train: trainPos ? { x: trainPos.x, z: trainPos.z, v: t.v, state: t.state, approaching: t.state === 'run' && !t.stopped } : null,
   };
 }
 
@@ -1006,6 +1009,7 @@ function step(dt) {
   life.update(dt, time, camera);
   sunsetCove.update(time,camera,atmos.cur);
   playground.update(time,camera);
+  camping.update(time,camera,atmos.cur);
   cafe.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
   audio.tick(listener(), dt);

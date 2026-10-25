@@ -7,3 +7,5 @@
 - Left: focused shader/UI/project/static-frame checks, inspect Cove comparisons, full suite once on final code, result/counts/QUEUE completion commit. Stop after task 31. Never merge or push.
 
 - Focused smoke: **25 passed**, no browser errors; six original style definitions unchanged and all five original Look modes render byte-identical fixed-input pixels. Preview controls/project round-trip and preset exclusion pass; sound locked. Frozen-frame Cove day/night comparison captures underway; full suite and final visual review remain.
+
+- First Cove comparison: pastel/paper look works, but the old WIP over-softened and doubled character outlines. Reduced only the new style brush radius/strength and removed its wobble; wash weights now respect strong colour/depth boundaries. Final refreshed comparisons and static-frame check next, then full suite.

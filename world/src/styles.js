@@ -36,7 +36,7 @@ export const STYLES = {
   },
   watercolor: {
     label: 'Watercolour (preview)', textures: 'clean', plants: 'painted',
-    paint: { radius: 3, strength: 0.6, wobble: 0.15, boil: 0, impasto: 0, canvas: 0, sat: 0.9, warmth: 0.02, contrast: 0.94, vignette: 0.08, grain: 0 },
+    paint: { radius: 2, strength: 0.35, wobble: 0, boil: 0, impasto: 0, canvas: 0, sat: 0.9, warmth: 0.02, contrast: 0.94, vignette: 0.08, grain: 0 },
     look: { mode: 5, wash: 0.65, pigment: 0.45, paper: 0.55 }, fxaa: true, weave: 0,
   },
 };

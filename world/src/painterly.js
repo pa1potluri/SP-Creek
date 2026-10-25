@@ -144,16 +144,21 @@ export const LookShader = {
         vec2 paperPos = uv * uRes / max(k, 1.0);
         vec2 bleed = vec2(noise(paperPos * 0.035), noise(paperPos * 0.035 + 23.0)) - 0.5;
         vec2 washUV = uv + bleed * px * max(k, 1.0) * uWash * 1.4;
-        vec3 wash = texture2D(tDiffuse, washUV).rgb;
+        vec3 source = texture2D(tDiffuse, washUV).rgb, wash = source;
+        float washWeight = 1.0, centerDepth = dist(washUV);
         float colorEdge = 0.0;
         for (int i = 0; i < 12; i++) {
           float a = float(i) * 2.39996;
           vec2 offset = vec2(cos(a), sin(a)) * (1.0 + float(i) / 12.0) * (1.0 + uWash * 3.0) * max(k, 1.0) * px;
           vec3 neighbour = texture2D(tDiffuse, washUV + offset).rgb;
-          wash += neighbour;
+          // Let pigment bleed inside a wash without doubling faces across silhouettes.
+          vec3 delta = neighbour - source;
+          float weight = exp(-dot(delta, delta) * 8.0 - abs(dist(washUV + offset) - centerDepth) / max(centerDepth, 1.0) * 12.0);
+          wash += neighbour * weight;
+          washWeight += weight;
           colorEdge = max(colorEdge, length(c - neighbour));
         }
-        wash /= 13.0;
+        wash /= washWeight;
         c = mix(c, wash, uWash * 0.7);
         c = mix(c, poster(c, 18.0), 0.18);
         float light = dot(c, vec3(0.299, 0.587, 0.114));

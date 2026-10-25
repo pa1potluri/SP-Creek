@@ -43,7 +43,7 @@ export function buildForest(world) {
   const low={geometry:world.treeGeos[3],material:world.mat.foliage,castShadow:true};instances(low,spots,world.lowPoly[0]);
   instances(world.blocky[3]||world.blocky[0],spots,world.blocky[0]);
   for(let i=0;i<34;i++){
-    const a=r()*Math.PI*2,d=6+r()*23,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=world.groundY(x,z);
+    const a=r()*Math.PI*2,d=6+r()*23,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=world.groundFootY(x,z,1);
     const rock=new THREE.DodecahedronGeometry(0.7+r()*0.5,0).scale(1.5,0.5,1);solid(rock,moss,x,h+0.2,z);
     for(let k=0;k<5;k++){const angle=k*1.257;solid(new THREE.SphereGeometry(0.25,6,4).scale(0.4,0.17,2.1),moss,x+Math.cos(angle)*0.4,h+0.15,z+Math.sin(angle)*0.4,root,[0,-angle,0.25]);}
   }
@@ -102,7 +102,7 @@ export function buildForest(world) {
   for(const {parent,mat,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),mat);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}
   root.updateMatrixWorld(true);let groundRevision=-1;const groundMatrix=new THREE.Matrix4();
   return {root,pad,owls,rabbit,deer,fireflies,variants,trail,update(t,camera,atmos){
-    if(groundRevision!==world.terrainRevision){for(const {im}of variants){for(let i=0;i<im.count;i++){im.getMatrixAt(i,groundMatrix);groundMatrix.elements[13]=world.groundY(groundMatrix.elements[12],groundMatrix.elements[14])-0.1;im.setMatrixAt(i,groundMatrix);}im.instanceMatrix.needsUpdate=true;im.computeBoundingSphere();}groundRevision=world.terrainRevision;}
+    if(groundRevision!==world.terrainRevision){for(const {im}of variants){for(let i=0;i<im.count;i++){im.getMatrixAt(i,groundMatrix);groundMatrix.elements[13]=world.groundFootY(groundMatrix.elements[12],groundMatrix.elements[14],0.65*groundMatrix.getMaxScaleOnAxis())-0.15;im.setMatrixAt(i,groundMatrix);}im.instanceMatrix.needsUpdate=true;im.computeBoundingSphere();}groundRevision=world.terrainRevision;}
     const night=Math.max(atmos.stars,world.lanternLevel*0.8),day=1-smoothstep(0.2,0.75,night);
     variants.forEach(({im,source})=>im.visible=source.visible);
     glows.forEach(mat=>mat.emissiveIntensity=0.1+night*0.9);fireflies.material.opacity=night*0.8;

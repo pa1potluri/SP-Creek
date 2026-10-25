@@ -142,6 +142,10 @@ function resize(fw, fh) {
   } else if (outputSize === 'window') {
     w = Math.max(2, innerWidth);
     h = Math.max(2, innerHeight);
+    // Review at a bounded pixel count; explicit video/export sizes remain exact.
+    const previewScale = Math.min(1, 1600 / w, 900 / h);
+    w = Math.max(2, Math.round(w * previewScale));
+    h = Math.max(2, Math.round(h * previewScale));
     Object.assign(canvas.style, { width: '100vw', height: '100vh', left: '0px', top: '0px' });
   } else {
     [w, h] = outputSize === '1080p' ? [1920, 1080] : [1280, 720];

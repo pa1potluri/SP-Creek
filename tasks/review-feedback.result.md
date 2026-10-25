@@ -35,3 +35,10 @@
 - Four synthetic ready-made preset selections (Dreamy meadow, Firefly forest, Golden afternoon, Dreamy meadow): handlers 2.9 / 2.2 / 37.8 / 2.2ms. Each subsequent two-second frame sample produced 121-122 frames; largest frame gap 33.4ms. No actual intermittent freeze reproduced at 720p. Browser closed after each diagnostic run; no audio unlocked.
 - User screenshot shows a substantially larger preview. Rendering cost at that size, real user's persisted state, GPU/browser state and longer sequences remain unmeasured. Do not claim the freeze fixed or blame its playback timer.
 - No app code changed in this diagnostic pass; no new full-suite run or screenshots. Next: optimise repeated terrain pad work with equivalent-height checks, then measure at the user's viewport and longer preset switching. Remains WIP.
+
+## Performance follow-up saved on area/preview-performance
+- Terrain pad indexing cuts the observed readiness time from 21.558s to 8.215s. Terrain/plant buffers matched exactly before separate root-footprint adjustments.
+- Reuses unchanged surface material programs; bounds Fit-window review to 1600x900 while keeping explicit output/export dimensions exact.
+- Downhill root-footprint sampling improves anchoring; remaining steep-bank tree-card silhouettes logged in STUCK. Actual persistent user-session hang remains unresolved.
+- Full suite **2001 + 2 passed**, 31 suites, no browser errors; eight updated Film day/night screenshots. See tasks/preview-performance.result.md and world/tests/preview-performance-full.txt.
+- WIP saved; user requested shutdown after this pass. Resume with remaining visual/GPU-session diagnosis and next-sign-in startup verification; do not rerun completed checks without new changes.

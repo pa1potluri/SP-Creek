@@ -88,6 +88,28 @@ export const RANCH = { x: -95, z: -55, r: 32, blend: 30 };
 export const CAMP = { x: -62, z: -172, r: 16, blend: 26 };
 const PADS = [RANCH, CAMP];
 const userPads = [];
+const padCells = new Map(), emptyPads = [], padCellSize = 32;
+let indexedPadCount = -1;
+function rebuildPadCells() {
+  padCells.clear();
+  // Keep insertion order: overlapping pads blend in their original order.
+  for (const p of userPads) {
+    const reach = Math.max(p.hx + p.hz + Math.max(1, p.blend || 8) * Math.SQRT2,
+      p.basin ? Math.max(p.rx, p.rz) * 1.8 : 0);
+    for (let x = Math.floor((p.x-reach)/padCellSize); x <= Math.floor((p.x+reach)/padCellSize); x++) {
+      for (let z = Math.floor((p.z-reach)/padCellSize); z <= Math.floor((p.z+reach)/padCellSize); z++) {
+        const key = `${x},${z}`;
+        if (!padCells.has(key)) padCells.set(key, []);
+        padCells.get(key).push(p);
+      }
+    }
+  }
+  indexedPadCount = userPads.length;
+}
+function nearbyPads(x, z) {
+  if (indexedPadCount !== userPads.length) rebuildPadCells();
+  return padCells.get(`${Math.floor(x/padCellSize)},${Math.floor(z/padCellSize)}`) || emptyPads;
+}
 const userFloors = [];
 let pondPad = null;
 export function pondRadius(x, z, p = HAMLET.pond) {
@@ -103,7 +125,7 @@ function applyPond(h, x, z) {
   return h + (bowl - h) * (1 - smoothstep(1.02,1.6,r));
 }
 function applyUserPads(h, x, z) {
-  for (const p of userPads) {
+  for (const p of nearbyPads(x, z)) {
     if(p.clearOnly)continue;
     if (p.basin) {
       if (Math.abs(x-p.x)>p.rx*1.8 || Math.abs(z-p.z)>p.rz*1.8) continue;
@@ -468,6 +490,7 @@ export class World {
     this.textureSet = set;
     if (this.waterUniforms) this.waterUniforms.uWaterDetail.value = set === 'flat' ? 0.35 : 1;
     for (const m of this.surfaces) {
+      const oldMap = m.map, oldEmissiveMap = m.emissiveMap;
       const u = m.userData;
       u.base ??= { map: m.map, emissiveMap: m.emissiveMap, color: m.color.clone() };
       const entry = u.sets?.[set] ?? (set === 'flat' && !u.keepMap ? 'none' : u.sets?.oil ?? u.sets?.clean ?? null);
@@ -482,7 +505,7 @@ export class World {
         m.map = u.base.map;
         m.emissiveMap = u.base.emissiveMap;
       }
-      m.needsUpdate = true;
+      if (m.map !== oldMap || m.emissiveMap !== oldEmissiveMap) m.needsUpdate = true;
     }
   }
 
@@ -1283,6 +1306,7 @@ export class World {
     buckets.forEach((list, i) => {
       if (!list.length) return;
       const im = new THREE.InstancedMesh(this.treeGeos[i], this.mat.foliage, list.length);
+      im.userData.rootRadius = 0.4;
       list.forEach((m, k) => im.setMatrixAt(k, m));
       im.castShadow = im.receiveShadow = true;
       im.computeBoundingSphere();
@@ -1386,6 +1410,7 @@ export class World {
         const mat = new THREE.MeshLambertMaterial({ map: tex, alphaTest: 0.5, side: THREE.DoubleSide });
         this._sway(mat, height, sway);
         const im = new THREE.InstancedMesh(crossedPlanes((height * img.width) / img.height, height), mat, list.length);
+        if (name === 'pine' || name === 'cottonwood') im.userData.rootRadius = 0.65;
         list.forEach(([x, y, z, sc], i) => {
           q.setFromAxisAngle(up, r() * 6.28);
           s.setScalar(sc);
@@ -1438,6 +1463,7 @@ export class World {
     spots.trees.forEach((list, i) => {
       if (!list.length) return;
       const im = new THREE.InstancedMesh(kinds[i], mat, list.length);
+      im.userData.rootRadius = 0.45;
       list.forEach((m, k) => im.setMatrixAt(k, m));
       im.castShadow = im.receiveShadow = true;
       im.computeBoundingSphere();
@@ -1648,6 +1674,16 @@ export class World {
     }
     if (type === 'bench') batchRigidParts(g);
     return g;
+  }
+
+  groundFootY(x,z,radius=0) {
+    let y = this.groundY(x,z);
+    // Bury the downhill edge of a trunk instead of balancing it on its centre.
+    if (radius > 0) for (let i=0;i<8;i++) {
+      const a=i*Math.PI/4;
+      y=Math.min(y,this.groundY(x+Math.cos(a)*radius,z+Math.sin(a)*radius));
+    }
+    return y;
   }
 
   groundY(x,z) {
@@ -2057,6 +2093,8 @@ export class World {
   }
 
   updateTerrain() {
+    // Also refresh same-count edits and railway pad reordering.
+    rebuildPadCells();
     this.terrainRevision = (this.terrainRevision || 0) + 1;
     this.endBuildReplay();
     const pos = this.ground.geometry.attributes.position;
@@ -2080,10 +2118,11 @@ export class World {
       for (let i = 0; i < m.count; i++) {
         matrix.fromArray(matrices, i * 16);
         const x = matrix.elements[12], z = matrix.elements[14];
-        const hidden = userPads.some((p) => withinPad(p, x, z, 1)) || this._insideFence(x, z) || this.inPond(x,z,2.5);
+        const hidden = nearbyPads(x,z).some((p) => withinPad(p, x, z, 1)) || this._insideFence(x, z) || this.inPond(x,z,2.5);
         // Keep the original vertical offset (flower heads, buried tree roots).
         const base = matrix.elements[13];
-        matrix.elements[13] = base + this.groundY(x,z) - heights[i];
+        const radius = (m.userData.rootRadius || 0) * matrix.getMaxScaleOnAxis();
+        matrix.elements[13] = base + this.groundFootY(x,z,radius) - heights[i];
         if (hidden) matrix.scale(V(0, 0, 0));
         m.setMatrixAt(i, matrix);
       }
@@ -2091,10 +2130,10 @@ export class World {
       m.computeBoundingSphere();
     }
     this.colliders.circles = this.colliders.circles.filter((c) => !this.plantColliders.has(c));
-    for (const c of this.plantColliders) if (!userPads.some((p) => withinPad(p, c.x, c.z, 1)) && !this._insideFence(c.x, c.z) && !this.inPond(c.x,c.z,2.5)) this.colliders.circles.push(c);
+    for (const c of this.plantColliders) if (!nearbyPads(c.x,c.z).some((p) => withinPad(p, c.x, c.z, 1)) && !this._insideFence(c.x, c.z) && !this.inPond(c.x,c.z,2.5)) this.colliders.circles.push(c);
     for (const e of this.props) {
       e.obj.position.y = this.surfaceY(e.x, e.z);
-      e.obj.visible = !userPads.some((p) => withinPad(p, e.x, e.z, 0)) && !this.inPond(e.x,e.z);
+      e.obj.visible = !nearbyPads(e.x,e.z).some((p) => withinPad(p, e.x, e.z, 0)) && !this.inPond(e.x,e.z);
       e.obj.updateMatrixWorld(true);
       for (const seat of e.seats || []) seat.y = e.obj.position.y + 0.45;
       for (const emitter of e.emitters) if (emitter.local) emitter.pos.copy(e.obj.localToWorld(emitter.local.clone()));
@@ -2102,7 +2141,7 @@ export class World {
     }
     for (const m of this.billboards) {
       m.position.y = this.surfaceY(m.position.x, m.position.z);
-      m.visible = !userPads.some((p) => withinPad(p, m.position.x, m.position.z, 0)) && !this.inPond(m.position.x,m.position.z);
+      m.visible = !nearbyPads(m.position.x,m.position.z).some((p) => withinPad(p, m.position.x, m.position.z, 0)) && !this.inPond(m.position.x,m.position.z);
     }
     for (const e of [...this.roads, ...(this.hamlet?.roads || [])]) {
       this.root.remove(e.obj); e.obj.geometry.dispose();

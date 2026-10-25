@@ -6,8 +6,9 @@ export async function runStartupHangTests() {
   const source = await (await fetch('/src/world.js')).text();
   const start = source.indexOf('function applyUserPads('), end = source.indexOf('// Flat valley floor', start);
   const compile = text => new Function('userPads', 'smoothstep', 'pondRadius', text + '; return applyUserPads;');
-  const actual = compile(source.slice(start, end));
-  const reference = compile(source.slice(start, end).replace(/    const reach =[^\n]+\n    if \(Math.abs\(x - p.x\)[^\n]+\n/, ''));
+  const grid = source.slice(source.indexOf('const padCells'), source.indexOf('const userFloors'));
+  const actual = compile(grid + source.slice(start, end));
+  const reference = compile(source.slice(start, end).replace('nearbyPads(x, z)', 'userPads').replace(/    const reach =[^\n]+\n    if \(Math.abs\(x - p.x\)[^\n]+\n/, ''));
   const smoothstep = (lo, hi, v) => { const t = Math.max(0, Math.min(1, (v - lo) / (hi - lo))); return t * t * (3 - 2 * t); };
   const pads = [a.world.hamlet.pad, ...a.world.areaPads];
   const fast = actual(pads, smoothstep, pondRadius), slow = reference(pads, smoothstep, pondRadius);
@@ -17,6 +18,12 @@ export async function runStartupHangTests() {
     if (fast(7, x, z) !== slow(7, x, z)) equal = false;
   }
   check(equal, 'Distant pad rejection preserves terrain exactly at 1800 points');
+  const edits = [{x:0,z:0,hx:4,hz:5,y:2,blend:3,yaw:0}], indexed = actual(edits,smoothstep,pondRadius);
+  indexed(0,0,0);
+  edits.push({x:64,z:-32,hx:6,hz:3,y:8,blend:4,yaw:0.7});
+  check(indexed(0,64,-32) === reference(edits,smoothstep,pondRadius)(0,64,-32), 'Adding a distant pad refreshes spatial lookup');
+  edits.pop();
+  check(indexed(0,64,-32) === 0, 'Removing a pad clears its cached region');
   const contains = new Function(source.slice(source.indexOf('const padRotations'), end) + '; return { withinPad, padDistance };')();
   let boundaries = true;
   for (const p of pads) for (const margin of [0, 1, 5]) for (const sign of [-1, 1]) {

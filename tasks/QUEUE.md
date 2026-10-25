@@ -58,7 +58,7 @@ finished. Re-read this file each time; Claude may change it.
 | 43 | `tasks/BIG-QUEUE-40-47.md` (contributing) | `area/contributing` | done; contribution guide + 10 draft ideas; links checked; full 1787 + 2; day/night baseline saved |
 | 44 | `tasks/BIG-QUEUE-40-47.md` (snow-day) | `area/snow-day` | done; four scenes 82-85 + 240s preset; full 1822 + 2; snow checks 31; eight day/night + Oil previews |
 | 45 | `tasks/BIG-QUEUE-40-47.md` (kite-picnic) | `area/kite-picnic` | done; six views 86-91 + two 240s presets; full 1861 + 2; outing checks 33; 12 day/night + Oil previews |
-| 46 | `tasks/BIG-QUEUE-40-47.md` (episode-presets-3) | `area/episode-presets-3` | WIP; Episodes 10-13 and wide views 92-95 built; smoke 35 + clearance passed; full suite/captures running |
+| 46 | `tasks/BIG-QUEUE-40-47.md` (episode-presets-3) | `area/episode-presets-3` | done; Episodes 10-13 at 180s + wide views 92-95; full 1900 + 2; episode checks 35; day/night + Oil saved; inherited cove band open |
 | 47 | `tasks/BIG-QUEUE-40-47.md` (self-review-3) | `area/self-review-3` | queued |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |

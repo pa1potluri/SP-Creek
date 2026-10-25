@@ -6,5 +6,6 @@
 - Original Pavi/Siri visit the balloon stall, keep a pastel balloon and share a bun. Pure-time scene poses, cleanup when disabled; removable props preserve original models/textures.
 - Appended views 69-71 and five-minute preset, wide start/end. New viewpoints stay near the cafe's existing quiet piano ambience, reused for a calm tune after the user enables sound. No new audio context or score/source; existing live/offline mix is retained.
 - Smoke: **40 passed**, errors [], audio locked. Verified switch/physics cleanup, duplicate prevention, six shoppers, original protagonists, bun/balloon staging, seeks, project and Build round-trips, all six styles and preset playback. Maximum new-view distance to the existing cafe piano source: 33.357m (inside its 55m audible range).
-- Day/night previews 69-71 saving. Pending inspection, full suite once, final result/QUEUE commit; then task 36.
+- Six Animated film previews 69-71 saved and inspected: clear stalls/balloon/bun, soft night lanterns and friendly pianist. No browser errors.
+- Full 22-suite run underway. Pending final counts and result/QUEUE commit; then task 36.
 - No merge, push or publication.

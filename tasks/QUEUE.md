@@ -43,11 +43,11 @@ finished. Re-read this file each time; Claude may change it.
 | 28a | `tasks/startup-hang.md` | `area/startup-hang` | done; server launcher + terrain startup fix; full 1446 + 2 passed; queue chat continues from here |
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
-| 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | paused until Thu Oct 29; stopped after task 30 per user |
+| 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | paused until Thu Oct 29; continue tasks 32-39 first |
 | 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
 | 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | done; SELF-REVIEW-1 report + day/night/oil and Play captures; visibility handoff fixed; full 1464 + 2 passed |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | done; full 1493 + 2 passed; rainy suite 26; six day/night previews 66-68 |
-| 35 | `tasks/market-day.md` | `area/market-day` | WIP: stalls, switch, Build pieces, shoppers/pianist, sibling moments and views 69-71 built; smoke running |
+| 35 | `tasks/market-day.md` | `area/market-day` | WIP: all market features saved; smoke 40 passed, six day/night previews; full 22-suite run underway |
 | 36 | `tasks/boat-trip.md` | `area/boat-trip` | queued |
 | 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | queued |
 | 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | queued |

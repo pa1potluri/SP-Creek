@@ -29,5 +29,24 @@ export async function runReviewFeedbackTests(){
   output.value='1080p';output.dispatchEvent(new Event('change'));
   check(canvas.width===1920&&canvas.height===1080,'Explicit 1080p output keeps exact dimensions');
  } finally {output.value=oldOutput;output.dispatchEvent(new Event('change'));}
+ const walker=a.life.hamletWalkers[0],saved={state:walker.state,seat:walker.seat,wait:walker.wait};
+ try {
+  for(const state of ['toSeat','sitDown','sit','getUp']) {
+   const bench={x:walker.pos.x,z:walker.pos.z,y:walker.pos.y+0.5,yaw:0,who:walker};
+   walker.state=state;walker.seat=bench;walker.leaveSeat();
+   check(walker.seat===null&&bench.who===null,'Inactive '+state+' walker releases its bench');
+   check(walker.state==='wait'&&walker.wait>0,'Inactive '+state+' walker cancels seating before reactivation');
+   walker.update(0,0);check(walker.pos.toArray().every(Number.isFinite),'Reactivated '+state+' walker updates without a null-seat crash');
+  }
+ } finally {Object.assign(walker,saved);}
+ const kid=a.life.townKids[0],oldPeople=a.life.settings.people,oldFamily=a.life.familyMode,kidState={state:kid.state,seat:kid.seat,wait:kid.wait};
+ try {
+  a.life.familyMode=true;
+  const bench={x:kid.pos.x,z:kid.pos.z,y:kid.pos.y+0.5,yaw:0,who:kid};
+  kid.state='sit';kid.seat=bench;a.life.settings.people=0;a.life.update(0,0,a.camera);
+  check(kid.seat===null&&kid.state==='wait','Hiding town children cancels an occupied bench state');
+  a.life.settings.people=4;a.life.update(0,0,a.camera);
+  check(kid.p.g.visible&&kid.pos.toArray().every(Number.isFinite),'Reactivating town children keeps the complete Life update running');
+ } finally {a.life.settings.people=oldPeople;a.life.familyMode=oldFamily;Object.assign(kid,kidState);a.life.update(0,0,a.camera);}
  return {passed:results.length,maxTerrainError:maxError,maxRootGap:maxGap,maxNativeHeightError:nativeError,results};
 }

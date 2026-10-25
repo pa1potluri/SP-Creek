@@ -1,0 +1,13 @@
+diff --git a/world/src/life.js b/world/src/life.js
+--- a/world/src/life.js
++++ b/world/src/life.js
+@@ -471,6 +471,10 @@
+   leaveSeat() {
+     if (this.seat) this.seat.who = null;
+     this.seat = null;
++    if (['toSeat', 'sitDown', 'sit', 'getUp'].includes(this.state)) {
++      this.state = 'wait';
++      this.wait = 0.3;
++    }
+   }
+   endChat() {

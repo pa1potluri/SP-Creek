@@ -8,13 +8,24 @@ body{margin:0;background:#f5f0e7;color:#35433f;font:17px/1.55 system-ui,sans-ser
 </style>
 <main>
 <h1>SP Creek — saved review</h1>
-<p class="note"><strong>Current preview includes WIP feedback fixes on area/review-feedback.</strong> Targeted checks: 108 passed. Full-suite verification of these changes is still pending; the 1900 + 2 results below apply to the prior reviewed checkpoint.</p>
+<p class="note"><strong>Current preview includes WIP feedback fixes on area/preview-performance.</strong> Previous full suite: 2001 checks + 2 startup reload checks passed across 31 suites. A reproduced bench-state freeze has a new fix undergoing verification. Steep forest tree silhouettes remain open.</p>
 <p>Foundation-stage previews from tasks 31 and 40–47. These are working previews; the final reference-art pass remains ahead.</p>
 <p><a class="button" href="../index.html">Open the 3D world</a></p>
 <p>In the world, open <strong>Ready-made videos</strong> for Snow day, Kite day, Picnic by the waterfall and Episodes 10–13. Watercolour is an optional preview in the art-style selector.</p>
 <section>
+<h2>Current preview fixes</h2>
+<p>Observed startup improved from about 22 seconds to 8 seconds in the earlier diagnostic session. Fit-window review uses up to 1600 × 900 pixels; explicit video sizes remain unchanged. Automatic preview startup has now been verified after a Windows restart.</p>
+<p><a href="preview-performance-full.txt">Current full-suite log</a> · <a href="preview-performance-profile.txt">Startup and menu measurements</a> · <a href="preview-switching.json">Longer switching diagnostic</a></p>
+<ul>
+<li>Forest camp: <a href="review-feedback-15-day.png">day</a> / <a href="review-feedback-15-night.png">night</a></li>
+<li>Forest trail (steep tree silhouettes still need work): <a href="review-feedback-26-day.png">day</a> / <a href="review-feedback-26-night.png">night</a></li>
+<li>Firefly tour: <a href="review-feedback-31-day.png">day</a> / <a href="review-feedback-31-night.png">night</a></li>
+<li>Clearer deer view: <a href="review-feedback-35-day.png">day</a> / <a href="review-feedback-35-night.png">night</a></li>
+</ul>
+</section>
+<section>
 <h2>Verification snapshot</h2>
-<p>Latest full suite: <strong>1900 checks + 2 startup reload checks passed</strong>, across 30 suites. The reviewed app checkpoint is <code>2fd7bcc</code>. No new app changes were made for this page.</p>
+<p>Earlier task 47 review: <strong>1900 checks + 2 startup reload checks passed</strong>, across 30 suites at app checkpoint <code>2fd7bcc</code>. The contact sheets below belong to that earlier review; current feedback captures are linked above.</p>
 <p>Normal and no-model static versions each passed 132 day/night poses and 14 short dry walking checks. All 96 camera views passed clearance.</p>
 <p><a href="self-review-3-full.json">Full-suite counts</a> · <a href="self-review-3-check.json">Normal-world review evidence</a> · <a href="self-review-3-public.json">Static fallback evidence</a></p>
 </section>

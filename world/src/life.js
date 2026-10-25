@@ -471,6 +471,10 @@ class Walker {
   leaveSeat() {
     if (this.seat) this.seat.who = null;
     this.seat = null;
+    if (['toSeat', 'sitDown', 'sit', 'getUp'].includes(this.state)) {
+      this.state = 'wait';
+      this.wait = 0.3;
+    }
   }
   endChat() {
     const c = this.chat;

@@ -23,3 +23,15 @@
 - Task remains **WIP / partial fix** because steep forest tree-card silhouettes remain unconvincing and the indefinite user-session hang is not conclusively resolved. No new content is pending from Claude's completed 41–47 batch; task 40's navy cove band and review 47's wide picnic prop readability remain documented in STUCK.md.
 - Exact next steps: inspect remaining root/card geometry on Forest Trail 26; if review still hangs, capture the actual Chrome GPU/context state and longer switching at the user's persisted settings. Avoid repeating speculative changes. Verify login auto-start at next sign-in.
 - User explicitly requested save-all and normal Windows shutdown after finishing this pass. Startup shortcut verified present; shutdown will not force-close unsaved applications. No push or merge.
+
+## Reproduced render-loop freeze / scope request
+- Longer 48-preset switching exposed repeated `Cannot read properties of null (reading x)` exceptions. Exact stack: Walker.update life.js:505 -> Life.update life.js:1099 -> main.js step/frame. First captured during preset index 24, Pavi & Siri: a little day, after switching through Balloon ride / Lets build.
+- Cause: Life.update's inactive walker path calls leaveSeat(), which clears `seat` while preserving a seating state. When activated later, Walker.update dereferences the now-null seat. Scheduled animation frames continue, but step throws before rendering, freezing the picture. No WebGL context loss was observed.
+- Concrete proposed fix: cancel `toSeat`, `sitDown`, `sit`, `getUp` to a short `wait` state whenever leaveSeat() clears the seat. Reviewable patch: tasks/preview-seat-reset.patch. No life.js edit has been applied.
+- Scope request under AGENTS.md rule 3: add world/src/life.js (leaveSeat state cancellation only) to this task. Current task scope lists main.js/world.js/forest.js and tests, but omits life.js. Need scope approval before applying this patch. Then add regression coverage for inactive/re-activated seated walkers, repeat switching, full suite and affected screenshots before completion.
+
+## Approved fix and verification in progress
+- User explicitly approved the life.js scope extension. Applied the four-line cancellation of pending/seated states in Walker.leaveSeat().
+- New regression checks exercise toSeat/sitDown/sit/getUp release/reactivation and the real Life.update hidden-town-child -> visible-town-child transition.
+- One full attempt reached the integration regression but it assumed family mode was enabled by earlier suites; corrected that test's setup/restore. This was a test precondition, not an additional production edit.
+- Production targeted pass: feedback 113 + area-shots 7 + startup-hang 7 = 127 passed; no browser errors; sound locked. Refreshed Film day/night views 0,15,26,31,35,46. Full suite rerun in progress, then repeat all 48 presets twice. Before-fix stack and failed switch sequence preserved in preview-switching-before.json.

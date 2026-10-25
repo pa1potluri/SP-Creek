@@ -1,10 +1,10 @@
-# Self-review 2 - WIP
+# Self-review 2 - complete
 
-- Branch area/self-review-2 from episode completion 884d1a3. Rules, queue, blueprint and both review task instructions read. Original task saved as self-review-2.task.md to avoid the Windows case collision with requested SELF-REVIEW-2.md report.
-- Scoped review corrections: inactive rain umbrellas/boots now detach from their owners so hidden props cannot enlarge original model bounds; reattach when the scene returns. Garden actors cross between beds over a smooth 14-second walk instead of jumping ten metres at 45 seconds; watering starts after arrival.
-- Added owner/bounds regressions and a garden movement continuity check. Original models, textures, camera numbers and presets unchanged.
-- Left: focused checks, day/night/oil and short Play walks for tasks 34-38, full suite once on final code, report/result/QUEUE completion commit. Then stop; task 31 remains paused until Thu Oct 29. No merge/push/publication.
-
-- Focused regressions: **rain 28 + garden 41 = 69 passed**, browser errors []. Maximum garden actor movement over one-second samples: 1.064m. Review capture completed: **128 camera poses**, **14 dry finite Play walks**, **32 day/night/oil and walk screenshots**, no browser errors, sound locked. Contact sheets/visual inspection next, then full 25-suite run and final report.
-
-- Film/oil/walk contact sheets inspected. New content is calm and original models remain intact. An inherited solid navy cove night waterline is confirmed against the first review capture; logged in STUCK.md as a separate shoreline/sea-rendering scope request. New episode view 80 frames it out. Full 25-suite run next; final report will flag this visual follow-up rather than claiming it fixed.
+- Branch area/self-review-2 from episode tip 884d1a3. Read rules, queue, blueprint and both review tasks. Per-task review is tasks/SELF-REVIEW-2.md, with source branch hashes, changed files, historical counts, final counts and screenshot names.
+- Two scoped fixes in 40da424: inactive rain umbrellas/boots detach so hidden props do not enlarge original model bounds, then reattach on return; garden actors take a smooth 14-second walk between beds instead of jumping ten metres at 45 seconds. Watering begins after arrival. Original character assets remain unchanged from 9ca912b.
+- Focused regressions: **rain 28 + garden 41 = 69 passed**, browser errors []. Maximum garden movement over one-second samples: **1.064m**.
+- Final full suite: **1636 passed + 2 startup reload checks**, all **25 suites**, browser errors []. All **82 camera views / 16,482 samples** pass clearance. Full counts: world/tests/self-review-2-full.json. No partial/failed run counted as passing.
+- Visual review: **128 rendered poses**, **14 short Play checks** at seven sites in day/night, all dry/finite with nonzero travel; **32 raw screenshots + three contact sheets** inspected. Each task 34-38 has film day/night and an oil preview. The corrected garden bed-change view also has all three. Evidence: world/tests/self-review-2-check.json and self-review-2-*.png. Sound stayed locked throughout.
+- **Unfinished outside-scope visual follow-up:** the cove has a broad solid navy waterline strip in night Play. Confirmed inherited against self-review-1-walk-cove-night.png before this batch; exact cause not diagnosed. STUCK.md requests a separate existing shoreline/sea/night-rendering scope. New episode view 80 frames it out; existing renderer unchanged. Report flags task 36 for this visual follow-up rather than claiming it fixed. No threatening content or blocked water boundary observed.
+- Original task instructions preserved as self-review-2.task.md because Windows cannot distinguish its former name from requested uppercase SELF-REVIEW-2.md.
+- Review task 39 is complete. Stopped after 39; task 31 remains paused until Thu Oct 29. No merge, push or publication.

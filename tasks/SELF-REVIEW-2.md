@@ -1,7 +1,7 @@
 # Self-review 2: tasks 34-38
 
 - Review base: area/episode-presets-2 at **884d1a3**. Scoped fixes are on area/self-review-2, **40da424**. No merge, push or publication.
-- Full suite on final review code: **pending**. Focused rain 28 + garden 41 = **69 passed**, no browser errors. Garden movement maximum: 1.064m over one-second samples.
+- Full suite on final review code: **1636 passed + 2 startup reload checks**, all 25 suites, browser errors []. All **82 views / 16,482 samples** pass clearance. Focused rain 28 + garden 41 = **69 passed**, no browser errors. Garden movement maximum: 1.064m over one-second samples.
 - **128 rendered camera poses**, **14 short Play movement checks** at seven places in day/night, all dry and finite; **32 raw previews + three contact sheets**. Browser errors []; sound stayed locked. Original character assets match 9ca912b byte-for-byte in Git.
 - Overall: new content is calm, rounded and child-friendly; no threatening themes or new deep-water access found. One inherited cove night rendering issue needs a separately scoped follow-up, below.
 
@@ -38,7 +38,7 @@
 
 ## Evidence and handoff
 
-- Contact sheets: world/tests/self-review-2-film-contact.png, self-review-2-oil-contact.png, self-review-2-walk-contact.png. Raw pose/walk evidence: self-review-2-check.json. Full counts will be saved as self-review-2-full.json after the run finishes.
+- Contact sheets: world/tests/self-review-2-film-contact.png, self-review-2-oil-contact.png, self-review-2-walk-contact.png. Raw pose/walk evidence: self-review-2-check.json. Full counts: world/tests/self-review-2-full.json.
 - Rain cleanup and garden movement are the only app changes on this review branch. The inherited cove waterline request is recorded in STUCK.md and the result file.
 - Original review instructions are preserved as tasks/self-review-2.task.md, because Windows cannot keep that original task name distinct from requested uppercase SELF-REVIEW-2.md.
-- Task 31 remains paused until Thu Oct 29. Stop after task 39; Claude reviews before any acceptance or publication.
+- Task 39 is complete; stopped here. Task 31 remains paused until Thu Oct 29. Claude reviews before any acceptance or publication.

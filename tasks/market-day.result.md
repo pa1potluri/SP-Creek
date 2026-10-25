@@ -1,15 +1,10 @@
-# Market day - WIP
+# Market day - complete
 
-- Branch area/market-day from rainy-day completion 48b6217. Read rules, queue, blueprint and task.
-- Five rounded stalls: fruit, flowers, bread, soft toys and balloons; two pastel bunting strings with rounded posts; friendly street pianist at a small keyboard; six chatting/shopping townsfolk.
-- Off-by-default Market day switch controls scenery and its approach boundaries. Saved projects and the market preset restore the same switch. Stalls use the existing Build extension registry; no general World.js changes needed.
-- Original Pavi/Siri visit the balloon stall, keep a pastel balloon and share a bun. Pure-time scene poses, cleanup when disabled; removable props preserve original models/textures.
-- Appended views 69-71 and five-minute preset, wide start/end. New viewpoints stay near the cafe's existing quiet piano ambience, reused for a calm tune after the user enables sound. No new audio context or score/source; existing live/offline mix is retained.
-- Smoke: **40 passed**, errors [], audio locked. Verified switch/physics cleanup, duplicate prevention, six shoppers, original protagonists, bun/balloon staging, seeks, project and Build round-trips, all six styles and preset playback. Maximum new-view distance to the existing cafe piano source: 33.357m (inside its 55m audible range).
-- Six Animated film previews 69-71 saved and inspected: clear stalls/balloon/bun, soft night lanterns and friendly pianist. No browser errors.
-- Full 22-suite run underway. Pending final counts and result/QUEUE commit; then task 36.
-- No merge, push or publication.
-
-- First full run found a cleanup regression at pavi-siri child-proportions: an invisible market balloon remained parented to Pavi and enlarged bounds. Fixed by detaching it when inactive and reattaching only while used; added a body-bounds cleanup regression. Focused market -> original-model check pending, then rerun the full suite. No partial run claimed as success.
-
-- Cleanup verification passed: market 41 + original-character 50 = 91 focused checks, errors []. Active appearance unchanged, so six inspected previews remain final. Fresh full 22-suite run now underway on the corrected code.
+- Branch area/market-day, stacked from rainy-day completion 48b6217.
+- Five rounded stalls: fruit, flowers, bread, soft toys and balloons; pastel bunting, a friendly keyboard player and six gentle shoppers. Market day is off by default; its switch, preset and saved projects restore scenery and approach boundaries. Five stalls join the existing Build catalogue.
+- Original Pavi and Siri keep their models/textures, visit the balloon stall and share a bakery bun. Appended views 69-71 and the five-minute market preset; existing shots retain their numbers.
+- The street musician reuses the nearby cafe's existing quiet piano ambience after a real Sound click. No new score or audio context. Maximum new-view distance to that source: 33.368m, within its existing 55m range.
+- Full suite: **1537 passed + 2 startup reload checks**, all 22 suites, browser errors []. Market checks: **41**. Clearance: 72 views, 14,472 samples, no failures. Counts: world/tests/market-day-full.json.
+- An initial full run found that the hidden balloon enlarged Pavi's bounds. Inactive balloons now detach; a regression checks normal model proportions. The corrected full run passes.
+- Animated film previews, inspected in day and night: world/tests/market-day-69-day.png / -night.png; market-day-70-day.png / -night.png; market-day-71-day.png / -night.png. Stalls, balloon and bun remain clear, with soft warm night lighting.
+- Nothing unfinished. No sound started in tests; no merge, push or publication. Claude review remains pending.

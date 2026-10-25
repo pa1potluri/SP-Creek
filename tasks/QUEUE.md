@@ -47,7 +47,7 @@ finished. Re-read this file each time; Claude may change it.
 | 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
 | 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | done; SELF-REVIEW-1 report + day/night/oil and Play captures; visibility handoff fixed; full 1464 + 2 passed |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | done; full 1493 + 2 passed; rainy suite 26; six day/night previews 66-68 |
-| 35 | `tasks/market-day.md` | `area/market-day` | WIP: six previews saved; inactive-balloon bounds fixed; market 41 + characters 50 passed; full 22-suite rerun underway |
+| 35 | `tasks/market-day.md` | `area/market-day` | done; full 1537 + 2 passed; market suite 41; six day/night previews 69-71; inactive-balloon cleanup fixed |
 | 36 | `tasks/boat-trip.md` | `area/boat-trip` | queued |
 | 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | queued |
 | 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | queued |

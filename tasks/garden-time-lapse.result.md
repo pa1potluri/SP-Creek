@@ -1,15 +1,10 @@
-# Growing a garden - WIP
+# Growing a garden - complete
 
-- Branch area/garden-time-lapse from boat completion e41d975. Rules, queue, blueprint and task read.
-- New garden module at (-151,10), marked in blueprint: four soft-edged beds, central path, sunflowers/carrots/pumpkins/flowers, ten gentle bees and butterflies. Five bed types register through the existing Build extension catalogue; no world.js change needed.
-- Original Pavi/Siri plant seeds, water, pick a carrot and fill a basket. Pure-time growth and poses follow the story cursor or world time. Hand props live in the garden root and hide outside the story.
-- Appended views 75-77 and four-minute Let's grow a garden preset. Life constructs the module through existing wiring; no main.js edit or new library.
-- Focused smoke and six day/night captures underway. Left: inspect previews, resolve findings, full suite once, final counts/result and QUEUE commit. Stopped at initial verification. No merge/push/publication.
-
-- Initial smoke: 38 passed, browser errors []. Preview inspection caught the west beds sinking below the later meadow pad/painted ground edge. Moved the small garden east to (-151,10), outside that overlap; final smoke and refreshed previews follow. No incomplete run counted as full-suite success.
-
-- Final focused smoke: **39 passed**, browser errors [], sound locked. Final terrain bed-contact regression passes after relocation. All six final Animated film previews 75-77 inspected: beds and actors sit on ground, grown crops and quiet insects remain clear at night. Full 24-suite verification underway; final counts and completion commit remain.
-
-- First full run passed building/styles/characters, then found raw paths 76/77 only 0.717m above a raised walk surface (the live director already clamped them). Added explicit raw-path clearance and a regression. Refreshed previews and full rerun required; the failed run is not counted as success.
-
-- Six previews refreshed after the raw-path clamp, no browser errors; corrected day/night framing inspected. Full 24-suite rerun is underway on 452c9f4 plus these image updates. Remaining: final counts, clean result and completion commit.
+- Branch area/garden-time-lapse from boat completion e41d975. New module at (-151,10), north of Willow Creek, marked in BLUEPRINT.md with its path and clear central walking gap.
+- Four soft-edged beds grow sunflowers, carrots, pumpkins and flowers. Original Pavi/Siri plant seeds, water with a rounded can, pick a carrot and fill a basket; ten gentle bees and butterflies visit. Growth, insects, props and poses reproduce from world/story time and can be scrubbed.
+- Five bed types join the existing Build extension catalogue. Life constructs the module through existing wiring; no main.js, general world.js, model/texture or library changes.
+- Appended views 75-77 and four-minute Let's grow a garden preset. Existing numbers remain stable.
+- Full suite: **1604 passed + 2 startup reload checks**, all 24 suites, browser errors []. Garden checks: **40**. Counts: world/tests/garden-time-lapse-full.json. Clearance: 78 views / 15,678 samples, no failures.
+- Preview inspection caught overlap with the later meadow ground layer; moved the garden east. The first full run caught raw camera paths too close to a raised walk surface; added explicit 1.8m clearance. Both regressions now pass in the completed full rerun.
+- Six final Animated film previews saved and inspected: world/tests/garden-time-lapse-75-day.png / -night.png; garden-time-lapse-76-day.png / -night.png; garden-time-lapse-77-day.png / -night.png. Beds meet ground, grown crops and original protagonists remain visible in soft night light.
+- Nothing unfinished. Tests keep sound locked. No merge, push or publication; Claude review pending.

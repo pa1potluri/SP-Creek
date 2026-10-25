@@ -9,3 +9,5 @@
 - Initial smoke: 38 passed, browser errors []. Preview inspection caught the west beds sinking below the later meadow pad/painted ground edge. Moved the small garden east to (-151,10), outside that overlap; final smoke and refreshed previews follow. No incomplete run counted as full-suite success.
 
 - Final focused smoke: **39 passed**, browser errors [], sound locked. Final terrain bed-contact regression passes after relocation. All six final Animated film previews 75-77 inspected: beds and actors sit on ground, grown crops and quiet insects remain clear at night. Full 24-suite verification underway; final counts and completion commit remain.
+
+- First full run passed building/styles/characters, then found raw paths 76/77 only 0.717m above a raised walk surface (the live director already clamped them). Added explicit raw-path clearance and a regression. Refreshed previews and full rerun required; the failed run is not counted as success.

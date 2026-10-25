@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { terrainHeight, batchRigidParts } from '../world.js';
+import { terrainHeight, walkHeight, batchRigidParts } from '../world.js';
 export const GARDEN={x:-151,z:10};
 export const GARDEN_PIECES={seedBed:{label:'Little seed bed',bounds:[2.8,1.8]},sunflowerBed:{label:'Sunflower bed',bounds:[2.8,1.8]},carrotBed:{label:'Carrot bed',bounds:[2.8,1.8]},pumpkinBed:{label:'Pumpkin bed',bounds:[2.8,1.8]},flowerBed:{label:'Flower garden bed',bounds:[2.8,1.8]}};
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
@@ -49,4 +49,4 @@ export function buildGarden(world){
  const area={root,pad,beds,basket,can,drops,seeds,pickedCarrot,harvest,insects,k:0,phase:0,update(t){const phase=Math.max(0,Math.min(240,t));this.phase=phase;const k=THREE.MathUtils.smoothstep(phase,25,160);this.k=k;beds.forEach(b=>b.update(k,phase>190));harvest.forEach(g=>g.visible=phase>210);insects.forEach(({g,wings},i)=>{g.visible=k>0.3;g.position.set(Math.sin(t*0.12+i)*8,0.8+Math.sin(t*0.3+i)*0.3,Math.cos(t*0.1+i)*7);wings.forEach((wing,j)=>wing.rotation.z=Math.sin(t*(i<4?12:4)+i)*(j?1:-1)*0.6);});}};
  world.garden=area;area.update(0);return area;
 }
-export function gardenViews(){return [['Planting a little garden',0,80],['Watch the garden grow',80,80],['Watering and harvest',160,80]].map(([name,phase,duration],i)=>({name,phase,gardenPhase:phase,duration,loop:false,group:"Let's grow a garden",clearance:1.5,sample(t,out){const h=terrainHeight(GARDEN.x,GARDEN.z);out.pos.set(GARDEN.x+(i===0?21:8),h+(i===0?17:5),GARDEN.z+(i===0?22:12));out.look.set(GARDEN.x,h+0.7,GARDEN.z);}}));}
+export function gardenViews(){return [['Planting a little garden',0,80],['Watch the garden grow',80,80],['Watering and harvest',160,80]].map(([name,phase,duration],i)=>({name,phase,gardenPhase:phase,duration,loop:false,group:"Let's grow a garden",clearance:1.5,sample(t,out){const h=terrainHeight(GARDEN.x,GARDEN.z);out.pos.set(GARDEN.x+(i===0?21:8),h+(i===0?17:5),GARDEN.z+(i===0?22:12));out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);out.look.set(GARDEN.x,h+0.7,GARDEN.z);}}));}

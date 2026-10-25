@@ -49,7 +49,7 @@ finished. Re-read this file each time; Claude may change it.
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | done; full 1493 + 2 passed; rainy suite 26; six day/night previews 66-68 |
 | 35 | `tasks/market-day.md` | `area/market-day` | done; full 1537 + 2 passed; market suite 41; six day/night previews 69-71; inactive-balloon cleanup fixed |
 | 36 | `tasks/boat-trip.md` | `area/boat-trip` | done; full 1561 + 2 passed; boat suite 21; six day/night previews 72-74 |
-| 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | WIP: garden relocated clear of meadow; smoke 39 passed; six day/night previews 75-77 saved; full 24-suite verification underway |
+| 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | WIP: full run found garden raw-path clearance; explicit clamp + regression added; refreshed previews and full rerun next |
 | 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | queued |
 | 39 | `tasks/self-review-2.md` | `area/self-review-2` | queued; then stop (31 only from Thu Oct 29) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |

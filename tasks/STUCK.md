@@ -2,7 +2,7 @@
 
 Things that did not get solved after a few tries go here.
 
-No unresolved items after task 32: Cove continuity, camping startup, Episode 4 and branch-train sound location are resolved. Historical scope requests and measurements are preserved in the task result files.
+Task 32 resolved Cove continuity, camping startup, Episode 4 and branch-train sound location. Historical scope requests and measurements are preserved in the task result files. The current inherited visual follow-up is recorded below.
 
 ## Inherited cove night waterline - visual follow-up from self-review 2
 

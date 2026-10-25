@@ -53,7 +53,7 @@ finished. Re-read this file each time; Claude may change it.
 | 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | done; Episodes 6-9; full 1633 + 2 passed; episode suite 25; eight final day/night previews 78-81 |
 | 39 | `tasks/self-review-2.task.md` | `area/self-review-2` | done; SELF-REVIEW-2 report; full 1636 + 2 passed; 128 poses, 14 dry walks, 32 captures + contacts; inherited cove night-strip follow-up in STUCK; stopped after 39 |
 | 40 | `tasks/BIG-QUEUE-40-47.md` (cove-night-strip) | `area/cove-night-strip` | STUCK; probes reverted; diagnosis and next check in STUCK.md; task 41 next |
-| 41 | `tasks/BIG-QUEUE-40-47.md` (public-ready) | `area/public-ready` | WIP; optional-model fallback built; normal and no-GLB static smoke 14 each passed; full suite running |
+| 41 | `tasks/BIG-QUEUE-40-47.md` (public-ready) | `area/public-ready` | done; full 1787 + 2 passed; no-GLB static copy 14 passed; four fallback day/night previews |
 | 42 | `tasks/BIG-QUEUE-40-47.md` (showcase-media) | `area/showcase-media` | queued |
 | 43 | `tasks/BIG-QUEUE-40-47.md` (contributing) | `area/contributing` | queued |
 | 44 | `tasks/BIG-QUEUE-40-47.md` (snow-day) | `area/snow-day` | queued |

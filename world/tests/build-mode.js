@@ -46,7 +46,8 @@ export async function runBuildTests() {
       walkables: world.walkables.length, emitters: world.emitters.length, spinners: world.spinners.length, windows: world.windowMats.length, pois: window.__life.pois.length, surfaces: world.surfaces.size };
     const types = ['shop', 'hotel', 'house', 'barn', 'chapel', 'tower', 'windmill'];
     let initialYaw = null;
-    for (const style of Object.keys(STYLES)) {
+    const styles=Object.keys(STYLES);
+    for (const [styleIndex,style] of styles.entries()) {
       document.title = `Build tests: ${style}`;
       app.applyStyle(style);
       for (const [i, type] of types.entries()) {
@@ -76,7 +77,8 @@ export async function runBuildTests() {
         for (const m of e.additions.windowMats) check(m.map === m.userData.sets[world.textureSet]?.map || world.textureSet === 'flat', `${style}/${type}: facade texture set`);
       }
       await nextFrame(); // Compile/render every style with every catalogue model present.
-      if (style !== 'pixel') for (const e of [...world.buildings]) world.removeBuilding(e);
+      // Keep only the final style fixture for the following editor checks.
+      if (styleIndex < styles.length-1) for (const e of [...world.buildings]) world.removeBuilding(e);
     }
     const shop = world.buildings[0];
     check(Math.abs(shop.spec.yaw - initialYaw - Math.PI) < 1e-6, 'R and wheel rotation persisted');

@@ -11,3 +11,5 @@
 - First Cove comparison: pastel/paper look works, but the old WIP over-softened and doubled character outlines. Reduced only the new style brush radius/strength and removed its wobble; wash weights now respect strong colour/depth boundaries. Final refreshed comparisons and static-frame check next, then full suite.
 
 - Final Cove captures: 12 matched-pose film/oil/watercolour day/night images for existing views 39 and 40, plus two comparison sheets. Fresh-start default verified film; paper/wash frozen screenshot byte-identical 400ms apart, same-pose time identical across comparisons, sound locked, browser errors []. Faces remain readable after the scoped wash correction. Full suite starts on final code next.
+
+- First full run stopped in Build mode: the suite assumed Pixel art was the final style and retained its seven buildings before Watercolour started. Corrected test-fixture cleanup to retain only the actual final style fixture; app placement/rendering code unchanged. Checking for similar order assumptions; fresh full run required. No partial run counted as passing.

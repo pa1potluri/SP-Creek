@@ -11,3 +11,5 @@
 - Final focused smoke: **39 passed**, browser errors [], sound locked. Final terrain bed-contact regression passes after relocation. All six final Animated film previews 75-77 inspected: beds and actors sit on ground, grown crops and quiet insects remain clear at night. Full 24-suite verification underway; final counts and completion commit remain.
 
 - First full run passed building/styles/characters, then found raw paths 76/77 only 0.717m above a raised walk surface (the live director already clamped them). Added explicit raw-path clearance and a regression. Refreshed previews and full rerun required; the failed run is not counted as success.
+
+- Six previews refreshed after the raw-path clamp, no browser errors; corrected day/night framing inspected. Full 24-suite rerun is underway on 452c9f4 plus these image updates. Remaining: final counts, clean result and completion commit.

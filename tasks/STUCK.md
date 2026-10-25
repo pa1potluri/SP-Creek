@@ -16,3 +16,9 @@ Task 32 resolved Cove continuity, camping startup, Episode 4 and branch-train so
 - Reproduced the navy band in Film shot 40 at night. Browser-only mesh hiding and a bright shoreline material isolate its screen region, but ray intersections and visible coverage need further investigation.
 - Tried sea/sand geometry overlap (+8m) and a brighter sea-only near-field reflection; neither removed the band. Both app probes reverted; no speculative renderer changes retained.
 - Next check: map screen points using the actual canvas rectangle and inspect shoreline/ground shader discard and depth coverage together. Keep the original follow-up open. Moving on after several attempts per AGENTS.md.
+
+## Review 47: public wide picnic prop readability
+
+- In self-review-3-41-fallback-day.png (plain static copy, no GLBs, wide view 94), the fallback cast renders, but the low blanket/basket are not clearly visible. Closer view 90 on the normal world shows them. No JavaScript errors, broken footing or water access was found.
+- Tried a level picnic pad and a level-footprint check; the wide image did not improve. Measured blanket centre y=23.22594, terrain y=23.14594 and decorative meadow y=23.19094, with all parent groups and layers visible. Thus burial was not established; the speculative leveling change and its test were reverted.
+- Next: compare actual rendered prop pixels and visibility between views 90/94 on the static fallback copy. Keep this as a visual follow-up; do not claim the wide public preview is polished.

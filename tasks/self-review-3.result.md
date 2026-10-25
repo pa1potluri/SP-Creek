@@ -10,3 +10,6 @@
 ## Review fix checkpoint
 - Wide static fallback view exposed the low picnic blanket partly buried by the blended lake-bank terrain. In the allowed meadow-lake module, the dry picnic footprint is now level (kite footprint remains clearing-only). Added a footprint-level regression: outing 34 passed; all 96 cameras / 19296 clearance samples passed.
 - First review full run was interrupted before completion to apply this fix; it is not a final passing run. A fresh full run must verify corrected code. Affected outing/episode/public previews are being refreshed.
+
+## Probe reverted / exact current app state
+- Blanket-height measurement did not establish burial. The leveling probe and extra regression check were reverted to app/test state 2fd7bcc. The wide static-copy prop-readability question is recorded in STUCK.md. No app fix is claimed in review 47. Final full run will use the unchanged task 46 app tip (outing suite remains 33).

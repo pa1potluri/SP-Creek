@@ -26,8 +26,7 @@ function buildMeadowOuting(world,parent){
  const root=new THREE.Group();root.name='Kite day and waterfall picnic';parent.add(root);
  const groups={},colors=['#e6aabd','#a9ced0','#efcf8d','#b6cfa0','#bcb1d6'],mat=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}),cream=mat('#f5e5bf'),wood=world.mat.wood;
  const add=(g,geo,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;g.add(o);return o;};
- // The low blanket needs a level dry patch, beyond the lake's blended bank.
- for(const [kind,p]of Object.entries(MEADOW_OUTING)){world.registerAreaPad({...p,hx:6,hz:5,blend:2,clearOnly:kind==='kite'});const g=new THREE.Group();g.position.set(p.x,terrainHeight(p.x,p.z),p.z);root.add(g);groups[kind]=g;}
+ for(const [kind,p]of Object.entries(MEADOW_OUTING)){world.registerAreaPad({...p,hx:6,hz:5,blend:1,clearOnly:true});const g=new THREE.Group();g.position.set(p.x,terrainHeight(p.x,p.z),p.z);root.add(g);groups[kind]=g;}
  world.updateTerrain();
  const hill=add(groups.kite,new THREE.SphereGeometry(1,28,14),mat('#b4cf98'),0,-0.12,0);hill.scale.set(8,1.1,6);
  const shape=new THREE.Shape();shape.moveTo(0,1.1);shape.quadraticCurveTo(.15,1.1,.28,.85);shape.lineTo(.75,.15);shape.quadraticCurveTo(.88,0,.74,-.16);shape.lineTo(.15,-.95);shape.quadraticCurveTo(0,-1.1,-.15,-.95);shape.lineTo(-.74,-.16);shape.quadraticCurveTo(-.88,0,-.75,.15);shape.lineTo(-.28,.85);shape.quadraticCurveTo(-.15,1.1,0,1.1);

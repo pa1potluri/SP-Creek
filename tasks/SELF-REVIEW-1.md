@@ -1,6 +1,6 @@
 # Self-review 1: tasks 21-32
 
-Reviewed the stack on area/self-review-1 after 7c9019c and visibility fix 50be96d. These judgments describe the corrected stack, not each historical branch in isolation. No merge or push. Final full-suite counts pending.
+Reviewed the stack on area/self-review-1 after 7c9019c and visibility fix 50be96d. These judgments describe the corrected stack, not each historical branch in isolation. No merge or push. Final full suite on this corrected tip: **1464 checks + 2 startup reload checks passed**, all 20 suites, exit 0, Browser errors []. Counts apply to every reviewed task on this stack; per-suite data: world/tests/self-review-1-full.json.
 
 Page loaded without JavaScript errors. Rendered 272 camera poses (34 relevant views, four positions in day and night). Made 26 short Play-mode passes at town, pond, ranch, forest, meadow, mine, hilltop, cove beach/village, camp, farm, station and cafe: every player position finite, moving and on dry footing. Inspected film day/night, oil-paint and Play-mode contact sheets. Sound stayed locked; audio quality was not auditioned automatically. Details: world/tests/self-review-1-check.json.
 
@@ -37,4 +37,6 @@ Each screenshot basename below has -day.png, -night.png and -oil.png versions in
 - Reproduced balloon -> train -> walking-view handoff leaving both protagonists hidden. Playground had captured the balloon's temporary false visibility and the train inherited it.
 - life.js now releases outgoing balloon/train visibility before another scene snapshots it, and repairs the playground's saved baseline on restoration. Its existing direct-call cleanup remains supported.
 - Added four regressions in world/tests/train-trip.js: both protagonists restored and hidden snapshots/passengers cleared after handoffs from normal town and playground. Focused train 32 + balloon 20 + moments 35 = 87 passed, errors []. Refreshed evidence explicitly asserts protagonist visibility after all 272 probes.
-- No remaining child-safety problem found in the inspected samples. Full stack suite pending before marking review done. No other application fixes made here.
+- No remaining child-safety problem found in the inspected samples. Full stack suite passed: 1464 + 2, including the four new handoff regressions. Review complete. No other application fixes made here.
+
+Original task instructions are preserved in tasks/self-review-1.task.md because Windows cannot keep filenames differing only in case.

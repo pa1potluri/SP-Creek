@@ -45,7 +45,7 @@ finished. Re-read this file each time; Claude may change it.
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | paused until Thu Oct 29; stopped after task 30 per user |
 | 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
-| 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | WIP: day/night walks + oil captures done; found staged-scene visibility handoff issue; fixing before full suite |
+| 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | done; SELF-REVIEW-1 report + day/night/oil and Play captures; visibility handoff fixed; full 1464 + 2 passed |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | queued |
 | 35 | `tasks/market-day.md` | `area/market-day` | queued |
 | 36 | `tasks/boat-trip.md` | `area/boat-trip` | queued |

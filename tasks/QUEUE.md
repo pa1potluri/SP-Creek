@@ -44,6 +44,14 @@ finished. Re-read this file each time; Claude may change it.
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | paused until Thu Oct 29; stopped after task 30 per user |
+| 32 | `tasks/finish-wip.md` | `area/finish-wip` | queued: branch from area/performance (tip) |
+| 33 | `tasks/self-review-1.md` | `area/self-review-1` | queued |
+| 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | queued |
+| 35 | `tasks/market-day.md` | `area/market-day` | queued |
+| 36 | `tasks/boat-trip.md` | `area/boat-trip` | queued |
+| 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | queued |
+| 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | queued |
+| 39 | `tasks/self-review-2.md` | `area/self-review-2` | queued; then stop (31 only from Thu Oct 29) |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -53,4 +61,4 @@ meadow & lake, crystal mine & balloon.
 > **User's decision (2026-10-24): long queue for 3–4 days.** Claude may be offline or out of credit, so keep
 > building through tasks 21–31 on stacked branches even though more than 2–3 finished tasks will wait for review.
 > Never merge, push or publish; Claude reviews them in batches later. Save/commit before every usage limit.
-> If a task gets stuck, write it in STUCK.md and go to the next one. Stop after task 31.
+> If a task gets stuck, write it in STUCK.md and go to the next one. Then tasks 32-39 (added 2026-10-25, again a 3-day queue); task 31 only from Thu Oct 29. Stop after 39.

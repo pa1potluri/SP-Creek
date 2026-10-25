@@ -5,10 +5,10 @@ import { STYLES } from '../src/styles.js';
 export async function runBoatTripTests(){
  const a=window.__app,d=a.director,w=a.world,original=a.projectData(),results=[],check=(ok,msg)=>{if(!ok)throw Error(msg);results.push(msg);};
  try{
-  a.timeline.stop();d.auto=false;d.paused=true;
+  a.timeline.stop();d.auto=false;d.paused=true;d.hold=true;
   check(d.shots[72].rowing==='lake'&&d.shots[73].rowingPhase===80&&d.shots[74].rowing==='cove','Three boating shots append at 72-74');
   const preset=VIDEO_PRESETS.boatTrip;check(preset.clips.reduce((n,c)=>n+c.seconds,0)===240,'Boat preset is four minutes');
-  const seek=(shot,t)=>{d.playShot(shot,{cut:true});d.t=t;a.step(0);};seek(72,20);
+  const seek=(shot,t)=>{d.playShot(shot,{cut:true});d.hold=true;d.t=t;a.step(0);};seek(72,20);
   const lake=w.meadowBoat,cove=w.sunsetCove.rowingBoat;check(!!lake&&!!cove,'Both boats register through existing area modules');
   check(lake.riders.every(p=>p.g.visible&&p.model.isSkinnedMesh&&p.model.material.map&&p.lifeJacket.children.length===5),'Both original models wear bright life jackets');
   check(!Object.values(a.life.stars).some(p=>p.g.visible),'Normal stars hide during boating');

@@ -6,3 +6,5 @@
 - Appended shots 72-74, four-minute A little boat trip preset. Existing shot numbers unchanged; no audio changes.
 - Focused browser check underway; first test lookup corrected from nonexistent waterAreas to existing colliders.water. Six Animated film day/night captures underway.
 - Left: inspect captures, fix any actual smoke findings, full suite once on final code, counts and final result/QUEUE commit. Stopped at verification, no merge or push.
+
+- Final focused smoke: **21 passed**, browser errors [], sound locked. Pure-time routes, near-shore water, original models and jackets, seeks, six styles and boat/balloon/train/walk cleanup verified. Endpoint holding is applied after each shot selection. Six refreshed day/night previews saved and inspected; ducks trail behind, jackets remain clear at night. Full 23-suite verification next.

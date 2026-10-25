@@ -1,15 +1,9 @@
-# Self-review 3 - WIP
+# Self-review 3 - WIP final verification
 
-- Branch area/self-review-3 from Episodes 10-13 tip 2fd7bcc. Scope: tasks 31 and 40-46; stop after 47, never merge/push/publish.
-- First normal-stack review: 132 Film day/night poses, 78 land-actor footing checks, 14 short dry/finite/moving walks, errors [], audio locked.
-- Refreshed plain static copy contains zero GLB files; public-ready 14, snow-day 31, kite-picnic 33, episode-presets-3 35, watercolour 25 = 138 passed; no JavaScript errors and sound locked. Browser may log expected optional-model 404 resources; no startup failure.
-- Final review driver is adding Play-view screenshots and public fallback Film/Oil frames. Final full 30-suite run and SELF-REVIEW-3.md still pending.
-- User supplied three final-style references and asked to share process/timeline with Claude. Added tasks/STYLE-TIMELINE.md and QUEUE note, distinguishing proposed estimates from deadlines. User subsequently clarified they will handle the separate sheet update and will guide work while Claude is unavailable. No external message/email sent.
-- Next: finish fresh review captures, inspect them, write per-task report including unresolved task 40 and visual-reference gap; full suite once; finalize result/QUEUE; commit everything and stop.
-
-## Review fix checkpoint
-- Wide static fallback view exposed the low picnic blanket partly buried by the blended lake-bank terrain. In the allowed meadow-lake module, the dry picnic footprint is now level (kite footprint remains clearing-only). Added a footprint-level regression: outing 34 passed; all 96 cameras / 19296 clearance samples passed.
-- First review full run was interrupted before completion to apply this fix; it is not a final passing run. A fresh full run must verify corrected code. Affected outing/episode/public previews are being refreshed.
-
-## Probe reverted / exact current app state
-- Blanket-height measurement did not establish burial. The leveling probe and extra regression check were reverted to app/test state 2fd7bcc. The wide static-copy prop-readability question is recorded in STUCK.md. No app fix is claimed in review 47. Final full run will use the unchanged task 46 app tip (outing suite remains 33).
+- Branch area/self-review-3 from 2fd7bcc. App/test probe was reverted; net app state remains 2fd7bcc. No merge/push/upload/publication.
+- SELF-REVIEW-3.md now has per-task branch hashes, scoped files, historical suite counts, fresh review evidence and candid visual findings for 31/40-46.
+- Normal and no-GLB static versions each passed 132 Film day/night poses, 78 land-actor checks and 14 moving/dry/finite Play checks. Static focused suite total 138. Sound locked; no JavaScript errors (expected optional GLB 404 resource messages are excluded by the runner).
+- Review captured 35 raw Film/Oil/Play images plus three contact sheets. Original assets unchanged. Cove night band unresolved. Wide public picnic prop readability also logged; measured blanket above both ground surfaces, so the unproven level-pad probe and added test were reverted.
+- User style references, tentative progress/timeline and proposed process saved in STYLE-TIMELINE.md and QUEUE note. User will handle their separate sheet update and guide work while Claude is unavailable.
+- Fresh final 30-suite run in progress on localhost:8811 (session 29587). Previous review run was interrupted for the probe and is not a final pass. Affected picnic/public pictures are refreshing on restored app state.
+- Remaining: finish full suite, save actual counts, ensure final captures/contact sheets match restored state, finalize report/result/QUEUE, commit everything, verify clean tree, STOP after 47. No new tasks beyond 47.

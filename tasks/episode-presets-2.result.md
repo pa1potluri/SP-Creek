@@ -13,3 +13,5 @@
 - Final view 80 is a higher seaward aerial with open water for end-card text and a narrow shoreline. Final day/night pair inspected: boat and jackets visible, dark hillside and hard palm shadows outside frame. Final full 25-suite rerun starts on this committed code; remaining counts and completion commit.
 
 - Full rerun found view 79 inside a church roof cone under the suite lighting direction. Raised this appended wide view from 14m to 26m above terrain. Refreshing its day/night pair and checking episode + clearance suites before the final full rerun. No failed/partial full run counted as passing.
+
+- Corrected episode + full camera-clearance check: **25 + 83 = 108 passed**, 82 views / 16,482 samples, no collisions or browser errors, sound locked. Refreshing the day image after the UI fully hides; full 25-suite rerun remains the final requirement.

@@ -1,9 +1,8 @@
-# Episode presets - WIP (Episode 4 depends on deferred camping wiring)
+# Episode presets - complete (finished in task 32)
 
-- Built Episodes 2, 3 and 5, each 180 seconds with natural shot pacing and immediate cuts. Each opens and ends wide for later title/end-card editing.
-- Episode 2: wide balloon lift, valley flight, wide homecoming. Episode 3: appended station establishing view 64, boarding, window ride, wide seaside halt. Episode 5: wide farm, pony feeding, lamb friends, wide farm ending.
-- Episode 4 is intentionally not exposed as a new ready-made button while camping is startup-unwired. User chose to leave that integration WIP; no main.js changes or hidden workaround.
-- UI smoke: 5 checks passed (all three buttons activate 180-second timelines with natural cuts; Episode 4 remains unexposed; audio locked), browser errors empty. Clearance: 66 passed, 65 shots / 13,065 samples, no failures.
-- Day/night previews: world/tests/episode-presets-64-day.png / -night.png, episode-presets-episode2-day.png / -night.png and episode-presets-episode5-day.png / -night.png. Station wide inspected; six images saved.
-- WIP checkpoint complete; continue task 29. After camping integration is authorized, add Episode 4, run the full suite once with every suite, record counts and mark task 28 done. Latest inherited completed full suite: task 27, 1440 + 2.
-- No merge, push or publication.
+- Episodes 2, 3, 4 and 5 each last 180 seconds, with natural shot pacing, wide starts and calm wide ends. Existing shot/preset numbers retained.
+- Episode 2: balloon lift, flight and homecoming. Episode 3: station establishing view 64, boarding, coach window, seaside halt. Episode 5: farm wide, pony feeding, lamb friends, farm wide.
+- After authorized normal camping registration, appended Episode 4: Camping under the stars, using 59 / 60 / 59 for 30 / 120 / 30 seconds, all calm night. Earlier missing-button deferral is resolved; integration smoke 13 passed, sound locked.
+- Final full suite: **1460 + 2 startup reload checks passed**, 20 suites, errors []. Counts: world/tests/finish-wip-full.json.
+- Existing Episodes 2/3/5 day/night evidence: episode-presets-64-day/night.png, episode-presets-episode2-day/night.png, episode-presets-episode5-day/night.png. Final Episode 4 views: finish-wip-{59,60}-{day,night}.png. Inspected.
+- No unfinished task-28 work. Solved STUCK entry removed. No merge, push or publication.

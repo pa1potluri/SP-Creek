@@ -33,18 +33,18 @@ finished. Re-read this file each time; Claude may change it.
 | 19 | `tasks/playground.md` | `area/playground` | done; full 1240 + 2 passed; day/night and oil previews saved |
 | 20 | `tasks/lantern-evening.md` | `area/lantern-evening` | done; full 1266 + 2 passed; day/night, dusk and oil previews saved; stopped after 20 |
 | 21 | `tasks/pavi-siri-3d.md` | `area/pavi-siri-3d` | done (from main 75a90ab); full 1293 + 2 passed; original-model day/night previews saved |
-| 22 | `tasks/cove-polish.md` | `area/cove-polish` | WIP: side-lane clearance + warm pebbles saved; Episode 1 cuts need presets.js scope (STUCK.md); continue 23 |
+| 22 | `tasks/cove-polish.md` | `area/cove-polish` | done in task 32; continuous Episode 1 view 65, warm pebbles and route clearance; full 1460 + 2 passed |
 | 23 | `tasks/pavi-siri-moments.md` | `area/pavi-siri-moments` | done; full 1335 + 2 passed; day/night previews 46-52 saved |
 | 24 | `tasks/balloon-ride.md` | `area/balloon-ride` | done; full 1358 + 2 passed; day/night previews 53-55 saved |
-| 25 | `tasks/train-trip.md` | `area/train-trip` | done; full 1389 + 2 passed; day/night 56-58 saved; audio-pan follow-up in STUCK.md |
-| 26 | `tasks/camping-night.md` | `area/camping-night` | WIP by user choice; module + 14 smoke checks + four day/night previews saved; main.js wiring deferred (STUCK.md); continue 27 |
+| 25 | `tasks/train-trip.md` | `area/train-trip` | done; full 1389 + 2 passed; day/night 56-58 saved; audio-pan follow-up resolved in task 32 |
+| 26 | `tasks/camping-night.md` | `area/camping-night` | done in task 32; normal startup/frame registration authorized and wired; four day/night previews; full 1460 + 2 passed |
 | 27 | `tasks/pony-farm.md` | `area/pony-farm` | done; full 1440 + 2 passed; day/night farm 61-63 and camera correction 60 saved |
-| 28 | `tasks/episode-presets.md` | `area/episode-presets` | WIP: Episodes 2/3/5 ready, smoke 5 + clearance 66 passed, six previews saved; Episode 4 waits for user-deferred camping wiring; continue 29 |
+| 28 | `tasks/episode-presets.md` | `area/episode-presets` | done in task 32; Episodes 2-5 complete, Episode 4 wired; day/night previews; full 1460 + 2 passed |
 | 28a | `tasks/startup-hang.md` | `area/startup-hang` | done; server launcher + terrain startup fix; full 1446 + 2 passed; queue chat continues from here |
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | paused until Thu Oct 29; stopped after task 30 per user |
-| 32 | `tasks/finish-wip.md` | `area/finish-wip` | WIP: camping/listener wiring and Episode presets built; continuous cove take 65 appended; smoke running |
+| 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
 | 33 | `tasks/self-review-1.md` | `area/self-review-1` | queued |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | queued |
 | 35 | `tasks/market-day.md` | `area/market-day` | queued |

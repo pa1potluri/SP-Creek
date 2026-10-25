@@ -16,3 +16,7 @@
 ## Follow-up / scope limit
 - Visual trip complete. Branch audio pan remains tied to original rail x=70 because main.js listener() is outside this task's files. Main-station whistle works; request for actual locomotive x/z is in STUCK.md. No main.js edit was made.
 - Claude reviews before acceptance. No merge, push or publication.
+
+## Follow-up resolved in task 32
+- Explicitly authorized listener() change now reads the locomotive world x/z. Integration checks confirm it follows the branch, away from the old rail x=70. Existing quiet whistle/steam and real-click sound lock remain.
+- Final stack verification: 1460 + 2 passed, all 20 suites, errors []. The old audio-pan STUCK item is resolved.

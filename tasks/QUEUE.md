@@ -55,7 +55,7 @@ finished. Re-read this file each time; Claude may change it.
 | 40 | `tasks/BIG-QUEUE-40-47.md` (cove-night-strip) | `area/cove-night-strip` | STUCK; probes reverted; diagnosis and next check in STUCK.md; task 41 next |
 | 41 | `tasks/BIG-QUEUE-40-47.md` (public-ready) | `area/public-ready` | done; full 1787 + 2 passed; no-GLB static copy 14 passed; four fallback day/night previews |
 | 42 | `tasks/BIG-QUEUE-40-47.md` (showcase-media) | `area/showcase-media` | done; six 3.8s 640px loops under 728KB; no Pavi/Siri; full 1787 + 2; 12 day/night stills |
-| 43 | `tasks/BIG-QUEUE-40-47.md` (contributing) | `area/contributing` | WIP; contribution guide + 10 draft ideas written; links checked; full suite running |
+| 43 | `tasks/BIG-QUEUE-40-47.md` (contributing) | `area/contributing` | done; contribution guide + 10 draft ideas; links checked; full 1787 + 2; day/night baseline saved |
 | 44 | `tasks/BIG-QUEUE-40-47.md` (snow-day) | `area/snow-day` | queued |
 | 45 | `tasks/BIG-QUEUE-40-47.md` (kite-picnic) | `area/kite-picnic` | queued |
 | 46 | `tasks/BIG-QUEUE-40-47.md` (episode-presets-3) | `area/episode-presets-3` | queued |

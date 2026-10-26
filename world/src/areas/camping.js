@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { terrainHeight } from '../world.js';
 import { makeCharacter, CAST, animatePerson, seat } from '../characters.js';
+import {makeCanvasTent} from '../props/canvas-tent.js';
 
 export const CAMPING={x:-200,z:58};
 export let campingReady=false;
@@ -15,12 +16,7 @@ export function buildCamping(world){
  const lightCanvas=document.createElement('canvas');lightCanvas.width=lightCanvas.height=64;const lc=lightCanvas.getContext('2d'),fade=lc.createRadialGradient(32,32,0,32,32,32);fade.addColorStop(0,'rgba(255,220,160,0.2)');fade.addColorStop(1,'rgba(255,220,160,0)');lc.fillStyle=fade;lc.fillRect(0,0,64,64);const lightMap=new THREE.CanvasTexture(lightCanvas);lightMap.colorSpace=THREE.SRGBColorSpace;const ground=mesh(root,new THREE.PlaneGeometry(28,25),new THREE.MeshBasicMaterial({map:lightMap,transparent:true,depthWrite:false}),0,0.04,0);ground.rotation.x=-Math.PI/2;
  const tents=[];
  for(const [i,x,z]of [[0,-7,-4],[1,7,-4]]){
-  const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=i?-0.25:0.25;root.add(g);const pos=[],uv=[],idx=[];
-  for(let j=0;j<=24;j++){const a=j/24*Math.PI;for(const end of [-1,1]){pos.push(Math.cos(a)*1.8,0.08+Math.sin(a)*1.8,end*2);uv.push(j/24,end>0?1:0);}if(j){const n=j*2;idx.push(n-2,n,n-1,n-1,n,n+1);}}
-  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();mesh(g,geo,i?m.pink:m.blue);
-  mesh(g,new THREE.BoxGeometry(3.5,0.12,4),m.cream,0,0.08,0);
-  mesh(g,new THREE.CircleGeometry(1.75,32,0,Math.PI),m.amber,0,0.08,2.01);
-  const door=mesh(g,new THREE.CircleGeometry(1.12,32,0,Math.PI),mat('#e9bd74',0.6),0,0.09,2.025);tents.push({root:g,door});
+  const g=makeCanvasTent(i);g.position.set(x,0,z);g.rotation.y=Math.atan2(-x,-z);root.add(g);tents.push({root:g});
   world.colliders.circles.push({x:CAMPING.x+x,z:CAMPING.z+z,r:2.7});
  }
  const fire=new THREE.Group();fire.name='Small guarded campfire';root.add(fire);

@@ -82,6 +82,8 @@ finished. Re-read this file each time; Claude may change it.
 | 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | WIP first refresh; rounded cave/rock treatment, softer crystals, cart moved off entry; four Film day/night captures; full 2015 + 2 passed; organic art/visual acceptance remains open |
 | 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` (planned) | queued; top Gameplay/Free Camera, persistent styles, simple side places; videos/episodes secondary |
 | 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | done, awaiting review; ordinary URL uses approved solid residents; supplied hero bodies retained; full 2015 + 2; day/night and clean server checks saved |
+| 70 | `tasks/canvas-tents.md` | `area/canvas-tents` | done model increment, awaiting review; five framed canvas tents, real open doors/ropes/poles; 17 focused + full 2015 + 2 passed; six Film scene views + closeups |
+| 71 | `tasks/coach-flicker.md` | `area/coach-flicker` (next) | queued user screenshot; train window/corner-frame and lamp flicker persists separately from platform/track repair |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -120,6 +122,9 @@ meadow & lake, crystal mine & balloon.
 
 
 > User latest: all fixes retained; review only current approved characters. Save UI WIP, make approved residents default, prioritize Crystal Mine refresh, then finish gameplay-first controls and functional collision/Kite/Episode repairs. Atmosphere remains unaccepted; no claim the game is finished.
+
+
+
 
 
 

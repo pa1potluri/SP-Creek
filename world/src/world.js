@@ -6,6 +6,7 @@ import { HAMLET } from './hamlet.js';
 import { familySign } from './family.js';
 import { cloudShader, waterMaterial } from './environment.js';
 import { dressHamletHouse, dressPondShore } from './areas/pond-details.js';
+import { makeCanvasTent } from './props/canvas-tent.js';
 
 // Batch only rigid siblings: animated joints and their exact transforms stay separate.
 export function batchRigidParts(root) {
@@ -1199,11 +1200,11 @@ export class World {
     const { x, z, y } = CAMP;
     for (let i = 0; i < 3; i++) {
       const a = i * 2.1 + 0.4;
-      const tent = mesh(prism(2.6, 2.1, 3.2), this.mat.canvas);
+      const tent = makeCanvasTent(i%2);
       tent.position.set(x + Math.cos(a) * 6, y, z + Math.sin(a) * 6);
-      tent.rotation.y = -a;
+      tent.rotation.y = Math.atan2(-Math.cos(a),-Math.sin(a));
       this.root.add(tent);
-      this.colliders.circles.push({ x: tent.position.x, z: tent.position.z, r: 1.6 });
+      this.colliders.circles.push({ x: tent.position.x, z: tent.position.z, r: 2.3 });
     }
     for (let i = 0; i < 3; i++) {
       const a = i * 2.1 + 1.45;

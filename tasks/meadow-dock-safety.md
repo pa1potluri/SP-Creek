@@ -1,0 +1,2 @@
+# Meadow dock safety increment
+Continue task 65 water/dock review in world/src/areas/meadow-lake.js only, plus focused tests/captures and task metadata. Baseline: center route dry, but side/end have no rail boundary. Add visible rounded rails matched by colliders, supports reaching ground; retain current deck bounds, clear land entrance and boat route. No camera IDs or style changes. Before done: full suite, Film day/night changed view evidence, route/edge checks. Keep overall meadow review WIP.

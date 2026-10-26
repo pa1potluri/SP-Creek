@@ -80,7 +80,18 @@ export async function buildMeadowLake(world) {
   const flatTrees=new THREE.InstancedMesh(world.treeGeos[0],world.mat.foliage,trees.length),tm=new THREE.Matrix4();trees.forEach(([x,z],i)=>{flatTrees.setMatrixAt(i,tm.makeTranslation(x,terrainHeight(x,z),z));world.colliders.circles.push({x,z,r:0.5});});flatTrees.computeBoundingSphere();root.add(flatTrees);fallback.push(flatTrees);
   const trail=world._ribbon([[-183,30],[-199,24],[-214,13],[-221,-4],[-222,-18]],2.2,world._pathMaterial(),{step:1});root.attach(trail);
   for(let i=0;i<20;i++)box(0.45,0.14,2.2,wood,-231.75+i*0.5,floor.y-0.07,-18);
-  for(const x of [-231,-223])for(const z of [-18.9,-17.1]){box(0.14,1.8,0.14,wood,x,floor.y-0.5,z);world.colliders.circles.push({x,z,r:0.12});}
+  for(const x of [-231.7,-227,-222.3])for(const z of [-19.04,-16.96]){
+    const bottom=Math.min(terrainHeight(x,z)-.15,floor.y-.4),top=floor.y+.8;
+    solid(new THREE.CapsuleGeometry(.075,top-bottom-.15,3,8),wood,x,(top+bottom)/2,z);
+    world.colliders.circles.push({x,z,r:.12});
+  }
+  // Visible rails and collision lines agree; the shore entrance stays open.
+  for(const z of [-19.04,-16.96]){
+    for(const h of [.35,.7])solid(new THREE.CapsuleGeometry(.055,9.39,3,8),wood,-227,floor.y+h,z,root,[0,0,Math.PI/2]);
+    world.colliders.segs.push({ax:-231.75,az:z,bx:-222.25,bz:z});
+  }
+  for(const h of [.35,.7])solid(new THREE.CapsuleGeometry(.055,1.97,3,8),wood,-231.75,floor.y+h,-18,root,[Math.PI/2,0,0]);
+  world.colliders.segs.push({ax:-231.75,az:-19.04,bx:-231.75,bz:-16.96});
   for(let i=0;i<8;i++){const a=0.2+i*0.2,x=lake.x+Math.cos(a)*13.5,z=lake.z+Math.sin(a)*9.8;solid(new THREE.DodecahedronGeometry(0.65,0).scale(1.2,0.25,1),stone,x,terrainHeight(x,z)+0.08,z);}
   for(let i=0;i<12;i++){const a=i*2.399,x=lake.x+Math.cos(a)*(3+i%4),z=lake.z+Math.sin(a)*4;solid(new THREE.CircleGeometry(0.3,20,0.1,Math.PI*1.85),moss,x,lake.y+0.035,z,root,[-Math.PI/2,0,i]);}
   const fallMat=new THREE.MeshPhongMaterial({map:world.waterShared.map.clone(),color:'#d6eeef',emissive:'#769fa8',emissiveIntensity:0.18,transparent:true,opacity:0.8,side:THREE.DoubleSide,shininess:45});

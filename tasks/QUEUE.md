@@ -213,3 +213,5 @@ meadow & lake, crystal mine & balloon.
 > Road surface WIP checkpoint: full suite passed 2015 + 2 startup, no browser errors. Additional surface/visual regression remains before done.
 
 
+
+> Latest 27 October: road-surface-fit repair completed (row 31h supersedes earlier WIP notes above). Meadow dock safety increment completed on area/meadow-dock-safety: matching rounded rails/supports, 480 movement steps, dry center access; full 2015 + 2, view32 Film day/night. Overall meadow task65 remains WIP. Next isolated queue item: Episode12 coverage diagnosis (66).

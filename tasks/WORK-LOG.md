@@ -24,3 +24,5 @@ Water/ref review checkpoint: continuous waterfall and expanding pond-contained f
 27 October incoming town reference: tasks/ref/town-elevations-review.png saved; navigation, lower/upper elevation connection and playground/building integration added to existing task 81, linked from 80. No scene change made from the image alone. Current branch remains area/meadow-water; other WIP unchanged.
 
 Saved-road angle popping repaired: fitted to rendered terrain, 85,400 expanded samples clear, persistence/rebuild/style switches pass, final full 2015 + 2 no errors; Film high/low day/night evidence. Commit on area/road-surface-fit; next meadow dock continuation. Balloon Hill task 91 retained.
+
+Meadow dock safety increment complete: rounded visible rails matched to boundaries, six grounded supports, open shore access; actual player movements stay inside deck, center remains dry. Full 2015 + 2 no errors and Film day/night saved. Overall meadow review still WIP.

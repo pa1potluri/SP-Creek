@@ -11,7 +11,8 @@
 - Twelve Film views: shots 11,12,56,57,58,40 in day/night, saved as world/tests/train-shore-fixes-<shot>-day.png / -night.png. Station, train boarding and beach-night images inspected; the navy strip is absent in the final beach image.
 - Focused test: 600 motion steps across five train views, finite camera positions, zero browser errors; Cove mountain hiding and restoration verified (3 layers); sound locked. Evidence train-shore-fixes-check.json. This is not a quantitative temporal-flicker measurement.
 - Before-band evidence: world/tests/train-shore-before.png.
-- Full suite running; not yet marked done. No new camera definitions, assets, dependencies, push or merge.
+- Full suite: 2015 + 2 startup checks passed, all 31 suites, exit 0, browser errors []. No new camera definitions, assets, dependencies, push or merge.
 
 ## Remaining
-- Finish recording full-suite result, commit and mark queue task done. Character fit/default rollout, forest roots and picnic composition are separate existing work.
+- Both requested repairs saved; awaiting lead/user visual review. Character fit/default rollout, forest roots and picnic composition are separate existing work.
+

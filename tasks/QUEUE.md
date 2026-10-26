@@ -52,7 +52,7 @@ finished. Re-read this file each time; Claude may change it.
 | 37 | `tasks/garden-time-lapse.md` | `area/garden-time-lapse` | done; full 1604 + 2 passed; garden suite 40; six day/night previews 75-77; terrain and raw-path clearance corrected |
 | 38 | `tasks/episode-presets-2.md` | `area/episode-presets-2` | done; Episodes 6-9; full 1633 + 2 passed; episode suite 25; eight final day/night previews 78-81 |
 | 39 | `tasks/self-review-2.task.md` | `area/self-review-2` | done; SELF-REVIEW-2 report; full 1636 + 2 passed; 128 poses, 14 dry walks, 32 captures + contacts; inherited cove night-strip follow-up in STUCK; stopped after 39 |
-| 40 | `tasks/BIG-QUEUE-40-47.md` (cove-night-strip) | `area/cove-night-strip` | STUCK; review 47 confirms night band; no app fix retained; diagnosis in STUCK.md |
+| 40 | `tasks/BIG-QUEUE-40-47.md` (cove-night-strip) | `area/cove-night-strip` | resolved in task 59; night band caused by foreground mountain ring, hidden in Cove and restored outside; full 2015 + 2 passed |
 | 41 | `tasks/BIG-QUEUE-40-47.md` (public-ready) | `area/public-ready` | done for startup/fallback; full 1787 + 2; static copy validated again in 47; wide picnic visual follow-up in STUCK |
 | 42 | `tasks/BIG-QUEUE-40-47.md` (showcase-media) | `area/showcase-media` | done; six 3.8s 640px loops under 728KB; no Pavi/Siri; full 1787 + 2; 12 day/night stills |
 | 43 | `tasks/BIG-QUEUE-40-47.md` (contributing) | `area/contributing` | done; contribution guide + 10 draft ideas; links checked; full 1787 + 2; day/night baseline saved |
@@ -71,7 +71,7 @@ finished. Re-read this file each time; Claude may change it.
 | 56 | `tasks/showcase-20s.md` | `area/showcase-20s` | done, awaiting review; 36 automatic 20-second scenes, 12-minute loop; focused pass + Film day/night; full 2015 + 2 passed |
 | 57 | `tasks/showcase-watercolor.md` | `area/showcase-watercolor` | done, awaiting review; all-watercolour 36-scene loop; focused + mixed-style regression passed; day/night saved; full 2015 + 2 passed |
 | 58 | `tasks/GAME-HEALTH-REVIEW.md` | `area/game-health-review` | review complete; eight fresh views, no runtime errors; prioritized unfinished visuals and character rollout recorded; repairs remain open |
-| 59 | `tasks/train-shore-fixes.md` | `area/train-shore-fixes` | WIP verification; train platform/junction depth overlaps separated; night band root cause found and fixed; 12 previews + focused motion passed; full suite running |
+| 59 | `tasks/train-shore-fixes.md` | `area/train-shore-fixes` | done, awaiting review; platform/junction overlaps separated; Cove mountain band removed; 12 day/night previews, 600 train motion steps; full 2015 + 2 passed |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -91,6 +91,7 @@ meadow & lake, crystal mine & balloon.
 
 > Loading diagnosis follow-up: 21.558s startup at 720p; terrain pad calculations and first-use shaders dominate CPU samples. Four preset clicks responsive in isolated test; the later reproduced bench-state freeze is now fixed and validated in task 50. Task 48 retains its forest visual follow-up; see its result.
 > Follow-up complete: user-approved life.js state reset fixes the reproduced null-seat freeze; full 2015 + 2 and 96 preset switches passed; 12 Film day/night frames saved. Task 48 retains only the unresolved forest visual follow-up. No new content queued.
+
 
 
 

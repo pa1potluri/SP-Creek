@@ -32,3 +32,7 @@ Task 32 resolved Cove continuity, camping startup, Episode 4 and branch-train so
 - Captured Walker.update life.js:505 reading a null seat after an inactive town child was shown again. User approved life.js scope extension; leaveSeat now cancels seating states.
 - Full 2015 + 2 checks and all 48 presets twice (96 selections) passed, no browser errors or WebGL context losses. Before/after sequence in preview-switching-before.json / preview-switching.json. This supersedes the earlier unconfirmed-hang note for this specific failure.
 - First-use shader pauses still occur; second warm pass max frame gap was 66.7ms. Forest steep-bank root silhouettes, cove night band and wide public picnic readability remain open visuals above.
+
+## Resolved in task 59: Cove night band
+Whole-scene raycast identified the 360m procedural mountain ring crossing the beach at x~-359/y~0.9, ahead of sand/water. Cove views now hide procedural mountain layers and restore them on exit. Final train-shore-fixes-40-night.png has no band; full 2015 + 2 passed. Historical failed material/geometry probes above retained for context.
+

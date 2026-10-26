@@ -44,7 +44,7 @@ finished. Re-read this file each time; Claude may change it.
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | done; preview-only Watercolour; full 1773 + 2 passed (26 suites); 12 day/night film-oil-watercolour previews + 2 comparisons; stopped after 31 |
-| 31a | `tasks/kids-ui.md` | `area/kids-ui` | WIP priority: six tabs/Create catalogue/live world preview/settings/Studio implemented; 19 focused checks, tab captures; full suite pending |
+| 31a | `tasks/kids-ui.md` | `area/kids-ui` | done functional menu, awaiting review; six tabs/live canvas/43 pieces/Studio; 21 focused + full 2015 + 2, every-tab/tablet/day-night captures; artwork placeholders |
 | 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
 | 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | done; SELF-REVIEW-1 report + day/night/oil and Play captures; visibility handoff fixed; full 1464 + 2 passed |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | done; full 1493 + 2 passed; rainy suite 26; six day/night previews 66-68 |
@@ -171,3 +171,4 @@ meadow & lake, crystal mine & balloon.
 
 
 > New lead task tasks/kids-ui.md is authoritative for the supplied menu design and supersedes task 86 prototype scope. Continue on area/kids-ui; do not discard earlier correction queue.
+

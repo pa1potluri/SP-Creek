@@ -1,6 +1,21 @@
-# Kids UI result — implementation checkpoint
-Branch area/kids-ui; priority 31a. Six rounded main tabs, Create categories, live Three.js canvas preview and view arrows, existing Place/Rotate/Delete, settings proxies and reversible Studio access implemented. Existing prototype launcher/dialog removed from active DOM. All 43 Build pieces represented (Buildings 10, Nature 13, Props 20), with road/fence and seven-style choices. Characters category honestly explains that individual placement is unavailable in existing tools; this is not invented character-placement functionality.
-Icons/logo/avatar are placeholders until supplied PNGs arrive. Build cards generate cached 3D snapshots; artwork can override via world/assets/ui/index.json, keeping static/offline loading and avoiding missing-image requests. Watch uses large play cards and existing preset titles/descriptions. No external libraries/CDNs.
-Focused checks: 21 passed before the final Watch title/description formatting adjustment, including real placed-building selection/rotation/deletion, all categories, live-preview bounds/aspect, >=64px top/category targets, Studio return, H hide/show, tablet fit, no sound/browser/resource errors. Screenshots of all six tabs plus tablet and Film Create day/night saved in world/tests/kids-ui-*.png.
-Full suite: earlier menu revision passed all 31 suites (2015 + 2 startup), final static-art/prototype cleanup regression currently running. Final focused screenshot/error check still pending. Do not mark done until final output is recorded.
-Limitations: placeholder artwork does not match the final painted reference exactly; no dedicated Town Hall/station Build piece or individual NPC placement exists in the original catalogue. Existing catalogue remains intact; new geometry/placement systems are outside this task's allowed files. Earlier actor/visual/terrain fixes remain queued, not fixed by the menu.
+# Kids UI result
+Status: done functional menu increment, awaiting lead/user visual review. Priority 31a, branch area/kids-ui.
+
+## Built
+- Rounded Home/Create/Play/Watch/Settings/Help navigation, logo/avatar placeholders and visible selected states.
+- Create has six categories, all 43 existing Build pieces (10 Buildings / 13 Nature / 20 Props), road/fence tools and seven styles. Cards use cached 3D snapshots when supplied artwork is absent.
+- Actual Three.js canvas in the preview, matching camera aspect, previous/next place buttons, and original Place/Rotate/Delete handlers. Placement returns to the full world; select a placed building before Rotate/Delete.
+- Play starts existing gameplay; Watch runs existing presets/episodes. Settings reuses style, mood, season, weather, family, festival and sound controls. Help explains the existing controls. Home leaves the calm world visible behind its welcome card.
+- Original panel available through Settings > Studio, with a return button. H hides/restores friendly menus and art strip for recording. Original prototype launcher/dialog removed from active DOM.
+- Local/offline font fallbacks; no new app libraries or CDN requests. Optional supplied PNGs registered in world/assets/ui/index.json; placeholders avoid broken asset requests on static servers.
+
+## Checked
+- Full 31 suites passed: 2015 + 2 startup reload checks; Browser errors: []. Log world/tests/kids-ui-full.txt.
+- Final focused test 21 passed: all tabs/categories, all 43 pieces, live preview/aspect, >=64px navigation/category targets, actual placement/selection/rotation/deletion, Studio return, H, 1024x768 tablet fit, no sound, page/console/resource errors.
+- Tab screenshots: kids-ui-home.png, -create.png, -play.png, -watch.png, -settings.png, -help.png. Tablet: kids-ui-tablet.png. Film day/night: kids-ui-create-day.png / -night.png. All under world/tests/.
+- Visually inspected Create/tablet and Watch captures; corrected legacy-popup layering, narrow category labels and merged Watch title/description text. No camera shot IDs or definitions changed.
+
+## Limitations / review notes
+- Artwork is intentionally placeholder-based until the user's painted icons arrive; the final illustrated reference is not matched pixel-for-pixel.
+- Individual NPC placement and dedicated Town Hall/station pieces are not in the existing Build catalogue. Characters explains the limitation instead of pretending to place them. Adding new placement systems/geometry needs a separate task outside the allowed UI-only files.
+- Earlier collision, atmosphere, terrain, camera and scene corrections remain open. The menu does not repair those scenes. No merge/push/publish.

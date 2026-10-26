@@ -227,3 +227,9 @@ body.kids-ui:not(.kids-studio) #modeControls > button { display:none; }
 body.kids-ui:not(.kids-studio) #modeControls > #freeBtn { display:flex;align-items:center;justify-content:center;width:174px;min-height:64px;font-size:16px;background:#c4e6fa;color:#214a64;border:3px solid #fff7e9;border-radius:20px;box-shadow:0 3px 7px #0003; }
 body.kids-ui:not(.kids-studio) #modeControls > #freeBtn.on { background:#ffda78;color:#573b27; }
 body.kids-ui:not(.kids-studio) #modeControls { position:absolute;top:-4px;left:calc(100% + 12px);right:auto; }
+/* Home keeps the world open; welcome belongs with the top-left brand. */
+.kidsBrand { display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:0 0 auto; }
+.kidsGreeting { color:#fff6db;text-shadow:0 1px 3px #32271f;font:bold 14px/18px 'Trebuchet MS',system-ui;white-space:nowrap;padding-left:6px; }
+@media(max-width:1100px){.kidsGreeting{font-size:12px}}
+.kidsBrand .kidsLogo { height:64px;min-height:64px;padding:4px 12px;display:flex;align-items:center;justify-content:center; }
+.kidsBrand .kidsLogo img { width:160px;height:48px;max-height:48px;object-fit:contain; }

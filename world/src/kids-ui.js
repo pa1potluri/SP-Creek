@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 export function setupKidsUI(app){
- const $=s=>document.querySelector(s),canvas=$('#view'),root=document.createElement('div');root.id='kidsUI';root.innerHTML='<header class="kidsHeader"><button class="kidsLogo" aria-label="SP Creek home">SP Creek</button><nav aria-label="Main menu"></nav><span class="kidsAvatar" aria-label="Friendly neighbour">☺</span></header><section id="kidsPanel"></section>';
+ const $=s=>document.querySelector(s),canvas=$('#view'),root=document.createElement('div');root.id='kidsUI';root.innerHTML='<header class="kidsHeader"><div class="kidsBrand"><button class="kidsLogo" aria-label="SP Creek home">SP Creek</button><span class="kidsGreeting">Welcome to SP Creek</span></div><nav aria-label="Main menu"></nav><span class="kidsAvatar" aria-label="Friendly neighbour">☺</span></header><section id="kidsPanel"></section>';
  document.body.append(root);document.body.classList.add('kids-ui');let tab='Home',category='Buildings',selected=null,view=0,studio=false;
  const panel=$('#kidsPanel'),icons={Home:'⌂',Create:'🖌',Play:'🎮',Watch:'▶',Settings:'⚙',Help:'?'};
  const asset=(name,fallback)=>{const span=document.createElement('span');span.className='kidsIcon';span.textContent=fallback;return span;};
@@ -38,7 +38,7 @@ export function setupKidsUI(app){
  const open=name=>{if(name!=='Play'&&app.game.active)app.game.exit();tab=name;studio=false;root.hidden=false;document.body.classList.remove('kids-studio','kids-world','ui-hidden');panel.hidden=false;root.querySelectorAll('.kidsTab').forEach(b=>{b.classList.toggle('on',b.dataset.tab===name);b.setAttribute('aria-current',name===b.dataset.tab?'page':'false');});
   if(name==='Create')create();else if(name==='Settings')settings();else if(name==='Watch'){heading('Watch SP Creek','Choose a calm video or an episode.');const grid=document.createElement('div');grid.className='kidsWatch';panel.append(grid);proxies('#videoPresets button',grid);}
   else if(name==='Help'){heading('Let’s explore!','A little guide to SP Creek');const grid=document.createElement('div');grid.className='kidsHelp';for(const text of ['🏡 Create: choose a piece, Place, then click the ground.','↻ Select a building to rotate or remove it.','🛤 Roads: click ground points, then Finish or Enter.','🎮 Play: WASD or arrows move; E rides a pony.','🖱 Free camera: drag to look, wheel to move closer.','🎨 Pick your favourite art style at any time.','🎥 H hides menus for recording; H brings them back.']){const p=document.createElement('p');p.textContent=text;grid.append(p);}panel.append(grid);}
-  else if(name==='Play'){app.game.enter();document.body.classList.remove('ui-hidden');closeForWorld();}else{heading('Welcome to SP Creek','A little world to build, explore and enjoy.');const row=document.createElement('div');row.className='kidsWelcome';row.append(button('🖌 Create your world',()=>open('Create')),button('🎮 Let’s play',()=>open('Play')),button('▶ Watch a story',()=>open('Watch')));panel.append(row);}resize();};
+  else if(name==='Play'){app.game.enter();document.body.classList.remove('ui-hidden');closeForWorld();}else{panel.replaceChildren();closeForWorld();}resize();};
  for(const [name,icon]of Object.entries(icons)){const b=button(name,()=>open(name),'kidsTab');b.dataset.tab=name;const i=document.createElement('span');i.className='kidsIcon';i.textContent=icon;b.prepend(i);art(i,name.toLowerCase());root.querySelector('.kidsHeader nav').append(b);}$('.kidsLogo').onclick=()=>open('Home');art($('.kidsLogo'),'logo');art($('.kidsAvatar'),'avatar');
  app.kidsUI={open,get tab(){return tab;},previewRect(){return !studio&&!root.hidden&&!panel.hidden&&tab==='Create'&&!document.body.classList.contains('ui-hidden')?$('#kidsPreviewWindow')?.getBoundingClientRect():null;}};
  panel.addEventListener('scroll',resize);
@@ -47,6 +47,7 @@ export function setupKidsUI(app){
  const back=button('Back to friendly menu',()=>open('Home'));back.id='kidsStudioBack';$('#panel').prepend(back);
  if(!new URLSearchParams(location.search).has('showcase'))open('Home');else{root.hidden=true;document.body.classList.add('kids-studio');}
 }
+
 
 
 

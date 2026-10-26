@@ -1,0 +1,5 @@
+# Home menu layout result
+Done layout correction, awaiting review. Branch area/home-menu-layout.
+Removed the large central welcome card and duplicate Create/Play/Watch action cards. Home now shows the full live world; Welcome to SP Creek is in the top-left logo/brand group, clear of the style strip. Existing top Create/Play/Watch tabs and icons remain. Free camera On/Off stays visible beside the styles; Studio and other tabs unchanged.
+Checks: 27 focused pass, including welcome/control non-overlap, no duplicate Home actions, six tabs, all pieces, actual placement/edit/delete, Studio, tablet, H, no audio/console/resource errors. Full 31 suites: 2015 + 2 startup passed, no browser errors. Log home-menu-layout-full.txt. All tab/tablet and Film Create day/night captures saved as world/tests/home-menu-layout-*.png. No camera definitions/IDs changed.
+User replacement artwork arrived during work: cat_characters, cat_nature, cat_props, cat_roads, cat_style, home and logo saved unchanged. No background editing performed. Other scene/collision corrections and any remaining icon replacements remain open.

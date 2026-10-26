@@ -10,3 +10,5 @@ Progress checkpoint: road interaction increment verified (12 focused + full 2015
 31a kids-ui functional increment complete: 21 focused + full 2015 + 2 passed; six tabs, all 43 pieces, live world preview, Studio and silent tests. Every tab/tablet/Film day-night captures saved. Placeholder art and unavailable individual NPC placement documented, not claimed complete. Resume earlier functional clearance corrections next; no review wait required.
 
 Artwork received: 13 supplied UI PNGs registered on area/kids-ui-art; 21 checks pass, captures refreshed. Home background verified opaque with baked checkerboard; originals preserved. Need transparent RGBA exports for final cut-out appearance. Collision resume checkpoint: shopper pair min separation improved from 0.079929m to 4.981526m; broad movement remains WIP.
+
+Home layout corrected per user: no large welcome/action overlay; greeting top-left and actions in top menus. 27 focused + full 2015 + 2 pass; current supplied replacement art preserved. No push/merge. Continue earlier scene/function corrections; user plans further submenus and icon replacements separately.

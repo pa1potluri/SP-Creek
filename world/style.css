@@ -150,3 +150,15 @@ body.ui-hidden #uiToggle,body.ui-hidden .viewBtn { opacity:1; }
 #buildPopover { bottom:82px; }
 #roadStatus { padding:9px;border:1px solid var(--accent);border-radius:6px;color:#fff0ce;font:14px/1.45 system-ui;background:#493720;margin:0 0 10px; }
 @media(max-width:1000px) { #styleBar button { font-size:13px; } #modeControls { gap:5px; } }
+
+#createScreen { width:min(1200px,96vw);max-height:90vh;overflow:auto;border:3px solid #fff4db;border-radius:30px;padding:24px;background:#f5e7d3;color:#573b50;box-shadow:0 12px 55px #0006;font:16px/1.4 system-ui; }
+#createScreen::backdrop { background:#182d3380;backdrop-filter:blur(3px); }
+#createScreen header { display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px; }
+#createScreen h1 { margin:0;color:#743c78;font-size:32px; } #createScreen p { margin:8px 0; }
+#createScreen button { color:#573b50;background:#fff8e9;border:2px solid #e0c5a6;border-radius:18px;font:16px system-ui;padding:12px;min-height:44px; }
+#createScreen button.on { background:#ffd576;border-color:#d79828; } #createScreen button:disabled { opacity:.45;cursor:default; }
+.createBody { display:grid;grid-template-columns:170px 1fr 240px;gap:20px; } .createBody nav { display:flex;flex-direction:column;gap:10px; }
+.createCards { display:grid;grid-template-columns:repeat(3,minmax(100px,1fr));gap:12px;align-content:start;max-height:60vh;overflow:auto; }
+.createCard { display:flex;flex-direction:column;align-items:center;gap:12px; } .createCard span { font-size:52px; } .createCard strong { font-size:15px; }
+.createBody aside { padding:16px;background:#fff9ee;border-radius:22px; } .createBody aside button { width:100%;margin-top:8px; } .createBody aside h2 { font-size:20px; } .createPlaceholder { font-size:90px;text-align:center; }
+@media(max-width:900px){.createBody{grid-template-columns:130px 1fr}.createBody aside{grid-column:1/-1}.createCards{grid-template-columns:repeat(2,minmax(100px,1fr))}#createScreen h1{font-size:25px}}

@@ -1,4 +1,5 @@
 import {walkHeight} from './world.js';
+import {setupCreateUI} from './create-ui.js';
 const PLACES=[
  ['Town',0,0,14],['River & mill',10,18,98],['Train station',11,65,22],
  ['Honey Bun Café',17,9,15],['Willow Creek',21,-55,80],['Old Hollow',25,125,-2],
@@ -54,4 +55,5 @@ export function setupExploreUI(app){
    list.querySelectorAll('button').forEach(p=>p.classList.toggle('on',p===b));app.renderClips();
   };list.append(b);}
  app.exploreUI={closeBrush:close,layout};
+ setupCreateUI();
 }

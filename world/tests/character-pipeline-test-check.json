@@ -113,8 +113,8 @@
       "geometries": 235,
       "textures": 1,
       "programs": 5,
-      "medianMs": 0.9000000059604645,
-      "p95Ms": 1.4000000059604645,
+      "medianMs": 0.6000000014901161,
+      "p95Ms": 1.1000000014901161,
       "timing": "CPU+GPU synchronized render latency; not average FPS"
     },
     {
@@ -133,8 +133,8 @@
       "geometries": 235,
       "textures": 1,
       "programs": 5,
-      "medianMs": 0.5,
-      "p95Ms": 0.6000000014901161,
+      "medianMs": 0.3999999985098839,
+      "p95Ms": 0.7000000029802322,
       "timing": "CPU+GPU synchronized render latency; not average FPS"
     },
     {
@@ -153,8 +153,8 @@
       "geometries": 235,
       "textures": 1,
       "programs": 5,
-      "medianMs": 0.6000000014901161,
-      "p95Ms": 0.8999999985098839,
+      "medianMs": 0.5,
+      "p95Ms": 0.8000000044703484,
       "timing": "CPU+GPU synchronized render latency; not average FPS"
     },
     {
@@ -173,8 +173,8 @@
       "geometries": 235,
       "textures": 1,
       "programs": 5,
-      "medianMs": 0.7999999970197678,
-      "p95Ms": 1.3000000044703484,
+      "medianMs": 0.5,
+      "p95Ms": 0.7000000029802322,
       "timing": "CPU+GPU synchronized render latency; not average FPS"
     },
     {
@@ -193,8 +193,8 @@
       "geometries": 235,
       "textures": 1,
       "programs": 5,
-      "medianMs": 0.8999999985098839,
-      "p95Ms": 1.1999999955296516,
+      "medianMs": 0.6000000014901161,
+      "p95Ms": 1,
       "timing": "CPU+GPU synchronized render latency; not average FPS"
     },
     {
@@ -213,8 +213,8 @@
       "geometries": 248,
       "textures": 1,
       "programs": 5,
-      "medianMs": 0.7999999970197678,
-      "p95Ms": 1.1999999955296516,
+      "medianMs": 0.5,
+      "p95Ms": 0.8999999985098839,
       "timing": "CPU+GPU synchronized render latency; not average FPS"
     },
     {
@@ -233,8 +233,8 @@
       "geometries": 261,
       "textures": 1,
       "programs": 5,
-      "medianMs": 0.8000000044703484,
-      "p95Ms": 1.2000000029802322,
+      "medianMs": 0.5,
+      "p95Ms": 1,
       "timing": "CPU+GPU synchronized render latency; not average FPS"
     }
   ],
@@ -246,7 +246,7 @@
     "NVIDIA GeForce RTX 5060 Ti",
     "Microsoft Basic Render Driver"
   ],
-  "readyMs": 699,
+  "readyMs": 503,
   "depthCheck": {
     "pixel": [
       255,
@@ -257,14 +257,14 @@
     "passed": true
   },
   "network": {
-    "bytes": 70435255,
-    "existingModelBytes": 22713448
+    "bytes": 47722428,
+    "existingModelBytes": 0
   },
   "heap": {
-    "usedSize": 6010744,
-    "totalSize": 7086080,
-    "embedderHeapUsedSize": 741456,
-    "backingStorageSize": 130341809
+    "usedSize": 5652356,
+    "totalSize": 6873088,
+    "embedderHeapUsedSize": 1076984,
+    "backingStorageSize": 120247348
   },
   "finalStats": {
     "mode": "pipeline",

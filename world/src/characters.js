@@ -325,6 +325,8 @@ export function makeCharacter(outfit = CAST.cowboy) {
 // These original meshes/textures are shared; every appearance owns its own skeleton.
 const starSources=Object.fromEntries(await Promise.all(['pavi','siri'].map(async role=>{
   try{
+  // This standalone page uses only code-built bodies; do not block it on unused GLBs.
+  if(location.pathname.endsWith('/character-pipeline-test.html'))return [role,null];
   const url=new URL('../assets/characters/'+role+'.glb',import.meta.url),response=await fetch(url);
   if(!response.ok)return [role,null];
   const gltf=await new GLTFLoader().parseAsync(await response.arrayBuffer(),new URL('.',url).href);let source;gltf.scene.updateMatrixWorld(true);gltf.scene.traverse(o=>{if(o.isMesh)source=o;});

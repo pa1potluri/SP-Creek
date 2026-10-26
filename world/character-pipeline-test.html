@@ -7,7 +7,14 @@
 <script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
 <link rel="icon" href="data:,">
 <style>aside{top:auto;bottom:12px;max-height:42vh;overflow:auto}</style>
+<style>body,#names{overflow:hidden}#startup{position:fixed;inset:0;z-index:10;display:grid;place-content:center;background:#e9eddf;text-align:center;padding:24px}#startup[hidden]{display:none}#startup p{max-width:480px}#startup button{justify-self:center}</style>
 <canvas id="view" aria-label="Character pipeline test plaza"></canvas><div id="names"></div>
+<div id="startup" role="status"><h1>Opening the resident preview</h1><p id="startupMessage">Starting the 3D preview…</p><button onclick="location.reload()">Reload preview</button></div>
+<script>
+window.previewLoadingMessage=message=>{document.querySelector('#startupMessage').textContent=message;};
+window.addEventListener('error',event=>{if(event.message)window.previewLoadingMessage('The preview could not start: '+event.message+'. Please reload, or share this message.');});
+window.addEventListener('unhandledrejection',event=>window.previewLoadingMessage('The preview could not finish loading: '+(event.reason?.message||event.reason)+'. Please reload.'));
+</script>
 <aside><h1>SP Creek · face pipeline v01</h1><p>Updated residents · package 1.1. 12 residents + Pavi and Siri, on existing game bodies.</p>
 <label>Faces <select id="faces"><option value="pipeline">Pipeline faces</option><option value="original">Current game faces</option></select></label>
 <label>Detail <select id="detail"><option value="4">Review · ¼ points</option><option value="1">Full source</option><option value="8">Distant · ⅛ points</option></select></label>
@@ -15,4 +22,4 @@
 <div><button id="day">Day</button><button id="night">Night</button><button id="pose">Gentle head turn: off</button></div>
 <p id="status" role="status">Loading saved profiles…</p><details><summary>Test notes</summary><p>Drag to orbit, scroll to zoom. H hides controls. GPU-rendered 3D points share normal scene depth. Original world is unchanged.</p><p>Pavi uses the frozen supplied hero face. Siri temporarily uses town-202; no dedicated Siri face was supplied. Faces have no blink or expression rig yet. This is a material/attachment test, not final art approval.</p></details>
 <p><a href="index.html">Back to SP Creek</a></p></aside>
-<script type="module" src="src/experiments/character-pipeline-test.js"></script></html>
+<script type="module" src="src/experiments/character-pipeline-test.js" onerror="previewLoadingMessage('The preview code could not load. Check the server connection, then reload.')"></script></html>

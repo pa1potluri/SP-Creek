@@ -1,0 +1,12 @@
+const {chromium}=require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const fs=require('fs');
+(async()=>{const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']});const report={checks:[],errors:[]};
+try{
+ const page=await browser.newPage({viewport:{width:824,height:1230}});page.on('pageerror',e=>report.errors.push(e.message));const start=Date.now();await page.goto('http://127.0.0.1:8811/character-pipeline-test.html');await page.waitForFunction(()=>window.__pipeline,undefined,{timeout:60000});report.readyMs=Date.now()-start;
+ const status=await page.evaluate(()=>{const a=__pipeline;a.setFrozen(true);a.view('group');a.step(0);return{hidden:document.querySelector('#startup').hidden,glbs:performance.getEntriesByType('resource').filter(r=>r.name.endsWith('.glb')).length,inFrame:a.actors.every(x=>{const p=x.rig.head.getWorldPosition(x.rig.g.position.clone());p.project(a.camera);return Math.abs(p.x)<.95&&Math.abs(p.y)<.95&&p.z<1;}),horizontalOverflow:document.documentElement.scrollWidth>innerWidth};});
+ for(const [ok,label]of [[status.hidden,'Loading overlay clears when ready'],[status.glbs===0,'Standalone preview never downloads unused GLBs'],[status.inFrame,'All 14 head centres fit narrow in-app viewport'],[!status.horizontalOverflow,'No horizontal page overflow']]){if(!ok)throw Error(label);report.checks.push(label);}
+ await page.screenshot({path:'world/tests/character-preview-loading-ready.png'});
+ const failure=await browser.newPage();await failure.route('**/src/experiments/character-pipeline-test.js',route=>route.abort());await failure.goto('http://127.0.0.1:8811/character-pipeline-test.html');await failure.waitForFunction(()=>document.querySelector('#startupMessage').textContent.includes('could not load'));
+ report.failureText=await failure.locator('#startupMessage').textContent();report.checks.push('Failed module load produces an explicit retry message');await failure.close();
+ if(report.errors.length)throw Error(report.errors.join('; '));report.passed=report.checks.length;console.log(JSON.stringify(report));
+}catch(error){report.failure=error.message;console.error(error);process.exitCode=1;}finally{fs.writeFileSync('world/tests/character-preview-loading-check.json',JSON.stringify(report,null,2));await browser.close();}})();

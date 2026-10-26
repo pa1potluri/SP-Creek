@@ -24,7 +24,7 @@ for(const [x,color]of [[-5,'#d7a074'],[0,'#c4d1b2'],[5,'#d6b3a7']]){
 }
 for(const x of [-5.5,5.5]){box(.1,2.4,.1,x,1.1,1,'#866d57');box(.3,.4,.3,x,2.4,1,'#ffe6a0');}
 
-const actors=[],assets=new Map(),profiles=new Map(),color=new THREE.Color();let mode='pipeline',stride=4,time=0,turn=false,frozen=false,mood='day';
+const actors=[],assets=new Map(),profiles=new Map(),color=new THREE.Color();let mode='pipeline',stride=4,time=0,turn=false,frozen=false,mood='day',currentView='group',loadedHeads=0;
 async function json(url){const response=await fetch(url);if(!response.ok)throw Error(`Could not load ${url}`);return response.json();}
 async function load(id,path,manifest,profile){
  const response=await fetch(base+path);if(!response.ok)throw Error(`Missing head ${id}`);
@@ -33,6 +33,7 @@ async function load(id,path,manifest,profile){
  // Baked/procedural colors use unlit points here, so unused normals need not stay resident.
  delete data.normals;
  assets.set(id,{id,data,bytes:buffer.byteLength,geometries:new Map(),profile});
+ window.previewLoadingMessage?.(`Loaded ${++loadedHeads} of 13 saved head files…`);
 }
 function geometry(asset,detail){
  if(asset.geometries.has(detail))return asset.geometries.get(detail);
@@ -47,7 +48,8 @@ function setDetail(value){stride=+value;pointMaterial.size=.010*Math.sqrt(stride
 function setFaces(value){mode=value;for(const actor of actors){actor.old.forEach(c=>c.visible=mode==='original');actor.points.visible=mode==='pipeline';}document.querySelector('#faces').value=mode;refresh();}
 function setMood(value){mood=value;const night=value==='night';scene.background=new THREE.Color(night?'#8196ac':'#dbe8d3');hemi.intensity=night?1.65:2.6;sun.intensity=night?.55:2;pointMaterial.color.setScalar(night?.82:1);heroMaterial.color.copy(pointMaterial.color);}
 function view(id='group'){
- if(id==='group'){camera.position.set(0,4.1,11.8);controls.target.set(0,1.1,0);}
+ currentView=id;
+ if(id==='group'){const distance=Math.max(11.8,4.75/(Math.tan(camera.fov*Math.PI/360)*camera.aspect));camera.position.set(0,1.1+distance*.255,distance);controls.target.set(0,1.1,0);}
  else {const actor=actors.find(a=>a.id===id)||actors[0],p=actor.rig.head.getWorldPosition(new THREE.Vector3());p.y+=.25*actor.rig.g.scale.y;camera.position.copy(p).add(new THREE.Vector3(.28,.1,1.65));controls.target.copy(p);}
  controls.update();
 }
@@ -55,7 +57,7 @@ function refresh(){if(!actors.length)return;const points=actors.reduce((n,a)=>n+
 }
 function step(dt){time+=dt;actors.forEach((a,i)=>{a.rig.head.rotation.y=turn?Math.sin(time*.4+i*.15)*.25:0;});controls.update();renderer.render(scene,camera);for(const a of actors){const p=a.rig.head.getWorldPosition(new THREE.Vector3());p.y+=.85;p.project(camera);a.label.style.left=`${(p.x*.5+.5)*innerWidth}px`;a.label.style.top=`${(-p.y*.5+.5)*innerHeight}px`;a.label.hidden=p.z>1;}refresh();}
 function stats(){return{mode,stride,mood,actors:actors.length,visibleActors:actors.filter(a=>a.rig.g.visible).length,sourcePoints:[...assets.values()].reduce((n,a)=>n+a.data.count,0),packedBytes:[...assets.values()].reduce((n,a)=>n+a.bytes,0),decodedHeadBytes:[...assets.values()].reduce((n,a)=>n+a.data.positions.byteLength+a.data.colors.byteLength+a.data.parts.byteLength,0),cachedHeadGeometryBytes:[...assets.values()].reduce((n,a)=>n+[...a.geometries.values()].reduce((m,g)=>m+g.attributes.position.array.byteLength+g.attributes.color.array.byteLength,0),0),visiblePoints:mode==='pipeline'?actors.filter(a=>a.rig.g.visible).reduce((n,a)=>n+a.points.geometry.attributes.position.count,0):0,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,programs:renderer.info.programs.length};}
-function resize(){const s=Math.min(1,1600/innerWidth,900/innerHeight);renderer.setSize(Math.round(innerWidth*s),Math.round(innerHeight*s),false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+function resize(){const s=Math.min(1,1600/innerWidth,900/innerHeight);renderer.setSize(Math.round(innerWidth*s),Math.round(innerHeight*s),false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();if(currentView==='group'&&actors.length)view('group');}
 addEventListener('resize',resize);resize();
 addEventListener('keydown',e=>{if(e.key.toLowerCase()==='h')document.body.classList.toggle('capture');});
 try{
@@ -73,10 +75,11 @@ try{
   actors.push({...entry,rig,old,points,label});
  });
  setDetail(stride);setFaces(mode);setMood('day');scene.updateMatrixWorld(true);view();
+ document.querySelector('#startup').hidden=true;
  document.querySelector('#faces').onchange=e=>setFaces(e.target.value);document.querySelector('#detail').onchange=e=>setDetail(e.target.value);
  for(const id of ['group','pavi','siri'])document.querySelector('#'+id).onclick=()=>view(id);
  document.querySelector('#resident').onclick=()=>view('town-202');for(const id of ['day','night'])document.querySelector('#'+id).onclick=()=>setMood(id);
  document.querySelector('#pose').onclick=()=>{turn=!turn;document.querySelector('#pose').textContent=`Gentle head turn: ${turn?'on':'off'}`;};
  window.__pipeline={scene,camera,renderer,actors,assets,setDetail,setFaces,setMood,view,step,stats,setFrozen:value=>frozen=value};
  let last=performance.now();function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000);last=now;if(!frozen)step(dt);}requestAnimationFrame(frame);
-}catch(error){document.querySelector('#status').textContent=error.message;console.error(error);}
+}catch(error){document.querySelector('#status').textContent=error.message;window.previewLoadingMessage?.('Could not load the resident preview: '+error.message+'. Please reload.');console.error(error);}

@@ -1,0 +1,4 @@
+# Cove surface lines and hard edges — user review
+Queued screenshot: codex-clipboard-46c504e3-edbd-4718-bc91-a34a63f757e6.png (2026-10-26).
+User points to a thin dark diagonal on the sea, a long diagonal across sand near Pavi/Siri, and outlined dune ridges. Inspect current default cast and all styles, first Film versus current illustrated style at identical camera/time. Distinguish mesh boundaries/depth conflicts/incorrect normals from post-processing outlines before changing settings. Repair sea/sand geometry or materials at source where possible; preserve useful character details and other styles. Do not equate this with the previously fixed dark night mountain band.
+Scope: areas/sunset-cove.js, its sea module/material helpers and styles/painterly only if diagnosis demonstrates those sources; focused tests, Film day/night and same-view style comparisons, result. Preserve saved shot IDs and existing cove footprint/boat logic.

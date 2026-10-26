@@ -364,10 +364,11 @@ function setTool(t) {
   if (tool?.startsWith('build:')) refreshBuildGhost();
   propButtons.forEach((b) => b.classList.toggle('on', b.dataset.prop === tool));
   canvas.classList.toggle('placing', !!tool);
+  canvas.dataset.tool=tool||'';
   showToolHint();
 }
 function showToolHint() {
-  if (tool === 'road' || tool === 'fence') { $('#hint').textContent = 'Click ground points · Enter/double-click to finish · Esc to cancel'; return; }
+  if (tool === 'road' || tool === 'fence') { $('#hint').textContent = `${roadPoints.length} points · Click ground · Finish or Enter to save · Esc cancels`; return; }
   if (tool?.startsWith('build:')) { $('#hint').textContent = 'Click ground to build · R/wheel rotates · Esc stops'; return; }
   $('#hint').textContent = tool ? `Click the ground to place: ${tool === 'cutout' ? 'cut-out' : tool} (Esc to stop)` : '';
 }
@@ -390,7 +391,7 @@ canvas.addEventListener('pointerup', (e) => {
   }
   if (tool === 'road' || tool === 'fence') {
     if (e.detail < 2 && (!roadPoints.length || Math.hypot(hit.point.x - roadPoints.at(-1)[0], hit.point.z - roadPoints.at(-1)[1]) > 0.2)) roadPoints.push([hit.point.x, hit.point.z]);
-    previewRoad(); return;
+    previewRoad();showToolHint();return;
   }
   if (tool === 'cutout') {
     if (cutout) {
@@ -436,11 +437,14 @@ document.addEventListener('artstylechange', () => { if (tool?.startsWith('build:
 let buildSignCustom = false;
 let ghost = null, buildYaw = 0, groundPoint = null, selectedBuilding = null, selectionBox = null;
 let roadPoints = [], roadPreview = null;
+const roadMarkers=new THREE.Group(),roadMarkerGeo=new THREE.SphereGeometry(.18,8,6),roadMarkerMat=new THREE.MeshBasicMaterial({color:'#fff3a1',depthTest:false});
+world.root.add(roadMarkers);
 function buildSpec(p = { x: 0, z: 0 }) {
   return { type: tool.slice(6), x: p.x, z: p.z, yaw: buildYaw, scale: +$('#buildScale').value, w: +$('#buildWidth').value,
     floors: +$('#buildFloors').value, wall: $('#buildWall').value.split(',').map(Number), sign: $('#buildSign').value, signCustom: buildSignCustom };
 }
 function clearBuildPreview() {
+  roadMarkers.clear();
   if (ghost) world.disposeBuilding(ghost);
   ghost = null;
   if (roadPreview) { world.root.remove(roadPreview); roadPreview.geometry.dispose(); roadPreview = null; }
@@ -473,6 +477,8 @@ function deleteBuilding() {
   if (selectedBuilding.spec.type === 'fence') world.removeFence(selectedBuilding); else world.removeBuilding(selectedBuilding); selectBuilding(null); saveLayout();
 }
 function previewRoad(cursor) {
+  roadMarkers.clear();
+  for(const [x,z]of roadPoints){const m=new THREE.Mesh(roadMarkerGeo,roadMarkerMat);m.position.set(x,terrainHeight(x,z)+.24,z);m.renderOrder=5;roadMarkers.add(m);}
   if (roadPreview) { world.root.remove(roadPreview); roadPreview.geometry.dispose(); roadPreview = null; }
   const pts = [...roadPoints];
   if (cursor && (!pts.length || Math.hypot(cursor.x - pts.at(-1)[0], cursor.z - pts.at(-1)[1]) > 0.2)) pts.push([cursor.x, cursor.z]);
@@ -486,7 +492,7 @@ function previewRoad(cursor) {
 function finishRoad() {
   if (roadPoints.length < 2) return flash('Click at least two different road points');
   if (tool === 'fence') world.addFence(roadPoints); else world.addRoad(roadPoints, +$('#roadWidth').value);
-  setTool(null); saveLayout();
+  const kind=tool==='fence'?'Fence':'Road';setTool(null);saveLayout();flash(`${kind} saved`);
 }
 buildButtons.forEach((b) => { b.onclick = () => {
   if (b.dataset.build === 'hotel') $('#buildFloors').value = 2;
@@ -978,7 +984,7 @@ addEventListener('keydown', (e) => {
   else if (e.code === 'KeyP') togglePause();
   else if (e.code === 'Escape') setTool(null);
   else if (e.code === 'KeyR' && tool?.startsWith('build:')) rotateBuild(Math.PI / 12);
-  else if (e.code === 'Enter' && (tool === 'road' || tool === 'fence')) finishRoad();
+  else if (e.code === 'Enter' && (tool === 'road' || tool === 'fence')) {e.preventDefault();finishRoad();}
   else if (e.code === 'Delete' && selectedBuilding) deleteBuilding();
   else if (/^Digit[1-9]$/.test(e.code)) {
     const i = +e.code.slice(5) - 1;

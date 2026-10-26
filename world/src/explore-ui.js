@@ -39,7 +39,7 @@ export function setupExploreUI(app){
  for(const [icon,name,types]of categories){const b=document.createElement('button');b.textContent=icon+' '+name;b.dataset.category=name;b.onclick=()=>showCategory(name,types);dock.append(b);}
  buildButton.onclick=()=>{if(!dock.hidden)return hideBuild();app.game.exit();dock.hidden=false;buildButton.classList.add('on');buildButton.setAttribute('aria-expanded','true');showCategory('Buildings',categories[0][2]);};
  document.querySelectorAll('#buildCatalogue [data-build]').forEach(b=>b.addEventListener('click',closeBuild));
- document.addEventListener('pointerdown',e=>{if(!buildPopup.hidden&&!buildPopup.contains(e.target)&&!dock.contains(e.target)&&!buildButton.contains(e.target))closeBuild();});
+ document.addEventListener('pointerdown',e=>{const drawing=['road','fence'].includes(document.querySelector('#view').dataset.tool);if(!buildPopup.hidden&&!buildPopup.contains(e.target)&&!dock.contains(e.target)&&!buildButton.contains(e.target)&&!(drawing&&e.target.id==='view'))closeBuild();});
  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBuild();});
  buildMode={hide:hideBuild,closePopup:closeBuild};
  const list=document.querySelector('#placeList');

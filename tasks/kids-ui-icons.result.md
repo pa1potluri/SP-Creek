@@ -1,3 +1,5 @@
 # UI icon visibility result — WIP checkpoint
 Manifest has all 13 supplied filenames. Runtime audit confirms all 13 images loaded with positive natural dimensions and visible bounds at 1280x720. Category spacing/row heights corrected to prevent lower Style row clipping; 64px targets preserved, tablet icon sizing retained. Screenshots kids-ui-icons-create.png / -tablet.png; JSON lists each icon by filename.
 Updated user PNG originals preserved unchanged. Full regression running; final counts and Film day/night captures pending. Six category icons belong in the Create tab; avatar and building-piece pictures were not supplied and retain their fallbacks.
+
+Final status: done icon registration/visibility increment, awaiting review. Full 31 suites passed: 2015 + 2 startup checks, no browser errors; kids-ui-icons-full.txt. Fresh audit confirms all 13 images loaded and visible; desktop/tablet and Film day/night captures saved. No assets repainted. All supplied replacement files committed unchanged. Any further image replacements can use the same filenames; menu categories are accessed through Create.

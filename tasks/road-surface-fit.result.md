@@ -9,3 +9,6 @@
 - Film high/low day/night diagnostic captures saved as road-surface-fit-{high,low}-{day,night}.png. Initial camera placement was obstructed; capture script corrected and rerun. Inspect all captures before accepting visual evidence.
 - Need broader widths/curves, terrain edit/rebuild and save/reload regression plus seven-style visual checks. Dense geometry is restricted to user roads; check long-road cost. Narrow positive sample margin does not prove every terrain crease is clear.
 - Current branch area/road-surface-fit. Next: finish verification / any residual clipping, full-suite result, then return to meadow dock and remaining queue. Never push or merge.
+
+## Full-suite checkpoint
+Required full rerun completed successfully (31 suites, 2015 + 2 startup checks; Browser errors: []). Road repair remains WIP for the broader angle/style/save-reload checks listed above.

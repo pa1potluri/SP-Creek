@@ -44,6 +44,7 @@ finished. Re-read this file each time; Claude may change it.
 | 29 | `tasks/cafe-bar-light.md` | `area/cafe-bar-light` | done; full 1446 + 2 passed (19 suites); four day/night previews + counter metrics saved; startup fix 2bbec71 incorporated |
 | 30 | `tasks/performance.md` | `area/performance` | done; full 1446 + 2 passed; targeted 29 passed; ten day/night previews; render cost 8.249 to 7.450ms; stopped after 30 per user |
 | 31 | `tasks/watercolor-resume.md` | `area/watercolor-resume` | done; preview-only Watercolour; full 1773 + 2 passed (26 suites); 12 day/night film-oil-watercolour previews + 2 comparisons; stopped after 31 |
+| 31a | `tasks/kids-ui.md` | `area/kids-ui` | WIP priority: six tabs/Create catalogue/live world preview/settings/Studio implemented; 19 focused checks, tab captures; full suite pending |
 | 32 | `tasks/finish-wip.md` | `area/finish-wip` | done; camping + Episode 4 + continuous cove take + real train listener; full 1460 + 2 passed; six day/night previews |
 | 33 | `tasks/self-review-1.task.md` | `area/self-review-1` | done; SELF-REVIEW-1 report + day/night/oil and Play captures; visibility handoff fixed; full 1464 + 2 passed |
 | 34 | `tasks/rainy-day-fun.md` | `area/rainy-day-fun` | done; full 1493 + 2 passed; rainy suite 26; six day/night previews 66-68 |
@@ -84,11 +85,11 @@ finished. Re-read this file each time; Claude may change it.
 | 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | done, awaiting review; ordinary URL uses approved solid residents; supplied hero bodies retained; full 2015 + 2; day/night and clean server checks saved |
 | 70 | `tasks/canvas-tents.md` | `area/canvas-tents` | done model increment, awaiting review; five framed canvas tents, real open doors/ropes/poles; 17 focused + full 2015 + 2 passed; six Film scene views + closeups |
 | 71 | `tasks/coach-flicker.md` | `area/coach-flicker` (next) | done identified geometry/shadow repair, awaiting motion review; raycast 3cm separation + 600 motion steps + six captures; full 2015 + 2 passed |
-| 72 | `tasks/terrain-shaping.md` | planned | queued user request: lower/flatten mountains, undo/save and road support |
-| 73 | `tasks/river-life.md` | planned | queued user request: placeable boats, gentle fish jumps and river life |
-| 74 | `tasks/station-residents.md` | planned | queued user request: calm standing/seated/readers at station |
-| 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
-| 76 | `tasks/blocky-style-review.md` | planned | queued user review: Blocky style selection/menu and genuine block-built silhouettes |
+| 72 | `tasks/terrain-shaping.md` | planned | queued user request: lower/flatten mountains, undo/save and road support |
+| 73 | `tasks/river-life.md` | planned | queued user request: placeable boats, gentle fish jumps and river life |
+| 74 | `tasks/station-residents.md` | planned | queued user request: calm standing/seated/readers at station |
+| 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
+| 76 | `tasks/blocky-style-review.md` | planned | queued user review: Blocky style selection/menu and genuine block-built silhouettes |
 | 77 | `tasks/readability-composition.md` | `area/readability-composition` | WIP larger grouped controls + visible road status; 34 checks and Film day/night; full suite and scene composition remain pending |
 | 78 | `tasks/firefly-forest-review.md` | planned | queued seven-point forest review: path/light first, trees/hillside second, fireflies/sky third; retain earlier roots/deer issues |
 | 79 | `tasks/river-railway-review.md` | planned | queued combined river/rail/hill review: banks/crossings and camera first, terrain/prop grouping next, distant depth/mill visibility; all earlier points retained |
@@ -98,8 +99,7 @@ finished. Re-read this file each time; Claude may change it.
 | 83 | `tasks/road-drawing-repair.md` | `area/road-drawing-repair` | done verified interaction increment, awaiting retest; 12 focused + full 2015 + 2; markers/Finish/Enter/save-reload pass; Film day/night; original cause unconfirmed |
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
 | 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
-| 86 | `tasks/create-layout.md` | `area/create-layout` | WIP reference-based Create catalogue; ten building cards/placement smoke passed, placeholder art; full navigation/preview/edit checks and full suite pending |
-| 87 | `tasks/kids-ui.md` | `area/kids-ui` | WIP authoritative full menu task received; task/reference committed; prototype in parent, six tabs/live preview/64px controls and verification next |
+| 86 | `tasks/create-layout.md` | `area/create-layout` | superseded by lead task 31a kids-ui; prototype retained in history, not a second public menu |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -171,4 +171,3 @@ meadow & lake, crystal mine & balloon.
 
 
 > New lead task tasks/kids-ui.md is authoritative for the supplied menu design and supersedes task 86 prototype scope. Continue on area/kids-ui; do not discard earlier correction queue.
-

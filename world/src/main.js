@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {setupKidsUI} from './kids-ui.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { TexturePass } from 'three/addons/postprocessing/TexturePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
@@ -141,13 +142,14 @@ function resize(fw, fh) {
     const s = Math.min(innerWidth / w, innerHeight / h);
     Object.assign(canvas.style, { width: `${w * s}px`, height: `${h * s}px`, left: `${(innerWidth - w * s) / 2}px`, top: `${(innerHeight - h * s) / 2}px` });
   } else if (outputSize === 'window') {
-    w = Math.max(2, innerWidth);
-    h = Math.max(2, innerHeight);
+    const preview=window.__app?.kidsUI?.previewRect();
+    w = Math.max(2, preview?.width||innerWidth);
+    h = Math.max(2, preview?.height||innerHeight);
     // Review at a bounded pixel count; explicit video/export sizes remain exact.
     const previewScale = Math.min(1, 1600 / w, 900 / h);
     w = Math.max(2, Math.round(w * previewScale));
     h = Math.max(2, Math.round(h * previewScale));
-    Object.assign(canvas.style, { width: '100vw', height: '100vh', left: '0px', top: '0px' });
+    Object.assign(canvas.style,preview?{width:preview.width+'px',height:preview.height+'px',left:preview.left+'px',top:preview.top+'px'}:{width:'100vw',height:'100vh',left:'0px',top:'0px'});
   } else {
     [w, h] = outputSize === '1080p' ? [1920, 1080] : [1280, 720];
     const s = Math.min(innerWidth / w, innerHeight / h);
@@ -1115,6 +1117,9 @@ function frame() {
 }
 atmos.setPreset('golden', true);
 setupExploreUI(window.__app);
+setupKidsUI(window.__app);
+document.querySelector('#createLaunch')?.remove();
+document.querySelector('#createScreen')?.remove();
 frame();
 if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));
 

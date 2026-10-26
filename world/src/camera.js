@@ -176,7 +176,7 @@ function makeShots() {
     {name:'A garden full of good things',gardenPhase:210,sample(t,out){out.pos.copy(G(GARDEN.x+21,17,GARDEN.z+22));out.look.copy(G(GARDEN.x,0.7,GARDEN.z));}}
   ].map(view=>({...view,duration:40,loop:false,group:'Episode establishing views',clearance:1.8,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}}));
   const snowDayViews=[['A snowman with friends','snowman'],['Soft snow angels','angels'],['A gentle sled ride','sled'],['Cocoa by the window','cocoa']].map(([name,kind])=>({name,snowDay:kind,group:'Snow day',duration:60,loop:false,clearance:1.5,sample(t,out){const f=snowDayFocus(kind);if(kind==='cocoa'){out.pos.copy(f.camera);out.look.copy(f.pos);out.look.y+=0.95;}else{out.pos.set(f.pos.x+8,f.pos.y+(kind==='angels'?9:6),f.pos.z+11);out.look.copy(f.pos);out.look.y+=kind==='angels'?0.1:0.9;}}}));
-  const outingViews=[['Kites above the meadow','kite',0],['Colourful kites and friends','kite',1],['A quiet kite-day ending','kite',2],['Picnic by the waterfall','picnic',0],['Fruit and little duck friends','picnic',1],['A wide waterfall picnic','picnic',2]].map(([name,kind,view])=>({name,meadowOuting:kind,group:kind==='kite'?'Kite day':'Waterfall picnic',duration:80,loop:false,clearance:1.5,sample(t,out){const f=meadowOutingFocus(kind),wide=view!==1;if(kind==='kite'){out.pos.set(f.x+(wide?16:9),f.y+(wide?10:8.5),f.z+(wide?12:15));out.look.set(f.x,f.y+(wide?5.5:6),f.z-1);}else{out.pos.set(f.x+(wide?13:7),f.y+(wide?8:4.5),f.z+(wide?16:10));out.look.set(f.x-4,f.y+1.1,f.z-4);}}}));
+  const outingViews=[['Kites above the meadow','kite',0],['Colourful kites and friends','kite',1],['A quiet kite-day ending','kite',2],['Picnic by the waterfall','picnic',0],['Fruit and little duck friends','picnic',1],['A wide waterfall picnic','picnic',2]].map(([name,kind,view])=>({name,meadowOuting:kind,group:kind==='kite'?'Kite day':'Waterfall picnic',duration:80,loop:false,clearance:1.5,sample(t,out){const f=meadowOutingFocus(kind),wide=view!==1;if(kind==='kite'){out.pos.set(f.x+(wide?16:9),f.y+(wide?10:8.5),f.z+(wide?12:15));out.look.set(f.x,f.y+(wide?5.5:6),f.z-1);}else{out.pos.set(f.x+(view===2?-12:wide?13:7),f.y+(wide?8:4.5),f.z+(wide?16:10));out.look.set(f.x-(view===1?1:4),f.y+1.1,f.z-(view===1?1:4));}}}));
   const episodeMoreViews=[
     {name:'Snow day from above',snowDay:'snowman',sample(t,out){const f=snowDayFocus('snowman');out.pos.set(f.pos.x+17,f.pos.y+14,f.pos.z+20);out.look.copy(f.pos);out.look.y+=.8;}},
     {name:'Kite festival from above',meadowOuting:'kite',sample(t,out){const f=meadowOutingFocus('kite');out.pos.set(f.x+22,f.y+15,f.z+19);out.look.copy(f);out.look.y+=5.2;}},
@@ -405,4 +405,5 @@ export class Director {
     window.addEventListener('blur', () => this.free.keys.clear());
   }
 }
+
 

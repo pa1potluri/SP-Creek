@@ -13,3 +13,7 @@ All earlier scene, UI art, terrain, water, atmosphere, Episode 12 and style-revi
 
 ## Preview / verification
 Local preview http://localhost:8811/; offline launcher SP Creek.bat. No npm/build step. Full suite uses DH_URL=http://127.0.0.1:8811 and every world/tests/*.js suite. Tests never start sound. Current checkpoint leaves no uncommitted agent changes. Update result/queue and commit WIP before any stop or limit.
+
+## Latest stop — 27 October, area/kite-platform
+Latest implementation checkpoint 51cdfaf. Explicit green Save road/Save fence controls are saved; 12 road persistence checks plus the descendant full suite pass. Festival raised disc is removed; actors stand at walkHeight + 0.04 instead of +0.98. Two clear trail links connect kite/picnic areas, with local flower/grass exclusions. 84 route samples have zero solid/deep-water obstruction; all 80 kite-facing samples still pass. Full 31 suites 2015 + 2 pass; eight Film day/night views and Watercolour comparison refreshed.
+Task 65 remains WIP: water/dock presentation, distant depth, remaining flower/material polish and weather reproduction. Continue those next, then Episode 12/task 66; task 64 global clearance scope boundary remains in STUCK.md. New user pond-duck reference saved as task 87 (idle, real-click turn/quack/flap, ripples, smooth resume, bounds/dock clearance), not implemented yet. All source, references, checks and queue changes committed locally; no push/merge/publish.

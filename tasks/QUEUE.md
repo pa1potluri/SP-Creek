@@ -80,7 +80,7 @@ finished. Re-read this file each time; Claude may change it.
 | 65 | `tasks/kite-facing.md` | `area/kite-facing` (planned) | queued confirmed screenshot; cast must face actual kites; brighter high-contrast kite colours and background separation; keep distinct standing positions |
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-review` (planned) | queued; user reports only waterfall; inspect preset/view activation and repair coverage |
 | 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | WIP first refresh; rounded cave/rock treatment, softer crystals, cart moved off entry; four Film day/night captures; full 2015 + 2 passed; organic art/visual acceptance remains open |
-| 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` (planned) | queued; top Gameplay/Free Camera, persistent styles, simple side places; videos/episodes secondary |
+| 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` | WIP implemented top controls/popovers/places/bottom Build dock; 30 smoke checks passed; road/wheel check and full suite pending; see result for exact stop |
 | 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | done, awaiting review; ordinary URL uses approved solid residents; supplied hero bodies retained; full 2015 + 2; day/night and clean server checks saved |
 | 70 | `tasks/canvas-tents.md` | `area/canvas-tents` | done model increment, awaiting review; five framed canvas tents, real open doors/ropes/poles; 17 focused + full 2015 + 2 passed; six Film scene views + closeups |
 | 71 | `tasks/coach-flicker.md` | `area/coach-flicker` (next) | done identified geometry/shadow repair, awaiting motion review; raycast 3cm separation + 600 motion steps + six captures; full 2015 + 2 passed |
@@ -131,4 +131,9 @@ meadow & lake, crystal mine & balloon.
 
 
 
+
+
+| 72 | `tasks/terrain-shaping.md` | planned | queued user request: lower/flatten mountains, undo/save and road support |
+| 73 | `tasks/river-life.md` | planned | queued user request: placeable boats, gentle fish jumps and river life |
+| 74 | `tasks/station-residents.md` | planned | queued user request: calm standing/seated/readers at station |
 

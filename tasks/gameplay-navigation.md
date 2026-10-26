@@ -14,3 +14,11 @@ User screenshot: move Brush & Finish out of permanent right-side panel into a co
 
 Latest annotated layout: top mode cluster includes Auto director, Free camera (on/off) and Pause. Separate fullscreen/play-pause/menu cluster stays on game picture side of panel boundary. All must stay accessible without scrolling; opening panel must not place these over sliders. Gameplay toggle also retained from earlier request.
 
+
+Implementation scope includes world/src/explore-ui.js to keep place/popover wiring separate from the frame loop.
+
+
+User screenshot adds bottom Build dock: replace long side Build catalogue with compact bottom category/tool buttons and a popover above them. Preserve all 43 choices, rotation/scale, roads/fences and selection editing. Reuse original controls/handlers; no copied third-party toolbar assets. Side panel stays places-first.
+
+
+User follow-up: verify real road point placement/finish; freeze automatic camera/timeline when drawing or placing. Add Free camera wheel dolly in/out (Alt+wheel retains building rotation while Free camera is active), preserve terrain clearance. Terrain sculpting is tracked separately in task 72.

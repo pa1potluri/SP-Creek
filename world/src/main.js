@@ -9,6 +9,7 @@ import { createSky, createMountains } from './sky.js';
 import { Atmosphere, PRESETS } from './atmosphere.js';
 import { OilShader, LookShader, FinalShader } from './painterly.js';
 import { STYLES } from './styles.js';
+import { setupExploreUI } from './explore-ui.js';
 import { Seasons } from './seasons.js';
 import { buildSunsetCove } from './areas/sunset-cove.js';
 import { buildPlayground } from './areas/playground.js';
@@ -307,6 +308,7 @@ const shotButtons = director.shots.map((s, i) => {
 function refreshCamera() {
   shotButtons.forEach((b, i) => b.classList.toggle('on', director.mode === 'shot' && director.index === i));
   $('#freeBtn').classList.toggle('on', director.mode === 'free');
+  $('#freeBtn').textContent=director.mode==='free'?'Free camera: On':'Free camera: Off';
   $('#autoBtn').classList.toggle('on', director.auto);
   $('#pauseBtn').classList.toggle('on', director.paused);
   $('#keyCount').textContent = `${director.custom.length} key${director.custom.length === 1 ? '' : 's'} saved`;
@@ -323,6 +325,8 @@ const addKey = () => { director.addKey(); saveKeys(); refreshCamera(); flash(`Ke
 $('#freeBtn').onclick = toggleFree;
 $('#pauseBtn').onclick = togglePause;
 $('#autoBtn').onclick = () => {
+  if(game.active)game.exit();
+  timeline.stop();
   director.auto = !director.auto;
   if (director.auto && director.mode === 'free') director.setFree(false);
   refreshCamera();
@@ -349,6 +353,10 @@ function setTool(t) {
   clearBuildPreview();
   roadPoints = [];
   tool = tool === t ? null : t;
+  if (tool) {
+    game.exit();timeline.stop();director.auto=false;director.flight=null;director.paused=true;
+    refreshCamera();
+  }
   selectBuilding(null);
   buildButtons.forEach((b) => b.classList.toggle('on', `build:${b.dataset.build}` === tool));
   $('#drawRoad').classList.toggle('on', tool === 'road');
@@ -538,6 +546,14 @@ $('#undoRoad').onclick = () => {
 };
 canvas.addEventListener('dblclick', () => { if (tool === 'road' || tool === 'fence') finishRoad(); });
 canvas.addEventListener('wheel', (e) => {
+  if (!game.active && director.mode === 'free' && !e.altKey) {
+    e.preventDefault();
+    const f=director.free,dir=new THREE.Vector3(Math.sin(f.yaw)*Math.cos(f.pitch),Math.sin(f.pitch),Math.cos(f.yaw)*Math.cos(f.pitch));
+    const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?canvas.clientHeight:1);
+    director.state.pos.addScaledVector(dir,-THREE.MathUtils.clamp(delta*.025,-12,12));
+    director.state.pos.y=Math.max(director.state.pos.y,terrainHeight(director.state.pos.x,director.state.pos.z)+.5);
+    director.update(0);return;
+  }
   if (!tool?.startsWith('build:')) return;
   e.preventDefault(); rotateBuild(Math.sign(e.deltaY) * Math.PI / 12);
 }, { passive: false });
@@ -908,7 +924,8 @@ function togglePlay() {
   game.enter();
 }
 game.onChange = () => {
-  $('#playBtn').textContent = game.active ? '■ Stop playing (G)' : '🎮 Play — walk & ride (G)';
+  $('#playBtn').textContent = game.active ? 'Gameplay: On' : 'Gameplay: Off';
+  $('#playBtn').setAttribute('aria-pressed',String(game.active));
   $('#playBtn').classList.toggle('on', game.active);
   document.body.classList.toggle('ui-hidden', game.active);
   $('#gameHelp').classList.toggle('hidden', !game.active);
@@ -921,7 +938,11 @@ game.onChange = () => {
 $('#playBtn').onclick = togglePlay;
 
 // ---------- keys ----------
-const toggleUI = () => document.body.classList.toggle('ui-hidden');
+const toggleUI = () => {
+  document.body.style.cursor='';
+  if($('#panel').style.display==='none'){$('#panel').style.removeProperty('display');$('#hud').style.removeProperty('display');document.body.classList.remove('ui-hidden');}
+  else document.body.classList.toggle('ui-hidden');
+};
 $('#uiToggle').onclick = toggleUI;
 // Review controls: freeze the whole scene (time stops, the frame keeps drawing), and full screen.
 let frozen = false;
@@ -1087,6 +1108,7 @@ function frame() {
   if (++frames === 2) $('#loading').classList.add('done');
 }
 atmos.setPreset('golden', true);
+setupExploreUI(window.__app);
 frame();
 if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));
 

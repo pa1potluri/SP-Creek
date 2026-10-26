@@ -105,3 +105,30 @@ button:disabled { opacity: 0.45; cursor: default; }
 #styleBar button.on::before { background:#ffce79;box-shadow:0 0 0 2px #ffce7933; }
 #styleBar button:focus-visible { outline:2px solid #ffe1a6;outline-offset:2px; }
 @media(max-width:600px) { #styleBar button { font-size:11px;padding:5px 6px; } }
+
+/* Main controls stay on the picture side of the open navigation panel. */
+body { --pictureInset:min(330px,92vw); }
+#uiToggle { right:calc(var(--pictureInset) + 12px); }
+#freezeBtn { right:calc(var(--pictureInset) + 54px); }
+#fullBtn { right:calc(var(--pictureInset) + 96px); }
+body.ui-hidden #uiToggle,body.ui-hidden .viewBtn { opacity:1; }
+#styleBar { right:calc(var(--pictureInset) + 144px);width:auto;max-width:none;min-width:110px;border-radius:14px; }
+#styleBar #styles { flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px; }
+#styles button { flex:0 0 auto; }
+#modeControls { display:flex;flex-wrap:wrap;gap:4px;margin-top:4px; }
+#modeControls button { font-size:11px;padding:5px 7px; }
+#modeControls button::before { display:none; }
+#brushPopover { position:fixed;left:8px;z-index:7;width:300px;max-width:calc(100vw - 16px);max-height:calc(100vh - 110px);overflow:auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);backdrop-filter:blur(6px); }
+#brushPopover[hidden] { display:none; }
+#brushPopover details { border:0;margin:0;padding:0; }
+#brushPopover summary { display:none; }
+#placeList button { min-height:32px;font-size:12px; }
+#panel { padding-top:18px; }
+#buildDock { position:fixed;left:calc((100vw - var(--pictureInset))/2);bottom:10px;transform:translateX(-50%);z-index:6;display:flex;gap:4px;padding:6px;background:#241f1beb;border:1px solid var(--line);border-radius:12px;max-width:calc(100vw - var(--pictureInset) - 16px);overflow-x:auto; }
+#buildDock[hidden],#buildPopover[hidden] { display:none; }
+#buildDock button { flex:0 0 auto;min-height:38px;padding:6px 9px;font:12px system-ui;white-space:nowrap; }
+#buildPopover { position:fixed;left:8px;bottom:70px;z-index:7;width:390px;max-width:calc(100vw - var(--pictureInset) - 16px);max-height:65vh;overflow:auto;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);backdrop-filter:blur(6px); }
+#buildPopover details { padding:0;margin:0;border:0; }
+#buildPopover summary { display:none; }
+#buildCatalogue button[hidden] { display:none; }
+#buildPanel > [hidden] { display:none; }

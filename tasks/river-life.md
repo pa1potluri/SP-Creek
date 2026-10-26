@@ -1,0 +1,3 @@
+# River life — user request
+Queued: allow placing boats on the river, with water-only placement and clearance from banks, bridge supports, other boats and ducks. Add occasional gentle fish jumps and ripples for life, driven by world time; no fast or startling splashes. Preserve existing rowing/picnic scenes and saved IDs. Use lightweight shared geometry and limit active fish.
+Scope proposal: a river-life area module, world.js boat placement/save hooks, main.js/explore-ui.js Build entry, tests and result. Inspect existing boat code first; reuse it where possible. Full suite plus Film day/night captures before done.

@@ -1,0 +1,3 @@
+# Quiet station residents — user request
+Queued: a few approved current residents near the train station, standing or sitting on benches and reading a plain child-friendly newspaper. No new walking routine requested. Keep boarding routes, platform edges and train clearance free; no intersecting people, props or seats. Use current solid resident faces, no old round-head fallback preview. Gentle deterministic idle movement only.
+Scope proposal: life.js station resident group/updates, characters.js reusable seated/reading pose if needed, tests and result. Check existing seating helpers before adding new geometry. Full suite and Film day/night station captures before done.

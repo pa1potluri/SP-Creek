@@ -15,7 +15,13 @@
 </head>
 <body>
 <canvas id="view"></canvas>
-<nav id="styleBar" aria-label="Art style"><div id="styles" role="toolbar" aria-label="Choose art style"></div></nav>
+<nav id="styleBar" aria-label="Art style"><div id="styles" role="toolbar" aria-label="Choose art style"></div><div id="modeControls" role="toolbar" aria-label="Explore controls">
+<button id="playBtn" title="Walk and ride (G)">Gameplay: Off</button>
+<button id="autoBtn" title="Automatic camera tour">Auto director</button>
+<button id="freeBtn" title="Free camera (F)">Free camera: Off</button>
+<button id="pauseBtn" title="Pause the camera (P)">Pause (P)</button>
+<button id="brushToggle" aria-expanded="false" aria-controls="brushPopover">Brush &amp; finish</button>
+</div></nav>
 <div id="loading">Painting the town…</div>
 <div id="exportOverlay" class="hidden">
   <div class="box">
@@ -42,14 +48,15 @@
     <p>A painted frontier town · H hides this panel</p>
   </header>
 
-  <details open>
-    <summary>Ready-made videos</summary>
+  <details id="explorePlaces" open><summary>Places to explore</summary><div id="placeList" class="grid"></div></details>
+  <details id="videoLibrary">
+    <summary>Videos &amp; episodes (optional)</summary>
     <p class="hint">Peaceful background videos, ready to go: each sets the shots, mood, sounds and town life, and starts a looping preview. Then render it under <i>Video</i> at any length.</p>
     <div id="videoPresets" class="presetlist"></div>
     <label class="row check"><span>Change art style with location (optional)</span><input type="checkbox" id="presetStyle"></label>
   </details>
 
-  <details open>
+  <details>
     <summary>Style adjustments</summary>
     <label class="row check"><span>Family mode (kid-friendly)</span><input type="checkbox" id="familyMode"></label>
     <label class="row"><span>Textures</span>
@@ -69,14 +76,14 @@
     <p class="hint">A style also sets the sliders under <i>Brush &amp; finish</i>; adjust them freely afterwards.</p>
   </details>
 
-  <details open>
+  <details>
     <summary>Camera</summary>
-    <div class="btnrow"><button id="playBtn" class="primary">🎮 Play — walk &amp; ride (G)</button></div>
+    
     <div id="shots" class="grid"></div>
     <div class="btnrow">
-      <button id="autoBtn">Auto director</button>
-      <button id="freeBtn">Free camera (F)</button>
-      <button id="pauseBtn">Pause (P)</button>
+      
+      
+      
     </div>
     <label class="row"><span>Speed</span><input type="range" data-cam="speed" min="0.1" max="3" step="0.05" value="1"><output></output></label>
     <label class="row"><span>Hand-held sway</span><input type="range" data-cam="sway" min="0" max="2" step="0.05" value="0.4"><output></output></label>
@@ -91,7 +98,7 @@
     <div id="keyCount" class="hint">0 keys</div>
   </details>
 
-  <details open>
+  <details>
     <summary>Timeline</summary>
     <p class="hint">Plan a whole video: each clip is a shot, how long it lasts, an optional mood change, and how the camera gets there (<b>fly</b> over the roofs, or <b>cut</b>). Paths are timed to end exactly when their clip ends.</p>
     <div id="clips"></div>
@@ -110,7 +117,7 @@
     </div>
   </details>
 
-  <details open>
+  <details>
     <summary>Atmosphere</summary>
     <label class="row check"><span>Festival</span><input type="checkbox" id="festival"></label>
     <label class="row check"><span>Market day</span><input type="checkbox" id="marketDay"></label>
@@ -125,7 +132,7 @@
     <label class="row"><span>Mood change (s)</span><input type="range" data-atmos="transition" min="0.5" max="30" step="0.5" value="5"><output></output></label>
   </details>
 
-  <details open>
+  <details>
     <summary>Town life</summary>
     <label class="row"><span>People walking</span><input type="range" data-life="people" min="0" max="24" step="1" value="10"><output></output></label>
     <label class="row"><span>Horse riders</span><input type="range" data-life="riders" min="0" max="4" step="1" value="2"><output></output></label>
@@ -141,7 +148,7 @@
     <p class="hint">Riders and the stagecoach come down the road, turn in front of the church and ride back out. Wind moves the shop signs, the flag and the tumbleweeds.</p>
   </details>
 
-  <details open>
+  <details id="brushPanel">
     <summary>Brush &amp; finish</summary>
     <label class="row"><span>Brush size</span><input type="range" data-paint="radius" min="1" max="7" step="1" value="4"><output></output></label>
     <label class="row"><span>Paint amount</span><input type="range" data-paint="strength" min="0" max="1" step="0.05" value="1"><output></output></label>
@@ -173,7 +180,7 @@
     <div class="btnrow"><button id="undoProp">Undo last</button><button id="clearProps">Remove all placed</button></div>
   </details>
 
-  <details id="buildPanel" open>
+  <details id="buildPanel">
     <summary>Build</summary>
     <p class="hint">Pick a building, set Rotation and Size, then click the ground. R or mouse wheel also rotates. Esc stops placing. To edit: press Esc, click your placed building, adjust Rotation/Size and press Apply.</p>
     <label class="row"><span>Rotation</span><input id="buildRotation" type="range" min="0" max="345" step="15" value="0"><output>0°</output></label>
@@ -239,7 +246,7 @@
     <div class="hint">Birds by day, crickets and owls at night, the river, mill, train, café piano and rain, following the camera. Click anywhere once to start the sound. Videos get the same sounds.</div>
   </details>
 
-  <details open>
+  <details>
     <summary>Video</summary>
     <label class="row"><span>Output size</span>
       <select id="outputSize"><option value="window">Fit window</option><option value="1080p">1920 × 1080</option><option value="720p">1280 × 720</option></select>
@@ -269,5 +276,7 @@
 <script type="module" src="src/main.js"></script>
 </body>
 </html>
+
+
 
 

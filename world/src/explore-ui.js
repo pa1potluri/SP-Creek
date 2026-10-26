@@ -26,7 +26,7 @@ export function setupExploreUI(app){
  dock.id='buildDock';dock.hidden=true;dock.setAttribute('aria-label','Build categories');document.body.append(dock);
  const roads=document.createElement('div');roads.id='buildRoadTools';const roadHeading=[...buildPanel.children].find(e=>e.tagName==='H3');let roadNode=roadHeading;while(roadNode){const next=roadNode.nextElementSibling;roads.append(roadNode);roadNode=next;}buildPanel.append(roads);
  const roadStatus=document.createElement('p');roadStatus.id='roadStatus';roadStatus.setAttribute('role','status');roadStatus.setAttribute('aria-live','polite');roads.prepend(roadStatus);
- const syncRoadStatus=()=>{roadStatus.textContent=document.querySelector('#hint').textContent||'Choose Draw road, then click ground points and Finish.';};
+ const syncRoadStatus=()=>{roadStatus.textContent=document.querySelector('#hint').textContent||'Choose Draw road, click ground points, then Save road.';};
  new MutationObserver(syncRoadStatus).observe(document.querySelector('#hint'),{childList:true,characterData:true,subtree:true});syncRoadStatus();
  const categories=[
   ['🏠','Buildings','shop hotel house barn chapel tower windmill cabin brick blacksmith'],
@@ -57,3 +57,4 @@ export function setupExploreUI(app){
  app.exploreUI={closeBrush:close,layout};
  setupCreateUI();
 }
+

@@ -370,7 +370,7 @@ function setTool(t) {
   showToolHint();
 }
 function showToolHint() {
-  if (tool === 'road' || tool === 'fence') { $('#hint').textContent = `${roadPoints.length} points · Click ground · Finish or Enter to save · Esc cancels`; return; }
+  if (tool === 'road' || tool === 'fence') { $('#hint').textContent = `${roadPoints.length} points · Click ground · Save road/fence or Enter · Esc cancels`; return; }
   if (tool?.startsWith('build:')) { $('#hint').textContent = 'Click ground to build · R/wheel rotates · Esc stops'; return; }
   $('#hint').textContent = tool ? `Click the ground to place: ${tool === 'cutout' ? 'cut-out' : tool} (Esc to stop)` : '';
 }
@@ -1122,5 +1122,6 @@ document.querySelector('#createLaunch')?.remove();
 document.querySelector('#createScreen')?.remove();
 frame();
 if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));
+
 
 

@@ -244,3 +244,4 @@ body.kids-ui:not(.kids-studio) #modeControls { position:absolute;top:-4px;left:c
 body.kids-ui:not(:has(.kidsTab[data-tab="Home"].on)) .kidsGreeting { display:none; }
 body.kids-ui:not(.kids-studio) #modeControls { top:-1px; }
 body.kids-ui:not(.kids-studio) #modeControls > #freeBtn { height:56px;min-height:56px; }
+#finishRoad,#finishFence { background:#3c694c;color:#fff4d6;border-color:#8dbc8c;font-weight:bold;min-height:44px; }

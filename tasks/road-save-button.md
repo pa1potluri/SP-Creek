@@ -1,0 +1,2 @@
+# Explicit road-save button — user correction
+Scope: index.html, main.js/explore-ui.js road wording, style.css, existing road test and metadata. Replace ambiguous Finish label with prominent Save road (Enter), and Save fence. Reuse original finish-and-save handler; preserve Enter/double-click and project persistence. No duplicate save state. Verify with existing road-drawing-repair.cjs; full suite before done.

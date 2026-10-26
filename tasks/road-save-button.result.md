@@ -1,0 +1,2 @@
+# Save road control result — WIP checkpoint
+Renamed ambiguous Finish to a prominent green Save road (Enter), and Save fence; hints explain saving. Reuses original finish/save handlers and preserves Enter/double-click. Existing 12 road input/keyboard/save-reload checks pass; current Film day/night captures copied to road-save-button-day.png / -night.png. Full regression pending; remain WIP until verified with the next descendant full run. No new data format or duplicate save state.

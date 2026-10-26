@@ -31,7 +31,8 @@ export function startShowcase(app) {
   const previous=app.timeline.onClip;
   app.timeline.onClip=(i)=>{
     previous(i);const c=clips[i];if(!c)return;
-    app.applyStyle(c.style);app.setSeason(c.season);app.setWeather(c.weather);
+    const style=app.showcase?.styleOverride||c.style;
+    app.applyStyle(style);app.setSeason(c.season);app.setWeather(c.weather);
     // Mood blending is handled by Timeline; the short dissolve hides the location cut.
     fade.getAnimations().forEach(a=>a.cancel());fade.animate([{opacity:1},{opacity:0}],{duration:900,fill:'none'});
     caption.textContent=`${i+1}/${clips.length} · ${app.director.shots[c.shot].name} · ${c.style==='film'?'Animated 3D':c.style==='watercolor'?'Watercolour':c.style} · ${c.mood}`;

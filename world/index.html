@@ -14,6 +14,7 @@
 </head>
 <body>
 <canvas id="view"></canvas>
+<nav id="styleBar" aria-label="Art style"><div id="styles" role="toolbar" aria-label="Choose art style"></div></nav>
 <div id="loading">Painting the town…</div>
 <div id="exportOverlay" class="hidden">
   <div class="box">
@@ -44,13 +45,12 @@
     <summary>Ready-made videos</summary>
     <p class="hint">Peaceful background videos, ready to go: each sets the shots, mood, sounds and town life, and starts a looping preview. Then render it under <i>Video</i> at any length.</p>
     <div id="videoPresets" class="presetlist"></div>
-    <label class="row check"><span>Use the preset's art style</span><input type="checkbox" id="presetStyle" checked></label>
+    <label class="row check"><span>Change art style with location (optional)</span><input type="checkbox" id="presetStyle"></label>
   </details>
 
   <details open>
-    <summary>Art style</summary>
+    <summary>Style adjustments</summary>
     <label class="row check"><span>Family mode (kid-friendly)</span><input type="checkbox" id="familyMode"></label>
-    <div id="styles" class="grid"></div>
     <label class="row"><span>Textures</span>
       <select id="texSet"><option value="auto">Follow the style</option><option value="oil">Oil painted</option><option value="clean">Clean cartoon</option><option value="flat">Flat toy colours</option></select>
     </label>

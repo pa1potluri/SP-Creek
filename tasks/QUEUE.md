@@ -75,10 +75,13 @@ finished. Re-read this file each time; Claude may change it.
 | 60 | `tasks/showcase-review-fixes.md` | `area/showcase-review-fixes` | WIP review repairs; natural pace + slower showcase motion, soft Watercolour, cafe snow exclusion, billboard shadow/depth repair, ambient solid avoidance and duck clearance; 13 focused checks + 16 previews; final full 2015 + 2 passed; broad scripted-cast collision and atmosphere/colour acceptance still open |
 | 61 | `tasks/server-health.md` | `area/server-health` | check complete; server/watchdog working; no JS crashes/context loss; two obsolete cut-out 404 requests found, repair pending; startup 18s game / 11s showcase / 3s character preview |
 | 62 | `tasks/build-transforms.md` | `area/build-transforms` | done, awaiting review; visible rotate/size controls for all 43 catalogue items and selected buildings; focused 135 + full 2015 + 2 passed; Film day/night saved |
-| 63 | `tasks/style-lock.md` | `area/style-lock` (next) | queued user priority; retain manually chosen style across location changes; preset style only by explicit option |
+| 63 | `tasks/style-lock.md` | `area/style-lock` (next) | WIP; retention verified 7 styles x 48 locations; persistent top style pills implemented; final all-mode toolbar/full verification pending; see task 68 for expanded navigation |
 | 64 | `tasks/actor-clearance.md` | `area/actor-clearance` (planned) | queued functional priority; finish broad actor-to-actor/prop clearance from task 60, including scripted crowds and market |
 | 65 | `tasks/kite-facing.md` | `area/kite-facing` (planned) | queued; Kite Day cast must face actual kites and keep distinct standing positions |
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-review` (planned) | queued; user reports only waterfall; inspect preset/view activation and repair coverage |
+| 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | queued user priority; current mine appearance rejected; inspect and rebuild friendly coherent grotto |
+| 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` (planned) | queued; top Gameplay/Free Camera, persistent styles, simple side places; videos/episodes secondary |
+| 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | queued immediate current-version fix; approved solid residents default, no old-version review links |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -114,4 +117,7 @@ meadow & lake, crystal mine & balloon.
 
 > Latest user functional priority: finish/save active Build controls, then style retention (63), broad actor clearance (64), Kite Day facing (65), Episode 12 coverage (66). Atmosphere/colour/cloud acceptance remains open in 60 and follows functional repairs. No earlier request dropped.
 
+
+
+> User latest: all fixes retained; review only current approved characters. Save UI WIP, make approved residents default, prioritize Crystal Mine refresh, then finish gameplay-first controls and functional collision/Kite/Episode repairs. Atmosphere remains unaccepted; no claim the game is finished.
 

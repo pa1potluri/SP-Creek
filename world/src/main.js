@@ -258,10 +258,17 @@ function setSlider(attr, key, value) {
   inp.dispatchEvent(new Event('input'));
 }
 let styleKey = 'oil';
+$('#presetStyle').checked = LS.get('dh.followPresetStyle') === true;
+$('#presetStyle').onchange = () => LS.set('dh.followPresetStyle', $('#presetStyle').checked);
 const styleButtons = Object.entries(STYLES).map(([key, s]) => {
   const b = document.createElement('button');
   b.textContent = s.label;
-  b.onclick = () => { applyStyle(key); LS.set('dh.styleChoice', key); };
+  b.dataset.style=key;b.title=s.label;b.setAttribute('aria-pressed','false');
+  b.onclick = () => {
+    applyStyle(key); LS.set('dh.styleChoice', key);
+    $('#presetStyle').checked = false; LS.set('dh.followPresetStyle', false);
+    if(window.__app?.showcase)window.__app.showcase.styleOverride=key;
+  };
   $('#styles').append(b);
   return [key, b];
 });
@@ -276,7 +283,7 @@ function applyStyle(key) {
   fxaa.enabled = s.fxaa;
   fin.uniforms.uWeave.value = s.weave;
   applyTextures();
-  styleButtons.forEach(([k, b]) => b.classList.toggle('on', k === styleKey));
+  styleButtons.forEach(([k, b]) => {b.classList.toggle('on', k === styleKey);b.setAttribute('aria-pressed',String(k===styleKey));});
   document.querySelectorAll('[data-for]').forEach((row) => row.classList.toggle('off', !row.dataset.for.split(' ').includes(styleKey)));
 }
 // texture set: 'auto' follows the style; or force oil / clean / flat for every style

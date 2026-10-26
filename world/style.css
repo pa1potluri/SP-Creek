@@ -96,3 +96,12 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 button:disabled { opacity: 0.45; cursor: default; }
 #buildSwatches button { width: 30px; height: 24px; border: 2px solid var(--line); }
 #buildSwatches button.on { border-color: var(--accent); }
+
+/* Style is the main control, independent of the scrolling/hidden side panel. */
+#styleBar { position:fixed;top:8px;left:8px;right:144px;z-index:6;width:max-content;max-width:calc(100vw - 152px);padding:5px;border:1px solid var(--line);border-radius:20px;background:#241f1bdf;backdrop-filter:blur(6px);cursor:default; }
+#styleBar #styles { display:flex;gap:4px;flex-wrap:wrap; }
+#styleBar button { display:inline-flex;align-items:center;gap:5px;border-radius:16px;padding:5px 8px;font:12px system-ui;white-space:nowrap;cursor:pointer; }
+#styleBar button::before { content:'';width:7px;height:7px;border-radius:50%;background:#aaa18d; }
+#styleBar button.on::before { background:#ffce79;box-shadow:0 0 0 2px #ffce7933; }
+#styleBar button:focus-visible { outline:2px solid #ffe1a6;outline-offset:2px; }
+@media(max-width:600px) { #styleBar button { font-size:11px;padding:5px 6px; } }

@@ -1,0 +1,22 @@
+{
+  "passed": 11,
+  "presets": 48,
+  "results": [
+    "Locations preserve style by default",
+    "oil retained for all 48 presets",
+    "film retained for all 48 presets",
+    "toy retained for all 48 presets",
+    "clean retained for all 48 presets",
+    "paper retained for all 48 presets",
+    "pixel retained for all 48 presets",
+    "watercolor retained for all 48 presets",
+    "Choosing a style disables automatic preset changes",
+    "Explicit opt-in applies preset look",
+    "Camera location change keeps Oil"
+  ],
+  "reload": {
+    "style": "oil",
+    "follow": false
+  },
+  "errors": []
+}

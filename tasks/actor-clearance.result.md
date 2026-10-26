@@ -20,3 +20,5 @@ Status: WIP on area/actor-clearance, stacked from 459a136. No claim of global co
 ## Resume checkpoint after menu
 Runtime reproduction: market shopper pair 0/5 reached 0.079929m separation over 0–238s (2s samples), both assigned the first stall. Changed sixth shopper to the opposite side and sample walkHeight at the actual moving position. The same running-app diagnostic now reports minimum shopper-pair separation 4.981526m. Inactive market shoppers are hidden explicitly and restored when active.
 This is WIP: the diagnostic is not yet an asserting regression, no full suite for this latest life.js change, and broad scripted/player/animal collision work remains open. Driver world/tests/market-spacing.cjs. User supplied UI artwork during this work; save collision change before integrating artwork separately.
+
+Low-usage handoff: latest full regressions on descendant branches (including kids-ui-icons-full.txt) cover these saved life.js changes and passed 2015 + 2. Dedicated market-spacing test still needs assertions; broad clearance remains WIP. User requests only small corrections now with 10% remaining. See tasks/SESSION-HANDOFF.md for the exact stop.

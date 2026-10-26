@@ -182,3 +182,5 @@ meadow & lake, crystal mine & balloon.
 
 
 
+
+> 26 October low-usage checkpoint: user reports 10% remaining. All implementation saved; large queue work is WIP/stopped at a safe point. Only incoming small corrections until further direction. Exact branch, completed checks, unfinished work and resume steps: tasks/SESSION-HANDOFF.md. Never push/merge/publish.

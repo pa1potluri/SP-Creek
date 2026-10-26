@@ -12,3 +12,5 @@ Progress checkpoint: road interaction increment verified (12 focused + full 2015
 Artwork received: 13 supplied UI PNGs registered on area/kids-ui-art; 21 checks pass, captures refreshed. Home background verified opaque with baked checkerboard; originals preserved. Need transparent RGBA exports for final cut-out appearance. Collision resume checkpoint: shopper pair min separation improved from 0.079929m to 4.981526m; broad movement remains WIP.
 
 Home layout corrected per user: no large welcome/action overlay; greeting top-left and actions in top menus. 27 focused + full 2015 + 2 pass; current supplied replacement art preserved. No push/merge. Continue earlier scene/function corrections; user plans further submenus and icon replacements separately.
+
+Low-usage save requested (10% remaining): wrote tasks/SESSION-HANDOFF.md; large work stopped. Latest full 2015 + 2 passes saved. Only small incoming corrections now; unfinished tasks remain WIP.

@@ -1,0 +1,2 @@
+# Readability/composition result
+WIP UI increment: top style labels 14px, mode targets 36px, places 14px/36px, Build categories 14px/44px; separated style/mode rows, stronger active dock and popup road-status feedback. Focused 34 checks pass, wide/narrow navigation and silent audio; readability-ui day/night/brush PNGs saved. Full suite not rerun for these latest UI changes; do not mark task done. Sky, bridge, scene framing and other visual requests remain unimplemented. User subsequently supplied new Create-screen reference; implementation is separately tracked in task 86.

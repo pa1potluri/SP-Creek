@@ -24,6 +24,9 @@ export function setupExploreUI(app){
  buildPopup.id='buildPopover';buildPopup.hidden=true;buildPopup.setAttribute('aria-label','Building tools');buildPopup.append(buildPanel);document.body.append(buildPopup);
  dock.id='buildDock';dock.hidden=true;dock.setAttribute('aria-label','Build categories');document.body.append(dock);
  const roads=document.createElement('div');roads.id='buildRoadTools';const roadHeading=[...buildPanel.children].find(e=>e.tagName==='H3');let roadNode=roadHeading;while(roadNode){const next=roadNode.nextElementSibling;roads.append(roadNode);roadNode=next;}buildPanel.append(roads);
+ const roadStatus=document.createElement('p');roadStatus.id='roadStatus';roadStatus.setAttribute('role','status');roadStatus.setAttribute('aria-live','polite');roads.prepend(roadStatus);
+ const syncRoadStatus=()=>{roadStatus.textContent=document.querySelector('#hint').textContent||'Choose Draw road, then click ground points and Finish.';};
+ new MutationObserver(syncRoadStatus).observe(document.querySelector('#hint'),{childList:true,characterData:true,subtree:true});syncRoadStatus();
  const categories=[
   ['🏠','Buildings','shop hotel house barn chapel tower windmill cabin brick blacksmith'],
   ['🌻','Gardens','gardenFence vegetablePatch flowerBox seedBed sunflowerBed carrotBed pumpkinBed flowerBed'],

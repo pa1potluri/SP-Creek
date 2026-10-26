@@ -89,7 +89,7 @@ finished. Re-read this file each time; Claude may change it.
 | 74 | `tasks/station-residents.md` | planned | queued user request: calm standing/seated/readers at station |
 | 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
 | 76 | `tasks/blocky-style-review.md` | planned | queued user review: Blocky style selection/menu and genuine block-built silhouettes |
-| 77 | `tasks/readability-composition.md` | planned | queued annotated eight-point review: sky/silhouettes, character/railing/framing, panel/top/Build readability |
+| 77 | `tasks/readability-composition.md` | `area/readability-composition` | WIP larger grouped controls + visible road status; 34 checks and Film day/night; full suite and scene composition remain pending |
 | 78 | `tasks/firefly-forest-review.md` | planned | queued seven-point forest review: path/light first, trees/hillside second, fireflies/sky third; retain earlier roots/deer issues |
 | 79 | `tasks/river-railway-review.md` | planned | queued combined river/rail/hill review: banks/crossings and camera first, terrain/prop grouping next, distant depth/mill visibility; all earlier points retained |
 | 80 | `tasks/town-scene-review.md` | planned | queued town review: camera/road, building edges/landmark, signs/prop spacing/ground texture; preserve approved names |
@@ -164,4 +164,5 @@ meadow & lake, crystal mine & balloon.
 
 
 > Visual review workflow confirmed: P1 camera/readability, P2 style consistency, P3 materials/lighting, P4 matching-camera/viewport seven-style regression. Reproduce findings in the running app before asset/rendering changes; annotations are observations, not confirmed code defects. Task 85 holds the shared checklist.
+
 

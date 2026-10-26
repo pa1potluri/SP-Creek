@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {decodePoints} from './experiments/point-data.mjs';
+import {roundPointMap} from './point-footprint.js';
 
 // First rollout is reversible; the ordinary game URL keeps its existing cast.
 export const profilesEnabled=new URLSearchParams(location.search).get('characterFaces')==='pipeline';
@@ -28,7 +29,7 @@ export function attachCharacterProfile(person,id){
  const profile=profiles.get(id);if(!profile)return;
  for(const child of person.head.children)child.visible=false;
  const key=id==='pavi'?'hero':'resident';
- if(!materials.has(key))materials.set(key,new THREE.PointsMaterial({size:key==='hero'?.012:.024,vertexColors:true,toneMapped:false,fog:true}));
+ if(!materials.has(key))materials.set(key,new THREE.PointsMaterial({size:key==='hero'?.012:.020,vertexColors:true,toneMapped:false,fog:true,...(key==='resident'?{map:roundPointMap(),alphaTest:.5}:{})}));
  const points=new THREE.Points(profile.geometry,materials.get(key));points.name='Approved face '+id;person.head.add(points);person.pipelineProfile=id;person.pipelineHead=points;
  points.onBeforeRender=(_renderer,scene)=>{const fog=scene.fog?.color;points.material.color.setScalar(fog ? .65+.35*Math.min(1,Math.max(fog.r,fog.g,fog.b)*2):1);};
 }

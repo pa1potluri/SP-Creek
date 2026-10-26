@@ -8,3 +8,6 @@ Copied unchanged on 26 October 2026 from `E:\claude pa1\SP Creek art\Character-P
 - Decoder copied from the supplied `game/point-data.mjs` to `src/experiments/point-data.mjs`.
 
 Siri has no separate source face in this package; the isolated test explicitly borrows town-202 for her slot. This is not a replacement for her approved character. Source references, authoring tools and standalone HTMLs are not included here. These local files have not been pushed, published or uploaded.
+
+## Resident source refresh: package 1.1 / v01
+Current resident binaries/profiles came from the user's `Character-Pipeline-Setup_ v01` folder. Hero binary is byte-identical to the earlier package. Denser resident sources now total 2,048,527 points; see tasks/character-pipeline-v01.result.md. Previous asset version remains in Git history.

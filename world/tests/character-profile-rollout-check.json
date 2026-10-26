@@ -11,7 +11,7 @@
     "Ordinary URL restores original models and faces",
     "Default game has no pipeline data download"
   ],
-  "readyMs": 8678,
+  "readyMs": 8556,
   "actualGame": {
     "pavi": "pavi",
     "residents": [

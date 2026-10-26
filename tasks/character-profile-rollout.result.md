@@ -23,3 +23,6 @@ User approved the characters and pipeline phases on 26 October 2026, and asked f
 - Check all art styles, weather, head/camera distances and all actor appearances (boat/balloon/camping/etc.); add distance LOD/streaming and expression/blink/gaze controls. Current frozen heads do not blink; original hidden-head animation does not animate point facial regions.
 - Run the complete suite on default and relevant opt-in paths; refresh all affected day/night evidence before default rollout. No shot IDs/presets changed. Current head-face acceptance is approved; runtime fit/performance validation remains outstanding.
 - End here to save usage. No new experiments started. Earlier forest WIP remains separate. Everything on this branch must be committed, never pushed.
+
+## v01 resident source update
+On area/character-pipeline-v01 the updated package 1.1 residents replaced the earlier data in the preview and game exports. Runtime binary total is now 15,419,020 bytes; full Pavi and original Siri are preserved. Preview 94 and game smoke 9 checks pass, with updated day/night evidence. This does not complete the broader integration or its pending full suite; current quick-review handoff is tasks/character-pipeline-v01.result.md.

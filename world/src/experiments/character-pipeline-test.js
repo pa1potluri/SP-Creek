@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {CAST,makeCharacter} from '../characters.js';
 import {decodePoints} from './point-data.mjs';
+import {roundPointMap} from '../point-footprint.js';
 
 const base='assets/characters/pipeline-test/',canvas=document.querySelector('#view');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(1);
@@ -40,10 +41,11 @@ function geometry(asset,detail){
  for(let i=0;i<a.count;i+=detail){positions.set(a.positions.subarray(i*3,i*3+3),k*3);color.setRGB(a.colors[i*3]/255,a.colors[i*3+1]/255,a.colors[i*3+2]/255,THREE.SRGBColorSpace);color.toArray(colors,k*3);partCounts[a.parts[i]]++;k++;}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(positions,3));g.setAttribute('color',new THREE.BufferAttribute(colors,3));g.computeBoundingSphere();g.userData.parts=partCounts;asset.geometries.set(detail,g);return g;
 }
-const pointMaterial=new THREE.PointsMaterial({size:.006,vertexColors:true,sizeAttenuation:true,toneMapped:false});
-function setDetail(value){stride=+value;pointMaterial.size=.012*Math.sqrt(stride);for(const actor of actors)actor.points.geometry=geometry(actor.asset,stride);document.querySelector('#detail').value=String(stride);refresh();}
+const pointMaterial=new THREE.PointsMaterial({size:.010,vertexColors:true,sizeAttenuation:true,toneMapped:false,map:roundPointMap(),alphaTest:.5});
+const heroMaterial=new THREE.PointsMaterial({size:.012,vertexColors:true,sizeAttenuation:true,toneMapped:false});
+function setDetail(value){stride=+value;pointMaterial.size=.010*Math.sqrt(stride);heroMaterial.size=.012*Math.sqrt(stride);for(const actor of actors)actor.points.geometry=geometry(actor.asset,stride);document.querySelector('#detail').value=String(stride);refresh();}
 function setFaces(value){mode=value;for(const actor of actors){actor.old.forEach(c=>c.visible=mode==='original');actor.points.visible=mode==='pipeline';}document.querySelector('#faces').value=mode;refresh();}
-function setMood(value){mood=value;const night=value==='night';scene.background=new THREE.Color(night?'#8196ac':'#dbe8d3');hemi.intensity=night?1.65:2.6;sun.intensity=night?.55:2;pointMaterial.color.setScalar(night?.82:1);}
+function setMood(value){mood=value;const night=value==='night';scene.background=new THREE.Color(night?'#8196ac':'#dbe8d3');hemi.intensity=night?1.65:2.6;sun.intensity=night?.55:2;pointMaterial.color.setScalar(night?.82:1);heroMaterial.color.copy(pointMaterial.color);}
 function view(id='group'){
  if(id==='group'){camera.position.set(0,4.1,11.8);controls.target.set(0,1.1,0);}
  else {const actor=actors.find(a=>a.id===id)||actors[0],p=actor.rig.head.getWorldPosition(new THREE.Vector3());p.y+=.25*actor.rig.g.scale.y;camera.position.copy(p).add(new THREE.Vector3(.28,.1,1.65));controls.target.copy(p);}
@@ -66,7 +68,7 @@ try{
   const skin=entry.asset.profile.palette?.skin;
   const rig=makeCharacter({...entry.outfit,star:undefined,hat:'none',skin:skin?`rgb(${skin.join(',')})`:entry.outfit.skin});
   rig.g.position.set((i%7-3)*1.15,i<7?0:.25,i<7?1.2:-1.2);scene.add(rig.g);
-  const old=[...rig.head.children],points=new THREE.Points(geometry(entry.asset,stride),pointMaterial);points.name=entry.name;rig.head.add(points);
+  const old=[...rig.head.children],points=new THREE.Points(geometry(entry.asset,stride),entry.id==='pavi'?heroMaterial:pointMaterial);points.name=entry.name;rig.head.add(points);
   const label=document.createElement('span');label.className='name';label.textContent=entry.name;document.querySelector('#names').append(label);
   actors.push({...entry,rig,old,points,label});
  });

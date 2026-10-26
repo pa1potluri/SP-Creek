@@ -7,6 +7,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import {selectCharacterProfile,profileSkin,attachCharacterProfile} from './character-profiles.js';
 
 export const HIP = 0.95;
 const R = Math.random;
@@ -204,9 +205,11 @@ function joint(parent, x, y, z) {
 const live = new Set(); // WeakRefs, for blinking and idle glances
 
 export function makeCharacter(outfit = CAST.cowboy) {
-  if(outfit.star&&starSources[outfit.star])return makeStarCharacter(outfit);
+  const pipelineId=selectCharacterProfile(outfit);
+  if(outfit.star&&starSources[outfit.star]&&!pipelineId)return makeStarCharacter(outfit);
   const o = { skin: '#e9b48c', hair: '#5a3a22', eyes: '#4a2c18', shirt: '#efe2c6', pants: '#4a4038', boots: '#4a3020', belt: '#4a2e1a', buckle: GOLD, build: 1, sleeves: 'long', hat: 'none', hairStyle: 'short', ...outfit };
   const g = new THREE.Group(), rig = new Rig(), b = o.build;
+  if(pipelineId)o.skin=profileSkin(pipelineId)||o.skin;
   const skin = mat(o.skin), shirt = mat(o.shirt), pants = mat(o.female ? o.boots : o.pants), boots = mat(o.boots);
   const sleeve = mat(o.coat || o.shirt);
 
@@ -313,6 +316,7 @@ export function makeCharacter(outfit = CAST.cowboy) {
     g.name=o.label;g.scale.setScalar(0.84);
     p.feet=knees.map(knee=>joint(knee,0,-0.44,0));
   }
+  if(pipelineId)attachCharacterProfile(p,pipelineId);
   stand(p);
   live.add(new WeakRef(p));
   return p;

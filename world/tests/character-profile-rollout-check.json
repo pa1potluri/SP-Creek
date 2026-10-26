@@ -1,0 +1,42 @@
+{
+  "errors": [],
+  "checks": [
+    "Pavi uses approved face in actual game",
+    "Siri preserves her supplied original model",
+    "Game residents and children present",
+    "Resident profiles attach to existing game head rigs",
+    "Two seconds of live world animation remain finite",
+    "Walking and idle animation keep face attachments",
+    "Integration check never starts sound",
+    "Ordinary URL restores original models and faces",
+    "Default game has no pipeline data download"
+  ],
+  "readyMs": 8678,
+  "actualGame": {
+    "pavi": "pavi",
+    "residents": [
+      "town-700",
+      "town-701",
+      "town-702",
+      "town-703",
+      "town-704",
+      "town-705",
+      "town-101",
+      "town-202",
+      "town-303",
+      "town-404",
+      "town-101",
+      "town-202",
+      "town-303",
+      "town-404",
+      "town-505",
+      "town-606",
+      "town-701",
+      "town-702"
+    ],
+    "audioLocked": true
+  },
+  "defaultRestored": true,
+  "profileRequestsOnDefault": 0,
+  "passed": 9
+}

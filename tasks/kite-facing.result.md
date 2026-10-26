@@ -16,3 +16,6 @@ Branch area/kite-facing, stacked after verified menu-spacing 3d769ad.
 - Platform terrain blending/ground detail, path access, flower density/clear walking corridors, waterfall/pond/bridge connections, distant cabin/tree depth, and full navigability audit remain open.
 - Weather finding: ready-made Kite Day already specifies rain=0 and applyVideoPreset resets weather to auto. Direct camera changes intentionally retain manually selected weather. Need reproduce the reported unexpected festival rain before changing atmosphere logic; no global/manual-weather override added.
 - Broader actor clearance remains task 64 WIP; standing-row separation is not a universal collision system. No merge/push/publish.
+
+## Verified checkpoint — 27 October
+Full 31 suites passed: 2015 + 2 startup reload checks, no browser errors (kite-facing-full.txt). Directional regression passes all 80 samples; 68 targeted legacy checks passed. Four authored views have Film day/night captures and the Watercolour comparison is saved. Task stays WIP for the expanded P2/P3 and weather-reproduction items above. Next implementation step: inspect the raised visual festival platform against walkHeight, then blend its ground/path transitions without adding invisible collision edges. No further code changes after these checks.

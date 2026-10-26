@@ -1,22 +1,15 @@
-# WIP handoff — 26 October 2026
-User reports 10% usage remaining and requests saving everything, no large new work, only small follow-up corrections. Large queue work stopped at a safe point. Current branch: area/kids-ui-icons. Last implementation commit before this handoff: 5641c42.
+# WIP handoff — 27 October 2026
+Current branch: area/kite-facing. User explicitly resumed from the handoff on 27 October, superseding the prior low-usage stop. Never merge/push/publish. Continue local queued corrections and save each checkpoint; do not claim background work after an inactive chat.
 
-## Saved and verified
-- Six-tab kids menu, real world preview, all 43 existing Build pieces, settings and Studio access.
-- Home welcome/action overlay removed; greeting top-left, Create/Play/Watch in top menu.
-- Original Free camera On/Off restored beside art styles.
-- All 13 supplied icon filenames registered and verified loaded/visible; category clipping repaired. Supplied PNG replacements saved unchanged.
-- Latest full 31 suites: 2015 + 2 startup checks passed, no browser errors. Evidence world/tests/kids-ui-icons-full.txt plus desktop/tablet and Film day/night captures. Prior road input/save/reload checks passed and are saved separately.
+## Completed on resume
+- Menu-spacing WIP verified: welcome clear of logo, Free camera/art bar both 56px and aligned at desktop/tablet widths. Full 2015 + 2, Film day/night. Commit 3d769ad.
+- Kite Day facing/visibility increment saved in bf5f68f: all five actors face actual assigned kites, friendly back row, larger/brighter static kites with cream trim, string grip height, reframed existing views so sails clear top controls. No saved IDs renumbered.
+- Before: 80/80 measured actors faced away; after: 0/80. Targeted kite/episode checks 33 + 35 pass; final full 31 suites 2015 + 2 pass, no browser errors. Four shots (86/87/88/93) have Film day/night captures, plus Watercolour comparison. Evidence world/tests/kite-facing-*.
 
-## Unfinished WIP / resume point
-- Task 64 actor clearance remains WIP. Market shopper overlap reproduced at 0.079929m and separated to 4.981526m in the sampled diagnostic; inactive shoppers hide correctly. These life.js changes are included in later passing full-suite runs, but market-spacing.cjs is still diagnostic rather than an asserting regression. Broad scripted/player/ride/small-animal/prop clearance is not complete.
-- Task 77 scene composition/sky/bridge work remains open. Larger control/readability increment is saved; menu work supersedes parts of the UI request, not the scene defects.
-- Other queued Kite Day, Episode 12, terrain, water, atmosphere and scene reviews remain open. See QUEUE.md and their result files; no earlier feedback dropped.
-- Artwork source/final visual acceptance remains user-reviewed; avatar/piece illustrations still use fallbacks where no artwork was supplied.
+## Current WIP / next
+Task 65 expanded festival review is NOT done. Continue platform terrain blending and path access, flower density/walking corridors, water/bridge connection, distant scenery and navigability checks. First inspect raised visual platform versus walkHeight; avoid invisible edges, teleporting or unsafe prop clearances. Weather finding is not reproduced in a fresh Kite Day preset (already rain=0, auto weather); retain manual weather choices and diagnose before altering atmosphere.
+Task 64 global actor clearance stays WIP. Swept traffic/crowd and market-spacing fixes are saved and covered by descendant passing suites. Remaining player/ride integration needs game.js scope plus scene-aware deterministic routing; boundary recorded in STUCK.md. Do not claim universal collision safety. Continue other isolated queued repairs when this boundary prevents progress.
+All earlier scene, UI art, terrain, water, atmosphere, Episode 12 and style-review corrections remain in QUEUE.md. Fonts remain deferred per user; supplied artwork originals retained.
 
-## Next action
-Wait for incoming small corrections and log/apply only those within remaining usage. Do not start the larger queued fixes during this low-usage period. Preserve current server setup; no shutdown, merge, push or publish requested now. Commit any follow-up work and update its WIP result before stopping. No new test suite needed for this documentation-only checkpoint.
-
-Low-usage small correction saved on area/menu-spacing: welcome moved clear of logo below art controls on Home; Free camera matches art bar at 56px. Focused desktop/tablet geometry check passes. Full suite deferred, task explicitly WIP; colour/font redesign not started.
-
-27 October resume: spacing full regression passed 2015 + 2, Film day/night refreshed; low-usage stop superseded by user resume. Task 64 remains WIP, scope/routing boundary recorded in STUCK.md. Continue the next isolated queued repair, Kite Day facing/visibility, without discarding global clearance.
+## Preview / verification
+Local preview http://localhost:8811/; offline launcher SP Creek.bat. No npm/build step. Full suite uses DH_URL=http://127.0.0.1:8811 and every world/tests/*.js suite. Tests never start sound. Current checkpoint leaves no uncommitted agent changes. Update result/queue and commit WIP before any stop or limit.

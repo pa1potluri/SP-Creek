@@ -14,3 +14,5 @@ Artwork received: 13 supplied UI PNGs registered on area/kids-ui-art; 21 checks 
 Home layout corrected per user: no large welcome/action overlay; greeting top-left and actions in top menus. 27 focused + full 2015 + 2 pass; current supplied replacement art preserved. No push/merge. Continue earlier scene/function corrections; user plans further submenus and icon replacements separately.
 
 Low-usage save requested (10% remaining): wrote tasks/SESSION-HANDOFF.md; large work stopped. Latest full 2015 + 2 passes saved. Only small incoming corrections now; unfinished tasks remain WIP.
+
+27 October resumed work: finished menu-spacing verification (full 2015 + 2), then reproduced and repaired Kite Day facing (80 wrong before, zero after), stronger kite visibility and safe authored framing. Full 2015 + 2 and 68 targeted checks pass; eight Film views and Watercolour comparison saved. Task 65 remains WIP for platform/paths/water/flowers/depth/weather diagnosis. Handoff rewritten to the exact new stop. Task 64 continuation boundary saved in STUCK.md; no universal collision completion claim.

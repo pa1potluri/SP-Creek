@@ -73,6 +73,7 @@ finished. Re-read this file each time; Claude may change it.
 | 58 | `tasks/GAME-HEALTH-REVIEW.md` | `area/game-health-review` | review complete; eight fresh views, no runtime errors; prioritized unfinished visuals and character rollout recorded; repairs remain open |
 | 59 | `tasks/train-shore-fixes.md` | `area/train-shore-fixes` | done, awaiting review; platform/junction overlaps separated; Cove mountain band removed; 12 day/night previews, 600 train motion steps; full 2015 + 2 passed |
 | 60 | `tasks/showcase-review-fixes.md` | `area/showcase-review-fixes` | WIP review repairs; natural pace + slower showcase motion, soft Watercolour, cafe snow exclusion, billboard shadow/depth repair, ambient solid avoidance and duck clearance; 13 focused checks + 16 previews; final full 2015 + 2 passed; broad scripted-cast collision and atmosphere/colour acceptance still open |
+| 61 | `tasks/server-health.md` | `area/server-health` | check complete; server/watchdog working; no JS crashes/context loss; two obsolete cut-out 404 requests found, repair pending; startup 18s game / 11s showcase / 3s character preview |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -92,6 +93,7 @@ meadow & lake, crystal mine & balloon.
 
 > Loading diagnosis follow-up: 21.558s startup at 720p; terrain pad calculations and first-use shaders dominate CPU samples. Four preset clicks responsive in isolated test; the later reproduced bench-state freeze is now fixed and validated in task 50. Task 48 retains its forest visual follow-up; see its result.
 > Follow-up complete: user-approved life.js state reset fixes the reproduced null-seat freeze; full 2015 + 2 and 96 preset switches passed; 12 Film day/night frames saved. Task 48 retains only the unresolved forest visual follow-up. No new content queued.
+
 
 
 

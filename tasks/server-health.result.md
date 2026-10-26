@@ -1,0 +1,11 @@
+# Server health result — 26 October 2026
+- Server and automatic restart watchdog running (python process 5084, watchdog PowerShell 12272 at check time). No restart needed.
+- HTTP 200: /, showcase.html, showcase-watercolor.html, character-pipeline-test.html, src/main.js, src/traffic-solids.js, local Three vendor file.
+- Fresh browser checks: game ready 18035ms; playing watercolour showcase 11083ms; isolated resident preview 2854ms. One cold-ish local sample each, not guarantees. Long startup remains a performance follow-up.
+- No page JavaScript exceptions or lost WebGL contexts. Synthetic Play started showcase; audio remained locked, as required.
+- FOUND: main.js legacy cut-out loader still requests assets/cutouts/lady.png and horse.png, but that directory/assets are absent. Both URLs return 404 in game and showcase. Three generic console resource messages occurred on initial normal page, two on showcase; only the two named failed asset responses were captured. Do not invent a third missing game asset.
+- Resident preview had zero resource/console errors.
+- Error-detecting script exits 1 deliberately because these missing requests exist. Evidence: world/tests/server-health-check.json. This does not mean the server is offline.
+- Latest full suite on unchanged application code: 2015 + 2 passed, showcase-review-full.txt. Existing runner ignores generic 404 console messages; this broader network check exposes that gap. No full suite rerun for this read-only check.
+- Next small repair: remove obsolete cut-out requests rather than recreate deleted pictures. No app files changed in this task. Broader visual/collision WIP stays as recorded in task 60.
+- Everything saved locally, no push/merge/publish.

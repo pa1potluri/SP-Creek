@@ -87,9 +87,9 @@ export async function buildSunsetCove(world,life){
   const palms=[instances(palm.trunk,wood,palmSites),instances(palm.leaves,palmLeaf,palmSites)];
   function cutoutMaterial(name){const sets={oil:imageTexture(images.oil[name]),clean:imageTexture(images.clean[name])},material=new THREE.MeshLambertMaterial({map:sets.clean,alphaTest:0.35,side:THREE.DoubleSide,emissive:0xffffff,emissiveMap:sets.clean,emissiveIntensity:0.08});material.userData.sets=sets;world.surfaces.add(material);return material;}
   const palmPaint=cutoutMaterial('palm'),palmPlane=new THREE.PlaneGeometry(8.4,11.2,3,6);palmPlane.translate(0,5.6,0);
-  const paintedPalms=instances(palmPlane,palmPaint,palmSites);paintedPalms.name='Painted cove palms';paintedPalms.customDepthMaterial=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking,map:palmPaint.map,alphaTest:0.35});
+  const paintedPalms=instances(palmPlane,palmPaint,palmSites);paintedPalms.name='Painted cove palms';paintedPalms.castShadow=false;paintedPalms.customDepthMaterial=new THREE.MeshDepthMaterial({depthPacking:THREE.RGBADepthPacking,map:palmPaint.map,alphaTest:0.35});
   const palmBefore=palmPaint.onBeforeCompile;palmPaint.onBeforeCompile=(shader,r)=>{palmBefore.call(palmPaint,shader,r);shader.uniforms.uPalmTime=world.waterUniforms.uWaterTime;shader.uniforms.uPalmWind=world.waterUniforms.uWaterWind;shader.vertexShader='uniform float uPalmTime,uPalmWind;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.x += sin(uPalmTime*0.65+position.y*0.8)*max(0.0,position.y-1.0)*0.018*uPalmWind;');};palmPaint.customProgramCacheKey=()=> 'cove-painted-palm-v1';
-  const flowerPaint=cutoutMaterial('bougainvillea'),paintedFlowers=instances(new THREE.PlaneGeometry(3.5,4.6),flowerPaint,cottages.map(p=>[p.x-2.6*Math.cos(p.yaw)+3.8*Math.sin(p.yaw),p.y+2.3*p.size,p.z+2.6*Math.sin(p.yaw)+3.8*Math.cos(p.yaw),p.size,p.size,p.size,p.yaw]));paintedFlowers.name='Painted bougainvillea';
+  const flowerPaint=cutoutMaterial('bougainvillea'),paintedFlowers=instances(new THREE.PlaneGeometry(3.5,4.6),flowerPaint,cottages.map(p=>[p.x-2.6*Math.cos(p.yaw)+3.8*Math.sin(p.yaw),p.y+2.3*p.size,p.z+2.6*Math.sin(p.yaw)+3.8*Math.cos(p.yaw),p.size,p.size,p.size,p.yaw]));paintedFlowers.name='Painted bougainvillea';paintedFlowers.castShadow=false;flowerPaint.polygonOffset=true;flowerPaint.polygonOffsetFactor=-1;flowerPaint.polygonOffsetUnits=-1;
   const panorama=document.createElement('canvas');panorama.width=horizons[0].width+horizons[1].width;panorama.height=horizons[0].height;const pc=panorama.getContext('2d');pc.drawImage(horizons[0],0,0);pc.drawImage(horizons[1],horizons[0].width,0);
   const horizonMap=new THREE.CanvasTexture(panorama);horizonMap.colorSpace=THREE.SRGBColorSpace;horizonMap.wrapS=THREE.RepeatWrapping;horizonMap.repeat.x=-1;
   const horizonHeight=1800*Math.PI/(panorama.width/panorama.height),horizonRatio=0.565;
@@ -126,5 +126,6 @@ export async function buildSunsetCove(world,life){
     walkers.forEach((p,i)=>{const x=-323+Math.sin(t*0.017+i*1.7)*24,z=i%2?-6.5:-28;p.g.position.set(x,terrainHeight(x,z),z);p.g.visible=!staged&&p.g.position.distanceTo(camera.position)>=6;p.g.rotation.y=Math.cos(t*0.017+i*1.7)>0?Math.PI/2:-Math.PI/2;animatePerson(p,t*3.5+i,0.6);});
   }};world.sunsetCove=area;return area;
 }
+
 
 

@@ -12,7 +12,7 @@ export const SHOWCASE_SCENES = [
   [83,'morning','film','winter'],[85,'night','film','winter'],
   [87,'golden','oil'],[89,'morning','film'],[92,'golden','film','winter'],
   [93,'dusk','oil'],[94,'golden','film'],[95,'golden','film'],
-].map(([shot,mood,style,season='summer',weather='auto'])=>({shot,mood,style,season,weather,seconds:20,move:'cut'}));
+].map(([shot,mood,style,season='summer',weather='auto'])=>({shot,mood,style,season,weather,seconds:20,move:'cut',natural:true}));
 
 export function startShowcase(app) {
   const watercolor=new URLSearchParams(location.search).get('showcaseStyle')==='watercolor';
@@ -45,5 +45,6 @@ export function startShowcase(app) {
   addEventListener('keydown',e=>{if(e.key==='Home'){e.preventDefault();play();}});
   app.showcase={clips,play,get playing(){return app.timeline.playing;}};
 }
+
 
 

@@ -160,12 +160,13 @@ export const LookShader = {
         }
         wash /= washWeight;
         c = mix(c, wash, uWash * 0.7);
-        c = mix(c, poster(c, 18.0), 0.18);
+        // Continuous washes avoid hard poster boundaries around silhouettes.
         float light = dot(c, vec3(0.299, 0.587, 0.114));
         c = mix(vec3(light), c, 0.9);
         c = mix(c, vec3(1.0, 0.985, 0.95), 0.07);
         float rim = max(depthEdge(uv, px * max(k, 1.0) * 1.3), smoothstep(0.06, 0.42, colorEdge));
-        c *= 1.0 - rim * uPigment * 0.22;
+        // Pigment pools in broad washes, never as a black contour.
+        c *= 1.0 + (noise(paperPos * 0.045) - 0.5) * uPigment * 0.06;
         float tooth = (noise(paperPos * 0.8) - 0.5) * 0.07 + (noise(paperPos * 0.18) - 0.5) * 0.045;
         float bloom = noise(paperPos * 0.018 + noise(paperPos * 0.006) * 7.0) - 0.5;
         c += tooth * uPaper * (0.35 + light * 0.65);
@@ -220,3 +221,4 @@ export const FinalShader = {
       gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
     }`,
 };
+

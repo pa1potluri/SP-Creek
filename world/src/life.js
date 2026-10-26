@@ -1,3 +1,4 @@
+import { solidAt } from './traffic-solids.js';
 import { buildGarden, GARDEN } from './areas/garden.js';
 import { SNOW_DAY } from './areas/town-center.js';
 import { MEADOW_OUTING } from './areas/meadow-lake.js';
@@ -452,10 +453,10 @@ class Walker {
     this.yaw += Math.sign(diff) * Math.min(Math.abs(diff), dt * 5);
     const v = Math.min(d, this.speed * dt * (Math.abs(diff) < 1 ? 1 : 0.3));
     const nx=this.pos.x+Math.sin(this.yaw)*v,nz=this.pos.z+Math.cos(this.yaw)*v;
-    let best=this.world.inPond(nx,nz,0.45)?null:{x:nx,z:nz,yaw:this.yaw},score=Infinity;
+    let best=(this.world.inPond(nx,nz,0.45)||this.world.ambientBlocked?.(nx,nz,this,0.38))?null:{x:nx,z:nz,yaw:this.yaw},score=Infinity;
     if(!best) for(const turn of [0.65,-0.65,1.3,-1.3,1.75,-1.75,2.2,-2.2]) {
       const yaw=this.yaw+turn,x=this.pos.x+Math.sin(yaw)*v,z=this.pos.z+Math.cos(yaw)*v;
-      if(this.world.inPond(x,z,0.45))continue;
+      if(this.world.inPond(x,z,0.45)||this.world.ambientBlocked?.(x,z,this,0.38))continue;
       const cost=Math.hypot(this.target.x-x,this.target.z-z)+Math.abs(turn)*0.01;
       if(cost<score){score=cost;best={x,z,yaw};}
     }
@@ -585,14 +586,14 @@ class Walker {
 function roadLoop() {
   const pts = [];
   for (let z = 330; z >= 70; z -= 26) pts.push(V(roadX(z) + 2.4, 0, z));
-  pts.push(V(2.4, 0, 40), V(2.4, 0, 0), V(2.4, 0, -35), V(2.7, 0, -46), V(0, 0, -52), V(-2.7, 0, -46), V(-2.4, 0, -35), V(-2.4, 0, 0), V(-2.4, 0, 40));
+  pts.push(V(2.4, 0, 40), V(2.4, 0, 0), V(2.4, 0, -35), V(2.7, 0, -46), V(0, 0, -48), V(-2.7, 0, -46), V(-2.4, 0, -35), V(-2.4, 0, 0), V(-2.4, 0, 40));
   for (let z = 70; z <= 330; z += 26) pts.push(V(roadX(z) - 2.4, 0, z));
   return new THREE.CatmullRomCurve3(pts, true, 'centripetal');
 }
 
 class RoadTraveller {
   constructor(model, curve, u0, speed, world) {
-    this.m = model;
+    this.m = model;this.world=world;
     this.curve = curve;
     this.len = curve.getLength();
     this.u = u0;
@@ -606,7 +607,9 @@ class RoadTraveller {
     this.update(0, true);
   }
   update(dt, snap = false) {
-    this.u = (this.u + (this.speed * dt) / this.len) % 1;
+    const next=(this.u+(this.speed*dt)/this.len)%1,candidate=this.curve.getPointAt(next);
+    if(!snap&&dt>0){const tangent=this.curve.getTangentAt(next),coach=this.m.wheels.length>0;for(const offset of (coach?[-3,0,3]:[-1.1,0,1.1]))if(this.world.ambientBlocked?.(candidate.x+tangent.x*offset,candidate.z+tangent.z*offset,this,coach?1.1:0.75))return;}
+    this.u=next;
     this.curve.getPointAt(this.u, this.p);
     this.curve.getTangentAt(this.u, this.t);
     const target = Math.atan2(this.t.x, this.t.z);
@@ -1095,6 +1098,8 @@ export class Life {
     this.marketNear=camera.position.x>-35&&camera.position.x<40&&camera.position.z>-75&&camera.position.z< -15;
     const wind = this.settings.wind;
     this.world.wind = wind; // painted plants sway with the same wind
+    const walkers=[...this.walkers,...(this.townKids||[]),...(this.settings.hamlet?this.hamletWalkers:[])];
+    this.world.ambientBlocked=(x,z,self,r)=>{if(solidAt(this.world,x,z,r))return true;for(const w of walkers){if(w===self||!w.p.g.visible||Math.abs(w.p.g.position.y-terrainHeight(x,z))>2)continue;if(Math.hypot(x-w.pos.x,z-w.pos.z)<r+0.38)return true;}for(const p of [...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{})]){if(p.g.visible&&Math.abs(p.g.position.y-terrainHeight(x,z))<2&&Math.hypot(x-p.g.position.x,z-p.g.position.z)<r+0.45)return true;}for(const rider of this.riders){if(rider===self)continue;if(Math.hypot(x-rider.p.x,z-rider.p.z)<r+1.05)return true;}return false;};
     this._socialise(dt, t);
     for (const w of this.walkers) w.update(dt, t);
     this.updateStars(t);
@@ -1198,3 +1203,6 @@ export function posePlaygroundChild(p,kind,t){
   if(kind==='dig'){p.upper.rotation.x=0.25;for(let i=0;i<2;i++){p.arms[i].rotation.x=-0.9+Math.sin(t*0.8+i)*0.15;p.elbows[i].rotation.x=-0.65;}for(const knee of p.knees||[])knee.rotation.x=0.9;}
   return kind==='slide'?0.72*sit:0;
 }
+
+
+

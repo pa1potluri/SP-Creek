@@ -1001,25 +1001,26 @@ function listener() {
 // Advance the whole world by exactly `dt` seconds and draw one frame.
 // The live loop passes real elapsed time; the exporter passes 1/fps.
 function step(dt) {
-  time += dt;
+  const motionDt=dt*(window.__app?.showcase?.playing?0.4:1);
+  time += motionDt;
   if (timeline.update(dt) === 'ended') refreshTimeline();
   if (game.active) game.update(dt);
   else director.update(dt);
   world.wind=life.settings.wind*(atmos.weather==='windy'?2.2:1);
-  atmos.update(dt, time, camera);
+  atmos.update(motionDt, time, camera);
   seasons.update(time,camera);
-  world.update(dt, time, camera);
+  world.update(motionDt, time, camera);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
   if (world.areaAnimationVisible(camera,-90,forest.pad.y+10,-204,90)) forest.update(time, camera, atmos.cur);
   if (world.areaAnimationVisible(camera,-225,meadowLake.pad.y+10,0,110)) meadowLake.update(time, camera, atmos.cur, atmos.key);
   crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
-  life.update(dt, time, camera);
+  life.update(motionDt, time, camera);
   sunsetCove.update(time,camera,atmos.cur);
   playground.update(time,camera);
   camping.update(time,camera,atmos.cur);
-  cafe.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
+  cafe.update(motionDt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
   audio.tick(listener(), dt);
   if (backdrop) {
@@ -1087,3 +1088,4 @@ function frame() {
 atmos.setPreset('golden', true);
 frame();
 if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));
+

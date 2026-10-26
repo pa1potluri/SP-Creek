@@ -95,6 +95,9 @@ finished. Re-read this file each time; Claude may change it.
 | 80 | `tasks/town-scene-review.md` | planned | queued town review: camera/road, building edges/landmark, signs/prop spacing/ground texture; preserve approved names |
 | 81 | `tasks/station-town-layout-review.md` | planned | queued eight explicit corrections: framing/routes first, station/layout next, playground/steam/tree/ground last; train bounds/collision gate before scaling |
 | 82 | `tasks/willow-creek-review.md` | planned | queued seven Willow Creek corrections: camera/road, landmark/storefronts, weather/cast/terrain; verify multiple distances and aspect ratios |
+| 83 | `tasks/road-drawing-repair.md` | `area/road-drawing-repair` | WIP immediate recurrence; real-pointer test creates road but user failure unresolved; visible feedback/save-reload checks next |
+| 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
+| 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -155,4 +158,7 @@ meadow & lake, crystal mine & balloon.
 
 
 
+
+
+> 26 October user authorises continuous correction work without review waits; may review daily or every two days while moving house. Timeline and reporting log: tasks/WORK-LOG.md. Road recurrence task 83 is immediate priority; no earlier item discarded.
 

@@ -94,7 +94,7 @@ finished. Re-read this file each time; Claude may change it.
 | 78 | `tasks/firefly-forest-review.md` | planned | queued seven-point forest review: path/light first, trees/hillside second, fireflies/sky third; retain earlier roots/deer issues |
 | 79 | `tasks/river-railway-review.md` | planned | queued combined river/rail/hill review: banks/crossings and camera first, terrain/prop grouping next, distant depth/mill visibility; all earlier points retained |
 | 80 | `tasks/town-scene-review.md` | planned | queued town review: camera/road, building edges/landmark, signs/prop spacing/ground texture; preserve approved names |
-| 81 | `tasks/station-town-layout-review.md` | planned | queued eight explicit corrections: framing/routes first, station/layout next, playground/steam/tree/ground last; train bounds/collision gate before scaling |
+| 81 | `tasks/station-town-layout-review.md` | planned | queued station/town + elevation/playground references: continuous routes/gentler upper access, station/layout, playground/steam/tree/ground; train bounds gate before scaling |
 | 82 | `tasks/willow-creek-review.md` | planned | queued seven Willow Creek corrections: camera/road, landmark/storefronts, weather/cast/terrain; verify multiple distances and aspect ratios |
 | 83 | `tasks/road-drawing-repair.md` | `area/road-drawing-repair` | done verified interaction increment, awaiting retest; 12 focused + full 2015 + 2; markers/Finish/Enter/save-reload pass; Film day/night; original cause unconfirmed |
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
@@ -189,6 +189,7 @@ meadow & lake, crystal mine & balloon.
 
 
 > 26 October low-usage checkpoint: user reports 10% remaining. All implementation saved; large queue work is WIP/stopped at a safe point. Only incoming small corrections until further direction. Exact branch, completed checks, unfinished work and resume steps: tasks/SESSION-HANDOFF.md. Never push/merge/publish.
+
 
 
 

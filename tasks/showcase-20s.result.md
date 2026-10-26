@@ -7,5 +7,6 @@
 - Uses the existing world-time timeline instead of separate wall timers; loading pauses cannot race ahead to another segment. Original camera/preset numbers and saved timeline storage unchanged.
 - Focused browser check passed: silent Play gate; all 36 valid 20-second scenes; automatic wrap to first scene; audio stayed locked without a real user click; no browser errors. world/tests/showcase-20s-check.json.
 - Film day/night evidence: world/tests/showcase-20s-town-day.png and -night.png. No camera definitions changed.
-- Full-suite verification running; do not mark done until its final result is recorded.
+- Full suite: 2015 checks passed + 2 startup reload checks, all 31 suites, exit 0, browser errors []. Log: world/tests/showcase-20s-full.txt. Complete, awaiting lead review.
 - Existing visual limitations remain (including the inherited Cove night water band and rough forest silhouettes). This presentation does not repair those areas. No push, merge or publishing.
+

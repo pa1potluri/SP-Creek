@@ -109,6 +109,7 @@ finished. Re-read this file each time; Claude may change it.
 | 87 | `tasks/pond-duck-interaction.md` | planned | queued pond reference: safe idle/swim, real-click turn/quack/flap, ripples, smooth resume, pond/dock clearance |
 | 88 | `tasks/railway-crossing.md` | planned | queued functional crossing: advance warnings/barriers, full train/tail clearance, actor safety; road/gate/building/fence visual reference retained |
 | 89 | `tasks/coastal-village-polish.md` | planned | queued preserve Clean coast/layout: connected cottage paths, ground contact/colliders, beach/pier support, vegetation/material/light/performance polish |
+| 90 | `tasks/old-hollow-review.md` | planned | queued friendly 3D cube ghosts/reactions and continuous street first; buildings/decor/warm light, matching collisions/clear paths; preserve UI/Clean style |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -198,4 +199,7 @@ meadow & lake, crystal mine & balloon.
 
 
 
+
+
+> 27 October user reconfirms: keep every incoming correction recorded and continue implementation without waiting for reviews; user is reviewing additional scenes. No merge/push/publish.
 

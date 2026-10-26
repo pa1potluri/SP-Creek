@@ -63,7 +63,7 @@ finished. Re-read this file each time; Claude may change it.
 | 48 | `tasks/review-feedback.md` | `area/review-feedback` | WIP visual follow-up; reproduced bench-state freeze fixed in task 50; full 2015 + 2 passed, 31 suites; 96 preset switches clean; 12 Film day/night views; deer clear; steep-bank tree silhouettes remain in STUCK |
 | 49 | `tasks/preview-autostart.md` | `area/preview-autostart` | done; restart/sign-in verified 2026-10-25 19:27; watchdog/server launched automatically; HTTP 200; isolated restart passed; unchanged checkpoint full 2001 + 2; no camera changes; task 48 remains WIP |
 | 50 | `tasks/preview-performance.md` | `area/preview-performance` | done, awaiting lead review; bench-state render freeze fixed; full 2015 + 2 passed, 31 suites; 96 preset switches clean; 12 Film day/night views; startup about 8.6s in final diagnostic; task 48 forest visuals still open |
-| 51 | `tasks/character-pipeline-test.md` | `area/character-pipeline-test` | WIP isolated 14-character test; 94 focused checks + 8 day/night poses + 2 comparisons; source assets preserved; full suite in progress, clean final benchmark pending; default world unchanged |
+| 51 | `tasks/character-pipeline-test.md` | `area/character-pipeline-test` | done isolated experiment, awaiting review; 12 residents + Pavi/Siri test slots; focused 94 and full 2015 + 2 passed; 8 day/night + 2 comparisons; RTX render ~0.6ms, head payload 34MB; no full-game rollout; Siri face provisional |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

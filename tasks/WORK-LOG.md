@@ -22,3 +22,5 @@ Low-usage save requested (10% remaining): wrote tasks/SESSION-HANDOFF.md; large 
 Water/ref review checkpoint: continuous waterfall and expanding pond-contained foam/ripples verified (80 focused, 68 legacy, full 2015 + 2). Current branch area/meadow-water. Durable image references and new tasks 88 functional crossing / 89 coastal polish saved; mine task 67 direction revised to timber entrance. Overall meadow/dock/shore/vegetation/depth still WIP. No completion claim for newly queued references.
 
 27 October incoming town reference: tasks/ref/town-elevations-review.png saved; navigation, lower/upper elevation connection and playground/building integration added to existing task 81, linked from 80. No scene change made from the image alone. Current branch remains area/meadow-water; other WIP unchanged.
+
+Saved-road angle popping repaired: fitted to rendered terrain, 85,400 expanded samples clear, persistence/rebuild/style switches pass, final full 2015 + 2 no errors; Film high/low day/night evidence. Commit on area/road-surface-fit; next meadow dock continuation. Balloon Hill task 91 retained.

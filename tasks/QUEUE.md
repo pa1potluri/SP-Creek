@@ -109,6 +109,8 @@ finished. Re-read this file each time; Claude may change it.
 | 87 | `tasks/pond-duck-interaction.md` | planned | queued pond reference: safe idle/swim, real-click turn/quack/flap, ripples, smooth resume, pond/dock clearance |
 | 88 | `tasks/railway-crossing.md` | planned | queued functional crossing: advance warnings/barriers, full train/tail clearance, actor safety; road/gate/building/fence visual reference retained |
 | 89 | `tasks/coastal-village-polish.md` | planned | queued preserve Clean coast/layout: connected cottage paths, ground contact/colliders, beach/pier support, vegetation/material/light/performance polish |
+| 31h | `tasks/road-surface-fit.md` | `area/road-surface-fit` | done repair, awaiting review: 85,400 curved/width samples clear; save/reload/rebuild/seven switches pass; final full 2015 + 2; Film high/low day/night |
+| 91 | `tasks/balloon-hill-review.md` | planned | queued deck/boarding, gentle access, anchored animation, landscape and matching safety boundaries; coordinate task 67 |
 | 90 | `tasks/old-hollow-review.md` | planned | queued friendly 3D cube ghosts/reactions and continuous street first; buildings/decor/warm light, matching collisions/clear paths; preserve UI/Clean style |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
@@ -209,3 +211,5 @@ meadow & lake, crystal mine & balloon.
 > Active WIP: tasks/road-surface-fit.md on area/road-surface-fit. Four reproduced routes pass clearance diagnostic after repair; full-suite/visual/save-reload acceptance pending. Task 83 input/save completion is separate from this rendering repair.
 
 > Road surface WIP checkpoint: full suite passed 2015 + 2 startup, no browser errors. Additional surface/visual regression remains before done.
+
+

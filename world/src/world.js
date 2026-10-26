@@ -830,9 +830,9 @@ export class World {
   // A flat strip draped over the terrain along a smooth path, e.g. a dirt road or a gravel bed.
   _ribbon(points, width, mat, { lift = 0.06, alpha = null, step = 2, fitGround = false } = {}) {
     const curve = new THREE.CatmullRomCurve3(points.map(([x, z]) => V(x, 0, z)), false, 'centripetal');
-    const n = Math.max(2, Math.ceil(curve.getLength() / (fitGround ? Math.min(step, 0.35) : step)));
+    const n = Math.max(2, Math.ceil(curve.getLength() / (fitGround ? Math.min(step, 0.25) : step)));
     // Wide two-edge strips cut through terrain crests; saved roads follow its rendered triangles.
-    const across = fitGround ? Math.max(2, Math.ceil(width / 0.35)) : 1, row = across + 1;
+    const across = fitGround ? Math.max(2, Math.ceil(width / 0.25)) : 1, row = across + 1;
     const pos = [], uv = [], col = [], idx = [];
     let along = 0, prev = null;
     for (let i = 0; i <= n; i++) {
@@ -2166,7 +2166,8 @@ export class World {
     }
     for (const e of [...this.roads, ...(this.hamlet?.roads || [])]) {
       this.root.remove(e.obj); e.obj.geometry.dispose();
-      e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1, fitGround: true, lift: 0.1 });
+      e.obj = this._ribbon(e.points, e.width, this.userRoadMat, this.roads.includes(e)
+        ? { step: 1, fitGround: true, lift: 0.1 } : { step: 1 });
     }
     for (const e of this.fences) {
       this.root.remove(e.obj); e.obj.geometry.dispose();
@@ -2224,5 +2225,6 @@ export class World {
     }
   }
 }
+
 
 

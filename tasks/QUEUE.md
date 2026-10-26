@@ -76,7 +76,7 @@ finished. Re-read this file each time; Claude may change it.
 | 61 | `tasks/server-health.md` | `area/server-health` | check complete; missing cut-out/favicon requests fixed in task 69; fresh game/showcase/character checks clean; latest 8.8s / 8.4s / 0.24s local readiness |
 | 62 | `tasks/build-transforms.md` | `area/build-transforms` | done, awaiting review; visible rotate/size controls for all 43 catalogue items and selected buildings; focused 135 + full 2015 + 2 passed; Film day/night saved |
 | 63 | `tasks/style-lock.md` | `area/style-lock`, completed on `area/gameplay-navigation` | done functionality, awaiting review; seven styles retained across 48 presets and 36 showcase scenes; reload verified; full 2015 + 2 and Film day/night |
-| 64 | `tasks/actor-clearance.md` | `area/actor-clearance` | WIP: swept horse/coach checks, broader visible crowd/coach/grazer obstacles; 6 focused checks passed; full regression running; scripted scene routes still open |
+| 64 | `tasks/actor-clearance.md` | `area/actor-clearance` | WIP: swept horse/coach checks, broader visible crowd/coach/grazer obstacles; 6 focused checks + full 2015 + 2 passed; Film day/night; scripted scene routes still open |
 | 65 | `tasks/kite-facing.md` | `area/kite-facing` (planned) | queued confirmed screenshot; cast must face actual kites; brighter high-contrast kite colours and background separation; keep distinct standing positions |
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-review` (planned) | queued; user reports only waterfall; inspect preset/view activation and repair coverage |
 | 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | WIP first refresh; rounded cave/rock treatment, softer crystals, cart moved off entry; four Film day/night captures; full 2015 + 2 passed; organic art/visual acceptance remains open |
@@ -128,6 +128,7 @@ meadow & lake, crystal mine & balloon.
 
 
 > User latest: all fixes retained; review only current approved characters. Save UI WIP, make approved residents default, prioritize Crystal Mine refresh, then finish gameplay-first controls and functional collision/Kite/Episode repairs. Atmosphere remains unaccepted; no claim the game is finished.
+
 
 
 

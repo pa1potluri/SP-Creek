@@ -1,0 +1,188 @@
+{
+  "before": true,
+  "scenes": [
+    {
+      "shot": 0,
+      "name": "Town Square 360°",
+      "style": "film"
+    },
+    {
+      "shot": 37,
+      "name": "Pavi & Siri walk",
+      "style": "film"
+    },
+    {
+      "shot": 38,
+      "name": "Pavi & Siri at the pond",
+      "style": "oil"
+    },
+    {
+      "shot": 39,
+      "name": "Sunset Cove from above",
+      "style": "film"
+    },
+    {
+      "shot": 42,
+      "name": "Walking into the sunset",
+      "style": "watercolor"
+    },
+    {
+      "shot": 43,
+      "name": "Two small friends on a big beach",
+      "style": "oil"
+    },
+    {
+      "shot": 21,
+      "name": "Willow Creek Approach",
+      "style": "film"
+    },
+    {
+      "shot": 34,
+      "name": "Willow Creek Pond Tour",
+      "style": "paper"
+    },
+    {
+      "shot": 24,
+      "name": "Town Center Stroll",
+      "style": "toy"
+    },
+    {
+      "shot": 18,
+      "name": "At the Counter",
+      "style": "film"
+    },
+    {
+      "shot": 19,
+      "name": "Board Game Table",
+      "style": "oil"
+    },
+    {
+      "shot": 26,
+      "name": "Forest Trail",
+      "style": "film"
+    },
+    {
+      "shot": 31,
+      "name": "Firefly Forest Tour",
+      "style": "film"
+    },
+    {
+      "shot": 45,
+      "name": "Playground",
+      "style": "film"
+    },
+    {
+      "shot": 30,
+      "name": "Old Hollow Tour",
+      "style": "film"
+    },
+    {
+      "shot": 27,
+      "name": "Meadow and Waterfall",
+      "style": "oil"
+    },
+    {
+      "shot": 32,
+      "name": "Meadow and Lake Tour",
+      "style": "clean"
+    },
+    {
+      "shot": 29,
+      "name": "Balloon Hilltop",
+      "style": "film"
+    },
+    {
+      "shot": 33,
+      "name": "Crystal Mine Tour",
+      "style": "pixel"
+    },
+    {
+      "shot": 54,
+      "name": "Over the valley",
+      "style": "film"
+    },
+    {
+      "shot": 57,
+      "name": "Window view",
+      "style": "oil"
+    },
+    {
+      "shot": 59,
+      "name": "Cosy camping clearing",
+      "style": "film"
+    },
+    {
+      "shot": 62,
+      "name": "Feeding the ponies",
+      "style": "film"
+    },
+    {
+      "shot": 67,
+      "name": "Raindrops on the cafe window",
+      "style": "film"
+    },
+    {
+      "shot": 69,
+      "name": "Market day in the square",
+      "style": "oil"
+    },
+    {
+      "shot": 73,
+      "name": "Drifting past the waterfall",
+      "style": "film"
+    },
+    {
+      "shot": 76,
+      "name": "Watch the garden grow",
+      "style": "paper"
+    },
+    {
+      "shot": 80,
+      "name": "Cove boat from above",
+      "style": "film"
+    },
+    {
+      "shot": 83,
+      "name": "Soft snow angels",
+      "style": "film"
+    },
+    {
+      "shot": 85,
+      "name": "Cocoa by the window",
+      "style": "film"
+    },
+    {
+      "shot": 87,
+      "name": "Colourful kites and friends",
+      "style": "oil"
+    },
+    {
+      "shot": 89,
+      "name": "Picnic by the waterfall",
+      "style": "film"
+    },
+    {
+      "shot": 92,
+      "name": "Snow day from above",
+      "style": "film"
+    },
+    {
+      "shot": 93,
+      "name": "Kite festival from above",
+      "style": "oil"
+    },
+    {
+      "shot": 94,
+      "name": "Waterfall picnic from above",
+      "style": "film"
+    },
+    {
+      "shot": 95,
+      "name": "Quiet water at the cove",
+      "style": "film"
+    }
+  ],
+  "total": 720,
+  "audioLocked": true,
+  "errors": []
+}

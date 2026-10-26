@@ -437,7 +437,7 @@ let buildSignCustom = false;
 let ghost = null, buildYaw = 0, groundPoint = null, selectedBuilding = null, selectionBox = null;
 let roadPoints = [], roadPreview = null;
 function buildSpec(p = { x: 0, z: 0 }) {
-  return { type: tool.slice(6), x: p.x, z: p.z, yaw: buildYaw, w: +$('#buildWidth').value,
+  return { type: tool.slice(6), x: p.x, z: p.z, yaw: buildYaw, scale: +$('#buildScale').value, w: +$('#buildWidth').value,
     floors: +$('#buildFloors').value, wall: $('#buildWall').value.split(',').map(Number), sign: $('#buildSign').value, signCustom: buildSignCustom };
 }
 function clearBuildPreview() {
@@ -451,11 +451,20 @@ function refreshBuildGhost() {
   ghost = world.makeBuilding(buildSpec(groundPoint || undefined), true);
   ghost.obj.visible = !!groundPoint;
 }
-function rotateBuild(delta) { buildYaw += delta; refreshBuildGhost(); }
+function syncBuildTransform(){const degrees=((Math.round(buildYaw*180/Math.PI)%360)+360)%360;
+  $('#buildRotation').value=degrees;$('#buildRotation').nextElementSibling.textContent=degrees+'°';$('#buildScale').nextElementSibling.textContent=Math.round(+$('#buildScale').value*100)+'%';}
+function rotateBuild(delta) { buildYaw += delta;syncBuildTransform();refreshBuildGhost(); }
+$('#buildRotateLeft').onclick=()=>rotateBuild(-Math.PI/12);
+$('#buildRotateRight').onclick=()=>rotateBuild(Math.PI/12);
+$('#buildRotation').oninput=()=>{buildYaw=+$('#buildRotation').value*Math.PI/180;syncBuildTransform();refreshBuildGhost();};
+$('#buildScale').oninput=()=>{syncBuildTransform();refreshBuildGhost();};
+$('#applyBuildTransform').onclick=()=>{if(!selectedBuilding||!world.buildings.includes(selectedBuilding))return;const spec={...selectedBuilding.spec,yaw:buildYaw,scale:+$('#buildScale').value};world.removeBuilding(selectedBuilding,false);selectBuilding(world.placeBuilding(spec));saveLayout();};
 function selectBuilding(e) {
   if (selectionBox) { scene.remove(selectionBox); selectionBox.geometry.dispose(); selectionBox.material.dispose(); }
   selectedBuilding = e; selectionBox = null;
   $('#deleteBuilding').disabled = !e;
+  $('#applyBuildTransform').disabled=!e||!world.buildings.includes(e);
+  if(e&&world.buildings.includes(e)){buildYaw=e.spec.yaw||0;$('#buildScale').value=e.spec.scale||1;syncBuildTransform();}
   $('#buildSelection').textContent = e ? `Selected: ${e.spec.sign || e.spec.type}` : 'No building selected';
   if (e) { selectionBox = new THREE.BoxHelper(e.obj, 0xe2a24a); scene.add(selectionBox); }
 }
@@ -484,7 +493,7 @@ buildButtons.forEach((b) => { b.onclick = () => {
   $('#buildFloors').nextElementSibling.textContent = $('#buildFloors').value;
   const signs = { shop: 'GENERAL STORE', hotel: 'HOTEL', house: 'HOMESTEAD', barn: 'LIVERY STABLE', chapel: '', tower: '', windmill: '', cabin: '', brick: 'GENERAL STORE', blacksmith: 'BLACKSMITH', hitch: '' };
   $('#buildSign').value = signs[b.dataset.build] || '';  buildSignCustom = false;
-  setTool(`build:${b.dataset.build}`);
+  selectBuilding(null);setTool(`build:${b.dataset.build}`);
 }; });
 for (const id of ['buildWidth', 'buildFloors', 'buildWall', 'buildSign', 'roadWidth']) {
   const inp = $('#' + id);
@@ -1088,4 +1097,5 @@ function frame() {
 atmos.setPreset('golden', true);
 frame();
 if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));
+
 

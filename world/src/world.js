@@ -1960,7 +1960,19 @@ export class World {
       this.colliders.circles.at(-1).r = (type === 'tower' ? 2.4 : 1.5) * w / 7;
     } else obj = this._building(s);
     const additions = Object.fromEntries(Object.entries(lists).map(([k, a]) => [k, a.slice(counts[k])]));
-    const entry = { obj, pad, additions, spec: { type, x, z, yaw, w, floors: s.floors, wall, sign: s.sign, signCustom: s.signCustom, y: pad.y } };
+    const scale = THREE.MathUtils.clamp(Number.isFinite(+spec.scale) ? +spec.scale : 1, 0.5, 2);
+    if (scale !== 1) {
+      // Scale around the placement anchor; physics and terrain pads must follow the artwork.
+      obj.scale.multiplyScalar(scale); obj.updateWorldMatrix(true, true);
+      pad.x=x+(pad.x-x)*scale;pad.z=z+(pad.z-z)*scale;pad.hx*=scale;pad.hz*=scale;
+      for (const q of [...additions.rects,...additions.floors]) {
+        q.cx=x+(q.cx-x)*scale;q.cz=z+(q.cz-z)*scale;q.hx*=scale;q.hz*=scale;
+        if(Number.isFinite(q.y))q.y=pad.y+(q.y-pad.y)*scale;
+      }
+      for (const q of additions.circles) {q.x=x+(q.x-x)*scale;q.z=z+(q.z-z)*scale;q.r*=scale;}
+      for (const q of additions.emitters) if(q.pos)q.pos.set(x+(q.pos.x-x)*scale,pad.y+(q.pos.y-pad.y)*scale,z+(q.pos.z-z)*scale);
+    }
+    const entry = { obj, pad, additions, spec: { type, x, z, yaw, scale, w, floors: s.floors, wall, sign: s.sign, signCustom: s.signCustom, y: pad.y } };
     this.setTextureSet(this.textureSet || 'oil');
     if (preview) {
       for (const [k, a] of Object.entries(lists)) a.splice(counts[k]);

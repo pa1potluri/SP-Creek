@@ -174,7 +174,11 @@
 
   <details id="buildPanel" open>
     <summary>Build</summary>
-    <p class="hint">Pick a building, then click the ground. R or mouse wheel rotates. Esc stops. With no tool, click a placed building to select it.</p>
+    <p class="hint">Pick a building, set Rotation and Size, then click the ground. R or mouse wheel also rotates. Esc stops placing. To edit: press Esc, click your placed building, adjust Rotation/Size and press Apply.</p>
+    <label class="row"><span>Rotation</span><input id="buildRotation" type="range" min="0" max="345" step="15" value="0"><output>0°</output></label>
+    <div class="btnrow"><button id="buildRotateLeft">↶ Rotate left</button><button id="buildRotateRight">↷ Rotate right</button></div>
+    <label class="row"><span>Size</span><input id="buildScale" type="range" min="0.5" max="2" step="0.1" value="1"><output>100%</output></label>
+    <button id="applyBuildTransform" disabled>Apply rotation and size to selected</button>
     <div id="buildCatalogue" class="grid">
       <button data-build="shop">Shop front</button><button data-build="hotel">Two-storey hotel</button>
       <button data-build="house">House</button><button data-build="barn">Barn</button>
@@ -264,3 +268,5 @@
 <script type="module" src="src/main.js"></script>
 </body>
 </html>
+
+

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SP Creek — character pipeline test</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e9eddf;color:#293d3b;font:15px/1.45 system-ui}canvas{display:block;width:100vw;height:100vh}aside{position:absolute;top:12px;left:12px;max-width:380px;padding:14px;background:#fffffff2;border:1px solid #d4dcca;border-radius:14px}h1{font-size:20px;margin:0 0 6px}p{margin:6px 0}button,select{font:inherit;padding:6px 10px;border:1px solid #9caca1;border-radius:8px;background:#fff;color:#293d3b;margin:3px}button:focus-visible,select:focus-visible{outline:3px solid #cf8d3c}#status{font-size:13px}details{margin-top:6px}#names{position:absolute;inset:0;pointer-events:none}.name{position:absolute;transform:translate(-50%,-100%);font-size:12px;background:#ffffffe6;padding:2px 6px;border-radius:5px;white-space:nowrap}.capture aside,.capture #names{display:none}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
+<link rel="icon" href="data:,">
+<style>aside{top:auto;bottom:12px;max-height:42vh;overflow:auto}</style>
+<canvas id="view" aria-label="Character pipeline test plaza"></canvas><div id="names"></div>
+<aside><h1>SP Creek · face pipeline test</h1><p>12 residents + Pavi and Siri, on existing game bodies.</p>
+<label>Faces <select id="faces"><option value="pipeline">Pipeline faces</option><option value="original">Current game faces</option></select></label>
+<label>Detail <select id="detail"><option value="4">Review · ¼ points</option><option value="1">Full source</option><option value="8">Distant · ⅛ points</option></select></label>
+<div><button id="group">Everyone</button><button id="pavi">Pavi face</button><button id="siri">Siri test face</button><button id="resident">Resident face</button></div>
+<div><button id="day">Day</button><button id="night">Night</button><button id="pose">Gentle head turn: off</button></div>
+<p id="status" role="status">Loading saved profiles…</p><details><summary>Test notes</summary><p>Drag to orbit, scroll to zoom. H hides controls. GPU-rendered 3D points share normal scene depth. Original world is unchanged.</p><p>Pavi uses the frozen supplied hero face. Siri temporarily uses town-202; no dedicated Siri face was supplied. Faces have no blink or expression rig yet. This is a material/attachment test, not final art approval.</p></details>
+<p><a href="index.html">Back to SP Creek</a></p></aside>
+<script type="module" src="src/experiments/character-pipeline-test.js"></script></html>

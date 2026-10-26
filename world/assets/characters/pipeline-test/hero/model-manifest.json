@@ -1,0 +1,29 @@
+{
+  "format": "face-points-v1",
+  "referenceColors": true,
+  "count": 258816,
+  "bytesPerPoint": 20,
+  "fields": {
+    "position": "float32le x,y,z at offsets 0,4,8",
+    "normal": "int8 nx,ny,nz at offsets 12,13,14; divide by 127",
+    "color": "uint8 R,G,B at offsets 15,16,17",
+    "part": "uint8 at offset 18",
+    "padding": "offset 19"
+  },
+  "density": 0.72,
+  "parts": [
+    "head",
+    "eye.L",
+    "eye.R",
+    "ear.L",
+    "ear.R",
+    "nose",
+    "mouth",
+    "hair",
+    "neck"
+  ],
+  "units": "face cheek width = 100; no physical scale is known",
+  "scope": "Face candidate only. No body skeleton or limb animation.",
+  "likeness": "Approximate procedural reconstruction; requires visual acceptance",
+  "sha256": "6cc76f3450bd8e140a8b2ae0b4f3061810905d01f047e6f7277b1dada7d7b394"
+}

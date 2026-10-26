@@ -1,0 +1,103 @@
+{
+  "version": 6,
+  "name": "Town resident 700",
+  "status": "Generated variation, not reference-fitted",
+  "units": "face cheek width = 100; no physical scale is known",
+  "parameters": {
+    "faceWidth": 100.09,
+    "faceHeight": 85.71,
+    "headDepth": 75.15,
+    "jawWidth": 0.89,
+    "eyeSpacing": 36.21,
+    "eyeWidth": 25.19,
+    "eyeHeight": 16.625400000000003,
+    "eyeY": 2.8,
+    "irisSize": 6.483906000000001,
+    "earWidth": 25.05,
+    "earHeight": 30.68,
+    "earDepth": 7,
+    "earOffset": 53.047700000000006,
+    "earY": -12,
+    "earZ": -14,
+    "earAngle": 39,
+    "noseWidth": 17.75,
+    "noseHeight": 8.62,
+    "noseDepth": 6.74,
+    "noseY": -13.7,
+    "mouthWidth": 35.33,
+    "mouthY": -24,
+    "hairSize": 1,
+    "density": 0.22,
+    "eyeDepth": 5.92,
+    "eyeInset": 9.64,
+    "irisOffset": -1.8,
+    "browY": 23.91,
+    "browArch": 6.75,
+    "chinForward": 24,
+    "cheekFullness": 4,
+    "faceRoundness": 2.6,
+    "socketDepth": 9.5,
+    "mouthSmile": 3.7,
+    "hairWidth": 133,
+    "hairHeight": 115,
+    "hairDepth": 108,
+    "hairCurl": 8.81,
+    "irisGazeX": 0,
+    "irisY": -1.9950480000000002,
+    "eyeLowerPower": 4.2,
+    "browTailDrop": 7.8,
+    "lashThickness": 0.55,
+    "chinPad": 1.8,
+    "chinCrease": 0.65,
+    "lipFullness": 0.55,
+    "dimpleDepth": 0.6,
+    "noseHighlight": 0.48,
+    "eyeTilt": 0.25,
+    "faceSamples": 40000,
+    "hairSamples": 30000,
+    "hairLocks": 52,
+    "proceduralFace": true,
+    "hairLength": 34
+  },
+  "palette": {
+    "skin": [
+      216,
+      143,
+      96
+    ],
+    "ear": [
+      204,
+      103,
+      69
+    ],
+    "hair": [
+      92,
+      49,
+      28
+    ],
+    "iris": [
+      105,
+      55,
+      26
+    ],
+    "blush": [
+      220,
+      131,
+      89
+    ]
+  },
+  "cameras": [],
+  "observations": {},
+  "measurementNote": "Review 02: manually re-estimated coordinates from enlarged gridded original images, approximately 3–6 px precision. Front and profile camera origins remain manually estimated. Ear shapes and image proportions disagree slightly. Oblique images remain visual hold-outs; they have not been fitted. Residuals describe these annotations, not certified reconstruction accuracy.",
+  "landmarkDefinitions": {
+    "eyeLeft": "pupil centre, not centre of eye white",
+    "eyeRight": "pupil centre, not centre of eye white",
+    "eyeLeftTop": "upper boundary of eye white at its centre",
+    "eyeLeftBottom": "lower boundary of eye white at its centre",
+    "chin": "anterior chin surface at 96% of lower head height; manually annotated points have 3–6 px uncertainty"
+  },
+  "id": "town-700",
+  "seed": 700,
+  "kind": "procedural-npc",
+  "hairStyle": "long"
+}

@@ -1,0 +1,504 @@
+{
+  "version": 6,
+  "name": "Boy — surface correction review",
+  "status": "Eye material separation, tapered hair locks, facial transition correction; pre-rig review",
+  "units": "face cheek width = 100; no physical scale is known",
+  "parameters": {
+    "faceWidth": 100,
+    "faceHeight": 82,
+    "headDepth": 80,
+    "jawWidth": 0.89,
+    "eyeSpacing": 38.25,
+    "eyeWidth": 24.2,
+    "eyeHeight": 18.5,
+    "eyeY": 2.8,
+    "irisSize": 7.2,
+    "earWidth": 36,
+    "earHeight": 30,
+    "earDepth": 7,
+    "earOffset": 54.7,
+    "earY": -12.3,
+    "earZ": -14,
+    "earAngle": 39,
+    "noseWidth": 14,
+    "noseHeight": 9,
+    "noseDepth": 10.8,
+    "noseY": -13.7,
+    "mouthWidth": 38,
+    "mouthY": -24,
+    "hairSize": 1,
+    "density": 0.72,
+    "eyeDepth": 6,
+    "eyeInset": 11,
+    "irisOffset": -3,
+    "browY": 22.5,
+    "browArch": 8,
+    "chinForward": 24,
+    "cheekFullness": 4,
+    "faceRoundness": 2.6,
+    "socketDepth": 9.5,
+    "mouthSmile": 3.7,
+    "hairWidth": 140,
+    "hairHeight": 128,
+    "hairDepth": 108,
+    "hairCurl": 7.5,
+    "irisGazeX": 0.4,
+    "irisY": -3.1,
+    "eyeLowerPower": 4.2,
+    "browTailDrop": 7.8,
+    "lashThickness": 0.55,
+    "chinPad": 1.8,
+    "chinCrease": 0.65,
+    "lipFullness": 0.55,
+    "dimpleDepth": 0.6,
+    "noseHighlight": 0.48,
+    "eyeTilt": 0.28,
+    "faceSamples": 56000,
+    "hairSamples": 60000,
+    "hairLocks": 88
+  },
+  "palette": {
+    "skin": [
+      247,
+      173,
+      126
+    ],
+    "ear": [
+      226,
+      110,
+      67
+    ],
+    "hair": [
+      68,
+      43,
+      33
+    ],
+    "iris": [
+      112,
+      46,
+      20
+    ],
+    "blush": [
+      246,
+      135,
+      107
+    ]
+  },
+  "cameras": [
+    {
+      "file": "01.png",
+      "angle": 0,
+      "cx": 627,
+      "cy": 315,
+      "scale": 2.85,
+      "status": "estimated; front master"
+    },
+    {
+      "file": "02.png",
+      "angle": 90,
+      "cx": 620,
+      "cy": 300,
+      "scale": 2.85,
+      "status": "estimated; profile"
+    },
+    {
+      "file": "03.png",
+      "angle": 180,
+      "cx": 627,
+      "cy": 315,
+      "scale": 2.85,
+      "status": "unverified"
+    },
+    {
+      "file": "04.png",
+      "angle": 270,
+      "cx": 610,
+      "cy": 300,
+      "scale": 2.85,
+      "status": "estimated; opposite profile"
+    },
+    {
+      "file": "05.png",
+      "angle": 30,
+      "cx": 306,
+      "cy": 153,
+      "scale": 1.4,
+      "status": "angle unverified"
+    },
+    {
+      "file": "06.png",
+      "angle": 45,
+      "cx": 310,
+      "cy": 154,
+      "scale": 1.4,
+      "status": "angle unverified"
+    },
+    {
+      "file": "07.png",
+      "angle": 135,
+      "cx": 310,
+      "cy": 154,
+      "scale": 1.4,
+      "status": "angle unverified"
+    },
+    {
+      "file": "08.png",
+      "angle": 160,
+      "cx": 310,
+      "cy": 154,
+      "scale": 1.4,
+      "status": "angle unverified"
+    }
+  ],
+  "observations": {
+    "01.png": {
+      "cheekLeft": [
+        488,
+        350
+      ],
+      "cheekRight": [
+        766,
+        350
+      ],
+      "chin": [
+        627,
+        432
+      ],
+      "eyeLeft": [
+        584,
+        315
+      ],
+      "eyeRight": [
+        674,
+        317
+      ],
+      "eyeLeftOuter": [
+        539,
+        307
+      ],
+      "eyeLeftInner": [
+        607,
+        307
+      ],
+      "eyeLeftTop": [
+        574,
+        281
+      ],
+      "eyeLeftBottom": [
+        574,
+        334
+      ],
+      "earLeft": [
+        473,
+        350
+      ],
+      "earRight": [
+        783,
+        350
+      ],
+      "earLeftTop": [
+        473,
+        309
+      ],
+      "earLeftBottom": [
+        473,
+        392
+      ],
+      "earLeftOuter": [
+        431,
+        350
+      ],
+      "earLeftInner": [
+        515,
+        350
+      ],
+      "noseTip": [
+        627,
+        354
+      ],
+      "noseLeft": [
+        606,
+        355
+      ],
+      "noseRight": [
+        647,
+        355
+      ],
+      "mouthCenter": [
+        627,
+        383
+      ],
+      "mouthLeft": [
+        573,
+        373
+      ],
+      "mouthRight": [
+        681,
+        373
+      ]
+    },
+    "02.png": {
+      "earLeft": [
+        579,
+        337
+      ],
+      "eyeLeft": [
+        716,
+        306
+      ],
+      "noseTip": [
+        766,
+        340
+      ],
+      "mouthCenter": [
+        749,
+        368
+      ],
+      "chin": [
+        730,
+        414
+      ]
+    },
+    "04.png": {
+      "earRight": [
+        650,
+        337
+      ],
+      "eyeRight": [
+        519,
+        305
+      ],
+      "noseTip": [
+        464,
+        340
+      ],
+      "mouthCenter": [
+        482,
+        368
+      ],
+      "chin": [
+        499,
+        414
+      ]
+    }
+  },
+  "measurementNote": "Review 02: manually re-estimated coordinates from enlarged gridded original images, approximately 3–6 px precision. Front and profile camera origins remain manually estimated. Ear shapes and image proportions disagree slightly. Oblique images remain visual hold-outs; they have not been fitted. Residuals describe these annotations, not certified reconstruction accuracy.",
+  "paletteSource": {
+    "file": "01.png",
+    "method": "Review 02: neutral skin, cheek and strand swatches from 7x7 median patches; neutral skin and dark hair adjusted as approximate material bases for CPU lighting, not recovered albedo",
+    "swatches": {
+      "skin": {
+        "pixel": [
+          711,
+          366
+        ],
+        "medianRGB": [
+          252,
+          140,
+          97
+        ]
+      },
+      "ear": {
+        "pixel": [
+          460,
+          355
+        ],
+        "medianRGB": [
+          233,
+          109,
+          68
+        ]
+      },
+      "hair": {
+        "pixel": [
+          625,
+          158
+        ],
+        "medianRGB": [
+          86,
+          54,
+          46
+        ]
+      },
+      "iris": {
+        "pixel": [
+          694,
+          325
+        ],
+        "medianRGB": [
+          112,
+          46,
+          20
+        ]
+      }
+    },
+    "review02": {
+      "neutralSkin": {
+        "pixel": [
+          632,
+          278
+        ],
+        "medianRGB": [
+          238,
+          153,
+          104
+        ]
+      },
+      "chin": {
+        "pixel": [
+          627,
+          402
+        ],
+        "medianRGB": [
+          222,
+          140,
+          93
+        ]
+      },
+      "cheek": {
+        "pixel": [
+          711,
+          366
+        ],
+        "medianRGB": [
+          251,
+          140,
+          97
+        ]
+      },
+      "ear": {
+        "pixel": [
+          466,
+          346
+        ],
+        "medianRGB": [
+          226,
+          110,
+          67
+        ]
+      },
+      "hair": {
+        "pixel": [
+          625,
+          158
+        ],
+        "medianRGB": [
+          90,
+          58,
+          50
+        ]
+      },
+      "strand": {
+        "pixel": [
+          645,
+          172
+        ],
+        "medianRGB": [
+          123,
+          88,
+          76
+        ]
+      }
+    }
+  },
+  "landmarkDefinitions": {
+    "eyeLeft": "pupil centre, not centre of eye white",
+    "eyeRight": "pupil centre, not centre of eye white",
+    "eyeLeftTop": "upper boundary of eye white at its centre",
+    "eyeLeftBottom": "lower boundary of eye white at its centre",
+    "chin": "anterior chin surface at 96% of lower head height; manually annotated points have 3–6 px uncertainty"
+  },
+  "referenceBake": {
+    "cameras": [
+      "01.png",
+      "02.png",
+      "03.png",
+      "04.png"
+    ],
+    "frontMaster": "01.png",
+    "backgroundChromaThreshold": 23,
+    "safeFaceOutline": [
+      [
+        280,
+        507,
+        746
+      ],
+      [
+        310,
+        494,
+        764
+      ],
+      [
+        340,
+        495,
+        763
+      ],
+      [
+        360,
+        501,
+        759
+      ],
+      [
+        380,
+        519,
+        745
+      ],
+      [
+        400,
+        538,
+        720
+      ],
+      [
+        420,
+        575,
+        679
+      ],
+      [
+        432,
+        615,
+        639
+      ]
+    ],
+    "outlineNote": "Manually estimated safe skin boundaries in source pixels; not an automatically detected contour",
+    "hairFilter": {
+      "minRedMinusBlue": 15,
+      "maxRedMinusGreen": 65,
+      "maxRedMinusBlue": 105,
+      "maxR": 170,
+      "maxG": 130,
+      "maxB": 115,
+      "minChromaRatio": 0.22
+    },
+    "neckMaterial": [
+      218,
+      139,
+      91
+    ],
+    "note": "Colors are sampled once and baked into fixed 3D points. Four oblique sources remain visual guides, not calibrated bake cameras.",
+    "bleedFix": {
+      "version": 1,
+      "templeStart": 28,
+      "templeBlend": 10,
+      "skinMaterial": [
+        239,
+        151,
+        103
+      ],
+      "earCenters": [
+        [
+          473,
+          350
+        ],
+        [
+          783,
+          350
+        ]
+      ],
+      "earScale": [
+        2.12,
+        2.46
+      ],
+      "note": "Temples use smoothly blended clean material where source registration is unreliable. Ears use local coordinates. Eyelid skin and lashes retain separate materials."
+    }
+  }
+}

@@ -79,7 +79,7 @@ finished. Re-read this file each time; Claude may change it.
 | 64 | `tasks/actor-clearance.md` | `area/actor-clearance` (planned) | queued functional priority; finish broad actor-to-actor/prop clearance from task 60, including scripted crowds and market |
 | 65 | `tasks/kite-facing.md` | `area/kite-facing` (planned) | queued; Kite Day cast must face actual kites and keep distinct standing positions |
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-review` (planned) | queued; user reports only waterfall; inspect preset/view activation and repair coverage |
-| 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | queued user priority; current mine appearance rejected; inspect and rebuild friendly coherent grotto |
+| 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | WIP first refresh; rounded cave/rock treatment, softer crystals, cart moved off entry; four Film day/night captures; full verification running; organic art/visual acceptance remains open |
 | 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` (planned) | queued; top Gameplay/Free Camera, persistent styles, simple side places; videos/episodes secondary |
 | 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | done, awaiting review; ordinary URL uses approved solid residents; supplied hero bodies retained; full 2015 + 2; day/night and clean server checks saved |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
@@ -120,5 +120,6 @@ meadow & lake, crystal mine & balloon.
 
 
 > User latest: all fixes retained; review only current approved characters. Save UI WIP, make approved residents default, prioritize Crystal Mine refresh, then finish gameplay-first controls and functional collision/Kite/Episode repairs. Atmosphere remains unaccepted; no claim the game is finished.
+
 
 

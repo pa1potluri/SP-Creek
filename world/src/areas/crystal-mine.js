@@ -24,8 +24,13 @@ export function buildCrystalMine(world) {
   rideHomeY=top.y;
   const pad=world.registerAreaPad({x:173,z:-115,y,hx:9,hz:10,blend:9});world.updateTerrain();
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),mat=(color,glow=0)=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:glow});
-  const wood=mat('#ae9070'),stone=world.paintedMaterial('stone',1,1,{color:'#938776'}) || mat('#938776'),cream=mat('#fff0d4'),moss=mat('#91ae80');
-  const colors=['#df63ad','#55b9e2','#9871db','#5ec9a1'];const crystalMats=colors.map(c=>mat(c,0.7));
+  const wood=mat('#bc9b76'),stone=mat('#afbec2',0.06),cream=mat('#fff0d4'),moss=mat('#91ae80');
+  const rockMats=['#b8c7c9','#c7c8bd','#a7babb'].map(c=>mat(c,0.035));
+  const rockCanvas=document.createElement('canvas');rockCanvas.width=rockCanvas.height=128;
+  const rockContext=rockCanvas.getContext('2d'),rockPixels=rockContext.createImageData(128,128);
+  for(let z=0;z<128;z++)for(let x=0;x<128;x++){const u=x/128*Math.PI*2,v=z/128*Math.PI*2,n=.89+.045*Math.sin(u*3+Math.sin(v*2))+.035*Math.cos(v*5+Math.sin(u*4))+.02*Math.sin(u*17+v*11),i=(z*128+x)*4;rockPixels.data[i]=rockPixels.data[i+1]=rockPixels.data[i+2]=Math.round(n*255);rockPixels.data[i+3]=255;}
+  rockContext.putImageData(rockPixels,0,0);const rockMap=new THREE.CanvasTexture(rockCanvas);rockMap.colorSpace=THREE.SRGBColorSpace;rockMap.wrapS=rockMap.wrapT=THREE.RepeatWrapping;stone.map=rockMap;rockMats.forEach(m=>m.map=rockMap);
+  const colors=['#e5afd0','#9bd5e0','#c4b2df','#afd5bd'];const crystalMats=colors.map(c=>mat(c,0.25));
   const buckets=new Map(),clusters=[],balloonMats=[],flags=[],glows=[];
   const glowMats=colors.map(color=>new THREE.SpriteMaterial({map:world.haloMat.map,color,transparent:true,opacity:0.15,depthWrite:false,blending:THREE.AdditiveBlending}));
   function solid(geo,m,x,h,z,parent=root,rot=null){if(rot)geo.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot)));geo.translate(x,h,z);const key=parent.uuid+m.uuid;if(!buckets.has(key))buckets.set(key,{parent,m,geos:[]});buckets.get(key).geos.push(geo.index?geo.toNonIndexed():geo);}
@@ -33,28 +38,28 @@ export function buildCrystalMine(world) {
   const ball=(r,m,x,h,z,g=root,s=[1,1,1])=>solid(new THREE.SphereGeometry(r,12,8).scale(...s),m,x,h,z,g);
   function group(x,h,z,parent=root){const g=new THREE.Group();g.position.set(x,h,z);parent.add(g);return g;}
   function rect(cx,cz,hx,hz){world.colliders.rects.push({cx,cz,ax:1,az:0,bx:0,bz:1,hx,hz});}
-  function crystal(x,h,z,scale=1){for(let i=0;i<4;i++){const a=i*2.4;solid(new THREE.CylinderGeometry(0.15*scale,0.25*scale,(0.6+i*0.2)*scale,6),crystalMats[i],x+Math.cos(a)*0.28*scale,h+(0.3+i*0.1)*scale,z+Math.sin(a)*0.28*scale,root,[0.08*Math.sin(a),0,0.12*Math.cos(a)]);}clusters.push([x,z]);if(scale>=0.55){const glow=new THREE.Sprite(glowMats[clusters.length%4]);glow.position.set(x,h+0.5*scale,z);glow.scale.setScalar(2.2*scale);root.add(glow);glows.push(glow);}}
-  // A short, closed room built above the terrain, with softly lit walls and a level floor.
-  box(6.6,0.12,8.3,stone,173,y+0.03,-116);
-  box(0.45,4.2,8.3,stone,169.8,y+2.1,-116);box(0.45,4.2,8.3,stone,176.2,y+2.1,-116);
-  box(6.8,4.2,0.45,stone,173,y+2.1,-120);box(6.9,0.45,8.6,stone,173,y+4.3,-116);
+  function crystal(x,h,z,scale=1){for(let i=0;i<4;i++){const a=i*2.4,height=(0.7+i*0.22)*scale;const profile=[[0,0],[.15*scale,0],[.23*scale,.1*scale],[.19*scale,height-.15*scale],[.1*scale,height-.03*scale],[0,height]].map(([r,h])=>new THREE.Vector2(r,h));solid(new THREE.LatheGeometry(profile,6),crystalMats[i],x+Math.cos(a)*0.28*scale,h,z+Math.sin(a)*0.28*scale,root,[0.08*Math.sin(a),0,0.12*Math.cos(a)]);}clusters.push([x,z]);if(scale>=0.55){const glow=new THREE.Sprite(glowMats[clusters.length%4]);glow.position.set(x,h+0.5*scale,z);glow.scale.setScalar(2.2*scale);root.add(glow);glows.push(glow);}}
+  // A rounded, bright grotto rather than a square room with oversized brick textures.
+  box(6.6,0.12,8.3,mat('#d4ceba'),173,y+0.03,-116);
+  const shellPos=[],shellUV=[],shellIndex=[],archSteps=24;
+  for(let j=0;j<=8;j++)for(let i=0;i<=archSteps;i++){const a=i/archSteps*Math.PI; shellPos.push(173+Math.cos(a)*3.2,y+0.18+Math.sin(a)*4.05,-111.8-j*1.03);shellUV.push(i/archSteps*2,j/4);}
+  for(let j=0;j<8;j++)for(let i=0;i<archSteps;i++){const a=j*(archSteps+1)+i,b=a+archSteps+1;shellIndex.push(a,b,a+1,b,b+1,a+1);}
+  const shell=new THREE.BufferGeometry();shell.setAttribute('position',new THREE.Float32BufferAttribute(shellPos,3));shell.setAttribute('uv',new THREE.Float32BufferAttribute(shellUV,2));shell.setIndex(shellIndex);shell.computeVertexNormals();
+  const lining=stone.clone();lining.side=THREE.DoubleSide;solid(shell,lining,0,0,0);
+  ball(1,stone,173,y+2,-120,root,[3.2,2.15,.35]);
   rect(169.8,-116,0.23,4.2);rect(176.2,-116,0.23,4.2);rect(173,-120,3.4,0.23);
   world.ceilings.push({cx:173,cz:-116,ax:1,az:0,bx:0,bz:1,hx:3.4,hz:4.2,y:y+4.05});
-  for(const x of [169.8,176.2])box(0.38,4.4,0.4,wood,x,y+2.2,-111.7);
-  box(7.2,0.4,0.5,wood,173,y+4.4,-111.7);
-  for(let i=0;i<7;i++){
-    const a=i*Math.PI/6;ball(1.6,stone,173+Math.cos(a)*4.1,y+0.8+Math.sin(a)*4.5,-116,root,[1.1,1,2]);
-  }
-  for(let i=0;i<7;i++){const a=i*Math.PI/6;ball(1.1,moss,173+Math.cos(a)*4.1,y+2.2+Math.sin(a)*4.5,-116,root,[1.2,0.18,1.6]);}
-  solid(new THREE.BoxGeometry(5,0.9,0.15),new THREE.MeshLambertMaterial({map:signTexture('CRYSTAL MINE',768,192,[170,18,82],'#496467')}),173,y+5,-111.3);
+  for(let i=0;i<11;i++){const a=i*Math.PI/10,r=.72+(i%3)*.08,x=173+Math.cos(a)*3.75,h=y+.45+Math.sin(a)*4.1;ball(r,rockMats[i%3],x,h,-111.7,root,[1.15,1,1.25]);if(i%2===0)ball(r*.8,moss,x,h+r*.8,-111.7,root,[1.1,.15,1]);}
+  for(const side of [-1,1])for(let i=0;i<4;i++){ball(.8+i*.1,rockMats[i%3],173+side*(3.9+i*.6),y+.35,-112-i*1.5,root,[1.1,.7,1.4]);}
+  solid(new THREE.BoxGeometry(4.2,0.65,0.15),new THREE.MeshLambertMaterial({map:signTexture('CRYSTAL MINE',768,192,[38,35,86],'#496467')}),173,y+5.1,-110.4);
   for(const z of [-118,-115,-112,-107])for(const x of [170.5,175.5])crystal(x,y+0.1,z,0.6+(z%2)*0.1);
   for(let i=0;i<5;i++){crystal(170.2,y+0.5+i*0.6,-119+i*1.4,0.55);crystal(175.8,y+0.7+i*0.55,-119+i*1.3,0.55);}
   for(let z=-119;z<=-104;z+=0.7)box(1.8,0.1,0.18,wood,173,y+0.12,z);
   for(const x of [172.4,173.6])box(0.07,0.12,15.5,stone,x,y+0.23,-111.5);
-  const cart=group(173,y,-108);box(1.45,0.7,1.6,wood,0,0.8,0,cart);box(1.6,0.1,1.75,cream,0,1.16,0,cart);
+  const cart=group(176.6,y,-108);box(1.45,0.7,1.6,wood,0,0.8,0,cart);box(1.6,0.1,1.75,cream,0,1.16,0,cart);
   for(const sx of [-1,1])for(const sz of [-1,1])solid(new THREE.CylinderGeometry(0.25,0.25,0.1,12),stone,sx*0.78,0.3,sz*0.55,cart,[0,0,Math.PI/2]);
-  for(let i=0;i<6;i++)crystal(172.65+(i%2)*0.7,y+1.2,-108.5+Math.floor(i/2)*0.45,0.45);
-  rect(173,-108,0.85,0.95);
+  for(let i=0;i<6;i++)crystal(176.25+(i%2)*0.7,y+1.2,-108.5+Math.floor(i/2)*0.45,0.45);
+  rect(176.6,-108,0.85,0.95);
   function lamp(x,z){const h=terrainHeight(x,z);box(0.12,2.4,0.12,wood,x,h+1.2,z);box(0.28,0.4,0.28,world.mat.lantern,x,h+2.2,z);const sp=new THREE.Sprite(world.haloMat);sp.position.set(x,h+2.2,z);sp.scale.setScalar(2);root.add(sp);world.colliders.circles.push({x,z,r:0.15});}
   for(const [x,z]of [[169,-111],[177,-111],[171,-118],[175,-118],[186,-109],[194,-122],[196,-137],[207,-141]])lamp(x,z);
   const path=world._ribbon([[173,-104],[184,-108],[192,-118],[195,-132],[202,-141]],2.6,world._pathMaterial(),{step:1});root.attach(path);
@@ -91,7 +96,7 @@ export function buildCrystalMine(world) {
   world.balloonRide={balloon,top};
   return {root,pad,top,balloon,crystalMats,clusters,sparkles,ropes,update(t,atmos){
     const night=Math.max(atmos.stars,world.lanternLevel),wind=Math.min(1.5,Math.abs(world.wind??1));
-    crystalMats.forEach((m,i)=>m.emissiveIntensity=0.65+night*0.2+Math.sin(t*0.6+i)*0.06);
+    crystalMats.forEach((m,i)=>m.emissiveIntensity=0.22+night*0.2+Math.sin(t*0.35+i)*0.025);
     glowMats.forEach((m,i)=>m.opacity=0.12+night*0.08+Math.sin(t*0.6+i)*0.015);
     const ride=balloonRideState();
     balloon.position.set(202+Math.sin(t*0.19)*0.25*wind,top.y+4.5+Math.sin(t*0.35)*0.25,-145+Math.cos(t*0.17)*0.2*wind);balloon.rotation.z=Math.sin(t*0.2)*0.025*wind;

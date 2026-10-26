@@ -221,3 +221,5 @@ meadow & lake, crystal mine & balloon.
 
 
 
+
+> Quick batch: Q01 completed on area/quick-01-camp-owl; full2015+2, Film59 day/night, quick-01-owl.result.md. Next Q02 steam, then Q03 Willow rain/particles. User limits this batch to1–3; save each separately.

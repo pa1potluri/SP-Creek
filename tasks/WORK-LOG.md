@@ -30,3 +30,5 @@ Meadow dock safety increment complete: rounded visible rails matched to boundari
 Episode12: runtime clips/cast activate correctly; identical wide/closing camera poses confirmed and separated. Medium shot now frames blanket/fruit. 180s/IDs retained; full2015 +2 no errors, six Film captures. Permanent waterfall-only freeze not reproduced; no claim to fix unseen session failure.
 
 27 October mine increment: timber facade/frames, grouped cyan crystals, wider winding graded ascent, rail-bounded deck/landing and grounded tethered basket. Full2015+2, no errors; 241 route samples/passage/edges pass, six Film views. Landscape/reference polish stays WIP; game boarding scope recorded in STUCK. Current area/crystal-timber-refresh.
+
+Q01 done: smaller camp-facing owl on grounded stump; size/contact/collider checked, full2015+2 and Film59 day/night saved. Next Q02 steam, then Q03 rain/particles only, per user10% limit.

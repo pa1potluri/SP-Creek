@@ -74,7 +74,7 @@ finished. Re-read this file each time; Claude may change it.
 | 59 | `tasks/train-shore-fixes.md` | `area/train-shore-fixes` | done, awaiting review; platform/junction overlaps separated; Cove mountain band removed; 12 day/night previews, 600 train motion steps; full 2015 + 2 passed |
 | 60 | `tasks/showcase-review-fixes.md` | `area/showcase-review-fixes` | WIP review repairs; natural pace + slower showcase motion, soft Watercolour, cafe snow exclusion, billboard shadow/depth repair, ambient solid avoidance and duck clearance; 13 focused checks + 16 previews; final full 2015 + 2 passed; broad scripted-cast collision and atmosphere/colour acceptance still open |
 | 61 | `tasks/server-health.md` | `area/server-health` | check complete; server/watchdog working; no JS crashes/context loss; two obsolete cut-out 404 requests found, repair pending; startup 18s game / 11s showcase / 3s character preview |
-| 62 | `tasks/build-transforms.md` | `area/build-transforms` | WIP active; visible rotation and uniform size controls for all catalogue items and selected buildings; geometry/physics/save verification pending |
+| 62 | `tasks/build-transforms.md` | `area/build-transforms` | done, awaiting review; visible rotate/size controls for all 43 catalogue items and selected buildings; focused 135 + full 2015 + 2 passed; Film day/night saved |
 | 63 | `tasks/style-lock.md` | `area/style-lock` (next) | queued user priority; retain manually chosen style across location changes; preset style only by explicit option |
 | 64 | `tasks/actor-clearance.md` | `area/actor-clearance` (planned) | queued functional priority; finish broad actor-to-actor/prop clearance from task 60, including scripted crowds and market |
 | 65 | `tasks/kite-facing.md` | `area/kite-facing` (planned) | queued; Kite Day cast must face actual kites and keep distinct standing positions |
@@ -113,4 +113,5 @@ meadow & lake, crystal mine & balloon.
 
 
 > Latest user functional priority: finish/save active Build controls, then style retention (63), broad actor clearance (64), Kite Day facing (65), Episode 12 coverage (66). Atmosphere/colour/cloud acceptance remains open in 60 and follows functional repairs. No earlier request dropped.
+
 

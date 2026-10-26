@@ -109,6 +109,8 @@ export async function buildSunsetCove(world,life){
   const walkers=Array.from({length:4},(_,i)=>{const p=makeCharacter(randomTownsfolk(i%2?'townswoman':'shopkeeper'));actors.add(p.g);return p;});
   const area={root,sea:sea.sea,water:sea.area,beach,shoreline,sand,roof,cottages,palms,paintedPalms,paintedFlowers,seaBackdrop,horizonHeight,horizonRatio,images,footprints,pebbles,boats,rowingBoat,actors,siblings,walkers,update(t,camera,cur){
     const focus=camera.position.x<-280;actors.visible=focus;
+    // The valley's nearest mountain ring crosses the cove itself; it is not a shoreline.
+    if(focus&&!area.hiddenMountains){area.hiddenMountains=[];world.root.parent.traverse(o=>{if(o.geometry?.attributes.aHazeAlpha){area.hiddenMountains.push([o,o.visible]);o.visible=false;}});}else if(!focus&&area.hiddenMountains){for(const [o,visible]of area.hiddenMountains)o.visible=visible;area.hiddenMountains=null;}
     const valley=world.root.parent.children.find(o=>o.geometry?.type==='CylinderGeometry'&&o.material?.map&&!o.material.fog);if(focus&&valley){if(area.valleyBackdrop?.mesh!==valley){if(area.valleyBackdrop)area.valleyBackdrop.mesh.visible=area.valleyBackdrop.visible;area.valleyBackdrop={mesh:valley,visible:valley.visible};}valley.visible=false;}else if(area.valleyBackdrop){area.valleyBackdrop.mesh.visible=area.valleyBackdrop.visible;area.valleyBackdrop=null;}
     const sky=world.root.parent.children.find(o=>o.material?.uniforms?.uSunSize);if(focus&&sky)sky.material.uniforms.uSunSize.value=0;
     const painted=world.textureSet!=='flat',set=world.textureSet==='oil'?'oil':'clean';palms.forEach(p=>p.visible=!painted);paintedPalms.visible=painted;paintedFlowers.visible=painted;
@@ -124,3 +126,5 @@ export async function buildSunsetCove(world,life){
     walkers.forEach((p,i)=>{const x=-323+Math.sin(t*0.017+i*1.7)*24,z=i%2?-6.5:-28;p.g.position.set(x,terrainHeight(x,z),z);p.g.visible=!staged&&p.g.position.distanceTo(camera.position)>=6;p.g.rotation.y=Math.cos(t*0.017+i*1.7)>0?Math.PI/2:-Math.PI/2;animatePerson(p,t*3.5+i,0.6);});
   }};world.sunsetCove=area;return area;
 }
+
+

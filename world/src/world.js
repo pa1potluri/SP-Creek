@@ -1149,9 +1149,9 @@ export class World {
       // Smooth only the new railway corridor, keeping coaches clear of steep natural banks.
       for(let i=1;i<=count;i++){const p=sampleTrainTrack(i*spacing);this.registerAreaPad({x:p.pos.x,z:p.pos.z,y:p.pos.y-0.51,hx:2.5,hz:2.2,yaw:p.yaw,blend:5});}
       for(let d=30;d<=TRAIN_SPUR_LENGTH;d+=8){const p=sampleTrainTrack(d).pos;this.registerAreaPad({x:p.x,z:p.z,hx:6,hz:6,blend:0,clearOnly:true});}
-      this._ribbon(TRAIN_SPUR_POINTS,4.6,this._pathMaterial(),{lift:0.18});
-      const ties=[],rails=[],up=V(0,1,0);for(let d=0;d<TRAIN_SPUR_LENGTH;d+=0.8){const f=sampleTrainTrack(d);ties.push(new THREE.BoxGeometry(2.6,0.14,0.26).rotateY(f.yaw).translate(f.pos.x,f.pos.y-0.21,f.pos.z));}
-      for(let d=0;d<TRAIN_SPUR_LENGTH;d+=2){const a=sampleTrainTrack(d),b=sampleTrainTrack(Math.min(TRAIN_SPUR_LENGTH,d+2));for(const side of [-1,1]){const p=a.pos.clone().add(V(Math.cos(a.yaw)*side*0.72,-0.07,-Math.sin(a.yaw)*side*0.72)),q=b.pos.clone().add(V(Math.cos(b.yaw)*side*0.72,-0.07,-Math.sin(b.yaw)*side*0.72)),delta=q.clone().sub(p);rails.push(new THREE.CylinderGeometry(0.055,0.055,delta.length(),6).applyQuaternion(new THREE.Quaternion().setFromUnitVectors(up,delta.clone().normalize())).translate(...p.add(q).multiplyScalar(0.5).toArray()));}}
+      this._ribbon(TRAIN_SPUR_POINTS,4.6,this._pathMaterial(),{lift:0.22});
+      const ties=[],rails=[],up=V(0,1,0);for(let d=0;d<TRAIN_SPUR_LENGTH;d+=0.8){const f=sampleTrainTrack(d);ties.push(new THREE.BoxGeometry(2.6,0.14,0.26).rotateY(f.yaw).translate(f.pos.x,f.pos.y-0.18,f.pos.z));}
+      for(let d=0;d<TRAIN_SPUR_LENGTH;d+=2){const a=sampleTrainTrack(d),b=sampleTrainTrack(Math.min(TRAIN_SPUR_LENGTH,d+2));for(const side of [-1,1]){const p=a.pos.clone().add(V(Math.cos(a.yaw)*side*0.72,-0.04,-Math.sin(a.yaw)*side*0.72)),q=b.pos.clone().add(V(Math.cos(b.yaw)*side*0.72,-0.04,-Math.sin(b.yaw)*side*0.72)),delta=q.clone().sub(p);rails.push(new THREE.CylinderGeometry(0.055,0.055,delta.length(),6).applyQuaternion(new THREE.Quaternion().setFromUnitVectors(up,delta.clone().normalize())).translate(...p.add(q).multiplyScalar(0.5).toArray()));}}
       root.add(mesh(mergeGeometries(ties),this.mat.darkWood),mesh(mergeGeometries(rails),this.mat.iron));for(const g of [...ties,...rails])g.dispose();
       for(const halt of TRAIN_HALTS){const f=sampleTrainTrack(halt.distance-11.4),g=new THREE.Group();g.position.copy(f.pos);g.rotation.y=f.yaw;root.add(g);
         const box=(w,h,d,x,y,z,m=this.mat.wood)=>{const o=mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);g.add(o);return o;};
@@ -1172,12 +1172,13 @@ export class World {
 
     // station: its front and platform face the track
     this._building({ sign: 'SP CREEK STATION', z: 10, w: 18, floors: 1, wall: [32, 40, 60], trim: [0, 0, 90], signBg: [210, 30, 25], signInk: '#f2e6c8', chimney: true, x: 60.5, rot: Math.PI / 2 });
-    const platform = mesh(new THREE.BoxGeometry(5.2, 0.35, 34), this.mat.darkWood);
-    platform.position.set(65.8, 0.175, 10);
+    const platform = mesh(new THREE.BoxGeometry(5.15, 0.35, 34), this.mat.darkWood);
+    // Meet the station porch without overlapping its coplanar top face.
+    platform.position.set(65.825, 0.175, 10);
     this.root.add(platform);
     platform.updateMatrixWorld();
     this.walkables.push(platform);
-    this.floors.push({ ...this._rectOf(platform, 0, 0, 2.6, 17), y: 0.35 });
+    this.floors.push({ ...this._rectOf(platform, 0, 0, 2.575, 17), y: 0.35 });
     for (const z of [-4, 10, 24]) this._lanternPost(67.9, z, false, -1);
     this._waterTower(77, 42, 0.75);
     this._ribbon([[4, -2.8], [22, -2.8], [40, 0], [52, 8], [58, 20.5], [64, 22]], 4.5, this._pathMaterial());
@@ -2203,4 +2204,5 @@ export class World {
     }
   }
 }
+
 

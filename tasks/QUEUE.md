@@ -71,6 +71,7 @@ finished. Re-read this file each time; Claude may change it.
 | 56 | `tasks/showcase-20s.md` | `area/showcase-20s` | done, awaiting review; 36 automatic 20-second scenes, 12-minute loop; focused pass + Film day/night; full 2015 + 2 passed |
 | 57 | `tasks/showcase-watercolor.md` | `area/showcase-watercolor` | done, awaiting review; all-watercolour 36-scene loop; focused + mixed-style regression passed; day/night saved; full 2015 + 2 passed |
 | 58 | `tasks/GAME-HEALTH-REVIEW.md` | `area/game-health-review` | review complete; eight fresh views, no runtime errors; prioritized unfinished visuals and character rollout recorded; repairs remain open |
+| 59 | `tasks/train-shore-fixes.md` | `area/train-shore-fixes` | WIP verification; train platform/junction depth overlaps separated; night band root cause found and fixed; 12 previews + focused motion passed; full suite running |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -90,6 +91,7 @@ meadow & lake, crystal mine & balloon.
 
 > Loading diagnosis follow-up: 21.558s startup at 720p; terrain pad calculations and first-use shaders dominate CPU samples. Four preset clicks responsive in isolated test; the later reproduced bench-state freeze is now fixed and validated in task 50. Task 48 retains its forest visual follow-up; see its result.
 > Follow-up complete: user-approved life.js state reset fixes the reproduced null-seat freeze; full 2015 + 2 and 96 preset switches passed; 12 Film day/night frames saved. Task 48 retains only the unresolved forest visual follow-up. No new content queued.
+
 
 
 

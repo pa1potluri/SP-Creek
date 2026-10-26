@@ -1,150 +1,1158 @@
 {
-  "format": "face-points-v1",
+  "format": "solid-residents+face-points-v1",
   "bytesPerPoint": 20,
   "profiles": [
     {
       "id": "town-101",
-      "count": 36860,
-      "sourceCount": 147440,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         179,
         111,
         74
       ],
-      "sha256": "e255a8607ae2d236d5ae0d6fd88ef5fb859fd57a7beb0f774f30c7bf43876929"
+      "profile": {
+        "id": "town-101",
+        "parameters": {
+          "faceWidth": 97.3,
+          "faceHeight": 82.4,
+          "headDepth": 83.75,
+          "jawWidth": 0.89,
+          "eyeSpacing": 34.66,
+          "eyeWidth": 17,
+          "eyeHeight": 12,
+          "eyeY": 2.8,
+          "irisSize": 4.3,
+          "earWidth": 23.24,
+          "earHeight": 24.54,
+          "earDepth": 7,
+          "earOffset": 51.569,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 13.23,
+          "noseHeight": 9.49,
+          "noseDepth": 12.33,
+          "noseY": -13.7,
+          "mouthWidth": 32.54,
+          "mouthY": -24,
+          "hairSize": 0.9,
+          "density": 0.32,
+          "eyeDepth": 4.76,
+          "eyeInset": 11.26,
+          "irisOffset": -1.8,
+          "browY": 22.95,
+          "browArch": 4.53,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 119,
+          "hairHeight": 78,
+          "hairDepth": 93,
+          "hairCurl": 4,
+          "irisGazeX": 0,
+          "irisY": -1.898832,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.29,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 24,
+          "proceduralFace": true,
+          "hairLength": 0
+        },
+        "palette": {
+          "skin": [
+            179,
+            111,
+            74
+          ],
+          "ear": [
+            167,
+            71,
+            47
+          ],
+          "hair": [
+            92,
+            49,
+            28
+          ],
+          "iris": [
+            105,
+            55,
+            26
+          ],
+          "blush": [
+            183,
+            99,
+            67
+          ]
+        },
+        "hairStyle": "short"
+      }
     },
     {
       "id": "town-202",
-      "count": 47215,
-      "sourceCount": 188860,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         130,
         79,
         54
       ],
-      "sha256": "67ef189d20ef60415d3e34247f0da018109bf91a77d9152cf859bcc5a05181be"
+      "profile": {
+        "id": "town-202",
+        "parameters": {
+          "faceWidth": 97.77,
+          "faceHeight": 84.01,
+          "headDepth": 75.31,
+          "jawWidth": 0.89,
+          "eyeSpacing": 32.31,
+          "eyeWidth": 17.09,
+          "eyeHeight": 12.6466,
+          "eyeY": 2.8,
+          "irisSize": 4.785200000000001,
+          "earWidth": 23,
+          "earHeight": 25,
+          "earDepth": 7,
+          "earOffset": 51.8181,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 11.05,
+          "noseHeight": 8.8,
+          "noseDepth": 6.49,
+          "noseY": -13.7,
+          "mouthWidth": 45.8,
+          "mouthY": -24,
+          "hairSize": 1,
+          "density": 0.32,
+          "eyeDepth": 5.55,
+          "eyeInset": 10.33,
+          "irisOffset": -1.8,
+          "browY": 23.33,
+          "browArch": 5.93,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 133,
+          "hairHeight": 115,
+          "hairDepth": 108,
+          "hairCurl": 6.53,
+          "irisGazeX": 0,
+          "irisY": -1.5175919999999998,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.21,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 52,
+          "proceduralFace": true,
+          "hairLength": 34
+        },
+        "palette": {
+          "skin": [
+            130,
+            79,
+            54
+          ],
+          "ear": [
+            118,
+            39,
+            27
+          ],
+          "hair": [
+            38,
+            30,
+            25
+          ],
+          "iris": [
+            105,
+            55,
+            26
+          ],
+          "blush": [
+            134,
+            67,
+            47
+          ]
+        },
+        "hairStyle": "long"
+      }
     },
     {
       "id": "town-303",
-      "count": 42301,
-      "sourceCount": 169203,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         233,
         156,
         113
       ],
-      "sha256": "bab6a83d35b60d8e17cf139dda57cd9bd785897396aee704fcd0bfc17386f6a9"
+      "profile": {
+        "id": "town-303",
+        "parameters": {
+          "faceWidth": 98.24,
+          "faceHeight": 85.62,
+          "headDepth": 76.86,
+          "jawWidth": 0.89,
+          "eyeSpacing": 38.95,
+          "eyeWidth": 19.91,
+          "eyeHeight": 13.538800000000002,
+          "eyeY": 2.8,
+          "irisSize": 5.280132000000001,
+          "earWidth": 26.72,
+          "earHeight": 25.52,
+          "earDepth": 7,
+          "earOffset": 52.0672,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 20,
+          "noseHeight": 8.1,
+          "noseDepth": 13,
+          "noseY": -13.7,
+          "mouthWidth": 46,
+          "mouthY": -24,
+          "hairSize": 1,
+          "density": 0.32,
+          "eyeDepth": 4.85,
+          "eyeInset": 11.4,
+          "irisOffset": -1.8,
+          "browY": 23.71,
+          "browArch": 4.34,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 140,
+          "hairHeight": 128,
+          "hairDepth": 108,
+          "hairCurl": 8.67,
+          "irisGazeX": 0,
+          "irisY": -1.624656,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.26,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 56,
+          "proceduralFace": true,
+          "hairLength": 0
+        },
+        "palette": {
+          "skin": [
+            233,
+            156,
+            113
+          ],
+          "ear": [
+            221,
+            116,
+            86
+          ],
+          "hair": [
+            92,
+            49,
+            28
+          ],
+          "iris": [
+            68,
+            91,
+            111
+          ],
+          "blush": [
+            237,
+            144,
+            106
+          ]
+        },
+        "hairStyle": "curly"
+      }
     },
     {
       "id": "town-404",
-      "count": 43672,
-      "sourceCount": 174687,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         244,
         174,
         126
       ],
-      "sha256": "fb4784ecf93847ddfc9efcfbe8eafa04f262ab3f3a5ee10dd1cda156b47d6bd6"
+      "profile": {
+        "id": "town-404",
+        "parameters": {
+          "faceWidth": 98.71,
+          "faceHeight": 87.23,
+          "headDepth": 78.42,
+          "jawWidth": 0.89,
+          "eyeSpacing": 36.6,
+          "eyeWidth": 26,
+          "eyeHeight": 19,
+          "eyeY": 2.8,
+          "irisSize": 7,
+          "earWidth": 28.45,
+          "earHeight": 26.01,
+          "earDepth": 7,
+          "earOffset": 52.3163,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 17.7,
+          "noseHeight": 7.41,
+          "noseDepth": 8.81,
+          "noseY": -13.7,
+          "mouthWidth": 32.32,
+          "mouthY": -24,
+          "hairSize": 0.95,
+          "density": 0.32,
+          "eyeDepth": 5.65,
+          "eyeInset": 10.47,
+          "irisOffset": -1.8,
+          "browY": 24.09,
+          "browArch": 5.75,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 132,
+          "hairHeight": 100,
+          "hairDepth": 106,
+          "hairCurl": 6.81,
+          "irisGazeX": 0,
+          "irisY": -2.018424,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.18,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 32,
+          "proceduralFace": true,
+          "hairLength": 13
+        },
+        "palette": {
+          "skin": [
+            244,
+            174,
+            126
+          ],
+          "ear": [
+            232,
+            134,
+            99
+          ],
+          "hair": [
+            163,
+            113,
+            65
+          ],
+          "iris": [
+            68,
+            91,
+            111
+          ],
+          "blush": [
+            248,
+            162,
+            119
+          ]
+        },
+        "hairStyle": "bob"
+      }
     },
     {
       "id": "town-505",
-      "count": 36751,
-      "sourceCount": 147001,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         244,
         174,
         126
       ],
-      "sha256": "28ffd20b1bbbe7417d75084a892a333ec9e890b301013ec1f9328f502200d7b4"
+      "profile": {
+        "id": "town-505",
+        "parameters": {
+          "faceWidth": 99.18,
+          "faceHeight": 78.84,
+          "headDepth": 79.97,
+          "jawWidth": 0.89,
+          "eyeSpacing": 34.25,
+          "eyeWidth": 25.55,
+          "eyeHeight": 17.6295,
+          "eyeY": 2.8,
+          "irisSize": 6.875505,
+          "earWidth": 36,
+          "earHeight": 32,
+          "earDepth": 7,
+          "earOffset": 52.565400000000004,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 9,
+          "noseHeight": 10.71,
+          "noseDepth": 6,
+          "noseY": -13.7,
+          "mouthWidth": 45.58,
+          "mouthY": -24,
+          "hairSize": 0.9,
+          "density": 0.32,
+          "eyeDepth": 4.95,
+          "eyeInset": 9.53,
+          "irisOffset": -1.8,
+          "browY": 24.46,
+          "browArch": 4.15,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 119,
+          "hairHeight": 78,
+          "hairDepth": 93,
+          "hairCurl": 4,
+          "irisGazeX": 0,
+          "irisY": -2.1155399999999998,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.23,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 24,
+          "proceduralFace": true,
+          "hairLength": 0
+        },
+        "palette": {
+          "skin": [
+            244,
+            174,
+            126
+          ],
+          "ear": [
+            232,
+            134,
+            99
+          ],
+          "hair": [
+            130,
+            77,
+            38
+          ],
+          "iris": [
+            70,
+            77,
+            47
+          ],
+          "blush": [
+            248,
+            162,
+            119
+          ]
+        },
+        "hairStyle": "short"
+      }
     },
     {
       "id": "town-606",
-      "count": 47202,
-      "sourceCount": 188806,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         216,
         143,
         96
       ],
-      "sha256": "8fd9285ce507f7424daec5848238ef674616fc55a36397577df6498009228a66"
+      "profile": {
+        "id": "town-606",
+        "parameters": {
+          "faceWidth": 99.65,
+          "faceHeight": 80.45,
+          "headDepth": 81.53,
+          "jawWidth": 0.89,
+          "eyeSpacing": 31.9,
+          "eyeWidth": 19.36,
+          "eyeHeight": 14.52,
+          "eyeY": 2.8,
+          "irisSize": 5.420800000000001,
+          "earWidth": 31.93,
+          "earHeight": 26.98,
+          "earDepth": 7,
+          "earOffset": 52.8145,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 13.35,
+          "noseHeight": 10.02,
+          "noseDepth": 11.14,
+          "noseY": -13.7,
+          "mouthWidth": 47,
+          "mouthY": -24,
+          "hairSize": 1,
+          "density": 0.32,
+          "eyeDepth": 5.74,
+          "eyeInset": 10.6,
+          "irisOffset": -1.8,
+          "browY": 24.84,
+          "browArch": 5.56,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 133,
+          "hairHeight": 115,
+          "hairDepth": 108,
+          "hairCurl": 7.09,
+          "irisGazeX": 0,
+          "irisY": -1.7424,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.27,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 52,
+          "proceduralFace": true,
+          "hairLength": 34
+        },
+        "palette": {
+          "skin": [
+            216,
+            143,
+            96
+          ],
+          "ear": [
+            204,
+            103,
+            69
+          ],
+          "hair": [
+            61,
+            37,
+            28
+          ],
+          "iris": [
+            105,
+            55,
+            26
+          ],
+          "blush": [
+            220,
+            131,
+            89
+          ]
+        },
+        "hairStyle": "long"
+      }
     },
     {
       "id": "town-700",
-      "count": 47032,
-      "sourceCount": 188127,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         216,
         143,
         96
       ],
-      "sha256": "27eb2b9032947f145626bb7eb750586af629f61eba740bfb499e37d181d9ab07"
+      "profile": {
+        "id": "town-700",
+        "parameters": {
+          "faceWidth": 100.09,
+          "faceHeight": 85.71,
+          "headDepth": 75.15,
+          "jawWidth": 0.89,
+          "eyeSpacing": 36.21,
+          "eyeWidth": 25.19,
+          "eyeHeight": 16.625400000000003,
+          "eyeY": 2.8,
+          "irisSize": 6.483906000000001,
+          "earWidth": 25.05,
+          "earHeight": 30.68,
+          "earDepth": 7,
+          "earOffset": 53.047700000000006,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 17.75,
+          "noseHeight": 8.62,
+          "noseDepth": 6.74,
+          "noseY": -13.7,
+          "mouthWidth": 35.33,
+          "mouthY": -24,
+          "hairSize": 1,
+          "density": 0.32,
+          "eyeDepth": 5.92,
+          "eyeInset": 9.64,
+          "irisOffset": -1.8,
+          "browY": 23.91,
+          "browArch": 6.75,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 133,
+          "hairHeight": 115,
+          "hairDepth": 108,
+          "hairCurl": 8.81,
+          "irisGazeX": 0,
+          "irisY": -1.9950480000000002,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.25,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 52,
+          "proceduralFace": true,
+          "hairLength": 34
+        },
+        "palette": {
+          "skin": [
+            216,
+            143,
+            96
+          ],
+          "ear": [
+            204,
+            103,
+            69
+          ],
+          "hair": [
+            92,
+            49,
+            28
+          ],
+          "iris": [
+            105,
+            55,
+            26
+          ],
+          "blush": [
+            220,
+            131,
+            89
+          ]
+        },
+        "hairStyle": "long"
+      }
     },
     {
       "id": "town-701",
-      "count": 41908,
-      "sourceCount": 167631,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         130,
         79,
         54
       ],
-      "sha256": "16b1f8ff9787b81a0f7dbaeeec30701950ff620a47fd695b246960d83a89db17"
+      "profile": {
+        "id": "town-701",
+        "parameters": {
+          "faceWidth": 100.09,
+          "faceHeight": 86.62,
+          "headDepth": 82,
+          "jawWidth": 0.89,
+          "eyeSpacing": 36.55,
+          "eyeWidth": 22.19,
+          "eyeHeight": 16.642500000000002,
+          "eyeY": 2.8,
+          "irisSize": 6.213200000000001,
+          "earWidth": 24.42,
+          "earHeight": 24.51,
+          "earDepth": 7,
+          "earOffset": 53.047700000000006,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 18.39,
+          "noseHeight": 10.43,
+          "noseDepth": 11.54,
+          "noseY": -13.7,
+          "mouthWidth": 34.87,
+          "mouthY": -24,
+          "hairSize": 1,
+          "density": 0.32,
+          "eyeDepth": 5.79,
+          "eyeInset": 10.5,
+          "irisOffset": -1.8,
+          "browY": 21.24,
+          "browArch": 4.21,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 140,
+          "hairHeight": 128,
+          "hairDepth": 108,
+          "hairCurl": 8.87,
+          "irisGazeX": 0,
+          "irisY": -1.9971,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.19,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 56,
+          "proceduralFace": true,
+          "hairLength": 0
+        },
+        "palette": {
+          "skin": [
+            130,
+            79,
+            54
+          ],
+          "ear": [
+            118,
+            39,
+            27
+          ],
+          "hair": [
+            92,
+            49,
+            28
+          ],
+          "iris": [
+            68,
+            91,
+            111
+          ],
+          "blush": [
+            134,
+            67,
+            47
+          ]
+        },
+        "hairStyle": "curly"
+      }
     },
     {
       "id": "town-702",
-      "count": 47198,
-      "sourceCount": 188791,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         233,
         156,
         113
       ],
-      "sha256": "c221bb4ac93075007f251519fddbb95a37d5e17a62e7e5cc453059be213863dd"
+      "profile": {
+        "id": "town-702",
+        "parameters": {
+          "faceWidth": 100.1,
+          "faceHeight": 87.53,
+          "headDepth": 78.85,
+          "jawWidth": 0.89,
+          "eyeSpacing": 36.88,
+          "eyeWidth": 19.19,
+          "eyeHeight": 13.8168,
+          "eyeY": 2.8,
+          "irisSize": 5.373200000000001,
+          "earWidth": 23.79,
+          "earHeight": 26.34,
+          "earDepth": 7,
+          "earOffset": 53.053,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 19.02,
+          "noseHeight": 8.25,
+          "noseDepth": 9.33,
+          "noseY": -13.7,
+          "mouthWidth": 34.41,
+          "mouthY": -24,
+          "hairSize": 1,
+          "density": 0.32,
+          "eyeDepth": 5.67,
+          "eyeInset": 11.36,
+          "irisOffset": -1.8,
+          "browY": 23.57,
+          "browArch": 4.67,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 133,
+          "hairHeight": 115,
+          "hairDepth": 108,
+          "hairCurl": 8.93,
+          "irisGazeX": 0,
+          "irisY": -1.658016,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.26,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 52,
+          "proceduralFace": true,
+          "hairLength": 34
+        },
+        "palette": {
+          "skin": [
+            233,
+            156,
+            113
+          ],
+          "ear": [
+            221,
+            116,
+            86
+          ],
+          "hair": [
+            61,
+            37,
+            28
+          ],
+          "iris": [
+            68,
+            91,
+            111
+          ],
+          "blush": [
+            237,
+            144,
+            106
+          ]
+        },
+        "hairStyle": "long"
+      }
     },
     {
       "id": "town-703",
-      "count": 41771,
-      "sourceCount": 167083,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         216,
         143,
         96
       ],
-      "sha256": "1867c1329f7df01ad0c10d3400c66bc2148fc7239377f2c04718107506281991"
+      "profile": {
+        "id": "town-703",
+        "parameters": {
+          "faceWidth": 100.1,
+          "faceHeight": 78.43,
+          "headDepth": 75.69,
+          "jawWidth": 0.89,
+          "eyeSpacing": 37.21,
+          "eyeWidth": 25.19,
+          "eyeHeight": 17.3811,
+          "eyeY": 2.8,
+          "irisSize": 6.7786290000000005,
+          "earWidth": 23.17,
+          "earHeight": 28.16,
+          "earDepth": 7,
+          "earOffset": 53.053,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 19.65,
+          "noseHeight": 10.06,
+          "noseDepth": 7.12,
+          "noseY": -13.7,
+          "mouthWidth": 33.95,
+          "mouthY": -24,
+          "hairSize": 1,
+          "density": 0.32,
+          "eyeDepth": 5.54,
+          "eyeInset": 10.23,
+          "irisOffset": -1.8,
+          "browY": 20.9,
+          "browArch": 5.13,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 140,
+          "hairHeight": 128,
+          "hairDepth": 108,
+          "hairCurl": 8.99,
+          "irisGazeX": 0,
+          "irisY": -2.085732,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.2,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 56,
+          "proceduralFace": true,
+          "hairLength": 0
+        },
+        "palette": {
+          "skin": [
+            216,
+            143,
+            96
+          ],
+          "ear": [
+            204,
+            103,
+            69
+          ],
+          "hair": [
+            61,
+            37,
+            28
+          ],
+          "iris": [
+            70,
+            77,
+            47
+          ],
+          "blush": [
+            220,
+            131,
+            89
+          ]
+        },
+        "hairStyle": "curly"
+      }
     },
     {
       "id": "town-704",
-      "count": 43517,
-      "sourceCount": 174068,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         179,
         111,
         74
       ],
-      "sha256": "072a1745a6612b2ee0c45357b782056120012bc1e497a800fc1e6fa2de8b550c"
+      "profile": {
+        "id": "town-704",
+        "parameters": {
+          "faceWidth": 100.11,
+          "faceHeight": 79.34,
+          "headDepth": 82.54,
+          "jawWidth": 0.89,
+          "eyeSpacing": 37.55,
+          "eyeWidth": 22.19,
+          "eyeHeight": 14.645400000000002,
+          "eyeY": 2.8,
+          "irisSize": 5.711706000000001,
+          "earWidth": 35.54,
+          "earHeight": 29.99,
+          "earDepth": 7,
+          "earOffset": 53.0583,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 9.28,
+          "noseHeight": 7.88,
+          "noseDepth": 11.92,
+          "noseY": -13.7,
+          "mouthWidth": 33.48,
+          "mouthY": -24,
+          "hairSize": 0.95,
+          "density": 0.32,
+          "eyeDepth": 5.42,
+          "eyeInset": 11.09,
+          "irisOffset": -1.8,
+          "browY": 23.23,
+          "browArch": 5.58,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 132,
+          "hairHeight": 100,
+          "hairDepth": 106,
+          "hairCurl": 5.05,
+          "irisGazeX": 0,
+          "irisY": -1.7574480000000001,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.26,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 32,
+          "proceduralFace": true,
+          "hairLength": 13
+        },
+        "palette": {
+          "skin": [
+            179,
+            111,
+            74
+          ],
+          "ear": [
+            167,
+            71,
+            47
+          ],
+          "hair": [
+            163,
+            113,
+            65
+          ],
+          "iris": [
+            105,
+            55,
+            26
+          ],
+          "blush": [
+            183,
+            99,
+            67
+          ]
+        },
+        "hairStyle": "bob"
+      }
     },
     {
       "id": "town-705",
-      "count": 36708,
-      "sourceCount": 146830,
-      "stride": 4,
+      "representation": "solid",
       "skin": [
         233,
         156,
         113
       ],
-      "sha256": "81f5d77e2c954cc6fabacbfb9ef68acd53fac9149de920edac0df2813b3e96bd"
+      "profile": {
+        "id": "town-705",
+        "parameters": {
+          "faceWidth": 100.11,
+          "faceHeight": 80.25,
+          "headDepth": 79.39,
+          "jawWidth": 0.89,
+          "eyeSpacing": 37.88,
+          "eyeWidth": 19.19,
+          "eyeHeight": 14.392500000000002,
+          "eyeY": 2.8,
+          "irisSize": 5.373200000000001,
+          "earWidth": 34.92,
+          "earHeight": 31.82,
+          "earDepth": 7,
+          "earOffset": 53.0583,
+          "earY": -12,
+          "earZ": -14,
+          "earAngle": 39,
+          "noseWidth": 9.91,
+          "noseHeight": 9.69,
+          "noseDepth": 9.71,
+          "noseY": -13.7,
+          "mouthWidth": 33.02,
+          "mouthY": -24,
+          "hairSize": 0.9,
+          "density": 0.32,
+          "eyeDepth": 5.29,
+          "eyeInset": 9.95,
+          "irisOffset": -1.8,
+          "browY": 20.56,
+          "browArch": 6.04,
+          "chinForward": 24,
+          "cheekFullness": 4,
+          "faceRoundness": 2.6,
+          "socketDepth": 9.5,
+          "mouthSmile": 3.7,
+          "hairWidth": 119,
+          "hairHeight": 78,
+          "hairDepth": 93,
+          "hairCurl": 4,
+          "irisGazeX": 0,
+          "irisY": -1.7271,
+          "eyeLowerPower": 4.2,
+          "browTailDrop": 7.8,
+          "lashThickness": 0.55,
+          "chinPad": 1.8,
+          "chinCrease": 0.65,
+          "lipFullness": 0.55,
+          "dimpleDepth": 0.6,
+          "noseHighlight": 0.48,
+          "eyeTilt": 0.2,
+          "faceSamples": 90000,
+          "hairSamples": 90000,
+          "hairLocks": 24,
+          "proceduralFace": true,
+          "hairLength": 0
+        },
+        "palette": {
+          "skin": [
+            233,
+            156,
+            113
+          ],
+          "ear": [
+            221,
+            116,
+            86
+          ],
+          "hair": [
+            163,
+            113,
+            65
+          ],
+          "iris": [
+            68,
+            91,
+            111
+          ],
+          "blush": [
+            237,
+            144,
+            106
+          ]
+        },
+        "hairStyle": "short"
+      }
     },
     {
       "id": "pavi",

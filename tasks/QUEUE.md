@@ -67,6 +67,7 @@ finished. Re-read this file each time; Claude may change it.
 | 52 | `tasks/character-profile-rollout.md` | `area/character-profile-rollout` | WIP approved real-game opt-in; 12 residents + Pavi wired; Siri original; runtime files now 15.4MB after v01 refresh; 9 smoke checks + four Film day/night frames; default rollback verified; full suite/rig fit/persistence/LOD pending; saved at usage limit |
 | 53 | `tasks/character-pipeline-v01.md` | `area/character-pipeline-v01` | WIP quick-review refresh; package 1.1 residents in preview + opt-in game; hero unchanged; 94 preview + 9 game checks passed; day/night refreshed; full suite pending; runtime binaries 15.4MB |
 | 54 | `tasks/character-preview-loading.md` | `area/character-preview-loading` | WIP verified loading repair; unused 22.7MB GLB wait removed from standalone page; progress/errors + narrow-pane fit; 94 preview + 5 loading checks passed; working in-app tab opened; full suite pending |
+| 55 | `tasks/solid-residents.md` | `area/solid-residents` | WIP verification; residents now solid opaque one-mesh heads/hair, no resident point downloads; 44 checks + turning/gameplay day/night saved; final full suite running; Pavi untouched |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 

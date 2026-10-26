@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {CAST,makeCharacter} from '../characters.js';
 import {decodePoints} from './point-data.mjs';
-import {roundPointMap} from '../point-footprint.js';
+import {makeSolidResident} from '../solid-residents.js';
 
 const base='assets/characters/pipeline-test/',canvas=document.querySelector('#view');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(1);
@@ -42,27 +42,28 @@ function geometry(asset,detail){
  for(let i=0;i<a.count;i+=detail){positions.set(a.positions.subarray(i*3,i*3+3),k*3);color.setRGB(a.colors[i*3]/255,a.colors[i*3+1]/255,a.colors[i*3+2]/255,THREE.SRGBColorSpace);color.toArray(colors,k*3);partCounts[a.parts[i]]++;k++;}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(positions,3));g.setAttribute('color',new THREE.BufferAttribute(colors,3));g.computeBoundingSphere();g.userData.parts=partCounts;asset.geometries.set(detail,g);return g;
 }
-const pointMaterial=new THREE.PointsMaterial({size:.010,vertexColors:true,sizeAttenuation:true,toneMapped:false,map:roundPointMap(),alphaTest:.5});
 const heroMaterial=new THREE.PointsMaterial({size:.012,vertexColors:true,sizeAttenuation:true,toneMapped:false});
-function setDetail(value){stride=+value;pointMaterial.size=.010*Math.sqrt(stride);heroMaterial.size=.012*Math.sqrt(stride);for(const actor of actors)actor.points.geometry=geometry(actor.asset,stride);document.querySelector('#detail').value=String(stride);refresh();}
+function setDetail(value){stride=+value;heroMaterial.size=.012*Math.sqrt(stride);for(const actor of actors)if(!actor.asset.solid)actor.points.geometry=geometry(actor.asset,stride);document.querySelector('#detail').value=String(stride);refresh();}
 function setFaces(value){mode=value;for(const actor of actors){actor.old.forEach(c=>c.visible=mode==='original');actor.points.visible=mode==='pipeline';}document.querySelector('#faces').value=mode;refresh();}
-function setMood(value){mood=value;const night=value==='night';scene.background=new THREE.Color(night?'#8196ac':'#dbe8d3');hemi.intensity=night?1.65:2.6;sun.intensity=night?.55:2;pointMaterial.color.setScalar(night?.82:1);heroMaterial.color.copy(pointMaterial.color);}
+function setMood(value){mood=value;const night=value==='night';scene.background=new THREE.Color(night?'#8196ac':'#dbe8d3');hemi.intensity=night?1.65:2.6;sun.intensity=night?.55:2;heroMaterial.color.setScalar(night?.82:1);}
 function view(id='group'){
  currentView=id;
+ const selected=actors.find(a=>a.id===id)||actors[0];
+ for(const actor of actors)actor.rig.g.visible=id==='group'||actor===selected;
  if(id==='group'){const distance=Math.max(11.8,4.75/(Math.tan(camera.fov*Math.PI/360)*camera.aspect));camera.position.set(0,1.1+distance*.255,distance);controls.target.set(0,1.1,0);}
  else {const actor=actors.find(a=>a.id===id)||actors[0],p=actor.rig.head.getWorldPosition(new THREE.Vector3());p.y+=.25*actor.rig.g.scale.y;camera.position.copy(p).add(new THREE.Vector3(.28,.1,1.65));controls.target.copy(p);}
  controls.update();
 }
-function refresh(){if(!actors.length)return;const points=actors.reduce((n,a)=>n+a.points.geometry.attributes.position.count,0);document.querySelector('#status').textContent=`${actors.length} bodies · ${mode==='pipeline'?points.toLocaleString()+' visible head points':'original game heads'} · ${stride===1?'full source':`1/${stride} density`} · ${renderer.info.render.calls} draw calls`;
+function refresh(){if(!actors.length)return;document.querySelector('#status').textContent=`${actors.length} bodies · ${mode==='pipeline'?'solid resident surfaces + separate Pavi face':'original game heads'} · ${renderer.info.render.calls} draw calls`;
 }
-function step(dt){time+=dt;actors.forEach((a,i)=>{a.rig.head.rotation.y=turn?Math.sin(time*.4+i*.15)*.25:0;});controls.update();renderer.render(scene,camera);for(const a of actors){const p=a.rig.head.getWorldPosition(new THREE.Vector3());p.y+=.85;p.project(camera);a.label.style.left=`${(p.x*.5+.5)*innerWidth}px`;a.label.style.top=`${(-p.y*.5+.5)*innerHeight}px`;a.label.hidden=p.z>1;}refresh();}
-function stats(){return{mode,stride,mood,actors:actors.length,visibleActors:actors.filter(a=>a.rig.g.visible).length,sourcePoints:[...assets.values()].reduce((n,a)=>n+a.data.count,0),packedBytes:[...assets.values()].reduce((n,a)=>n+a.bytes,0),decodedHeadBytes:[...assets.values()].reduce((n,a)=>n+a.data.positions.byteLength+a.data.colors.byteLength+a.data.parts.byteLength,0),cachedHeadGeometryBytes:[...assets.values()].reduce((n,a)=>n+[...a.geometries.values()].reduce((m,g)=>m+g.attributes.position.array.byteLength+g.attributes.color.array.byteLength,0),0),visiblePoints:mode==='pipeline'?actors.filter(a=>a.rig.g.visible).reduce((n,a)=>n+a.points.geometry.attributes.position.count,0):0,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,programs:renderer.info.programs.length};}
+function step(dt){time+=dt;actors.forEach((a,i)=>{a.rig.head.rotation.y=turn?Math.sin(time*.4+i*.15)*.25:0;});controls.update();renderer.render(scene,camera);for(const a of actors){const p=a.rig.head.getWorldPosition(new THREE.Vector3());p.y+=.85;p.project(camera);a.label.style.left=`${(p.x*.5+.5)*innerWidth}px`;a.label.style.top=`${(-p.y*.5+.5)*innerHeight}px`;a.label.hidden=!a.rig.g.visible||p.z>1;}refresh();}
+function stats(){return{mode,stride,mood,actors:actors.length,solidResidents:actors.filter(a=>a.asset.solid).length,visibleActors:actors.filter(a=>a.rig.g.visible).length,packedBytes:[...assets.values()].reduce((n,a)=>n+a.bytes,0),visiblePoints:mode==='pipeline'?actors.filter(a=>a.rig.g.visible&&!a.asset.solid).reduce((n,a)=>n+a.points.geometry.attributes.position.count,0):0,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,geometries:renderer.info.memory.geometries,textures:renderer.info.memory.textures,programs:renderer.info.programs.length};}
 function resize(){const s=Math.min(1,1600/innerWidth,900/innerHeight);renderer.setSize(Math.round(innerWidth*s),Math.round(innerHeight*s),false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();if(currentView==='group'&&actors.length)view('group');}
 addEventListener('resize',resize);resize();
 addEventListener('keydown',e=>{if(e.key.toLowerCase()==='h')document.body.classList.toggle('capture');});
 try{
  const manifests=await json(base+'residents/manifest.json'),hero=await json(base+'hero/model-manifest.json');
- await Promise.all(manifests.map(async m=>{const p=await json(base+`profiles/${m.id}.json`);profiles.set(m.id,p);await load(m.id,`residents/${m.id}.bin`,m,p);}));
+ await Promise.all(manifests.map(async m=>{const p=await json(base+`profiles/${m.id}.json`);profiles.set(m.id,p);assets.set(m.id,{id:m.id,solid:true,profile:p,bytes:0,geometries:new Map()});window.previewLoadingMessage?.(`Loaded ${++loadedHeads} of 13 saved profiles…`);}));
  await load('pavi','hero/head-points.bin',hero,await json(base+'profiles/main-character.json'));
  const entries=manifests.map((m,i)=>({id:m.id,name:m.id,asset:assets.get(m.id),outfit:[CAST.mayor,CAST.cafeHost,CAST.pianist,CAST.teacher,CAST.townswoman,CAST.rancher][i%6]}));
  entries.splice(3,0,{id:'pavi',name:'Pavi · saved hero',asset:assets.get('pavi'),outfit:{...CAST.pavi,scale:.84}},{id:'siri',name:'Siri · temporary town-202',asset:assets.get('town-202'),outfit:{...CAST.siri,scale:.84}});
@@ -70,7 +71,7 @@ try{
   const skin=entry.asset.profile.palette?.skin;
   const rig=makeCharacter({...entry.outfit,star:undefined,hat:'none',skin:skin?`rgb(${skin.join(',')})`:entry.outfit.skin});
   rig.g.position.set((i%7-3)*1.15,i<7?0:.25,i<7?1.2:-1.2);scene.add(rig.g);
-  const old=[...rig.head.children],points=new THREE.Points(geometry(entry.asset,stride),entry.id==='pavi'?heroMaterial:pointMaterial);points.name=entry.name;rig.head.add(points);
+  const old=[...rig.head.children],points=entry.asset.solid?makeSolidResident(entry.asset.profile):new THREE.Points(geometry(entry.asset,stride),heroMaterial);points.name=entry.name;rig.head.add(points);
   const label=document.createElement('span');label.className='name';label.textContent=entry.name;document.querySelector('#names').append(label);
   actors.push({...entry,rig,old,points,label});
  });

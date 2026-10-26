@@ -15,11 +15,11 @@ window.previewLoadingMessage=message=>{document.querySelector('#startupMessage')
 window.addEventListener('error',event=>{if(event.message)window.previewLoadingMessage('The preview could not start: '+event.message+'. Please reload, or share this message.');});
 window.addEventListener('unhandledrejection',event=>window.previewLoadingMessage('The preview could not finish loading: '+(event.reason?.message||event.reason)+'. Please reload.'));
 </script>
-<aside><h1>SP Creek · face pipeline v01</h1><p>Updated residents · package 1.1. 12 residents + Pavi and Siri, on existing game bodies.</p>
+<aside><h1>SP Creek · solid pedestrians</h1><p>Simple opaque resident faces and hair. Pavi keeps his detailed face.</p>
 <label>Faces <select id="faces"><option value="pipeline">Pipeline faces</option><option value="original">Current game faces</option></select></label>
-<label>Detail <select id="detail"><option value="4">Review · ¼ points</option><option value="1">Full source</option><option value="8">Distant · ⅛ points</option></select></label>
+<label>Pavi detail <select id="detail"><option value="4">Review · ¼ points</option><option value="1">Full source</option><option value="8">Distant · ⅛ points</option></select></label>
 <div><button id="group">Everyone</button><button id="pavi">Pavi face</button><button id="siri">Siri test face</button><button id="resident">Resident face</button></div>
 <div><button id="day">Day</button><button id="night">Night</button><button id="pose">Gentle head turn: off</button></div>
-<p id="status" role="status">Loading saved profiles…</p><details><summary>Test notes</summary><p>Drag to orbit, scroll to zoom. H hides controls. GPU-rendered 3D points share normal scene depth. Original world is unchanged.</p><p>Pavi uses the frozen supplied hero face. Siri temporarily uses town-202; no dedicated Siri face was supplied. Faces have no blink or expression rig yet. This is a material/attachment test, not final art approval.</p></details>
-<p><a href="index.html">Back to SP Creek</a></p></aside>
+<p id="status" role="status">Loading saved profiles…</p><details><summary>Test notes</summary><p>Drag to orbit, scroll to zoom. H hides controls. Residents now use solid meshes, not dots. Detail changes Pavi only.</p><p>Pavi uses the frozen supplied hero face. Siri temporarily uses town-202 in this test; no dedicated Siri face was supplied. The actual game keeps her original model. Faces have no blink or expression rig yet.</p></details>
+<p><a href="./?characterFaces=pipeline">Try residents walking in the game</a> · <a href="index.html">Original world</a></p></aside>
 <script type="module" src="src/experiments/character-pipeline-test.js" onerror="previewLoadingMessage('The preview code could not load. Check the server connection, then reload.')"></script></html>

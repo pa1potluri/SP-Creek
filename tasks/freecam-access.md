@@ -1,0 +1,2 @@
+# Free camera access — menu regression
+User could not find Free camera after kids UI integration. Cause verified in CSS: friendly menu hid #modeControls, which contains the original #freeBtn. Restore that original button as a visible 64px primary control beside the art strip, with existing On/Off wiring. Scope style.css, focused menu test/evidence and metadata. Preserve Studio and H hide behaviour. No duplicate camera state.

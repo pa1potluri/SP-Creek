@@ -1,0 +1,3 @@
+# Free camera access result — WIP checkpoint
+Cause: friendly menu hid #modeControls, including the original Free camera button. Restored original control beside the top art strip with existing On/Off state and 64px target. No duplicate camera state. Corrected placement relative to the style bar's filtered containing block.
+24 focused checks passed: visible at the top (bounds 80–160px), toggles On/Off, all six tabs/43 pieces, editing, Studio, H and tablet checks; audio locked, no page/console/resource errors. Screenshots freecam-access-*.png, including Film Create day/night. Full 31-suite regression running; final counts must be recorded before done.

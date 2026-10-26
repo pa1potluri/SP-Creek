@@ -100,6 +100,7 @@ finished. Re-read this file each time; Claude may change it.
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
 | 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
 | 86 | `tasks/create-layout.md` | `area/create-layout` | superseded by lead task 31a kids-ui; prototype retained in history, not a second public menu |
+| 31c | `tasks/freecam-access.md` | `area/freecam-access` | WIP restore original Free camera beside style strip; 24 focused/top-bounds checks pass; full suite pending |
 | 31b | `tasks/kids-ui-art.result.md` | `area/kids-ui-art` | WIP supplied 13 icons registered; 21 checks/tab captures pass; opaque baked checkerboard needs transparent exports; avatar/pieces still fallbacks |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
@@ -172,5 +173,6 @@ meadow & lake, crystal mine & balloon.
 
 
 > New lead task tasks/kids-ui.md is authoritative for the supplied menu design and supersedes task 86 prototype scope. Continue on area/kids-ui; do not discard earlier correction queue.
+
 
 

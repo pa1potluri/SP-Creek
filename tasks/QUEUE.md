@@ -85,7 +85,7 @@ finished. Re-read this file each time; Claude may change it.
 | 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | done, awaiting review; ordinary URL uses approved solid residents; supplied hero bodies retained; full 2015 + 2; day/night and clean server checks saved |
 | 70 | `tasks/canvas-tents.md` | `area/canvas-tents` | done model increment, awaiting review; five framed canvas tents, real open doors/ropes/poles; 17 focused + full 2015 + 2 passed; six Film scene views + closeups |
 | 71 | `tasks/coach-flicker.md` | `area/coach-flicker` (next) | done identified geometry/shadow repair, awaiting motion review; raycast 3cm separation + 600 motion steps + six captures; full 2015 + 2 passed |
-| 72 | `tasks/terrain-shaping.md` | planned | queued user request: lower/flatten mountains, undo/save and road support |
+| 72 | `tasks/terrain-shaping.md` | `area/terrain-shaping` | WIP isolated bounded brush/history foundation, 206 unit checks; not wired into game; protection/support/UI/persistence and full validation next |
 | 73 | `tasks/river-life.md` | planned | queued user request: placeable boats, gentle fish jumps and river life |
 | 74 | `tasks/station-residents.md` | planned | queued user request: calm standing/seated/readers at station |
 | 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
@@ -215,6 +215,7 @@ meadow & lake, crystal mine & balloon.
 
 
 > Latest 27 October: road-surface-fit repair completed (row 31h supersedes earlier WIP notes above). Meadow dock safety increment completed on area/meadow-dock-safety: matching rounded rails/supports, 480 movement steps, dry center access; full 2015 + 2, view32 Film day/night. Overall meadow task65 remains WIP. Next isolated queue item: Episode12 coverage diagnosis (66).
+
 
 
 

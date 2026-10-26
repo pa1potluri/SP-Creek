@@ -15,3 +15,8 @@
 ## Exact handoff
 Suite recorded and all changes saved. Next functional priorities remain top Gameplay/Free Camera + simple side places (68), full actor clearance (64), Kite Day facing (65), Episode 12 coverage (66). Task 63 top style bar is implemented with preference retention, but final all-mode UX acceptance is unfinished. Prior atmosphere/forest/picnic and hero fit/persistence work stays open.
 
+
+## 27 October timber continuation — WIP
+Current branch area/crystal-timber-refresh, stacked from verified Episode12 correction 38b7332. First implementation: three rounded timber support frames inside/at the existing passage, with matching post colliders and overhead braces. Existing bright lining, rock surround, rails/cart and balloon mechanics retained. This is only a first structural increment, not the completed reference target.
+Light check: local page and Episode12 diagnostic still load/run. No full suite or mine-specific day/night captures yet for this increment, so NOT done.
+Left: inspect current shots28/33 and actual passage clearance; integrate timber entrance/sign/rock surround, group crystals and cart contents, refine warm lantern presentation, assess ascent/platform and coordinate Balloon Hill91. Keep route/ride safety and saved IDs. Full suite plus affected Film day/night required before done. Exact stop: frames added in buildCrystalMine after ceiling registration; no further mine geometry edited.

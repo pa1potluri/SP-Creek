@@ -39,7 +39,7 @@ export function buildCrystalMine(world) {
   function group(x,h,z,parent=root){const g=new THREE.Group();g.position.set(x,h,z);parent.add(g);return g;}
   function rect(cx,cz,hx,hz){world.colliders.rects.push({cx,cz,ax:1,az:0,bx:0,bz:1,hx,hz});}
   function crystal(x,h,z,scale=1){for(let i=0;i<4;i++){const a=i*2.4,height=(0.7+i*0.22)*scale;const profile=[[0,0],[.15*scale,0],[.23*scale,.1*scale],[.19*scale,height-.15*scale],[.1*scale,height-.03*scale],[0,height]].map(([r,h])=>new THREE.Vector2(r,h));solid(new THREE.LatheGeometry(profile,6),crystalMats[i],x+Math.cos(a)*0.28*scale,h,z+Math.sin(a)*0.28*scale,root,[0.08*Math.sin(a),0,0.12*Math.cos(a)]);}clusters.push([x,z]);if(scale>=0.55){const glow=new THREE.Sprite(glowMats[clusters.length%4]);glow.position.set(x,h+0.5*scale,z);glow.scale.setScalar(2.2*scale);root.add(glow);glows.push(glow);}}
-  // A rounded, bright grotto rather than a square room with oversized brick textures.
+  // Keep a bright, clear passage behind the timber entrance supports.
   box(6.6,0.12,8.3,mat('#d4ceba'),173,y+0.03,-116);
   const shellPos=[],shellUV=[],shellIndex=[],archSteps=24;
   for(let j=0;j<=8;j++)for(let i=0;i<=archSteps;i++){const a=i/archSteps*Math.PI; shellPos.push(173+Math.cos(a)*3.2,y+0.18+Math.sin(a)*4.05,-111.8-j*1.03);shellUV.push(i/archSteps*2,j/4);}
@@ -49,6 +49,15 @@ export function buildCrystalMine(world) {
   ball(1,stone,173,y+2,-120,root,[3.2,2.15,.35]);
   rect(169.8,-116,0.23,4.2);rect(176.2,-116,0.23,4.2);rect(173,-120,3.4,0.23);
   world.ceilings.push({cx:173,cz:-116,ax:1,az:0,bx:0,bz:1,hx:3.4,hz:4.2,y:y+4.05});
+  const timber=mat('#b68b5e');
+  for(const z of [-111.5,-115,-118.5]){
+    for(const x of [170,176]){
+      solid(new THREE.CapsuleGeometry(.18,3.2,3,8),timber,x,y+1.78,z);
+      rect(x,z,.18,.22);
+    }
+    solid(new THREE.CapsuleGeometry(.2,6,3,8),timber,173,y+3.55,z,root,[0,0,Math.PI/2]);
+    for(const side of [-1,1])solid(new THREE.CapsuleGeometry(.11,.9,3,8),timber,173+side*2.65,y+3.16,z,root,[0,0,side*Math.PI/4]);
+  }
   for(let i=0;i<11;i++){const a=i*Math.PI/10,r=.72+(i%3)*.08,x=173+Math.cos(a)*3.75,h=y+.45+Math.sin(a)*4.1;ball(r,rockMats[i%3],x,h,-111.7,root,[1.15,1,1.25]);if(i%2===0)ball(r*.8,moss,x,h+r*.8,-111.7,root,[1.1,.15,1]);}
   for(const side of [-1,1])for(let i=0;i<4;i++){ball(.8+i*.1,rockMats[i%3],173+side*(3.9+i*.6),y+.35,-112-i*1.5,root,[1.1,.7,1.4]);}
   solid(new THREE.BoxGeometry(4.2,0.65,0.15),new THREE.MeshLambertMaterial({map:signTexture('CRYSTAL MINE',768,192,[38,35,86],'#496467')}),173,y+5.1,-110.4);

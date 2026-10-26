@@ -90,6 +90,7 @@ finished. Re-read this file each time; Claude may change it.
 | 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
 | 76 | `tasks/blocky-style-review.md` | planned | queued user review: Blocky style selection/menu and genuine block-built silhouettes |
 | 77 | `tasks/readability-composition.md` | planned | queued annotated eight-point review: sky/silhouettes, character/railing/framing, panel/top/Build readability |
+| 78 | `tasks/firefly-forest-review.md` | planned | queued seven-point forest review: path/light first, trees/hillside second, fireflies/sky third; retain earlier roots/deer issues |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -128,6 +129,7 @@ meadow & lake, crystal mine & balloon.
 
 
 > User latest: all fixes retained; review only current approved characters. Save UI WIP, make approved residents default, prioritize Crystal Mine refresh, then finish gameplay-first controls and functional collision/Kite/Episode repairs. Atmosphere remains unaccepted; no claim the game is finished.
+
 
 
 

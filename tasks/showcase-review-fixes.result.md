@@ -20,7 +20,8 @@
 ## Checked / status
 - Focused 13 checks passed; actual horse stops for injected solid obstruction; two rowing loops (240 samples) minimum duck/boat distance 3.16765m; natural camera pace, motion/timeline ratio, cafe roof uniforms, palm shadow settings and removed rim checked; zero browser errors.
 - Sixteen watercolour day/night images: world/tests/showcase-review-{37,39,42,34,69,73,80,85}-{day,night}.png. Inspected town characters, Cove above, pond and cafe interior. These are existing views, no camera definitions changed.
-- Initial full 2015 + 2 passed. Final full suite running after extending horse/coach front/rear clearance; final counts pending before completion.
+- Final full suite on the final horse/coach footprint code: 2015 + 2 startup checks passed, all 31 suites, exit 0, browser errors []. Log: world/tests/showcase-review-full.txt.
 - Watercolour appearance/colour and intermittent plant flicker need user/lead visual acceptance. No quantitative proof of every flicker case or every scripted-cast pair. Generic ambient avoidance is not a complete choreography/path-planning engine: preauthored star animations, farm animals and all staged crowd combinations are not exhaustively collision-tested. Keep broader collision acceptance WIP rather than claiming every actor can never overlap.
-- Next: finish final verification and record counts; review collisions in the complete real-time 12-minute loop and any new user observations. Forest root/picnic visual issues and Pavi original-body fit remain separate.
+- Next: review collisions in the complete real-time 12-minute loop, especially scripted cast/farm/crowd combinations; continue atmospheric depth and scene colour acceptance from user observations. Forest root/picnic visual issues and Pavi original-body fit remain separate. Final checkpoint is WIP for these broader acceptance items, not a claim that all visual/game problems are fixed.
 - No pushes, merges or publishing. Working scope saved on area/showcase-review-fixes.
+

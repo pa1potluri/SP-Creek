@@ -2,8 +2,10 @@ import * as THREE from 'three';
 import {decodePoints} from './experiments/point-data.mjs';
 import {makeSolidResident} from './solid-residents.js';
 
-// First rollout is reversible; the ordinary game URL keeps its existing cast.
-export const profilesEnabled=new URLSearchParams(location.search).get('characterFaces')==='pipeline';
+// Approved solid residents are the game cast. The old heads are an internal rollback only.
+const faceMode=new URLSearchParams(location.search).get('characterFaces');
+export const profilesEnabled=faceMode!=='original';
+const heroHeadPreview=faceMode==='pipeline';
 const profiles=new Map(),materials=new Map();let nextResident=0;
 if(profilesEnabled){
  try{
@@ -11,6 +13,7 @@ if(profilesEnabled){
   const manifest=await response.json();
   await Promise.all(manifest.profiles.map(async entry=>{
    if(entry.representation==='solid'){profiles.set(entry.id,{...entry,solid:true});return;}
+   if(!heroHeadPreview)return;
    const response=await fetch(new URL(entry.id+'.bin',base));if(!response.ok)return;
    const buffer=await response.arrayBuffer();if(buffer.byteLength!==entry.count*20)return;
    const data=decodePoints(buffer,{scale:.0042,offset:[0,.25,0]}),colors=new Float32Array(data.count*3),color=new THREE.Color();
@@ -23,6 +26,7 @@ if(profilesEnabled){
 const residentIds=['town-101','town-202','town-303','town-404','town-505','town-606','town-700','town-701','town-702','town-703','town-704','town-705'];
 export function selectCharacterProfile(outfit){
  if(!profilesEnabled||outfit.star==='siri'||outfit.ghost)return null;
+ if(outfit.star==='pavi'&&!heroHeadPreview)return null;
  const id=outfit.star==='pavi'?'pavi':(outfit.pipelineProfile||residentIds[(nextResident++)%residentIds.length]);return profiles.has(id)?id:null;
 }
 export function profileSkin(id){const skin=profiles.get(id)?.skin;return skin?`rgb(${skin.join(',')})`:null;}

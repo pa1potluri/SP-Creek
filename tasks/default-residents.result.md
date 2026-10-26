@@ -1,0 +1,8 @@
+# Default approved residents result
+- The ordinary game URL http://localhost:8811/ now uses the twelve approved v01-derived solid resident faces/hair. No opt-in link needed. Original heads remain an internal explicit rollback only.
+- Default game keeps the user's supplied Pavi and Siri GLB bodies/models, avoiding the temporary code-built Pavi body from the head experiment. Pavi's frozen pipeline source was identical to the approved original hero source; no new Siri profile was supplied. Full hero-rig integration remains separate WIP.
+- Public local showcase landing links now use this same default cast, without forcing the experimental hero-head/body path. One current game URL for review; no old-version links sent.
+- Removed obsolete missing lady/horse cutout requests; added explicit empty favicon. Fresh health check: game, playing showcase and character preview HTTP 200, no console/resource/page errors, no lost graphics contexts. Latest readiness 8.777s / 8.359s / .238s respectively (local samples).
+- Focused default-cast check: 18 visible residents all solid; supplied Pavi/Siri model bodies present; zero unused pipeline hero point downloads; audio locked. Default-residents-check.json. Film day/night pictures default-residents-day.png and -night.png, loading overlay cleared.
+- Full suite: 2015 + 2 startup checks passed, 31 suites, exit 0, Browser errors []. Default-residents-full.txt. This also covers the current toolbar code's baseline compatibility; complete mode/navigation usability work stays in tasks 63/68.
+- No app assets deleted; no push/merge/publish. Original user character files untouched. Current resident increment complete; broader task 52 persistence/hero work remains open.

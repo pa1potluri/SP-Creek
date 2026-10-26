@@ -163,21 +163,6 @@ function resize(fw, fh) {
 }
 addEventListener('resize', () => { if (!exporting) resize(); });
 
-// Painted cut-outs (transparent PNGs from ChatGPT) in assets/cutouts/ stand around the cafe.
-const CUTOUTS = [
-  { file: 'lady', x: 6.4, z: 13.2, h: 1.72 },
-  { file: 'horse', x: 2.6, z: 13.8, h: 2.2 },
-];
-for (const c of CUTOUTS) {
-  const img = new Image();
-  img.onload = () => {
-    const tex = T.imageTexture(img);
-    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping; // no bleeding at the transparent edges
-    world.placeCutout(tex, img.width / img.height, c.x, c.z, c.h);
-  };
-  img.src = `assets/cutouts/${c.file}.png`; // missing files are simply skipped
-}
-
 // ---------- saved state ----------
 world.loadLayout(LS.get('dh.layout') || []);
 for (const [pos, look] of LS.get('dh.keys') || []) director.custom.push({ pos: new THREE.Vector3(...pos), look: new THREE.Vector3(...look) });

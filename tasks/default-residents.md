@@ -6,3 +6,6 @@ is identical to the existing approved hero, so do not force temporary block-body
 Keep original heads only as internal rollback. Scope character-profiles.js, showcase landing links,
 preview return links, obsolete absent cutout requests in main.js, focused tests/captures and metadata.
 Full suite/day-night verification required; do not claim hero-rig WIP is solved.
+
+Scope also includes index.html only for an explicit empty favicon, avoiding the browser's implicit missing favicon request (no new asset).
+

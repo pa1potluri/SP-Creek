@@ -1,55 +1,30 @@
 {
-  "checkedAt": "2026-10-26T11:10:35.152Z",
+  "checkedAt": "2026-10-26T11:41:45.293Z",
   "pages": [
     {
       "url": "/",
       "status": 200,
-      "readyMs": 18035,
+      "readyMs": 8777,
       "contextLost": false,
       "audioLocked": true,
       "showcasePlaying": null,
-      "errors": [
-        "Failed to load resource: the server responded with a status of 404 (File not found)",
-        "Failed to load resource: the server responded with a status of 404 (File not found)",
-        "Failed to load resource: the server responded with a status of 404 (File not found)"
-      ],
-      "failed": [
-        {
-          "url": "http://localhost:8811/assets/cutouts/lady.png",
-          "status": 404
-        },
-        {
-          "url": "http://localhost:8811/assets/cutouts/horse.png",
-          "status": 404
-        }
-      ]
+      "errors": [],
+      "failed": []
     },
     {
       "url": "/?showcase&showcaseStyle=watercolor&characterFaces=pipeline",
       "status": 200,
-      "readyMs": 11083,
+      "readyMs": 8359,
       "contextLost": false,
       "audioLocked": true,
       "showcasePlaying": true,
-      "errors": [
-        "Failed to load resource: the server responded with a status of 404 (File not found)",
-        "Failed to load resource: the server responded with a status of 404 (File not found)"
-      ],
-      "failed": [
-        {
-          "url": "http://localhost:8811/assets/cutouts/lady.png",
-          "status": 404
-        },
-        {
-          "url": "http://localhost:8811/assets/cutouts/horse.png",
-          "status": 404
-        }
-      ]
+      "errors": [],
+      "failed": []
     },
     {
       "url": "/character-pipeline-test.html",
       "status": 200,
-      "readyMs": 2854,
+      "readyMs": 238,
       "contextLost": false,
       "audioLocked": true,
       "showcasePlaying": null,

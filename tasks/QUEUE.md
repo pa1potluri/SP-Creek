@@ -73,7 +73,7 @@ finished. Re-read this file each time; Claude may change it.
 | 58 | `tasks/GAME-HEALTH-REVIEW.md` | `area/game-health-review` | review complete; eight fresh views, no runtime errors; prioritized unfinished visuals and character rollout recorded; repairs remain open |
 | 59 | `tasks/train-shore-fixes.md` | `area/train-shore-fixes` | done, awaiting review; platform/junction overlaps separated; Cove mountain band removed; 12 day/night previews, 600 train motion steps; full 2015 + 2 passed |
 | 60 | `tasks/showcase-review-fixes.md` | `area/showcase-review-fixes` | WIP review repairs; natural pace + slower showcase motion, soft Watercolour, cafe snow exclusion, billboard shadow/depth repair, ambient solid avoidance and duck clearance; 13 focused checks + 16 previews; final full 2015 + 2 passed; broad scripted-cast collision and atmosphere/colour acceptance still open |
-| 61 | `tasks/server-health.md` | `area/server-health` | check complete; server/watchdog working; no JS crashes/context loss; two obsolete cut-out 404 requests found, repair pending; startup 18s game / 11s showcase / 3s character preview |
+| 61 | `tasks/server-health.md` | `area/server-health` | check complete; missing cut-out/favicon requests fixed in task 69; fresh game/showcase/character checks clean; latest 8.8s / 8.4s / 0.24s local readiness |
 | 62 | `tasks/build-transforms.md` | `area/build-transforms` | done, awaiting review; visible rotate/size controls for all 43 catalogue items and selected buildings; focused 135 + full 2015 + 2 passed; Film day/night saved |
 | 63 | `tasks/style-lock.md` | `area/style-lock` (next) | WIP; retention verified 7 styles x 48 locations; persistent top style pills implemented; final all-mode toolbar/full verification pending; see task 68 for expanded navigation |
 | 64 | `tasks/actor-clearance.md` | `area/actor-clearance` (planned) | queued functional priority; finish broad actor-to-actor/prop clearance from task 60, including scripted crowds and market |
@@ -81,7 +81,7 @@ finished. Re-read this file each time; Claude may change it.
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-review` (planned) | queued; user reports only waterfall; inspect preset/view activation and repair coverage |
 | 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | queued user priority; current mine appearance rejected; inspect and rebuild friendly coherent grotto |
 | 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` (planned) | queued; top Gameplay/Free Camera, persistent styles, simple side places; videos/episodes secondary |
-| 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | queued immediate current-version fix; approved solid residents default, no old-version review links |
+| 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | done, awaiting review; ordinary URL uses approved solid residents; supplied hero bodies retained; full 2015 + 2; day/night and clean server checks saved |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -120,4 +120,5 @@ meadow & lake, crystal mine & balloon.
 
 
 > User latest: all fixes retained; review only current approved characters. Save UI WIP, make approved residents default, prioritize Crystal Mine refresh, then finish gameplay-first controls and functional collision/Kite/Episode repairs. Atmosphere remains unaccepted; no claim the game is finished.
+
 

@@ -85,8 +85,13 @@ export async function buildMeadowLake(world) {
   for(let i=0;i<12;i++){const a=i*2.399,x=lake.x+Math.cos(a)*(3+i%4),z=lake.z+Math.sin(a)*4;solid(new THREE.CircleGeometry(0.3,20,0.1,Math.PI*1.85),moss,x,lake.y+0.035,z,root,[-Math.PI/2,0,i]);}
   const fallMat=new THREE.MeshPhongMaterial({map:world.waterShared.map.clone(),color:'#d6eeef',emissive:'#769fa8',emissiveIntensity:0.18,transparent:true,opacity:0.8,side:THREE.DoubleSide,shininess:45});
   const fallPoints=[v(-256,y+9,-23),v(-253,y+6.3,-23),v(-250,y+3.5,-23),v(-247,lake.y+0.1,-23)];
-  for(let i=0;i<3;i++){ball(3.3,stone,-259+i*3,y+2.2+i*-0.4,-23,root,[1,2.1-i*0.45,1.1]);ball(2,moss,-260+i*3,y+7.2-i*2.5,-23,root,[1.3,0.25,1.5]);box(4,0.25,3.6,moss,-258+i*3,y+8.8-i*2.75,-23);const a=fallPoints[i],b=fallPoints[i+1],g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute([a.x,a.y,a.z-1.4,a.x,a.y,a.z+1.4,b.x,b.y,b.z-1.7,b.x,b.y,b.z+1.7],3));g.setAttribute('uv',new THREE.Float32BufferAttribute([0,0,1,0,0,1,1,1],2));g.setIndex([0,2,1,1,2,3]);g.computeVertexNormals();const mesh=new THREE.Mesh(g,fallMat);root.add(mesh);}
-  const foamMat=new THREE.MeshLambertMaterial({color:'#eff9ed',transparent:true,opacity:0.5,side:THREE.DoubleSide});const foam=new THREE.Mesh(new THREE.RingGeometry(1.2,2.2,40),foamMat);foam.rotation.x=-Math.PI/2;foam.position.set(-247,lake.y+0.05,-23);root.add(foam);
+  for(let i=0;i<3;i++){ball(3.3,stone,-259+i*3,y+2.2+i*-0.4,-23,root,[1,2.1-i*0.45,1.1]);ball(2,moss,-260+i*3,y+7.2-i*2.5,-23,root,[1.3,0.25,1.5]);box(4,0.25,3.6,moss,-258+i*3,y+8.8-i*2.75,-23);}
+  // One continuous ribbon keeps the original anchors without straight strip seams.
+  const fallCurve=new THREE.CatmullRomCurve3(fallPoints,false,'centripetal'),fp=[],fu=[],fc=[],fi=[];
+  for(let i=0;i<=48;i++){const u=i/48,p=fallCurve.getPointAt(u),width=1.4+.3*u;for(let j=0;j<=8;j++){const s=j/8;fp.push(p.x,p.y,p.z+(s*2-1)*width);fu.push(s,u*3);fc.push(1,1,1,smoothstep(0,.15,s)*(1-smoothstep(.85,1,s)));if(i&&j){const a=(i-1)*9+j-1,b=i*9+j-1;fi.push(a,b,a+1,a+1,b,b+1);}}}
+  const fallGeo=new THREE.BufferGeometry();fallGeo.setAttribute('position',new THREE.Float32BufferAttribute(fp,3));fallGeo.setAttribute('uv',new THREE.Float32BufferAttribute(fu,2));fallGeo.setAttribute('color',new THREE.Float32BufferAttribute(fc,4));fallGeo.setIndex(fi);fallGeo.computeVertexNormals();fallMat.vertexColors=true;fallMat.depthWrite=false;const fallMesh=new THREE.Mesh(fallGeo,fallMat);fallMesh.name='Continuous meadow waterfall';root.add(fallMesh);
+  const foamGeo=new THREE.RingGeometry(.55,.82,48,2),foamColours=[];for(let i=0;i<foamGeo.attributes.position.count;i++){const p=foamGeo.attributes.position,r=Math.hypot(p.getX(i),p.getY(i));foamColours.push(1,1,1,Math.max(0,Math.sin((r-.55)/.27*Math.PI)));}foamGeo.setAttribute('color',new THREE.Float32BufferAttribute(foamColours,4));
+  const foamRings=Array.from({length:3},(_,i)=>{const mat=new THREE.MeshLambertMaterial({color:'#eff9ed',vertexColors:true,transparent:true,opacity:.4,side:THREE.DoubleSide,depthWrite:false}),ring=new THREE.Mesh(foamGeo,mat);ring.rotation.x=-Math.PI/2;ring.position.set(-247,lake.y+.055+i*.002,-23);root.add(ring);return ring;});
   const rainbows=[];['#e9a4af','#ecc49a','#eee0a0','#c4dfad','#aad6d6','#b6bde5','#d4b4dc'].forEach((color,i)=>{const mat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.18,side:THREE.DoubleSide,depthWrite:false});const arc=new THREE.Mesh(new THREE.RingGeometry(3.4+i*0.1,3.49+i*0.1,48,1,0,Math.PI),mat);arc.rotation.y=Math.PI/2;arc.position.set(-247,y+0.8,-23);root.add(arc);rainbows.push(arc);});
   const sprayPos=new Float32Array(70*3),sprayGeo=new THREE.BufferGeometry();sprayGeo.setAttribute('position',new THREE.BufferAttribute(sprayPos,3));const spray=new THREE.Points(sprayGeo,new THREE.PointsMaterial({color:'#f0fbf3',size:0.16,transparent:true,opacity:0.45,depthWrite:false}));spray.frustumCulled=false;root.add(spray);
   let sparkRevision=-1;const sparkHeights=new Float64Array(80);
@@ -116,10 +121,10 @@ export async function buildMeadowLake(world) {
     for(let i=0;i<40;i++){const a=i*2.399;fliesPos.set([lake.x+Math.sin(a)*10+Math.sin(t*0.2+i)*0.4,lake.y+0.7+(i%4)*0.5+Math.sin(t*0.5+i)*0.25,lake.z+Math.cos(a)*7+Math.cos(t*0.2+i)*0.4],i*3);}fliesGeo.attributes.position.needsUpdate=true;
     crowd.forEach((p,i)=>{animatePerson(p,t*0.6+i,0);gesture(p,i%2?'listen':'talk',((t+i*2)%18)/18,t);});
   }};
-  return {root,pad,lake,water,plants,ducks,rabbits,rainbows,festival,outing,update(t,camera,atmos,key){
+  return {root,pad,lake,water,waterfall:{mesh:fallMesh,material:fallMat,foamRings},plants,ducks,rabbits,rainbows,festival,outing,update(t,camera,atmos,key){
     festival.update(t,camera,atmos);
     const flat=world.textureSet==='flat';plants.forEach(p=>p.visible=!flat);fallback.forEach(p=>p.visible=flat);
-    fallMat.map.offset.y=-t*0.12;fallMat.color.copy(world.waterUniforms.uWaterHorizon.value).lerp(new THREE.Color('#cce4df'),0.55);foamMat.color.copy(world.waterUniforms.uWaterFoamColor.value);foam.scale.setScalar(1+Math.sin(t*0.7)*0.06);
+    fallMat.map.offset.y=-t*0.12;fallMat.color.copy(world.waterUniforms.uWaterHorizon.value).lerp(new THREE.Color('#cce4df'),0.55);foamRings.forEach((ring,i)=>{const u=((t*.32+i/3)%1+1)%1;ring.scale.setScalar(.35+u*1.1);ring.material.color.copy(world.waterUniforms.uWaterFoamColor.value);ring.material.opacity=.4*(1-u)*(1-u);});
     rainbows.forEach(a=>a.material.opacity=(key==='golden'||key==='morning')?0.19:0);
     for(let i=0;i<70;i++){const phase=(t*0.3+i/70)%1;sprayPos[i*3]=-247+Math.sin(i*2.4)*phase*2;sprayPos[i*3+1]=lake.y+Math.sin(phase*Math.PI)*1.4;sprayPos[i*3+2]=-23+Math.cos(i*2.4)*phase*2;}sprayGeo.attributes.position.needsUpdate=true;
     if(sparkRevision!==world.terrainRevision){for(let i=0;i<80;i++){const x=MEADOW.x+Math.sin(i*2.399)*((i%7)+1)*4,z=Math.cos(i*2.399)*((i%6)+1)*3;sparkPos[i*3]=x;sparkPos[i*3+2]=z;sparkHeights[i]=terrainHeight(x,z);}sparkRevision=world.terrainRevision;}
@@ -131,6 +136,7 @@ export async function buildMeadowLake(world) {
     dragonflies.forEach((g,i)=>g.position.set(lake.x+Math.sin(t*0.4+i)*10,lake.y+1+Math.sin(t*0.8+i)*0.3,lake.z+Math.cos(t*0.3+i)*7));
   }};
 }
+
 
 
 

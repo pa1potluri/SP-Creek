@@ -19,3 +19,5 @@ Branch area/kite-facing, stacked after verified menu-spacing 3d769ad.
 
 ## Verified checkpoint — 27 October
 Full 31 suites passed: 2015 + 2 startup reload checks, no browser errors (kite-facing-full.txt). Directional regression passes all 80 samples; 68 targeted legacy checks passed. Four authored views have Film day/night captures and the Watercolour comparison is saved. Task stays WIP for the expanded P2/P3 and weather-reproduction items above. Next implementation step: inspect the raised visual festival platform against walkHeight, then blend its ground/path transitions without adding invisible collision edges. No further code changes after these checks.
+
+Platform/path continuation: visual disc removed in favour of actual meadow ground; feet reduced from 0.98m to walkHeight + 0.04m, two trail links, locally cleared flower corridors. 84 route samples unobstructed; 80 facing samples still correct; full 2015 + 2 passed. See kite-platform.result.md and kite-platform-full.txt. Expanded festival remains WIP for water/depth/material/weather items.

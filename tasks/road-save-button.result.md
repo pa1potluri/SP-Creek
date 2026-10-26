@@ -1,2 +1,4 @@
 # Save road control result — WIP checkpoint
 Renamed ambiguous Finish to a prominent green Save road (Enter), and Save fence; hints explain saving. Reuses original finish/save handlers and preserves Enter/double-click. Existing 12 road input/keyboard/save-reload checks pass; current Film day/night captures copied to road-save-button-day.png / -night.png. Full regression pending; remain WIP until verified with the next descendant full run. No new data format or duplicate save state.
+
+Final inherited verification: descendant area/kite-platform full 31 suites passed 2015 + 2, no browser errors; 12 road persistence checks already passed and explicit Save road label confirmed in platform diagnostic. Status: done explicit save-control increment, awaiting review. Current road-save-button Film day/night captures show the prominent controls. No new save format.

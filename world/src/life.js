@@ -670,7 +670,7 @@ let gardenCameraReader=()=>null;
 let snowDayCameraReader=()=>null;
 let meadowOutingCameraReader=()=>null;
 export function setMeadowOutingCameraReader(reader){meadowOutingCameraReader=reader;}
-export function meadowOutingFocus(kind){const p=MEADOW_OUTING[kind];return V(p.x,terrainHeight(p.x,p.z)+(kind==='kite'?.98:.12),p.z);}
+export function meadowOutingFocus(kind){const p=MEADOW_OUTING[kind];return V(p.x,terrainHeight(p.x,p.z)+(kind==='kite'?0.04:0.12),p.z);}
 export function setSnowDayCameraReader(reader){snowDayCameraReader=reader;}
 export function snowDayFocus(kind){if(kind==='cocoa')return rainyFocus('window');const p=SNOW_DAY[kind];return {pos:V(p.x,walkHeight(p.x,p.z),p.z),yaw:0};}
 export function setGardenCameraReader(reader){gardenCameraReader=reader;}
@@ -955,10 +955,10 @@ export class Life {
     this.outingFriends??=[CAST.teacher,CAST.rancher,CAST.kid].map(o=>{const p=makeCharacter(o);this.scene.add(p.g);return p;});
     for(const [i,p]of Object.values(this.stars).entries()){
       seat(p,false,0);animatePerson(p,t*.65,0);p.g.visible=true;p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);p.g.position.copy(f).add(V((i?1:-1)*1.3,0,kind==='kite'?0:1.15));
-      if(kind==='kite'){faceKite(p,i?3:1);pointCharacterArm(p,i?1:0,f.clone().add(V((i?1:-1)*1.3,1.27,0)));p.elbows[i?1:0].rotation.x=-.25;}
+      if(kind==='kite'){p.g.position.y=walkHeight(p.g.position.x,p.g.position.z)+.04;faceKite(p,i?3:1);pointCharacterArm(p,i?1:0,f.clone().add(V((i?1:-1)*1.3,1.27,0)));p.elbows[i?1:0].rotation.x=-.25;}
       else{p.arms.forEach((arm,j)=>arm.rotation.x=-.5+Math.sin(t*.45+j)*.08);p.elbows.forEach(elbow=>elbow.rotation.x=-.8);}
     }
-    this.outingFriends.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f).add(V((i-1)*2.6,0,kind==='kite'?1.1:-2.0));p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);animatePerson(p,t*.4+i,0);if(kind==='kite'){faceKite(p,i*2);pointCharacterArm(p,0,area.groups.kite.localToWorld(V((i*2-2)*1.3,2.25,0)));}});
+    this.outingFriends.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f).add(V((i-1)*2.6,0,kind==='kite'?1.1:-2.0));p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);animatePerson(p,t*.4+i,0);if(kind==='kite'){p.g.position.y=walkHeight(p.g.position.x,p.g.position.z)+.04;faceKite(p,i*2);pointCharacterArm(p,0,area.groups.kite.localToWorld(V((i*2-2)*1.3,1.31,0)));}});
   }
 
   updateSnowDay(time){
@@ -1223,6 +1223,7 @@ export function posePlaygroundChild(p,kind,t){
   if(kind==='dig'){p.upper.rotation.x=0.25;for(let i=0;i<2;i++){p.arms[i].rotation.x=-0.9+Math.sin(t*0.8+i)*0.15;p.elbows[i].rotation.x=-0.65;}for(const knee of p.knees||[])knee.rotation.x=0.9;}
   return kind==='slide'?0.72*sit:0;
 }
+
 
 
 

@@ -78,7 +78,7 @@ finished. Re-read this file each time; Claude may change it.
 | 62 | `tasks/build-transforms.md` | `area/build-transforms` | done, awaiting review; visible rotate/size controls for all 43 catalogue items and selected buildings; focused 135 + full 2015 + 2 passed; Film day/night saved |
 | 63 | `tasks/style-lock.md` | `area/style-lock`, completed on `area/gameplay-navigation` | done functionality, awaiting review; seven styles retained across 48 presets and 36 showcase scenes; reload verified; full 2015 + 2 and Film day/night |
 | 64 | `tasks/actor-clearance.md` | `area/actor-clearance`, resumed on `area/actor-clearance-resume` | WIP: swept horse/coach checks, broader visible crowd/coach/grazer obstacles; 6 focused checks + full 2015 + 2 passed; Film day/night; scripted scene routes still open |
-| 65 | `tasks/kite-facing.md` | `area/kite-facing` | WIP facing/visibility repaired: 80 samples, 68 existing checks, four Film day/night views; full 2015 + 2 passed; platform/paths/water/flowers/weather diagnosis remain |
+| 65 | `tasks/kite-facing.md` | `area/kite-facing` | WIP facing/visibility repaired: 80 samples, 68 existing checks, four Film day/night views; full 2015 + 2 passed; ground-level clearing/path links verified in area/kite-platform; water/depth/material/weather remain WIP |
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-review` (planned) | queued; user reports only waterfall; inspect preset/view activation and repair coverage |
 | 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | WIP first refresh; rounded cave/rock treatment, softer crystals, cart moved off entry; four Film day/night captures; full 2015 + 2 passed; organic art/visual acceptance remains open |
 | 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` | done interface increment, awaiting review; 30 navigation + 13 road/wheel + 254 showcase checks; full 2015 + 2; Film day/night; new feedback tracked 72–76 |
@@ -100,12 +100,13 @@ finished. Re-read this file each time; Claude may change it.
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
 | 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
 | 86 | `tasks/create-layout.md` | `area/create-layout` | superseded by lead task 31a kids-ui; prototype retained in history, not a second public menu |
-| 31g | `tasks/road-save-button.md` | `area/road-save-button` | WIP explicit green Save road/Save fence, 12 persistence checks pass; full regression pending |
+| 31g | `tasks/road-save-button.md` | `area/road-save-button` | done explicit green Save road/Save fence; 12 persistence checks + descendant full 2015 + 2 pass |
 | 31f | `tasks/menu-spacing.result.md` | `area/menu-spacing` | done spacing: welcome clear of logo, Free camera/art bar 56px; full 2015 + 2 and Film day/night verified 27 October |
 | 31e | `tasks/kids-ui-icons.md` | `area/kids-ui-icons` | done all 13 icons loaded/visible; category clipping fixed; full 2015 + 2 and desktop/tablet/Film day-night captures |
 | 31d | `tasks/home-menu-layout.md` | `area/home-menu-layout` | done remove duplicate welcome/action card, greeting top-left; 27 focused + full 2015 + 2; top Create/Play/Watch/Free camera retained |
 | 31c | `tasks/freecam-access.md` | `area/freecam-access` | done restore original Free camera beside style strip; 24 focused + full 2015 + 2 passed; wide/tablet/day-night captures |
 | 31b | `tasks/kids-ui-art.result.md` | `area/kids-ui-art` | WIP supplied 13 icons registered; 21 checks/tab captures pass; opaque baked checkerboard needs transparent exports; avatar/pieces still fallbacks |
+| 87 | `tasks/pond-duck-interaction.md` | planned | queued pond reference: safe idle/swim, real-click turn/quack/flap, ripples, smooth resume, pond/dock clearance |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -186,6 +187,7 @@ meadow & lake, crystal mine & balloon.
 
 
 > 26 October low-usage checkpoint: user reports 10% remaining. All implementation saved; large queue work is WIP/stopped at a safe point. Only incoming small corrections until further direction. Exact branch, completed checks, unfinished work and resume steps: tasks/SESSION-HANDOFF.md. Never push/merge/publish.
+
 
 
 

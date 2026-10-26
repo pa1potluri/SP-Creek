@@ -696,6 +696,7 @@ export class World {
     this.colliders.circles.push({ x, z, r: 0.15 });
     g.add(mesh(mergeGeometries([boxAt(0.14, 3.1, 0.14, 0, 1.55, 0), boxAt(0.7, 0.07, 0.07, dir * 0.3, 3.0, 0)]), this.mat.darkWood));
     const lamp = mesh(new THREE.BoxGeometry(0.26, 0.38, 0.26), this.mat.lantern, false);
+    lamp.receiveShadow = false; // A glowing shade should not carry crawling self-shadow edges.
     lamp.position.set(dir * 0.6, 2.72, 0);
     g.add(lamp);
     const halo = new THREE.Sprite(this.haloMat);

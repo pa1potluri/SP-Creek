@@ -193,7 +193,9 @@ function makeCoachCar(colour) {
   const g = new THREE.Group(), wheels = [];
   const body=mat(colour),trim=mat([35,30,45]);body.emissive.set('#6d4d30');body.emissiveIntensity=0.12;trim.emissive.set('#f4d99b');trim.emissiveIntensity=0.12;
   part(new THREE.BoxGeometry(2.7,0.15,9),body,0,1.1,0,g);
-  for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,0.85,3.7),body,x,1.55,z,g);part(new THREE.BoxGeometry(0.12,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.12,1.25,0.12),trim,x,2.65,z,g);}
+  // Trim stands proud of the end walls, and posts meet rather than overlap the header.
+  // Coplanar corner faces previously alternated between wall and trim as the camera moved.
+  for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,0.85,3.7),body,x,1.55,z,g);part(new THREE.BoxGeometry(0.16,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.16,1.18,0.18),trim,x,2.57,z,g);}
   for(const z of [-4.4,4.4])part(new THREE.BoxGeometry(2.7,2.2,0.12),body,0,2.25,z,g);
   for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(2,0.3,0.8),mat([35,40,50]),0,1.5,z,g);
   const boardingSteps=new THREE.Group();g.add(boardingSteps);for(let i=0;i<5;i++)part(new THREE.BoxGeometry(0.6,0.14,1.5),trim,-3.9+i*0.55,-0.17+i*0.3,0,boardingSteps);

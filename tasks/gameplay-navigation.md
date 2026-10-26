@@ -11,3 +11,6 @@ User screenshot clarification: fullscreen/play-pause/menu belong at the top-righ
 
 User screenshot: move Brush & Finish out of permanent right-side panel into a compact popover below the persistent art-style bar. Open from a clear style-adjustments control; click outside (and Escape) hides it automatically. Keep original sliders/values and style-specific options, avoid blocking the main world/panel. Preserve all earlier requests.
 
+
+Latest annotated layout: top mode cluster includes Auto director, Free camera (on/off) and Pause. Separate fullscreen/play-pause/menu cluster stays on game picture side of panel boundary. All must stay accessible without scrolling; opening panel must not place these over sliders. Gameplay toggle also retained from earlier request.
+

@@ -997,10 +997,10 @@ export class Life {
 
   updateMarket(time){
     const market=this.world.market,state=marketCameraReader(),active=!!this.world.marketDay&&!gardenCameraReader()&&!rowingCameraReader()&&!rainyCameraReader()&&!momentCameraReader()&&!balloonRideState()&&!trainTripReader()&&(!!state||this.marketNear);
-    if(!active){if(this.marketProps){this.marketProps.balloon.visible=this.marketProps.bun.visible=false;this.marketProps.balloon.removeFromParent();}return;}if(!market)return;
+    if(!active){if(this.marketProps){this.marketProps.balloon.visible=this.marketProps.bun.visible=false;this.marketProps.shoppers.forEach(p=>p.g.visible=false);this.marketProps.balloon.removeFromParent();}return;}if(!market)return;
     if(!this.marketProps){const balloon=new THREE.Group();balloon.name='Pavi market balloon';const mat=new THREE.MeshLambertMaterial({color:'#e5b1c3',emissive:'#e5b1c3',emissiveIntensity:0.08}),top=new THREE.Mesh(new THREE.SphereGeometry(0.2,14,10),mat);top.scale.y=1.25;top.position.y=1.95;balloon.add(top);const string=new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,1,5),new THREE.MeshLambertMaterial({color:'#e5dbc4'}));string.position.y=1.2;balloon.add(string);balloon.position.x=-0.35;this.stars.pavi.g.add(balloon);const bun=new THREE.Mesh(new THREE.CapsuleGeometry(0.12,0.12,4,12),new THREE.MeshLambertMaterial({color:'#d9b57c'}));bun.rotation.z=Math.PI/2;this.world.root.add(bun);const shoppers=Array.from({length:6},(_,i)=>{const p=makeCharacter(randomTownsfolk(i%2?'townswoman':'shopkeeper'));market.root.add(p.g);return p;});this.marketProps={balloon,bun,shoppers};}
     const props=this.marketProps,t=state?.t??time,kind=state?.kind||'wide',focus=marketFocus(kind),phase=(Math.sin(t*0.025)+1)/2;
-    props.shoppers.forEach((p,i)=>{const stall=market.stalls[i%5].root.position;p.g.position.set(stall.x-2.7+Math.sin(t*0.08+i)*0.35,walkHeight(stall.x-2.7,stall.z+2.2),stall.z+2.2+Math.cos(t*0.06+i)*0.35);p.g.rotation.y=0.5+Math.sin(t*0.04+i)*0.4;animatePerson(p,t*0.7+i,0.12);gesture(p,i%2?'talk':'listen',((t+i*2)%20)/20,t);});
+    props.shoppers.forEach((p,i)=>{const stall=market.stalls[i%5].root.position,x=stall.x+(i>=5?2.7:-2.7)+Math.sin(t*.08+i)*.35,z=stall.z+2.2+Math.cos(t*.06+i)*.35;p.g.visible=true;p.g.position.set(x,walkHeight(x,z),z);p.g.rotation.y=0.5+Math.sin(t*0.04+i)*0.4;animatePerson(p,t*0.7+i,0.12);gesture(p,i%2?'talk':'listen',((t+i*2)%20)/20,t);});
     for(const [i,p]of Object.values(this.stars).entries()){p.g.visible=true;p.g.position.copy(focus);if(kind==='wide'){p.g.position.set(0.9-2.4*phase,walkHeight(0.9-2.4*phase,-27+4*phase),-27+4*phase);p.g.position.z+=(i?0.5:-0.5);}else if(kind==='balloon')p.g.position.z+=(i?0.65:-0.65);else p.g.position.x+=(i?0.55:-0.55);p.g.rotation.y=kind==='bun'?(i?-Math.PI/2:Math.PI/2):kind==='balloon'?Math.PI/2:-0.54;animatePerson(p,t*0.8+i,kind==='wide'?0.25:0);if(kind==='balloon')gesture(p,'wave',0.3+Math.sin(t*0.3)*0.1,t*0.4);}
     if(props.balloon.parent!==this.stars.pavi.g)this.stars.pavi.g.add(props.balloon);props.balloon.visible=true;props.balloon.rotation.z=Math.sin(t*0.35)*0.035;props.bun.visible=kind==='bun';props.bun.position.copy(focus);props.bun.position.y+=0.95;
     if(kind==='bun')for(const [i,p]of Object.values(this.stars).entries()){p.g.updateWorldMatrix(true,true);pointCharacterArm(p,i?0:1,props.bun.position,0.8);p.headPitch=0.12;}
@@ -1222,6 +1222,7 @@ export function posePlaygroundChild(p,kind,t){
   if(kind==='dig'){p.upper.rotation.x=0.25;for(let i=0;i<2;i++){p.arms[i].rotation.x=-0.9+Math.sin(t*0.8+i)*0.15;p.elbows[i].rotation.x=-0.65;}for(const knee of p.knees||[])knee.rotation.x=0.9;}
   return kind==='slide'?0.72*sit:0;
 }
+
 
 
 

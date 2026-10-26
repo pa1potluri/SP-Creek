@@ -16,3 +16,7 @@ Status: WIP on area/actor-clearance, stacked from 459a136. No claim of global co
 - Player/ride collision against moving actors, small animals, boat/duck full audit and staged character spacing require further checks. Existing boat/duck exclusion from task 60 is retained, not universal physics.
 - Latest screenshot feedback/new requests tracked 72–77. Do not mark task 64 done on these six tests alone.
 
+
+## Resume checkpoint after menu
+Runtime reproduction: market shopper pair 0/5 reached 0.079929m separation over 0–238s (2s samples), both assigned the first stall. Changed sixth shopper to the opposite side and sample walkHeight at the actual moving position. The same running-app diagnostic now reports minimum shopper-pair separation 4.981526m. Inactive market shoppers are hidden explicitly and restored when active.
+This is WIP: the diagnostic is not yet an asserting regression, no full suite for this latest life.js change, and broad scripted/player/animal collision work remains open. Driver world/tests/market-spacing.cjs. User supplied UI artwork during this work; save collision change before integrating artwork separately.

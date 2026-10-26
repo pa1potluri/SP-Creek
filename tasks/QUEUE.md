@@ -99,6 +99,7 @@ finished. Re-read this file each time; Claude may change it.
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
 | 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
 | 86 | `tasks/create-layout.md` | `area/create-layout` | WIP reference-based Create catalogue; ten building cards/placement smoke passed, placeholder art; full navigation/preview/edit checks and full suite pending |
+| 87 | `tasks/kids-ui.md` | `area/kids-ui` | WIP authoritative full menu task received; task/reference committed; prototype in parent, six tabs/live preview/64px controls and verification next |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -167,4 +168,7 @@ meadow & lake, crystal mine & balloon.
 > Visual review workflow confirmed: P1 camera/readability, P2 style consistency, P3 materials/lighting, P4 matching-camera/viewport seven-style regression. Reproduce findings in the running app before asset/rendering changes; annotations are observations, not confirmed code defects. Task 85 holds the shared checklist.
 
 
+
+
+> New lead task tasks/kids-ui.md is authoritative for the supplied menu design and supersedes task 86 prototype scope. Continue on area/kids-ui; do not discard earlier correction queue.
 

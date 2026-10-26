@@ -4,5 +4,6 @@
 - Glowing station lamp shades no longer receive crawling self-shadow edges; posts and other station geometry retain shadows.
 - Focused actual raycast confirms corner face z=4.4900000 and wall z=4.45999999, distinct by 3cm. 600 motion steps over five train views, finite cameras, no browser errors, audio locked. Evidence coach-flicker-check.json.
 - Six Film day/night captures coach-flicker-{56,57,58}-{day,night}.png with current approved default residents and supplied Pavi/Siri models.
-- Full suite running. Identified depth conflicts fixed; no quantitative guarantee against every driver/filter aliasing effect. Further user-observed flicker should remain open rather than be dismissed by passing tests.
-- Current stop: save full-suite counts, then navigation task 68 includes ALL latest top-controls/auto-hide popover screenshots; task 65 includes brighter/readable kites and cast facing; earlier collision/episode/atmosphere requests remain queued. No push/merge/publish.
+- Full suite: 2015 + 2 startup checks passed, 31 suites, exit 0, Browser errors []. Identified depth conflicts fixed; no quantitative guarantee against every driver/filter aliasing effect. Further user-observed flicker should remain open rather than be dismissed by passing tests.
+- Verified repair saved; next navigation task 68 includes ALL latest top-controls/auto-hide popover screenshots; task 65 includes brighter/readable kites and cast facing; earlier collision/episode/atmosphere requests remain queued. No push/merge/publish.
+

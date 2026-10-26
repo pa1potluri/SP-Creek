@@ -95,7 +95,7 @@ finished. Re-read this file each time; Claude may change it.
 | 80 | `tasks/town-scene-review.md` | planned | queued town review: camera/road, building edges/landmark, signs/prop spacing/ground texture; preserve approved names |
 | 81 | `tasks/station-town-layout-review.md` | planned | queued eight explicit corrections: framing/routes first, station/layout next, playground/steam/tree/ground last; train bounds/collision gate before scaling |
 | 82 | `tasks/willow-creek-review.md` | planned | queued seven Willow Creek corrections: camera/road, landmark/storefronts, weather/cast/terrain; verify multiple distances and aspect ratios |
-| 83 | `tasks/road-drawing-repair.md` | `area/road-drawing-repair` | WIP immediate recurrence; point markers/count, persistent Finish and save confirmation implemented; real-pointer smoke passes; keyboard/reload/full suite pending |
+| 83 | `tasks/road-drawing-repair.md` | `area/road-drawing-repair` | done verified interaction increment, awaiting retest; 12 focused + full 2015 + 2; markers/Finish/Enter/save-reload pass; Film day/night; original cause unconfirmed |
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
 | 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
@@ -164,3 +164,4 @@ meadow & lake, crystal mine & balloon.
 
 
 > Visual review workflow confirmed: P1 camera/readability, P2 style consistency, P3 materials/lighting, P4 matching-camera/viewport seven-style regression. Reproduce findings in the running app before asset/rendering changes; annotations are observations, not confirmed code defects. Task 85 holds the shared checklist.
+

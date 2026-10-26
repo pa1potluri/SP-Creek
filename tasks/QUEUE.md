@@ -203,3 +203,7 @@ meadow & lake, crystal mine & balloon.
 
 > 27 October user reconfirms: keep every incoming correction recorded and continue implementation without waiting for reviews; user is reviewing additional scenes. No merge/push/publish.
 
+
+> 27 October: Balloon Hill review saved in tasks/balloon-hill-review.md and tasks/ref/balloon-hill-review.png; coordinate with task 67. Saved-road angle popping repair active on area/road-surface-fit; input/save success does not establish surface visibility.
+
+> Active WIP: tasks/road-surface-fit.md on area/road-surface-fit. Four reproduced routes pass clearance diagnostic after repair; full-suite/visual/save-reload acceptance pending. Task 83 input/save completion is separate from this rendering repair.

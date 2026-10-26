@@ -828,9 +828,11 @@ export class World {
   }
 
   // A flat strip draped over the terrain along a smooth path, e.g. a dirt road or a gravel bed.
-  _ribbon(points, width, mat, { lift = 0.06, alpha = null, step = 2 } = {}) {
+  _ribbon(points, width, mat, { lift = 0.06, alpha = null, step = 2, fitGround = false } = {}) {
     const curve = new THREE.CatmullRomCurve3(points.map(([x, z]) => V(x, 0, z)), false, 'centripetal');
-    const n = Math.max(2, Math.ceil(curve.getLength() / step));
+    const n = Math.max(2, Math.ceil(curve.getLength() / (fitGround ? Math.min(step, 0.35) : step)));
+    // Wide two-edge strips cut through terrain crests; saved roads follow its rendered triangles.
+    const across = fitGround ? Math.max(2, Math.ceil(width / 0.35)) : 1, row = across + 1;
     const pos = [], uv = [], col = [], idx = [];
     let along = 0, prev = null;
     for (let i = 0; i <= n; i++) {
@@ -838,13 +840,17 @@ export class World {
       if (prev) along += p.distanceTo(prev);
       prev = p;
       const nx = -t.z, nz = t.x, ends = smoothstep(0, 0.04, i / n) * (1 - smoothstep(0.96, 1, i / n));
-      for (const side of [-1, 1]) {
+      for (let j = 0; j <= across; j++) {
+        const side = j / across * 2 - 1;
         const x = p.x + nx * side * width / 2, z = p.z + nz * side * width / 2;
-        pos.push(x, terrainHeight(x, z) + lift, z);
-        uv.push(side < 0 ? 0 : 1, along / 14);
+        pos.push(x, (fitGround ? this.groundY(x, z) : terrainHeight(x, z)) + lift, z);
+        uv.push(j / across, along / 14);
         col.push(1, 1, 1, ends * (alpha ? alpha(x, z) : 1));
       }
-      if (i) idx.push(i * 2 - 2, i * 2 - 1, i * 2, i * 2 - 1, i * 2 + 1, i * 2);
+      if (i) for (let j = 0; j < across; j++) {
+        const a = (i - 1) * row + j, b = i * row + j;
+        idx.push(a, a + 1, b, a + 1, b + 1, b);
+      }
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
@@ -2093,7 +2099,7 @@ export class World {
     if (points.length < 2) return null;
     this.userRoadMat ??= this._pathMaterial();
     const e = { points: points.map((p) => [...p]), width: Math.max(1, Math.min(14, +width || 5)) };
-    e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1 });
+    e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1, fitGround: true, lift: 0.1 });
     e.order=this._buildOrder(order);this.roads.push(e);
     this.setTextureSet(this.textureSet || 'oil');
     return e;
@@ -2160,7 +2166,7 @@ export class World {
     }
     for (const e of [...this.roads, ...(this.hamlet?.roads || [])]) {
       this.root.remove(e.obj); e.obj.geometry.dispose();
-      e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1 });
+      e.obj = this._ribbon(e.points, e.width, this.userRoadMat, { step: 1, fitGround: true, lift: 0.1 });
     }
     for (const e of this.fences) {
       this.root.remove(e.obj); e.obj.geometry.dispose();

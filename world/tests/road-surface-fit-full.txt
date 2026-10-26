@@ -1,0 +1,31 @@
+area-shots {"passed":7}
+balloon-ride {"passed":20,"maxSpeed":13.28099588237132}
+boat-trip {"passed":22}
+Build checks: 50
+Build checks: 100
+Build checks: 150
+Build checks: 200
+Build checks: 250
+Build checks: 300
+Build checks: 350
+Build checks: 400
+Build checks: 450
+Build checks: 500
+Build checks: 550
+build-mode {"passed":583}
+camping-night {"passed":14}
+clouds-water {"passed":246,"clearedPlants":80,"skyEdgeWorst":5.9875}
+episode-presets-2 {"passed":25}
+episode-presets-3 {"passed":35}
+family-mode {"passed":47}
+Family startup reload checks: 2 passed
+finish-wip {"passed":13,"maxCameraStep":0.108170100919028,"maxActorStep":0.02177174945274094,"minTownsperson":null}
+garden-time-lapse {"passed":42,"maxGardenStep":1.0641399416909678}
+hamlet-shots {"passed":47,"samples":27009,"minGround":6.762669683179624,"minTree":12.35139378822003}
+hamlet {"passed":37}
+kite-picnic {"passed":33}
+lantern-evening {"passed":27}
+market-day {"passed":42,"pianoRange":33.367986154396554}
+More buildings: oil
+More buildings: film
+More buildings: toy

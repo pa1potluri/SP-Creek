@@ -104,7 +104,7 @@ export async function runBuildTests() {
     check(world.roads.length === 2, 'Esc cancels unfinished road');
     click('#undoRoad'); check(world.roads.length === 1, 'Remove last road');
     const road = world.roads[0].obj.geometry.attributes.position;
-    check(Math.abs(road.getY(6) - terrainHeight(road.getX(6), road.getZ(6)) - 0.06) < 1e-4, 'Road follows terrain');
+    check(Math.abs(road.getY(6) - world.groundY(road.getX(6), road.getZ(6)) - 0.1) < 1e-4, 'Road follows rendered terrain');
     key('KeyG');
     check(game.active, 'G enters play mode');
     const rect = shop.additions.rects[0];

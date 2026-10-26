@@ -488,7 +488,7 @@ function previewRoad(cursor) {
   world.userRoadMat ??= world._pathMaterial();
   if (tool === 'fence') {
     const n = world.colliders.segs.length; roadPreview = world._fence(pts, true); world.colliders.segs.splice(n);
-  } else roadPreview = world._ribbon(pts, +$('#roadWidth').value, world.userRoadMat, { lift: 0.12, step: 1 });
+  } else roadPreview = world._ribbon(pts, +$('#roadWidth').value, world.userRoadMat, { lift: 0.12, step: 1, fitGround: true });
   world.setTextureSet(world.textureSet || 'oil');
 }
 function finishRoad() {

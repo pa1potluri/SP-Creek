@@ -233,3 +233,9 @@ body.kids-ui:not(.kids-studio) #modeControls { position:absolute;top:-4px;left:c
 @media(max-width:1100px){.kidsGreeting{font-size:12px}}
 .kidsBrand .kidsLogo { height:64px;min-height:64px;padding:4px 12px;display:flex;align-items:center;justify-content:center; }
 .kidsBrand .kidsLogo img { width:160px;height:48px;max-height:48px;object-fit:contain; }
+/* Keep all six category icons in view at 1280x720, including Style. */
+#kidsCategories { gap:7px; }
+#kidsCategories .kidsCategory { height:64px;min-height:64px;padding:8px 10px;gap:8px; }
+.kidsSubtitle { margin-bottom:10px; }
+@media(max-width:1100px){#kidsCategories .kidsCategory{padding:8px 6px;gap:6px}#kidsCategories .kidsIcon img{width:32px;height:32px}}
+@media(max-width:800px){#kidsCategories .kidsCategory{padding:4px 6px;gap:2px}#kidsCategories .kidsIcon img{width:24px;height:24px}}

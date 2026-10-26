@@ -1,5 +1,7 @@
 # Codex task queue
 
+> **27 October user reorder — quick fixes first:** follow [QUICK-FIX-ORDER.md](QUICK-FIX-ORDER.md) for the new draft execution order Q01–Q32. Historical IDs/status rows below are retained. Terrain72 is saved WIP; next implementation is campsite owl Q01, then station steam Q02. Time estimates exclude mandatory validation and saving; do not tick unverified findings. Safety regressions override cosmetic ordering.
+
 Work top to bottom. When a task is done (result file written, committed), mark it `done` here,
 commit, then start the next one at once on a new branch from the tip of the branch you just
 finished. Re-read this file each time; Claude may change it.

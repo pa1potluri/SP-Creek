@@ -77,7 +77,7 @@ finished. Re-read this file each time; Claude may change it.
 | 61 | `tasks/server-health.md` | `area/server-health` | check complete; missing cut-out/favicon requests fixed in task 69; fresh game/showcase/character checks clean; latest 8.8s / 8.4s / 0.24s local readiness |
 | 62 | `tasks/build-transforms.md` | `area/build-transforms` | done, awaiting review; visible rotate/size controls for all 43 catalogue items and selected buildings; focused 135 + full 2015 + 2 passed; Film day/night saved |
 | 63 | `tasks/style-lock.md` | `area/style-lock`, completed on `area/gameplay-navigation` | done functionality, awaiting review; seven styles retained across 48 presets and 36 showcase scenes; reload verified; full 2015 + 2 and Film day/night |
-| 64 | `tasks/actor-clearance.md` | `area/actor-clearance` | WIP: swept horse/coach checks, broader visible crowd/coach/grazer obstacles; 6 focused checks + full 2015 + 2 passed; Film day/night; scripted scene routes still open |
+| 64 | `tasks/actor-clearance.md` | `area/actor-clearance`, resumed on `area/actor-clearance-resume` | WIP: swept horse/coach checks, broader visible crowd/coach/grazer obstacles; 6 focused checks + full 2015 + 2 passed; Film day/night; scripted scene routes still open |
 | 65 | `tasks/kite-facing.md` | `area/kite-facing` (planned) | queued expanded festival review: facing/visible kites/weather first, platform/path/water continuity next, flowers/depth/cast staging; traversal checks required |
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-review` (planned) | queued; user reports only waterfall; inspect preset/view activation and repair coverage |
 | 67 | `tasks/crystal-refresh.md` | `area/crystal-refresh` (planned) | WIP first refresh; rounded cave/rock treatment, softer crystals, cart moved off entry; four Film day/night captures; full 2015 + 2 passed; organic art/visual acceptance remains open |
@@ -100,6 +100,7 @@ finished. Re-read this file each time; Claude may change it.
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
 | 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
 | 86 | `tasks/create-layout.md` | `area/create-layout` | superseded by lead task 31a kids-ui; prototype retained in history, not a second public menu |
+| 31b | `tasks/kids-ui-art.result.md` | `area/kids-ui-art` | WIP supplied 13 icons registered; 21 checks/tab captures pass; opaque baked checkerboard needs transparent exports; avatar/pieces still fallbacks |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
 
@@ -171,4 +172,5 @@ meadow & lake, crystal mine & balloon.
 
 
 > New lead task tasks/kids-ui.md is authoritative for the supplied menu design and supersedes task 86 prototype scope. Continue on area/kids-ui; do not discard earlier correction queue.
+
 

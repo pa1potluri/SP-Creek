@@ -18,3 +18,5 @@ User reports 10% usage remaining and requests saving everything, no large new wo
 Wait for incoming small corrections and log/apply only those within remaining usage. Do not start the larger queued fixes during this low-usage period. Preserve current server setup; no shutdown, merge, push or publish requested now. Commit any follow-up work and update its WIP result before stopping. No new test suite needed for this documentation-only checkpoint.
 
 Low-usage small correction saved on area/menu-spacing: welcome moved clear of logo below art controls on Home; Free camera matches art bar at 56px. Focused desktop/tablet geometry check passes. Full suite deferred, task explicitly WIP; colour/font redesign not started.
+
+27 October resume: spacing full regression passed 2015 + 2, Film day/night refreshed; low-usage stop superseded by user resume. Task 64 remains WIP, scope/routing boundary recorded in STUCK.md. Continue the next isolated queued repair, Kite Day facing/visibility, without discarding global clearance.

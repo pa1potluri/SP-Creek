@@ -100,7 +100,7 @@ finished. Re-read this file each time; Claude may change it.
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
 | 85 | `tasks/seven-style-qa.md` | planned | queued per-style QA board; preserve seven distinct styles and readable landmarks |
 | 86 | `tasks/create-layout.md` | `area/create-layout` | superseded by lead task 31a kids-ui; prototype retained in history, not a second public menu |
-| 31f | `tasks/menu-spacing.result.md` | `area/menu-spacing` | WIP small correction: welcome separated from logo; Free camera/art bar both 56px; desktop/tablet checks pass; full suite deferred for low usage |
+| 31f | `tasks/menu-spacing.result.md` | `area/menu-spacing` | done spacing: welcome clear of logo, Free camera/art bar 56px; full 2015 + 2 and Film day/night verified 27 October |
 | 31e | `tasks/kids-ui-icons.md` | `area/kids-ui-icons` | done all 13 icons loaded/visible; category clipping fixed; full 2015 + 2 and desktop/tablet/Film day-night captures |
 | 31d | `tasks/home-menu-layout.md` | `area/home-menu-layout` | done remove duplicate welcome/action card, greeting top-left; 27 focused + full 2015 + 2; top Create/Play/Watch/Free camera retained |
 | 31c | `tasks/freecam-access.md` | `area/freecam-access` | done restore original Free camera beside style strip; 24 focused + full 2015 + 2 passed; wide/tablet/day-night captures |
@@ -185,4 +185,5 @@ meadow & lake, crystal mine & balloon.
 
 
 > 26 October low-usage checkpoint: user reports 10% remaining. All implementation saved; large queue work is WIP/stopped at a safe point. Only incoming small corrections until further direction. Exact branch, completed checks, unfinished work and resume steps: tasks/SESSION-HANDOFF.md. Never push/merge/publish.
+
 

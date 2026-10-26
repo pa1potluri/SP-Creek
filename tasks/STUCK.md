@@ -36,3 +36,6 @@ Task 32 resolved Cove continuity, camping startup, Episode 4 and branch-train so
 ## Resolved in task 59: Cove night band
 Whole-scene raycast identified the 360m procedural mountain ring crossing the beach at x~-359/y~0.9, ahead of sand/water. Cove views now hide procedural mountain layers and restore them on exit. Final train-shore-fixes-40-night.png has no band; full 2015 + 2 passed. Historical failed material/geometry probes above retained for context.
 
+
+## Actor-clearance continuation boundary (27 October)
+Partial swept traffic, visible crowd and market-spacing repairs are saved and included in passing descendant full-suite runs. Global clearance is still unfinished: player/ride movement lives in game.js, outside tasks/actor-clearance.md scope; many scripted scenes overwrite absolute poses and require scene-aware routing that preserves seeking. Do not retrofit a frame-history clamp or teleport characters to arbitrary free spots: it can lose deterministic poses and camera focus. Need lead scope covering shared actor routing and game.js integration for the global guarantee. Continue isolated queued fixes meanwhile; task 64 stays WIP, not done.

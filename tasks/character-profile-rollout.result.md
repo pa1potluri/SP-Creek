@@ -26,3 +26,6 @@ User approved the characters and pipeline phases on 26 October 2026, and asked f
 
 ## v01 resident source update
 On area/character-pipeline-v01 the updated package 1.1 residents replaced the earlier data in the preview and game exports. Runtime binary total is now 15,419,020 bytes; full Pavi and original Siri are preserved. Preview 94 and game smoke 9 checks pass, with updated day/night evidence. This does not complete the broader integration or its pending full suite; current quick-review handoff is tasks/character-pipeline-v01.result.md.
+
+## Solid resident increment (task 55)
+User clarified that pedestrians require rough opaque surfaces, not detailed points. Actual opt-in game now uses twelve parameter-driven cached solid heads/hair; zero resident point .bin downloads. Pavi remains detailed; Siri remains original. Full default suite 2015 + 2, focused solid/walking/all-style 44 and loading/layout 5 checks pass; Film walking day/night evidence saved. Task 52 still retains Pavi GLB/body fit, profile persistence, expressions and broader rollout work; use tasks/solid-residents.result.md for current pedestrian representation/cost.

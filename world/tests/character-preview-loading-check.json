@@ -7,7 +7,7 @@
     "Failed module load produces an explicit retry message"
   ],
   "errors": [],
-  "readyMs": 635,
+  "readyMs": 361,
   "failureText": "The preview code could not load. Check the server connection, then reload.",
   "passed": 5
 }

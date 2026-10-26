@@ -8,3 +8,6 @@ Enable only at `/?characterFaces=pipeline`; ordinary URL preserves old character
 
 ## v01 refresh
 Re-exported from updated package 1.1 resident sources; new binary total is 15,419,020 bytes. Full hero remains unchanged; residents still retain every fourth source record. The 12,425,340-byte figure above describes the earlier checkpoint, not this version. Current rollout/verification remains WIP; see tasks/character-pipeline-v01.result.md.
+
+## Current solid-pedestrian export
+The active manifest now embeds twelve compact solid-head parameter profiles, not resident point records. It is 27,451 bytes; only the unchanged Pavi .bin (5,176,320 bytes) is requested. Older town-*.bin files remain for rollback, unused by the runtime. Build command is unchanged. See tasks/solid-residents.result.md; no default/main rollout or publication is implied.

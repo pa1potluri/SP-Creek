@@ -11,3 +11,6 @@ Siri has no separate source face in this package; the isolated test explicitly b
 
 ## Resident source refresh: package 1.1 / v01
 Current resident binaries/profiles came from the user's `Character-Pipeline-Setup_ v01` folder. Hero binary is byte-identical to the earlier package. Denser resident sources now total 2,048,527 points; see tasks/character-pipeline-v01.result.md. Previous asset version remains in Git history.
+
+## Solid-pedestrian runtime supersedes resident dots
+Residents now render from the saved profile parameters as opaque one-mesh heads/hair. The frozen source binaries remain here for provenance/rollback, but the preview does not fetch resident .bin files. Pavi's separate hero data is unchanged. Current checks and gameplay evidence: tasks/solid-residents.result.md and world/tests/solid-residents-check.json.

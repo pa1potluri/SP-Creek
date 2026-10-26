@@ -950,14 +950,15 @@ export class Life {
   updateMeadowOuting(time){
     const state=meadowOutingCameraReader(),area=this.world.meadowOuting;if(!area)return;area.update(state?.kind,state?.t??time);if(!state)return;
     const {kind,t}=state,f=meadowOutingFocus(kind);
+    const faceKite=(p,index)=>{const target=area.kites[index].g.getWorldPosition(V()),pos=p.g.getWorldPosition(V());p.g.rotation.y=Math.atan2(target.x-pos.x,target.z-pos.z);p.headYaw=0;p.headPitch=-.2;};
     this.outingHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.outingHidden.has(p))this.outingHidden.set(p,p.g.visible);p.g.visible=false;}
     this.outingFriends??=[CAST.teacher,CAST.rancher,CAST.kid].map(o=>{const p=makeCharacter(o);this.scene.add(p.g);return p;});
     for(const [i,p]of Object.values(this.stars).entries()){
       seat(p,false,0);animatePerson(p,t*.65,0);p.g.visible=true;p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);p.g.position.copy(f).add(V((i?1:-1)*1.3,0,kind==='kite'?0:1.15));
-      if(kind==='kite'){pointCharacterArm(p,i?1:0,f.clone().add(V((i?1:-1)*1.3,1.27,0)));p.elbows[i?1:0].rotation.x=-.25;}
+      if(kind==='kite'){faceKite(p,i?3:1);pointCharacterArm(p,i?1:0,f.clone().add(V((i?1:-1)*1.3,1.27,0)));p.elbows[i?1:0].rotation.x=-.25;}
       else{p.arms.forEach((arm,j)=>arm.rotation.x=-.5+Math.sin(t*.45+j)*.08);p.elbows.forEach(elbow=>elbow.rotation.x=-.8);}
     }
-    this.outingFriends.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f).add(V((i-1)*2.6,0,kind==='kite'?-1.1:-2.0));p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);animatePerson(p,t*.4+i,0);if(kind==='kite')p.arms[0].rotation.x=-1.0;});
+    this.outingFriends.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f).add(V((i-1)*2.6,0,kind==='kite'?1.1:-2.0));p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);animatePerson(p,t*.4+i,0);if(kind==='kite'){faceKite(p,i*2);pointCharacterArm(p,0,area.groups.kite.localToWorld(V((i*2-2)*1.3,2.25,0)));}});
   }
 
   updateSnowDay(time){

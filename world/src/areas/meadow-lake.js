@@ -25,14 +25,14 @@ export const MEADOW_OUTING={kite:{x:-205,z:6},picnic:{x:-224,z:2}};
 const outingClear=(x,z)=>Object.values(MEADOW_OUTING).some(p=>Math.abs(x-p.x)<6&&Math.abs(z-p.z)<5);
 function buildMeadowOuting(world,parent){
  const root=new THREE.Group();root.name='Kite day and waterfall picnic';parent.add(root);
- const groups={},colors=['#e6aabd','#a9ced0','#efcf8d','#b6cfa0','#bcb1d6'],mat=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}),cream=mat('#f5e5bf'),wood=world.mat.wood;
+ const groups={},colors=['#ff6795','#42d9ef','#ffd34d','#79e692','#aa8bff'],mat=color=>new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide}),cream=mat('#f5e5bf'),wood=world.mat.wood;
  const add=(g,geo,m,x=0,y=0,z=0)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;g.add(o);return o;};
  for(const [kind,p]of Object.entries(MEADOW_OUTING)){world.registerAreaPad({...p,hx:6,hz:5,blend:1,clearOnly:true});const g=new THREE.Group();g.position.set(p.x,terrainHeight(p.x,p.z),p.z);root.add(g);groups[kind]=g;}
  world.updateTerrain();
  const hill=add(groups.kite,new THREE.SphereGeometry(1,28,14),mat('#b4cf98'),0,-0.12,0);hill.scale.set(8,1.1,6);
  const shape=new THREE.Shape();shape.moveTo(0,1.1);shape.quadraticCurveTo(.15,1.1,.28,.85);shape.lineTo(.75,.15);shape.quadraticCurveTo(.88,0,.74,-.16);shape.lineTo(.15,-.95);shape.quadraticCurveTo(0,-1.1,-.15,-.95);shape.lineTo(-.74,-.16);shape.quadraticCurveTo(-.88,0,-.75,.15);shape.lineTo(-.28,.85);shape.quadraticCurveTo(-.15,1.1,0,1.1);
  const kiteGeometry=new THREE.ShapeGeometry(shape),kites=[],strings=[];
- for(let i=0;i<5;i++){const g=new THREE.Group();groups.kite.add(g);add(g,kiteGeometry,mat(colors[i]));const tails=[];for(let j=0;j<5;j++){const tail=add(g,new THREE.CapsuleGeometry(.055,.25,3,6),mat(colors[(i+j+1)%5]),0,-1.35-j*.34,0);tails.push(tail);}kites.push({g,tails});const geo=new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(17*3),3)),line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:'#d7c9ac',transparent:true,opacity:.8}));line.frustumCulled=false;groups.kite.add(line);strings.push(line);}
+ for(let i=0;i<5;i++){const g=new THREE.Group();groups.kite.add(g);const sail=mat(colors[i]);sail.emissive.set(colors[i]);sail.emissiveIntensity=.2;add(g,kiteGeometry,sail);g.scale.setScalar(1.35);const border=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(shape.getPoints(40).map(p=>new THREE.Vector3(p.x,p.y,.01))),new THREE.LineBasicMaterial({color:'#fff5cb'}));g.add(border);const tails=[];for(let j=0;j<5;j++){const tail=add(g,new THREE.CapsuleGeometry(.055,.25,3,6),mat(colors[(i+j+1)%5]),0,-1.35-j*.34,0);tails.push(tail);}kites.push({g,tails});const geo=new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(new Float32Array(17*3),3)),line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:'#d7c9ac',transparent:true,opacity:.8}));line.frustumCulled=false;groups.kite.add(line);strings.push(line);}
  const blanket=add(groups.picnic,new THREE.BoxGeometry(4,.06,3.2),mat('#a9c8cf'),0,.08,0);
  for(let x=0;x<8;x++)for(let z=0;z<6;z++)if((x+z)%2===0)add(groups.picnic,new THREE.BoxGeometry(.48,.008,.48),mat('#e9d3bd'),-1.75+x*.5,.115,-1.25+z*.5);
  const basket=add(groups.picnic,new THREE.SphereGeometry(.55,18,10,0,Math.PI*2,Math.PI/2,Math.PI/2),wood,0,.42,0);basket.scale.set(1,.75,.7);
@@ -41,7 +41,7 @@ function buildMeadowOuting(world,parent){
  const ducks=[];for(let i=0;i<3;i++){const g=new THREE.Group();groups.picnic.add(g);const body=add(g,new THREE.SphereGeometry(.20,12,8),cream,0,.18,0);body.scale.set(.8,.8,1.3);add(g,new THREE.SphereGeometry(.12,12,8),cream,0,.37,.17);const bill=add(g,new THREE.SphereGeometry(.07,8,6),mat('#e4bc75'),0,.33,.3);bill.scale.set(1,.4,1.4);for(const x of [-.075,.075])add(g,new THREE.SphereGeometry(.018,6,4),mat('#56636b'),x,.4,.23);ducks.push(g);}
  root.visible=false;
  return world.meadowOuting={root,groups,kites,strings,blanket,fruit,ducks,update(kind,t){root.visible=!!kind;groups.kite.visible=kind==='kite';groups.picnic.visible=kind==='picnic';if(!kind)return;
-  kites.forEach(({g,tails},i)=>{g.position.set((i-2)*3+Math.sin(t*.23+i)*.65,7+(i%3)*1.3+Math.sin(t*.3+i)*.35,-3-(i%2)*2);g.rotation.set(.08,0,Math.sin(t*.28+i)*.12);tails.forEach((tail,j)=>{tail.position.x=Math.sin(t*.65+i-j*.4)*.10;tail.rotation.z=Math.sin(t*.65+i-j*.4)*.35;});const a=strings[i].geometry.attributes.position;for(let j=0;j<=16;j++){const u=j/16;a.setXYZ(j,(i-2)*1.3*(1-u)+g.position.x*u,1.9*(1-u)+g.position.y*u-Math.sin(u*Math.PI)*.35,g.position.z*u);}a.needsUpdate=true;});
+  kites.forEach(({g,tails},i)=>{g.position.set((i-2)*3+Math.sin(t*.23+i)*.65,7+(i%3)*1.3+Math.sin(t*.3+i)*.35,-3-(i%2)*2);g.rotation.set(.08,0,Math.sin(t*.28+i)*.12);tails.forEach((tail,j)=>{tail.position.x=Math.sin(t*.65+i-j*.4)*.10;tail.rotation.z=Math.sin(t*.65+i-j*.4)*.35;});const a=strings[i].geometry.attributes.position;for(let j=0;j<=16;j++){const u=j/16;a.setXYZ(j,(i-2)*1.3*(1-u)+g.position.x*u,2.25*(1-u)+g.position.y*u-Math.sin(u*Math.PI)*.35,g.position.z*u);}a.needsUpdate=true;});
   ducks.forEach((g,i)=>{g.position.set((i-1)*.65+Math.sin(t*.25+i)*.12,.02,-2.2+Math.cos(t*.2+i)*.18);g.rotation.y=Math.sin(t*.2+i)*.2;});
  }};
 }
@@ -129,5 +129,6 @@ export async function buildMeadowLake(world) {
     dragonflies.forEach((g,i)=>g.position.set(lake.x+Math.sin(t*0.4+i)*10,lake.y+1+Math.sin(t*0.8+i)*0.3,lake.z+Math.cos(t*0.3+i)*7));
   }};
 }
+
 
 

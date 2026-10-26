@@ -39,3 +39,6 @@ Whole-scene raycast identified the 360m procedural mountain ring crossing the be
 
 ## Actor-clearance continuation boundary (27 October)
 Partial swept traffic, visible crowd and market-spacing repairs are saved and included in passing descendant full-suite runs. Global clearance is still unfinished: player/ride movement lives in game.js, outside tasks/actor-clearance.md scope; many scripted scenes overwrite absolute poses and require scene-aware routing that preserves seeking. Do not retrofit a frame-history clamp or teleport characters to arbitrary free spots: it can lose deterministic poses and camera focus. Need lead scope covering shared actor routing and game.js integration for the global guarantee. Continue isolated queued fixes meanwhile; task 64 stays WIP, not done.
+
+## 27 October — Balloon Hill gameplay boarding scope
+Task91 asks for a boarding prompt and gameplay ride. Existing cinematic ride is intact and tested; game.js _interact supports horses only. Task67 permits areas/crystal-mine.js and camera.js, so no game/main wiring edited. Needed scope: game.js proximity/prompt/interact and main.js existing ride activation/return wiring, with collision and real-click-only sound checks. Keep this request open; proceed with independent queue corrections without asking the user to repeat it.

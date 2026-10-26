@@ -28,3 +28,5 @@ Saved-road angle popping repaired: fitted to rendered terrain, 85,400 expanded s
 Meadow dock safety increment complete: rounded visible rails matched to boundaries, six grounded supports, open shore access; actual player movements stay inside deck, center remains dry. Full 2015 + 2 no errors and Film day/night saved. Overall meadow review still WIP.
 
 Episode12: runtime clips/cast activate correctly; identical wide/closing camera poses confirmed and separated. Medium shot now frames blanket/fruit. 180s/IDs retained; full2015 +2 no errors, six Film captures. Permanent waterfall-only freeze not reproduced; no claim to fix unseen session failure.
+
+27 October mine increment: timber facade/frames, grouped cyan crystals, wider winding graded ascent, rail-bounded deck/landing and grounded tethered basket. Full2015+2, no errors; 241 route samples/passage/edges pass, six Film views. Landscape/reference polish stays WIP; game boarding scope recorded in STUCK. Current area/crystal-timber-refresh.

@@ -80,7 +80,7 @@ finished. Re-read this file each time; Claude may change it.
 | 64 | `tasks/actor-clearance.md` | `area/actor-clearance`, resumed on `area/actor-clearance-resume` | WIP: swept horse/coach checks, broader visible crowd/coach/grazer obstacles; 6 focused checks + full 2015 + 2 passed; Film day/night; scripted scene routes still open |
 | 65 | `tasks/kite-facing.md` | `area/kite-facing` | WIP facing/visibility repaired: 80 samples, 68 existing checks, four Film day/night views; full 2015 + 2 passed; ground-level clearing/path links verified in area/kite-platform; water/depth/material/weather remain WIP |
 | 66 | `tasks/episode-12-review.md` | `area/episode-12-coverage` | done duplicate camera correction, awaiting review; 180s/five clips/four positions and picnic activation verified; full 2015 + 2, six Film captures; stuck single-view failure not reproduced |
-| 67 | `tasks/crystal-refresh.md` | `area/crystal-timber-refresh` | WIP first timber frames/post colliders added; smoke only; mine-specific clearance/day-night/full suite and reference integration remain; task91 coordinated |
+| 67 | `tasks/crystal-refresh.md` | `area/crystal-timber-refresh` | WIP verified timber/route/platform increment: 241 route samples clear, full 2015 + 2, six Film captures; reference landscape polish and task91 gameplay boarding scope remain |
 | 68 | `tasks/gameplay-navigation.md` | `area/gameplay-navigation` | done interface increment, awaiting review; 30 navigation + 13 road/wheel + 254 showcase checks; full 2015 + 2; Film day/night; new feedback tracked 72–76 |
 | 69 | `tasks/default-residents.md` | `area/default-residents` (planned) | done, awaiting review; ordinary URL uses approved solid residents; supplied hero bodies retained; full 2015 + 2; day/night and clean server checks saved |
 | 70 | `tasks/canvas-tents.md` | `area/canvas-tents` | done model increment, awaiting review; five framed canvas tents, real open doors/ropes/poles; 17 focused + full 2015 + 2 passed; six Film scene views + closeups |
@@ -215,5 +215,6 @@ meadow & lake, crystal mine & balloon.
 
 
 > Latest 27 October: road-surface-fit repair completed (row 31h supersedes earlier WIP notes above). Meadow dock safety increment completed on area/meadow-dock-safety: matching rounded rails/supports, 480 movement steps, dry center access; full 2015 + 2, view32 Film day/night. Overall meadow task65 remains WIP. Next isolated queue item: Episode12 coverage diagnosis (66).
+
 
 

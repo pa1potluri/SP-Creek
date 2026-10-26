@@ -163,3 +163,4 @@ meadow & lake, crystal mine & balloon.
 > 26 October user authorises continuous correction work without review waits; may review daily or every two days while moving house. Timeline and reporting log: tasks/WORK-LOG.md. Road recurrence task 83 is immediate priority; no earlier item discarded.
 
 
+> Visual review workflow confirmed: P1 camera/readability, P2 style consistency, P3 materials/lighting, P4 matching-camera/viewport seven-style regression. Reproduce findings in the running app before asset/rendering changes; annotations are observations, not confirmed code defects. Task 85 holds the shared checklist.

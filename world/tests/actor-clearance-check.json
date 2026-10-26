@@ -1,0 +1,12 @@
+{
+  "passed": 6,
+  "results": [
+    "Swept step catches a thin obstacle between endpoints",
+    "Clear movement remains clear",
+    "Grazing horse yields instead of stepping through thin obstacle",
+    "Current character positions block ambient traffic",
+    "Hidden character does not create a phantom obstacle",
+    "Audio remains locked"
+  ],
+  "errors": []
+}

@@ -1,4 +1,4 @@
-import { solidAt } from './traffic-solids.js';
+import { solidAt, blockedPath } from './traffic-solids.js';
 import { buildGarden, GARDEN } from './areas/garden.js';
 import { SNOW_DAY } from './areas/town-center.js';
 import { MEADOW_OUTING } from './areas/meadow-lake.js';
@@ -331,9 +331,10 @@ export class Grazer {
         this.target = null;
         this.timer = 6 + R() * 12;
       } else {
-        this.pos.x += Math.sin(this.yaw) * 0.8 * dt;
-        this.pos.z += Math.cos(this.yaw) * 0.8 * dt;
-        this.phase += dt * 3;
+        const x=this.pos.x+Math.sin(this.yaw)*.8*dt,z=this.pos.z+Math.cos(this.yaw)*.8*dt;
+        if(this.world?.ambientBlocked&&blockedPath(this.world.ambientBlocked,this.pos.x,this.pos.z,x,z,.85,this)){
+          this.target=null;this.timer=2;
+        }else{this.pos.x=x;this.pos.z=z;this.phase+=dt*3;}
       }
       animateHorse(this.h, this.phase, 0.6);
     } else {
@@ -610,7 +611,7 @@ class RoadTraveller {
   }
   update(dt, snap = false) {
     const next=(this.u+(this.speed*dt)/this.len)%1,candidate=this.curve.getPointAt(next);
-    if(!snap&&dt>0){const tangent=this.curve.getTangentAt(next),coach=this.m.wheels.length>0;for(const offset of (coach?[-3,0,3]:[-1.1,0,1.1]))if(this.world.ambientBlocked?.(candidate.x+tangent.x*offset,candidate.z+tangent.z*offset,this,coach?1.1:0.75))return;}
+    if(!snap&&dt>0&&this.world.ambientBlocked){const coach=this.m.wheels.length>0,steps=Math.max(1,Math.ceil(this.speed*dt/.25));for(let i=1;i<=steps;i++){const u=(this.u+(this.speed*dt*i/steps)/this.len)%1,p=this.curve.getPointAt(u),tangent=this.curve.getTangentAt(u);for(const offset of (coach?[-3,-1.5,0,1.5,3,4.5]:[-1.1,0,1.1]))if(this.world.ambientBlocked(p.x+tangent.x*offset,p.z+tangent.z*offset,this,coach?1.1:.75))return;}}
     this.u=next;
     this.curve.getPointAt(this.u, this.p);
     this.curve.getTangentAt(this.u, this.t);
@@ -1101,7 +1102,23 @@ export class Life {
     const wind = this.settings.wind;
     this.world.wind = wind; // painted plants sway with the same wind
     const walkers=[...this.walkers,...(this.townKids||[]),...(this.settings.hamlet?this.hamletWalkers:[])];
-    this.world.ambientBlocked=(x,z,self,r)=>{if(solidAt(this.world,x,z,r))return true;for(const w of walkers){if(w===self||!w.p.g.visible||Math.abs(w.p.g.position.y-terrainHeight(x,z))>2)continue;if(Math.hypot(x-w.pos.x,z-w.pos.z)<r+0.38)return true;}for(const p of [...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{})]){if(p.g.visible&&Math.abs(p.g.position.y-terrainHeight(x,z))<2&&Math.hypot(x-p.g.position.x,z-p.g.position.z)<r+0.45)return true;}for(const rider of this.riders){if(rider===self)continue;if(Math.hypot(x-rider.p.x,z-rider.p.z)<r+1.05)return true;}return false;};
+    const people=[...walkers.map(w=>({owner:w,p:w.p})),...[
+      ...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),
+      ...(this.marketProps?.shoppers||[]),...(this.outingFriends||[]),...(this.snowAdults||[]),
+      ...(this.world.playground?.kids||[]),...(this.ponyFarm?.stars||[]),
+    ].map(p=>({owner:p,p}))],point=V();
+    const visible=g=>{for(let o=g;o;o=o.parent)if(!o.visible)return false;return !!g.parent;};
+    this.world.ambientBlocked=(x,z,self,r)=>{
+      if(solidAt(this.world,x,z,r))return true;
+      const y=terrainHeight(x,z);
+      for(const {owner,p}of people){if(owner===self||!visible(p.g))continue;p.g.updateWorldMatrix(true,false);p.g.getWorldPosition(point);if(Math.abs(point.y-y)<2&&Math.hypot(x-point.x,z-point.z)<r+.45)return true;}
+      for(const traveller of [...this.riders,...(this.coach?[this.coach]:[])]){
+        if(traveller===self||!visible(traveller.m.g))continue;const coach=traveller.m.wheels.length>0;
+        for(const offset of (coach?[-3,-1.5,0,1.5,3,4.5]:[-1.1,0,1.1]))if(Math.hypot(x-traveller.p.x-Math.sin(traveller.yaw)*offset,z-traveller.p.z-Math.cos(traveller.yaw)*offset)<r+(coach?1.1:.75))return true;
+      }
+      for(const grazer of this.grazers){if(grazer===self||grazer.ridden||!visible(grazer.h.g))continue;if(Math.abs(grazer.h.g.position.y-y)<2&&Math.hypot(x-grazer.pos.x,z-grazer.pos.z)<r+.85)return true;}
+      return false;
+    };
     this._socialise(dt, t);
     for (const w of this.walkers) w.update(dt, t);
     this.updateStars(t);
@@ -1115,7 +1132,7 @@ export class Life {
     if (this.coach) this.coach.update(dt);
     if (this.train) this.train.update(dt);
     if (this.ponyFarm && this.world.areaAnimationVisible(camera,-180,this.ponyFarm.y+5,-80,70)) this.ponyFarm.update(t,camera);
-    for (const g of this.grazers) g.update(dt, t);
+    for (const g of this.grazers) {g.world=this.world;g.update(dt, t);}
 
     for (const s of this.signs) s.pivot.rotation.z = (Math.sin(t * 1.4 + s.ph) * 0.1 + Math.sin(t * 2.3 + s.ph) * 0.04) * wind;
 

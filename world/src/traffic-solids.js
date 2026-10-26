@@ -1,5 +1,11 @@
 // Local solid queries for ambient traffic, avoiding an all-tree scan on each footstep.
 const indexes=new WeakMap();
+// Check the space between frames too, so a long step cannot skip a thin obstacle.
+export function blockedPath(blocked,ax,az,bx,bz,r,self){
+ const steps=Math.max(1,Math.ceil(Math.hypot(bx-ax,bz-az)/.25));
+ for(let i=1;i<=steps;i++){const u=i/steps;if(blocked(ax+(bx-ax)*u,az+(bz-az)*u,self,r))return true;}
+ return false;
+}
 export function solidAt(world,x,z,r=0.4){
  const c=world.colliders,key=[c.circles.length,c.rects.length,c.segs.length,world.terrainRevision].join(':');let index=indexes.get(world);
  if(!index||index.key!==key){const cells=new Map(),put=(shape,type,minX,maxX,minZ,maxZ)=>{for(let i=Math.floor(minX/16);i<=Math.floor(maxX/16);i++)for(let j=Math.floor(minZ/16);j<=Math.floor(maxZ/16);j++){const k=i+','+j;if(!cells.has(k))cells.set(k,[]);cells.get(k).push({shape,type});}};

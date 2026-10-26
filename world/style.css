@@ -239,3 +239,8 @@ body.kids-ui:not(.kids-studio) #modeControls { position:absolute;top:-4px;left:c
 .kidsSubtitle { margin-bottom:10px; }
 @media(max-width:1100px){#kidsCategories .kidsCategory{padding:8px 6px;gap:6px}#kidsCategories .kidsIcon img{width:32px;height:32px}}
 @media(max-width:800px){#kidsCategories .kidsCategory{padding:4px 6px;gap:2px}#kidsCategories .kidsIcon img{width:24px;height:24px}}
+/* Small user-requested spacing adjustment; colours/fonts stay unchanged. */
+.kidsGreeting { position:fixed;left:24px;top:166px;padding:8px 12px;border-radius:10px;background:rgba(30,23,18,.72); }
+body.kids-ui:not(:has(.kidsTab[data-tab="Home"].on)) .kidsGreeting { display:none; }
+body.kids-ui:not(.kids-studio) #modeControls { top:-1px; }
+body.kids-ui:not(.kids-studio) #modeControls > #freeBtn { height:56px;min-height:56px; }

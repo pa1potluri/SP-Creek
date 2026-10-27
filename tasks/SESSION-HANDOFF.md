@@ -1,13 +1,11 @@
-# Current handoff — 27 October
-Branch area/quick-11-campsite. All files committed. Never push/merge/publish.
-User-authorised Q04–Q11 batch complete; Q01–Q11 ticked in QUICK-FIX-ORDER.md. Stop after Q11; Q12 next, not started.
-- Q04 festival reset:8 clip activations dry; manual drizzle retained, no code change.
-- Q05 Film readability defaults: depth blur.6→.25, bloom.3→.12 (UI effective.1); legacy expectation intentionally updated, shader pixel regression retained.
-- Q06 station cottonwood moved from90.8103,14.1191 to114,72;4 representations/collider agree.
-- Q07 eleven main-street sign palettes match existing Willow cream-on-dark; names/layout unchanged.
-- Q08 complete parked-train bounds fit authored overview64 at16:9/4:3; no scale/route change. Arbitrary Freecam crop not constrained.
-- Q09 Arrival/Church Approach viewpoint/landmark framing improved;9 margin samples at3 aspects.
-- Q10 Willow chapel crop reproduced and fixed;18 samples across21/22 at3 aspects, actual portrait screenshots saved.
-- Q11 campsite camera closer/higher, sibling/grownup spacing improved, existing tents/open gaps retained, pooled warm firelight with no shadows and calm deterministic modulation. Initial new-light probe timed out startup; replaced with existing pool, no new global light count. Final full2015+2 passed, no errors.88 path samples clear/dry, full tent bounds, lighting seeking verified. Film59/60 day/night + Oil saved.
-Each task result tasks/quick-0N*.result.md / quick-10-willow.result.md / quick-11-campsite.result.md has evidence and limitations. Full31 suites2015+2 passed for each task. Latest log quick-11-full.txt.
-Larger town/station/camp/Willow landscape/layout/actor polish remains queued; these are specific increments/diagnostics, not whole-game visual acceptance. Earlier mine landscape and terrain72 integration remain WIP; global actor-routing and gameplay balloon boarding scope requests in STUCK.md. User images remain sufficient; no new request needed.
+# Current handoff — coastal village WIP
+Branch area/coastal-village-polish. Never push, merge or publish.
+User's latest repeated beach reference takes priority over Q12. Reference saved unchanged as tasks/ref/coastal-village-review-latest.png. Task89/Q20 remains WIP, not ticked.
+- First increment committed643fcf1:15 cottage footings with foundations,21 continuous ground-fitted paths,16 pier support posts and graded land-to-deck approach.
+- Second increment: cove-only shallow-water colour/foam; keep nearshore procedural water visible beneath far sunset backdrop.18 varied coastal palms moved seaward, inland palms removed; small instanced shrubs/rocks avoid houses/routes. No new lights, global exposure, UI or camera/preset changes.
+- Trial grass overlay made jagged triangles; removed. Do not reintroduce coarse triangle masks.
+- Focused coastal-continuity.cjs passed:135 footing samples0 buried,min+.02m;615 approaches clear/dry; supports grounded; actual pier entry walk passed. Audio locked, no page errors.
+- Full31 suites2015 +2 startup checks passed, exit0, Browser errors []. Log world/tests/coastal-polish-full.txt.
+- Fresh Film/Clean/Oil day/night overview: coastal-continuity-{film,clean,oil}-{day,night}.png; close beach: coastal-beach-{film,clean,oil}-{day,night}.png. Clean day overview/night and close beach inspected.
+Next: cottage roof/material detail and warmer window balance; larger uphill vegetation and less repetitive hillside surface; moving-camera/performance/artistic reference comparison. Keep task89 WIP until those are implemented and verified. Current foundations/routes are physical continuity improvements, not a claim of matching the target image.
+Q01–Q11 complete/ticked, separate results and commits on earlier stacked branches. Other older corrections remain queued, including global actor clearance, terrain72 integration, broader mine landscape and balloon gameplay boarding (scope requests in STUCK.md). No new reference images needed from user.

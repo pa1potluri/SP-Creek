@@ -81,16 +81,19 @@ export async function buildSunsetCove(world,life){
   for(let j=0;j<310;j++)for(let i=0;i<26;i++){const a=j*27+i,b=a+27;shoreIndex.push(a,b,a+1,b,b+1,a+1);}
   const shoreGeo=new THREE.BufferGeometry();shoreGeo.setAttribute('position',new THREE.Float32BufferAttribute(shorePos,3));shoreGeo.setAttribute('uv',new THREE.Float32BufferAttribute(shoreUV,2));shoreGeo.setIndex(shoreIndex);shoreGeo.computeVertexNormals();shoreSand.transparent=false;shoreSand.vertexColors=false;const shoreline=add(shoreGeo,shoreSand,0,0,0);shoreline.name='Smooth rounded sand shoreline';
 
-  const paths=[],cottagePaths=[];
-  const path=(points,width)=>{const m=world._ribbon(points,width,laneMaterial,{lift:.09,step:.5,fitGround:true});root.attach(m);paths.push(m);return m;};
+  const paths=[],cottagePaths=[],pathRoutes=[];
+  const path=(points,width)=>{const m=world._ribbon(points,width,laneMaterial,{lift:.09,step:.5,fitGround:true});root.attach(m);paths.push(m);pathRoutes.push({points,width});return m;};
   for(const [points,width]of [[[[ -269,0],[-285,10],[-296,20],[-350,20]],5],[[[-310.5,-55],[-310.5,75]],2.6],[[[-325.5,-55],[-325.5,75]],2.6]])path(points,width);
   for(const p of cottages){const front=d=>[p.x+(-1.6*Math.cos(p.yaw)+d*Math.sin(p.yaw))*p.size,p.z+(1.6*Math.sin(p.yaw)+d*Math.cos(p.yaw))*p.size],a=front(4.2),b=front(7),road=Math.abs(p.x+310.5)<Math.abs(p.x+325.5)?-310.5:-325.5;const points=[a,b,[road,b[1]]];path(points,1.8);cottagePaths.push(points);}
   for(const z of [-28,-6.5])path([[-347,z],[-299,z]],1.8);
   path([[-350,20],[-346,26],[-349,30],[-351,30]],2.4);
   const steps=[];for(let i=0;i<88;i++){const x=-297-i*0.6;steps.push([x,laneHeight(x)+0.04,20,0.65,0.12,5]);}instances(new THREE.BoxGeometry(1,1,1),paving,steps);
   const squareY=terrainHeight(-317,-4);add(new THREE.CylinderGeometry(4.2,4.4,0.15,32),white,-317,squareY+0.04,-4);add(new THREE.CylinderGeometry(1.3,1.5,0.7,24),white,-317,squareY+0.4,-4);add(new THREE.CylinderGeometry(1.25,1.25,0.06,24),blue,-317,squareY+0.78,-4);add(new THREE.SphereGeometry(0.45,12,8),cream,-317,squareY+1.4,-4,1,0.45,1);world.colliders.circles.push({x:-317,z:-4,r:1.7});
-  const palmSites=[];for(let i=0;i<18;i++){const z=-83+i*14,x=coastX(z)+21+(i%3)*4;palmSites.push([x,terrainHeight(x,z),z,0.8+(i%3)*0.12,0.8+(i%3)*0.12,0.8+(i%3)*0.12,i*2.399]);world.colliders.circles.push({x,z,r:0.3});}
-  for(const [x,z]of [[-316,-26],[-338,-10],[-315,9],[-334,43]]){palmSites.push([x,terrainHeight(x,z),z,0.65,0.65,0.65,0]);world.colliders.circles.push({x,z,r:0.3});for(let j=0;j<6;j++)flowers.push([x+Math.cos(j)*0.8,terrainHeight(x,z)+0.2,z+Math.sin(j)*0.8,0.3,0.2,0.3]);}
+  const clearPlant=(x,z,r)=>x>coastX(z)+30&&Math.hypot(x+317,z+4)>3+r&&cottages.every(p=>{const dx=x-p.x,dz=z-p.z;return Math.abs(dx*Math.cos(p.yaw)-dz*Math.sin(p.yaw))>3.7*p.size+r||Math.abs(dx*Math.sin(p.yaw)+dz*Math.cos(p.yaw))>3.5*p.size+r;})&&pathRoutes.every(({points,width})=>points.every((a,i)=>{const b=points[i+1];if(!b)return true;const dx=b[0]-a[0],dz=b[1]-a[1],t=THREE.MathUtils.clamp(((x-a[0])*dx+(z-a[1])*dz)/(dx*dx+dz*dz),0,1);return Math.hypot(x-a[0]-t*dx,z-a[1]-t*dz)>width/2+r;}));
+  const shrubs=[],gardenRocks=[];
+  cottages.forEach((p,i)=>{for(const a of [.8,3.9]){const x=p.x+Math.cos(a+i*.2)*6.8,z=p.z+Math.sin(a+i*.2)*6.8;if(!clearPlant(x,z,1.5))continue;for(let j=0;j<3;j++)shrubs.push([x+(j-1)*.4,groundHeight(x,z)+.35,z+Math.sin(j*2)*.3,.65,.45+(j%2)*.2,.6]);world.colliders.circles.push({x,z,r:1});if(clearPlant(x+1.5,z+.7,.6))gardenRocks.push([x+1.5,groundHeight(x+1.5,z+.7)+.15,z+.7,.5,.3,.4,i]);}});
+  instances(new THREE.IcosahedronGeometry(1,1),green,shrubs);instances(new THREE.DodecahedronGeometry(1,1),stone,gardenRocks);
+  const palmSites=[];for(let i=0;i<18;i++){const z=-83+i*14,x=coastX(z)+18+(i%3)*2,s=.72+(i%4)*.12;palmSites.push([x,terrainHeight(x,z),z,s,s,s,i*2.399]);world.colliders.circles.push({x,z,r:0.3});}
   instances(new THREE.SphereGeometry(1,8,6),pink,flowers.slice(-24));
   const palm=world.palmGeometry(),palmLeaf=new THREE.MeshLambertMaterial({color:'#71965e',side:THREE.DoubleSide});
   const before=palmLeaf.onBeforeCompile;palmLeaf.onBeforeCompile=(shader,r)=>{before.call(palmLeaf,shader,r);shader.uniforms.uPalmTime=world.waterUniforms.uWaterTime;shader.uniforms.uPalmWind=world.waterUniforms.uWaterWind;shader.vertexShader='uniform float uPalmTime,uPalmWind;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.x += sin(uPalmTime*0.65+position.y)*0.10*uPalmWind;');};palmLeaf.customProgramCacheKey=()=> 'cove-palm-v1';

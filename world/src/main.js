@@ -383,6 +383,8 @@ canvas.addEventListener('pointerup', (e) => {
   ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   raycaster.setFromCamera(ndc, camera);
   if (!tool) {
+    const ghostHit=raycaster.intersectObjects(ghostTown.ghosts.map(e=>e.g),true)[0];
+    if(ghostHit){const solidHit=raycaster.intersectObjects([world.ground,ghostTown.root],true).find(h=>h.distance<ghostHit.distance-.05&&h.object.isMesh&&!h.object.material?.transparent);if(!solidHit&&ghostTown.react(ghostHit.object))return;}
     const selected = raycaster.intersectObjects([...world.buildings, ...world.fences].map((b) => b.obj), true)[0];
     selectBuilding(selected ? [...world.buildings, ...world.fences].find((b) => { let o = selected.object; while (o && o !== b.obj) o = o.parent; return o === b.obj; }) : null);
     return;

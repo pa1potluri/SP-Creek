@@ -266,3 +266,5 @@ meadow & lake, crystal mine & balloon.
 > Q12 saved: trail ground mismatch reproduced(-.303..+.573m), widened/fitted to+.1m;7 lanterns,90 soft fireflies distributed/above ground, log/seats moved with proper bounds.601 static samples clear, seeking identical, full2015+2 passed. Q12 ticked; Q13 playground next. Broader forest task78/Q17 remains WIP.
 
 > Q13 complete on area/quick-13-playground, approved module scope: neutral fine-grain surface,5 pastel equipment zones, single continuous ground-fitted entrance.201 static route samples clear/dry; native playground36 and full2015+2 passed, Film45/64 before/after day/night + Oil45 saved. Q13 ticked; broader task81 remains WIP. Next Q14 current UI review, no old screenshots assumed current.
+
+> Current area/quick-14-ui WIP baseline only, no runtime edits. Friendly/Studio at1600/1024/768:0 horizontal page overflow,6 main tabs available,36px style targets, no errors/audio. Six screenshots/report saved. Next verify keyboard style access, Build dock/popovers and side-panel hierarchy before choosing fixes. Pond/Q12/Q13 completed separately; Q14 not ticked.

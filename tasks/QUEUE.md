@@ -108,7 +108,7 @@ finished. Re-read this file each time; Claude may change it.
 | 31d | `tasks/home-menu-layout.md` | `area/home-menu-layout` | done remove duplicate welcome/action card, greeting top-left; 27 focused + full 2015 + 2; top Create/Play/Watch/Free camera retained |
 | 31c | `tasks/freecam-access.md` | `area/freecam-access` | done restore original Free camera beside style strip; 24 focused + full 2015 + 2 passed; wide/tablet/day-night captures |
 | 31b | `tasks/kids-ui-art.result.md` | `area/kids-ui-art` | WIP supplied 13 icons registered; 21 checks/tab captures pass; opaque baked checkerboard needs transparent exports; avatar/pieces still fallbacks |
-| 87 | `tasks/pond-duck-interaction.md` | `area/pond-duck-interaction` | WIP investigation only: confirmed moment-props ducks overlap dock coordinates; latest reference/result saved; no code changes/tests yet; stopped at user usage-limit request |
+| 87 | `tasks/pond-duck-interaction.md` | `area/pond-duck-interaction` | done functional increment:3 swimming ducks, click turn/flap/real-click quack/ripples; dock/pond/mutual clearance7203 poses,11 focused + full2015+2 passed; shoreline bands fixed; Film day/night saved |
 | 88 | `tasks/railway-crossing.md` | planned | queued functional crossing: advance warnings/barriers, full train/tail clearance, actor safety; road/gate/building/fence visual reference retained |
 | 89 | `tasks/coastal-village-polish.md` | `area/coastal-village-polish` | WIP: cottage foundations,21 connected paths and supported pier verified; shallow-water/foam and coastal planting increment built; final material/landscape polish remains |
 | 31h | `tasks/road-surface-fit.md` | `area/road-surface-fit` | done repair, awaiting review: 85,400 curved/width samples clear; save/reload/rebuild/seven switches pass; final full 2015 + 2; Film high/low day/night |
@@ -260,3 +260,5 @@ meadow & lake, crystal mine & balloon.
 > Old Hollow task90 current WIP:6 opaque rounded cube ghosts/blink/click wave, ground-fitted continuous cobblestone routes, four planters/two benches/warm windows/pumpkin colliders.707 route samples and actual pointer/Draw Road ownership pass; full2015+2 no errors/audio. Film Stroll/Tour day/night + Clean/Oil saved. Broader facade/roof/autumn landscape remains; Q26 not ticked.
 
 > SAVE NOW: current area/pond-duck-interaction, task87 investigation/reference only. Actual owner pavi-siri-moments.js; static ducks can overlap dock. Exact next steps in result. No runtime edits or test runs this task; user requested stop for usage. Old Hollow7db6f9f and Balloon Hill0b95c27 already saved. Never push.
+
+> Pond task87/Q23 complete functional increment:11 focused + full2015+2 passed,7203 body poses clear; silent pointer/Draw Road ownership and mock audio envelope checks. Film pond tour/moment day/night + Clean/Oil saved. Result updated. Resume quick order at Q12 forest path/light/fireflies; broader older WIPs retained.

@@ -70,6 +70,20 @@ export class AudioEngine {
     this.amb = new Ambience(ctx, this.ambGain);
   }
 
+  quack(event) {
+    if(!event?.isTrusted)return;
+    this.ensure();
+    const ctx=this.ctx,t=ctx.currentTime;
+    if(t-(this.lastQuack??-Infinity)<.4)return;
+    this.lastQuack=t;
+    const voice=ctx.createOscillator(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+    voice.type='triangle';voice.frequency.setValueAtTime(330,t);voice.frequency.exponentialRampToValueAtTime(210,t+.22);
+    filter.type='bandpass';filter.frequency.value=750;filter.Q.value=.7;
+    gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(.035*this.ambVol,t+.035);gain.gain.exponentialRampToValueAtTime(.0001,t+.26);
+    voice.connect(filter).connect(gain).connect(this.master);voice.start(t);voice.stop(t+.28);
+    voice.onended=()=>{voice.disconnect();filter.disconnect();gain.disconnect();};
+  }
+
   // Every frame: the soundscape follows where the camera (or player) is and the mood.
   // While a video renders, the state is recorded instead, for renderOffline.
   tick(state, dt) {

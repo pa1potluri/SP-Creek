@@ -28,8 +28,10 @@ export function dressHamletHouse(world, entry) {
 }
 
 export function dressPondShore(world, parent, p, y) {
-  const pos=[],colors=[],indices=[],radii=[0.98,1.02,1.12,1.22,1.34],alpha=[0,0.5,0.75,0.35,0],n=96;
-  for(let j=0;j<radii.length;j++)for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,f=1+0.06*Math.sin(a*3+0.5)+0.035*Math.cos(a*5),x=Math.cos(a)*p.rx*f*radii[j],z=Math.sin(a)*p.rz*f*radii[j];pos.push(x,terrainHeight(p.x+x,p.z+z)-y+0.025,z);colors.push(0.8+j*0.04,0.77+j*0.025,0.64+j*0.02,alpha[j]);if(j&&i){const k=j*(n+1)+i;indices.push(k-1,k-n-2,k,k-n-2,k-n-1,k);}}
+  const pos=[],colors=[],indices=[],radii=Array.from({length:37},(_,i)=>.98+i*.01),n=192;
+  // Match the half-metre bank triangles; broad annular faces cut through the slope.
+  const bankY=(x,z)=>{const gx=(x-p.x+22)*2,gz=(z-p.z+19)*2,ix=Math.floor(gx),iz=Math.floor(gz),u=gx-ix,v=gz-iz,bx=p.x-22+ix*.5,bz=p.z-19+iz*.5,a=terrainHeight(bx,bz),b=terrainHeight(bx+.5,bz),c=terrainHeight(bx,bz+.5),d=terrainHeight(bx+.5,bz+.5);return (u+v<=1?a+(b-a)*u+(c-a)*v:d+(c-d)*(1-u)+(b-d)*(1-v))+.05;};
+  for(let j=0;j<radii.length;j++)for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,f=1+0.06*Math.sin(a*3+0.5)+0.035*Math.cos(a*5),x=Math.cos(a)*p.rx*f*radii[j],z=Math.sin(a)*p.rz*f*radii[j],blend=Math.sin(j/(radii.length-1)*Math.PI)**2;pos.push(x,bankY(p.x+x,p.z+z)-y,z);colors.push(.85,.81,.7,blend*.65);if(j&&i){const k=j*(n+1)+i;indices.push(k-1,k-n-2,k,k-n-2,k-n-1,k);}}
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,4));geo.setIndex(indices);geo.computeVertexNormals();
   const rim=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color:'#cfbf9c',vertexColors:true,transparent:true,depthWrite:false,side:THREE.DoubleSide}));rim.receiveShadow=true;parent.add(rim);
   const pebbles=[];for(let i=0;i<24;i++){const a=i*2.399,r=1.16+(Math.sin(i*5.3)*0.5+0.5)*0.17,f=1+0.06*Math.sin(a*3+0.5)+0.035*Math.cos(a*5),x=Math.cos(a)*p.rx*f*r,z=Math.sin(a)*p.rz*f*r;const g=new THREE.IcosahedronGeometry(0.09+(i%4)*0.035,1);g.scale(1.3,0.6,1);g.translate(x,terrainHeight(p.x+x,p.z+z)-y+0.06,z);pebbles.push(g);}

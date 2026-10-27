@@ -47,7 +47,7 @@ Tick an item only after its relevant checks and required full suite/day-night ev
 |---|---|---|---|---|
 | [ ] | Q21 | Finish shared character/horse/player/scripted collision routing | 64 | Multiple sessions; scope boundary logged |
 | [ ] | Q22 | Functional railway barriers/signals and safe occupancy handling | 88 | Multiple sessions |
-| [ ] | Q23 | Pond duck click reaction, swimming, ripples and dock clearance | 87 | 1–3 hours |
+| [x] | Q23 | Pond duck click reaction, swimming, ripples and dock clearance | 87 |11 focused + full2015+2;7203 poses clear; shoreline bands fixed; day/night saved |
 | [ ] | Q24 | Quiet seated/standing/reading station residents | 74 | 1–2 hours |
 | [ ] | Q25 | River boat placement and gentle jumping fish | 73 | 1–3 hours |
 | [ ] | Q26 | Old Hollow cube ghosts/reactions, connected street and decoration | 90 | Multiple sessions |

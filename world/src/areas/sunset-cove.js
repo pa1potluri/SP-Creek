@@ -33,7 +33,7 @@ export async function buildSunsetCove(world,life){
   function add(geo,m,x,y,z,sx=1,sy=1,sz=1,parent=root){const mesh=new THREE.Mesh(geo,m);mesh.position.set(x,y,z);mesh.scale.set(sx,sy,sz);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);return mesh;}
   function instances(geo,m,items){const mesh=new THREE.InstancedMesh(geo,m,items.length);items.forEach(([x,y,z,sx=1,sy=1,sz=1,yaw=0],i)=>{q.setFromAxisAngle(v.set(0,1,0),yaw);mesh.setMatrixAt(i,matrix.compose(v.set(x,y,z),q,scale.set(sx,sy,sz)));});mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);batches.push(mesh);return mesh;}
   const laneMaterial=world.paintedMaterial('cobblestones',1,1,{vertexColors:true,transparent:true,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4});
-  const laneBefore=laneMaterial.onBeforeCompile;laneMaterial.onBeforeCompile=(shader,r)=>{laneBefore.call(laneMaterial,shader,r);shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying float vCoveAcross;').replace('#include <begin_vertex>','#include <begin_vertex>\nvCoveAcross=uv.y;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vCoveAcross;').replace('#include <opaque_fragment>','diffuseColor.a *= smoothstep(0.0,0.06,vCoveAcross)*(1.0-smoothstep(0.94,1.0,vCoveAcross));\n#include <opaque_fragment>');};laneMaterial.customProgramCacheKey=()=> 'cove-lane-v1';
+  const laneBefore=laneMaterial.onBeforeCompile;laneMaterial.onBeforeCompile=(shader,r)=>{laneBefore.call(laneMaterial,shader,r);shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying float vCoveAcross;').replace('#include <begin_vertex>','#include <begin_vertex>\nvCoveAcross=uv.x;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vCoveAcross;').replace('#include <opaque_fragment>','diffuseColor.a *= smoothstep(0.0,0.06,vCoveAcross)*(1.0-smoothstep(0.94,1.0,vCoveAcross));\n#include <opaque_fragment>');};laneMaterial.customProgramCacheKey=()=> 'cove-lane-v2';
   const cottages=[];
   for(let row=0;row<5;row++)for(let col=0;col<3;col++){
     const seed=row*3+col,x=-303-col*15+Math.sin(seed*2.4)*2,z=-38+row*23+(col%2)*2+Math.cos(seed*1.9)*3,y=terrainHeight(x,z),yaw=Math.sin(seed*1.7)*0.16,size=0.88+(seed%4)*0.07;
@@ -44,7 +44,14 @@ export async function buildSunsetCove(world,life){
   const laneTop=terrainHeight(-297,20),laneBottom=terrainHeight(-350,20);laneHeight=x=>THREE.MathUtils.lerp(laneTop,laneBottom,THREE.MathUtils.clamp((-297-x)/53,0,1));
   world.registerAreaPad({x:-323.5,z:20,hx:26.5,hz:2.7,blend:1,y:(laneTop+laneBottom)/2,slopeX:(laneTop-laneBottom)/53});
   const deckFloor={cx:-373,cz:30,ax:1,az:0,bx:0,bz:1,hx:23,hz:2.5,y:1.2};
+  world.registerAreaPad({x:-349,z:30,hx:2,hz:2.2,blend:5,y:1.16});
   const sea=world.createSea([deckFloor]);world.updateTerrain();
+  const footprintHeights=p=>{const heights=[];for(const dx of [-3.7,0,3.7])for(const dz of [-3.5,0,3.5])heights.push(groundHeight(p.x+(Math.cos(p.yaw)*dx+Math.sin(p.yaw)*dz)*p.size,p.z+(-Math.sin(p.yaw)*dx+Math.cos(p.yaw)*dz)*p.size));return heights;};
+  for(const p of cottages){p.y=Math.max(...footprintHeights(p))+.04;world.registerAreaPad({x:p.x,z:p.z,hx:6.5,hz:6.5,blend:3,y:p.y});}
+  world.updateTerrain();
+  const foundations=cottages.map(p=>{const h=footprintHeights(p);p.y=Math.max(p.y,...h)+.02;const height=Math.max(.18,p.y-Math.min(...h)+.12);return[p.x,p.y-height/2,p.z,7.6*p.size,height,7.2*p.size,p.yaw];});
+  const stone=world.paintedMaterial('stone',1,1,{color:'#d8c7ab'})||mat('#d8c7ab'),paving=world.paintedMaterial('cobblestones',1,1,{color:'#eadac0'})||stone;
+  instances(new THREE.BoxGeometry(1,1,1),stone,foundations);
   instances(new THREE.BoxGeometry(7.4,4.4,7),white,cottages.map(p=>[p.x,p.y+2.2*p.size,p.z,p.size,p.size,p.size,p.yaw]));
   const roofGeo=new THREE.ConeGeometry(1,1,4);roofGeo.rotateY(Math.PI/4);
   instances(roofGeo,roof,cottages.map(p=>[p.x,p.y+5.1*p.size,p.z,6*p.size,2.3*p.size,5.8*p.size,p.yaw]));
@@ -74,13 +81,16 @@ export async function buildSunsetCove(world,life){
   for(let j=0;j<310;j++)for(let i=0;i<26;i++){const a=j*27+i,b=a+27;shoreIndex.push(a,b,a+1,b,b+1,a+1);}
   const shoreGeo=new THREE.BufferGeometry();shoreGeo.setAttribute('position',new THREE.Float32BufferAttribute(shorePos,3));shoreGeo.setAttribute('uv',new THREE.Float32BufferAttribute(shoreUV,2));shoreGeo.setIndex(shoreIndex);shoreGeo.computeVertexNormals();shoreSand.transparent=false;shoreSand.vertexColors=false;const shoreline=add(shoreGeo,shoreSand,0,0,0);shoreline.name='Smooth rounded sand shoreline';
 
-  for(const [points,width]of [[[[ -269,0],[-285,10],[-296,20],[-350,20]],5],[[[-308,-55],[-308,70]],3],[[[-327,-55],[-327,70]],3]]){const road=world._ribbon(points,width,laneMaterial,{lift:0.08,step:1});root.attach(road);}
-  for(const p of cottages){const lane=world._ribbon([[p.x,p.z+5],[p.x+5,p.z+7],[-317,p.z+7]],1.5,laneMaterial,{lift:0.09,step:1});root.attach(lane);}
-  for(const z of [-28,-6.5]){const lane=world._ribbon([[-347,z],[-299,z]],1.5,laneMaterial,{lift:0.09,step:1});root.attach(lane);}
-  const steps=[];for(let i=0;i<88;i++){const x=-297-i*0.6;steps.push([x,laneHeight(x)+0.04,20,0.65,0.12,5]);}instances(new THREE.BoxGeometry(1,1,1),white,steps);
+  const paths=[],cottagePaths=[];
+  const path=(points,width)=>{const m=world._ribbon(points,width,laneMaterial,{lift:.09,step:.5,fitGround:true});root.attach(m);paths.push(m);return m;};
+  for(const [points,width]of [[[[ -269,0],[-285,10],[-296,20],[-350,20]],5],[[[-310.5,-55],[-310.5,75]],2.6],[[[-325.5,-55],[-325.5,75]],2.6]])path(points,width);
+  for(const p of cottages){const front=d=>[p.x+(-1.6*Math.cos(p.yaw)+d*Math.sin(p.yaw))*p.size,p.z+(1.6*Math.sin(p.yaw)+d*Math.cos(p.yaw))*p.size],a=front(4.2),b=front(7),road=Math.abs(p.x+310.5)<Math.abs(p.x+325.5)?-310.5:-325.5;const points=[a,b,[road,b[1]]];path(points,1.8);cottagePaths.push(points);}
+  for(const z of [-28,-6.5])path([[-347,z],[-299,z]],1.8);
+  path([[-350,20],[-346,26],[-349,30],[-351,30]],2.4);
+  const steps=[];for(let i=0;i<88;i++){const x=-297-i*0.6;steps.push([x,laneHeight(x)+0.04,20,0.65,0.12,5]);}instances(new THREE.BoxGeometry(1,1,1),paving,steps);
   const squareY=terrainHeight(-317,-4);add(new THREE.CylinderGeometry(4.2,4.4,0.15,32),white,-317,squareY+0.04,-4);add(new THREE.CylinderGeometry(1.3,1.5,0.7,24),white,-317,squareY+0.4,-4);add(new THREE.CylinderGeometry(1.25,1.25,0.06,24),blue,-317,squareY+0.78,-4);add(new THREE.SphereGeometry(0.45,12,8),cream,-317,squareY+1.4,-4,1,0.45,1);world.colliders.circles.push({x:-317,z:-4,r:1.7});
   const palmSites=[];for(let i=0;i<18;i++){const z=-83+i*14,x=coastX(z)+21+(i%3)*4;palmSites.push([x,terrainHeight(x,z),z,0.8+(i%3)*0.12,0.8+(i%3)*0.12,0.8+(i%3)*0.12,i*2.399]);world.colliders.circles.push({x,z,r:0.3});}
-  for(const [x,z]of [[-316,-26],[-335,-13],[-315,9],[-334,43]]){palmSites.push([x,terrainHeight(x,z),z,0.65,0.65,0.65,0]);world.colliders.circles.push({x,z,r:0.3});for(let j=0;j<6;j++)flowers.push([x+Math.cos(j)*0.8,terrainHeight(x,z)+0.2,z+Math.sin(j)*0.8,0.3,0.2,0.3]);}
+  for(const [x,z]of [[-316,-26],[-338,-10],[-315,9],[-334,43]]){palmSites.push([x,terrainHeight(x,z),z,0.65,0.65,0.65,0]);world.colliders.circles.push({x,z,r:0.3});for(let j=0;j<6;j++)flowers.push([x+Math.cos(j)*0.8,terrainHeight(x,z)+0.2,z+Math.sin(j)*0.8,0.3,0.2,0.3]);}
   instances(new THREE.SphereGeometry(1,8,6),pink,flowers.slice(-24));
   const palm=world.palmGeometry(),palmLeaf=new THREE.MeshLambertMaterial({color:'#71965e',side:THREE.DoubleSide});
   const before=palmLeaf.onBeforeCompile;palmLeaf.onBeforeCompile=(shader,r)=>{before.call(palmLeaf,shader,r);shader.uniforms.uPalmTime=world.waterUniforms.uWaterTime;shader.uniforms.uPalmWind=world.waterUniforms.uWaterWind;shader.vertexShader='uniform float uPalmTime,uPalmWind;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed.x += sin(uPalmTime*0.65+position.y)*0.10*uPalmWind;');};palmLeaf.customProgramCacheKey=()=> 'cove-palm-v1';
@@ -102,12 +112,13 @@ export async function buildSunsetCove(world,life){
   const prints=[];for(let i=0;i<90;i++){const z=-25+i,edge=coastX(z)+8;for(const side of [-1,1])prints.push([edge+side*0.17,groundHeight(edge+side*0.17,z)+0.05,z+side*0.22,0.12,1,0.23]);}const printGeo=new THREE.PlaneGeometry(2,2);printGeo.rotateX(-Math.PI/2);const footprints=instances(printGeo,new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(printCanvas),transparent:true,opacity:0.65,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3}),prints);footprints.castShadow=false;
   footprints.material.onBeforeCompile=shader=>{shader.uniforms.uPrintTime=world.waterUniforms.uWaterTime;shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying float vPrintZ;').replace('#include <begin_vertex>','#include <begin_vertex>\nvPrintZ=instanceMatrix[3].z;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float uPrintTime;varying float vPrintZ;').replace('#include <opaque_fragment>','diffuseColor.a *= 1.0-smoothstep(8.0,55.0,mod(uPrintTime-vPrintZ*0.8+160.0,160.0));\n#include <opaque_fragment>');};
   const pier=add(new THREE.BoxGeometry(46,0.25,5),wood,-373,1.075,30);world.walkables.push(pier);
+  const pierSupports=[];for(let x=-394;x<=-352;x+=6)for(const z of [27.9,32.1]){const bottom=groundHeight(x,z)-.2,top=1; pierSupports.push([x,(top+bottom)/2,z,.2,top-bottom,.2]);}instances(new THREE.CylinderGeometry(1,1,1,10),wood,pierSupports);
   const railParts=[];for(const side of [-1,1]){for(let x=-395;x<=-350;x+=3)railParts.push(new THREE.BoxGeometry(0.14,1.3,0.14).translate(x,1.8,30+side*2.45));railParts.push(new THREE.BoxGeometry(46,0.12,0.12).translate(-373,2.35,30+side*2.45));world.colliders.segs.push({ax:-396,az:30+side*2.45,bx:-350,bz:30+side*2.45});}world.colliders.segs.push({ax:-395.7,az:27.5,bx:-395.7,bz:32.5});railParts.push(new THREE.BoxGeometry(0.12,0.12,5).translate(-395.7,2.35,30));add(mergeGeometries(railParts),wood,0,0,0);
   const rowingBoat=makeRowingBoat(world,root,t=>{const a=t/240*Math.PI*2,z=-45+Math.cos(a)*7,x=coastX(z)-6+Math.sin(a)*1.2,dz=-Math.sin(a)*7,dx=(coastX(z+0.01)-coastX(z-0.01))/0.02*dz+Math.cos(a)*1.2;return {pos:new THREE.Vector3(x,WATER_Y+0.15,z),yaw:Math.atan2(dx,dz)};},p=>p.x=Math.min(p.x,coastX(p.z)-1.5));
   const boats=[];for(let i=0;i<3;i++){const g=new THREE.Group();g.position.set(-380-i*9,-0.6,38+i*6);root.add(g);add(new THREE.SphereGeometry(1,16,10,0,Math.PI*2,Math.PI/2,Math.PI/2),i%2?blue:wood,0,0,0,1,0.6,2.7,g);add(new THREE.BoxGeometry(1.6,0.13,0.5),wood,0,0.10,0,1,1,1,g);if(i===2){add(new THREE.CylinderGeometry(0.05,0.07,5,8),wood,0,2.4,0,1,1,1,g);const sailGeo=new THREE.BufferGeometry();sailGeo.setAttribute('position',new THREE.Float32BufferAttribute([0,4.7,0,0,0.6,0,0,0.6,2.3],3));sailGeo.computeVertexNormals();add(sailGeo,new THREE.MeshLambertMaterial({color:'#f3dfb3',side:THREE.DoubleSide}),0,0,0,1,1,1,g);}boats.push(g);}
   const actors=new THREE.Group();actors.name='Cove strolls';root.add(actors);const siblings={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};for(const p of Object.values(siblings))actors.add(p.g);
   const walkers=Array.from({length:4},(_,i)=>{const p=makeCharacter(randomTownsfolk(i%2?'townswoman':'shopkeeper'));actors.add(p.g);return p;});
-  const area={root,sea:sea.sea,water:sea.area,beach,shoreline,sand,roof,cottages,palms,paintedPalms,paintedFlowers,seaBackdrop,horizonHeight,horizonRatio,images,footprints,pebbles,boats,rowingBoat,actors,siblings,walkers,update(t,camera,cur){
+  const area={root,sea:sea.sea,water:sea.area,beach,shoreline,sand,roof,cottages,paths,cottagePaths,foundations,pierSupports,palms,paintedPalms,paintedFlowers,seaBackdrop,horizonHeight,horizonRatio,images,footprints,pebbles,boats,rowingBoat,actors,siblings,walkers,update(t,camera,cur){
     const focus=camera.position.x<-280;actors.visible=focus;
     // The valley's nearest mountain ring crosses the cove itself; it is not a shoreline.
     if(focus&&!area.hiddenMountains){area.hiddenMountains=[];world.root.parent.traverse(o=>{if(o.geometry?.attributes.aHazeAlpha){area.hiddenMountains.push([o,o.visible]);o.visible=false;}});}else if(!focus&&area.hiddenMountains){for(const [o,visible]of area.hiddenMountains)o.visible=visible;area.hiddenMountains=null;}
@@ -126,6 +137,7 @@ export async function buildSunsetCove(world,life){
     walkers.forEach((p,i)=>{const x=-323+Math.sin(t*0.017+i*1.7)*24,z=i%2?-6.5:-28;p.g.position.set(x,terrainHeight(x,z),z);p.g.visible=!staged&&p.g.position.distanceTo(camera.position)>=6;p.g.rotation.y=Math.cos(t*0.017+i*1.7)>0?Math.PI/2:-Math.PI/2;animatePerson(p,t*3.5+i,0.6);});
   }};world.sunsetCove=area;return area;
 }
+
 
 
 

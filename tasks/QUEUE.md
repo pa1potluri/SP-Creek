@@ -93,7 +93,7 @@ finished. Re-read this file each time; Claude may change it.
 | 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
 | 76 | `tasks/blocky-style-review.md` | planned | queued user review: Blocky style selection/menu and genuine block-built silhouettes |
 | 77 | `tasks/readability-composition.md` | `area/readability-composition` | WIP larger grouped controls + visible road status; 34 checks and Film day/night; full suite and scene composition remain pending |
-| 78 | `tasks/firefly-forest-review.md` | planned | queued seven-point forest review: path/light first, trees/hillside second, fireflies/sky third; retain earlier roots/deer issues |
+| 78 | `tasks/firefly-forest-review.md` | `area/quick-12-forest` | WIP broader forest; Q12 path/light/firefly increment done:601 static route samples clear, full2015+2, Film Trail/Tour/Deer day/night + Oil; tree/root/deer/hillside/sky remain |
 | 79 | `tasks/river-railway-review.md` | planned | queued combined river/rail/hill review: banks/crossings and camera first, terrain/prop grouping next, distant depth/mill visibility; all earlier points retained |
 | 80 | `tasks/town-scene-review.md` | planned | queued town review: camera/road, building edges/landmark, signs/prop spacing/ground texture; preserve approved names |
 | 81 | `tasks/station-town-layout-review.md` | planned | queued station/town + elevation/playground references: continuous routes/gentler upper access, station/layout, playground/steam/tree/ground; train bounds gate before scaling |
@@ -262,3 +262,5 @@ meadow & lake, crystal mine & balloon.
 > SAVE NOW: current area/pond-duck-interaction, task87 investigation/reference only. Actual owner pavi-siri-moments.js; static ducks can overlap dock. Exact next steps in result. No runtime edits or test runs this task; user requested stop for usage. Old Hollow7db6f9f and Balloon Hill0b95c27 already saved. Never push.
 
 > Pond task87/Q23 complete functional increment:11 focused + full2015+2 passed,7203 body poses clear; silent pointer/Draw Road ownership and mock audio envelope checks. Film pond tour/moment day/night + Clean/Oil saved. Result updated. Resume quick order at Q12 forest path/light/fireflies; broader older WIPs retained.
+
+> Q12 saved: trail ground mismatch reproduced(-.303..+.573m), widened/fitted to+.1m;7 lanterns,90 soft fireflies distributed/above ground, log/seats moved with proper bounds.601 static samples clear, seeking identical, full2015+2 passed. Q12 ticked; Q13 playground next. Broader forest task78/Q17 remains WIP.

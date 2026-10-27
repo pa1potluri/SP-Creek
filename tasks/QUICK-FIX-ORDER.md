@@ -26,7 +26,7 @@ Tick an item only after its relevant checks and required full suite/day-night ev
 | [x] | Q09 | Town street/landmark/storefront margins and visible cast | 80 | 15–30 min |
 | [x] | Q10 | Willow Creek road/landmark/storefront framing | 82 | 15–30 min |
 | [x] | Q11 | Campsite framing, campers/tent spacing and firelight | 84 | 20–40 min |
-| [ ] | Q12 | Forest path/lantern readability and firefly visibility | 78 | 20–40 min |
+| [x] | Q12 | Forest path/lantern readability and firefly visibility | 78 |601 static samples clear; ground-fit/light/firefly increment, full2015+2, Film/Oil evidence |
 | [ ] | Q13 | Playground ground/contrast and connection to paths | 81 | 20–40 min |
 | [ ] | Q14 | Remaining top/side/build UI hierarchy and composition | 77 | 20–40 min |
 

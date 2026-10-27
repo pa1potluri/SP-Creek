@@ -1,0 +1,3 @@
+# Q04 — Kite Festival weather — verified, no code change needed
+Actual Kite Day and Episode11 preset buttons tested after drizzle plus extra rain .8: all8 clip activations use weather auto, extraRain0, physical rain0. Direct camera selection retains manually chosen drizzle (rain.3), as intended. The screenshot's conflicting rain is consistent with retained manual weather; a broken preset reset was not reproduced. Do not override user weather merely on camera navigation.
+Full31 suites2015+2 startup passed; Browser errors []. Evidence quick-04-check.json/cjs, quick-04-full.txt; Film festival view93 day/night. Task65 landscape/weather visual acceptance remains separate; no assets/render settings modified.

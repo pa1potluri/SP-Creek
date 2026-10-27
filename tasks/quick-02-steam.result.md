@@ -1,0 +1,4 @@
+# Q02 — lighter station/train steam — done, awaiting review
+Train puffs now max size3 instead6, opacity .18 instead .35, lifetime4.5s instead6; lower stopped/moving/cinematic emission rates. Twelve shared building chimneys use explicit smaller/fainter/shorter-lived puffs instead large defaults. Campfire/river spray untouched; no new particle system, camera, train scale, route or collision edits.
+Focused check verifies reduced train emitter, 12 chimney emitters, no page errors and locked audio. Film station11/above64 day/night captures saved as quick-02-{11,64}-{day,night}.png after effect warmup. Above view inspected: station/train remain visible without large white plumes. Steam is still present, intentionally subtle.
+Full suite31 suites2015 +2 startup passed, Browser errors []; quick-02-full.txt. Existing full train motion/boarding tests included. Other station framing/layout/tree/route corrections remain queued.

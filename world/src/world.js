@@ -686,7 +686,7 @@ export class World {
       this.ceilings.push({ ...this._rectOf(g, 0, zc, w / 2, depth / 2), y: (s.y ?? 0) + 3.7 });
     } else this.colliders.rects.push(this._rectOf(g, 0, -depth / 2 - 0.075, w / 2, depth / 2 + 0.15));
     this.floors.push({ ...this._rectOf(g, 0, 1.45, (w + 0.3) / 2, 1.3), y: (s.y ?? 0) + 0.35 });
-    if (s.chimney) this.emitters.push({ type: 'smoke', pos: g.localToWorld(V(w * 0.28, bh + 2.8, -depth * 0.55)), rate: 2.2, acc: 0 });
+    if (s.chimney) this.emitters.push({ type: 'smoke', pos: g.localToWorld(V(w * 0.28, bh + 2.8, -depth * 0.55)), rate: 1.2, acc: 0, life: 5, s0: .45, s1: 2.4, alpha: .14, rise: 1 });
     return g;
   }
 

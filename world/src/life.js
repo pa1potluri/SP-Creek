@@ -224,7 +224,7 @@ class Train {
     ];
     for (const c of this.cars) root.add(c.g);
     this.friends=['pavi','siri'].map(role=>{const p=makeCharacter(CAST[role]);root.add(p.g);p.g.visible=false;return p;});
-    this.steam = { type: 'smoke', pos: V(), rate: 0, acc: 0, life: 6, s0: 1, s1: 6, alpha: 0.35, rise: 2 };
+    this.steam = { type: 'smoke', pos: V(), rate: 0, acc: 0, life: 4.5, s0: 0.55, s1: 3, alpha: 0.18, rise: 1.4 };
     world.emitters.push(this.steam);
     this.dir = 1;
     this.s = -400;
@@ -249,7 +249,7 @@ class Train {
     const f=sampleTrainTrip(time),p0=sampleTrainTrip(Math.max(0,time-0.05)),p1=sampleTrainTrip(Math.min(240,time+0.05));this.v=Math.abs(p1.distance-p0.distance)/0.1;this.s=f.pos.z;this.stopped=f.stopped;this.state=f.stopped?'stopped':'run';
     for(const c of this.cars){const p=sampleTrainTrack(f.distance-c.off);c.g.visible=true;if(c.boardingSteps){c.boardingSteps.visible=c===this.cars[2]&&time<25;c.doors[0].visible=!c.boardingSteps.visible;}c.g.position.copy(p.pos);c.g.rotation.y=p.yaw;for(const {w,r}of c.wheels)w.rotation.x=-f.distance/r;}
     const coach=this.cars[2].g;coach.updateMatrixWorld(true);this.friends.forEach((p,i)=>{p.g.visible=true;const u=THREE.MathUtils.smoothstep(time,3+i*3,18+i*3),local=V(-4.2+3.35*u,-0.16+1.26*u,i?0.55:-0.55);if(u===1){local.x=-0.85+1.7*THREE.MathUtils.smoothstep(time,21,27);local.y=1.1;}const base=coach.localToWorld(local);p.g.position.copy(base);p.g.rotation.y=coach.rotation.y+(Math.PI/2);animatePerson(p,time*4,u<1?0.45:0);if(u===1)gesture(p,'wave',0.3+Math.sin(time*0.3+i)*0.15,time*0.7);});
-    this.cars[0].g.updateMatrixWorld(true);this.steam.pos.copy(this.cars[0].g.localToWorld(V(0,4.4,2.6)));this.steam.rate=f.stopped?0.8:3;
+    this.cars[0].g.updateMatrixWorld(true);this.steam.pos.copy(this.cars[0].g.localToWorld(V(0,4.4,2.6)));this.steam.rate=f.stopped?0.55:1.6;
     this.world.trainTripActive=true;
   }
   update(dt) {
@@ -288,7 +288,7 @@ class Train {
       for (const { w, r } of c.wheels) w.rotation.x += (this.v * dt) / r;
     }
     this.steam.pos.set(RAIL_X, 4.4, this.s + this.dir * 2.6);
-    this.steam.rate = !visible ? 0 : this.state === 'stopped' ? 1.5 : 4 + this.v * 0.5;
+    this.steam.rate = !visible ? 0 : this.state === 'stopped' ? 0.65 : 1.8 + this.v * 0.18;
   }
   remove(root) {
     for (const c of this.cars) root.remove(c.g);

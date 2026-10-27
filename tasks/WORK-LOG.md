@@ -32,3 +32,5 @@ Episode12: runtime clips/cast activate correctly; identical wide/closing camera 
 27 October mine increment: timber facade/frames, grouped cyan crystals, wider winding graded ascent, rail-bounded deck/landing and grounded tethered basket. Full2015+2, no errors; 241 route samples/passage/edges pass, six Film views. Landscape/reference polish stays WIP; game boarding scope recorded in STUCK. Current area/crystal-timber-refresh.
 
 Q01 done: smaller camp-facing owl on grounded stump; size/contact/collider checked, full2015+2 and Film59 day/night saved. Next Q02 steam, then Q03 rain/particles only, per user10% limit.
+
+Q02 done: reduced train/chimney steam, no train movement/scale changes; full2015+2, four Film station day/night captures, no page errors/audio. Saved separately.

@@ -54,10 +54,10 @@ function orbitShot(name, center, radius, height, duration, lookY = 2) {
 function makeShots() {
   const town = [
     panShot('Town Square 360°', G(0, 1.7, 10), 90, Math.PI),
-    pathShot('Arrival', [[G(3, 2.4, 125), G(1, 4, 40)], [G(0.8, 2.0, 82), G(0, 3.5, 30)], [G(0, 1.8, 48), G(0, 2.6, 0)]], 42),
+    pathShot('Arrival', [[G(3, 3.4, 125), G(1, 4, 40)], [G(0.8, 3.8, 82), G(0, 4, 30)], [G(0, 4.2, 48), G(0, 4.2, 0)]], 42),
     pathShot('Café to Town Hall', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
     pathShot('Boardwalk Stroll', [[G(-6.2, 2.05, 46), G(-4.5, 2.1, 30)], [G(-6.2, 2.05, 10), G(-4.5, 2.2, -5)], [G(-6.2, 2.05, -28), G(-3, 2.6, -45)]], 55),
-    pathShot('Church Approach', [[G(0, 1.7, -18), G(0, 3.5, -62)], [G(0.4, 1.6, -46), G(0, 10, -64)]], 30),
+    pathShot('Church Approach', [[G(0, 3.6, -12), G(0, 11, -65)], [G(0.4, 4.3, -30), G(0, 11, -65)]], 30),
     pathShot('Crane Reveal', [[G(0, 1.8, 24), G(0, 2.5, -10)], [G(5, 14, 40), G(0, 4, -5)], [G(12, 42, 88), G(0, 0, -40)]], 36),
     orbitShot('Golden Orbit', V(0, 0, -5), 72, 32, 150, 3),
     pathShot('Hilltop Vista', [[G(-95, 22, 104), G(0, 4, 5)], [G(-108, 24, 109), G(0, 4, -10)]], 45),
@@ -405,5 +405,6 @@ export class Director {
     window.addEventListener('blur', () => this.free.keys.clear());
   }
 }
+
 
 

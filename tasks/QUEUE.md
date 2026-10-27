@@ -237,3 +237,5 @@ meadow & lake, crystal mine & balloon.
 > Q07 sign contrast increment completed: eleven main-street labels match Willow palette, full2015+2 and Film/Oil/Blocky evidence. View-dependent framing remains Q09/Q10. Q08 train bounds diagnostic next.
 
 > Q08 verified authored train framing at two aspects: full train fits, scale unchanged; no speculative code change. Full2015+2 and four Film captures. Freecam crop not constrained; wider station layout remains open. Next Q09 town camera.
+
+> Q09 town Arrival/Church Approach framing complete: landmark margin checks at3 aspects, Film/Oil/Blocky evidence, full2015+2. Q10 Willow chapel crop reproduced and next.

@@ -23,7 +23,7 @@ Tick an item only after its relevant checks and required full suite/day-night ev
 | Tick | Order | Correction | Existing task | Initial implementation estimate |
 |---|---|---|---|---|
 | [x] | Q08 | Station/train framing and signage; inspect camera bounds and road/structure clearance before any scale change | 81 | 15–30 min |
-| [ ] | Q09 | Town street/landmark/storefront margins and visible cast | 80 | 15–30 min |
+| [x] | Q09 | Town street/landmark/storefront margins and visible cast | 80 | 15–30 min |
 | [ ] | Q10 | Willow Creek road/landmark/storefront framing | 82 | 15–30 min |
 | [ ] | Q11 | Campsite framing, campers/tent spacing and firelight | 84 | 20–40 min |
 | [ ] | Q12 | Forest path/lantern readability and firefly visibility | 78 | 20–40 min |
@@ -70,6 +70,7 @@ Safety/collision regressions found during any earlier batch take priority immedi
 ## First implementation batch
 
 Start Q01 (campsite owl): inspect current camera and geometry, adjust only if the report is reproduced, verify existing campsite/character access, save Film day/night and full suite, result and commit on its own stacked area branch. Then Q02. Escalate unexpectedly complex findings without losing them.
+
 
 
 

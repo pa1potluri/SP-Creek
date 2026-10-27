@@ -1,0 +1,4 @@
+# Q09 — town framing — done camera increment
+Arrival now uses a slightly higher viewpoint for less ground-dominated framing. Church Approach holds farther back and aims at the full landmark, instead of moving too close to its base. Road/building geometry, walking width, actor scale, shot IDs/durations and360-degree view retained.
+Landmark bounding-box checks pass9 poses across16:9,4:3 andportrait aspect; worst top .651 and bottom -.736 in NDC, with horizontal margins. Film1/4 day/night and matching Oil/Blocky4 captures saved; quick-09-framing.json. Foreground storefronts may intentionally enter/leave frame during movement; this does not guarantee no arbitrary moving passer-by can cross frame edges. Wider prop/layout/actor routing work remains queued.
+Full31 suites2015+2 startup passed, Browser errors []; quick-09-full.txt. Mandatory camera-clearance regression included.

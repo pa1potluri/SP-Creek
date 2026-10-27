@@ -1271,7 +1271,7 @@ export class World {
     const buckets = this.treeGeos.map(() => []);
     let count = 0;
     for (let tries = 0; count < 520 && tries < 20000; tries++) {
-      const x = (r() - 0.5) * 680, z = (r() - 0.5) * 680;
+      let x = (r() - 0.5) * 680, z = (r() - 0.5) * 680;
       if (Math.hypot(x, z) > 335 || Math.hypot(x, z * 0.55) < 30) continue;
       if (Math.abs(x) < 23 && z > -85 && z < 72) continue;
       if (Math.abs(x - roadX(z)) < 9 && z > 0) continue;
@@ -1281,7 +1281,9 @@ export class World {
       const h = terrainHeight(x, z);
       const v = h > 22 || dens > 0.66 ? (r() < 0.5 ? 3 : 4) : r() < 0.25 ? 2 : r() < 0.5 ? 0 : 1;
       const sc = 0.8 + r() * 0.9;
-      p.set(x, h - 0.2, z);
+      // Keep the station vista clear; move the same seeded tree in every plant style.
+      if (Math.abs(x-90.8103)<.01 && Math.abs(z-14.1191)<.01 && !this._reserved(114,72,2)) { x=114; z=72; }
+      p.set(x, terrainHeight(x,z) - 0.2, z);
       q.setFromAxisAngle(up, r() * 6.28);
       s.set(sc, sc * (0.85 + r() * 0.3), sc);
       buckets[v].push(m4.compose(p, q, s).clone());

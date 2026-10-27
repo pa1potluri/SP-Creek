@@ -231,3 +231,5 @@ meadow & lake, crystal mine & balloon.
 > User authorises Q04–Q11 next. Q04 verified preset reset (8 clips dry) and retained manual drizzle; no code fix required, full2015+2 and Film93 day/night. Next Q05 Film focus/bloom.
 
 > Q05 Film defaults completed on area/quick-05-film-readability; full2015+2, eight fixed-view before/after captures. Q06 identified foreground cottonwood at90.8103,14.1191 via station-view raycast; relocate shared plant/collider next.
+
+> Q06 completed: identified cottonwood relocated with all4 representations/collider, full2015+2, Film64 before/after day/night. NextQ07 sign contrast/placement inspection.

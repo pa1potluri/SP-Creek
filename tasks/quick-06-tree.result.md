@@ -1,0 +1,4 @@
+# Q06 — station foreground tree — done, awaiting review
+Station-view raycasts identified cottonwood at90.8103,14.1191. Relocated that one seeded tree to clear ground114,72; shared generation moves native/painted/block representations and collider together, preserves seeded species/scale/random sequence, samples new ground height. No other foliage or camera edits.
+Checks: old representations0, relocated representations4, old collider absent/new collider present; destination not reserved, audio locked. Film64 before/after day/night reviewed: obstructing yellow canopy gone from station foreground. quick-06-inspect/check JSON and scripts retained.
+Final full31 suites2015+2 startup passed, Browser errors []; quick-06-full.txt. Camera/train framing and other station requests remain Q08/task81, not claimed done here.

@@ -12,7 +12,7 @@ export const STYLES = {
   film: {
     label: 'Animated film (Pixar-like)', textures: 'clean', plants: 'painted',
     paint: { radius: 1, strength: 0, wobble: 0, boil: 0, impasto: 0, canvas: 0, sat: 1.0, warmth: 0.04, contrast: 0.97, vignette: 0.2, grain: 0 },
-    look: { mode: 1, dof: 0.6, bloom: 0.3 }, fxaa: true, weave: 0,
+    look: { mode: 1, dof: 0.25, bloom: 0.12 }, fxaa: true, weave: 0,
   },
   toy: {
     label: 'Blocky toy (Roblox-like)', textures: 'flat', plants: 'blocks',

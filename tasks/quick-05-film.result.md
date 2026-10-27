@@ -1,0 +1,4 @@
+# Q05 — Film readability — done, awaiting review
+Film depth of field reduced .6→.25 and bloom .3→.12 (existing UI step quantises bloom to .1). Film mode, textures/plants, colour grading and user sliders retained. All other style definitions unchanged; LookShader unchanged.
+Fixed-camera Film before/after views0 and21, day/night, saved as quick-05-{before,after}-{0,21}-{day,night}.png. Inspected after view: less softening of foreground facade detail. Current project look confirms .25/.1, audio locked. This is a default adjustment, not final seven-style visual acceptance.
+First suite exposed the historical Watercolour test freezing the old Film defaults. Updated only its intentional Film baseline expectation; kept legacy shader pixel checks and all other style snapshots intact. Final full31 suites2015+2 startup passed, Browser errors []; quick-05-full.txt. No camera IDs, area geometry or other styles altered.

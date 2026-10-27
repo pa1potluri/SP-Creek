@@ -229,3 +229,5 @@ meadow & lake, crystal mine & balloon.
 > Quick batch1–3 complete: Q01 owl (0a3d04c), Q02 steam (a4969f8), Q03 local Willow weather on area/quick-03-willow-weather. Each full2015+2, evidence/results saved; checklist Q01/Q02/Q03 ticked. Larger campsite/station/Willow requests remain open. No Q04 work started.
 
 > User authorises Q04–Q11 next. Q04 verified preset reset (8 clips dry) and retained manual drizzle; no code fix required, full2015+2 and Film93 day/night. Next Q05 Film focus/bloom.
+
+> Q05 Film defaults completed on area/quick-05-film-readability; full2015+2, eight fixed-view before/after captures. Q06 identified foreground cottonwood at90.8103,14.1191 via station-view raycast; relocate shared plant/collider next.

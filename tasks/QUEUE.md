@@ -1,6 +1,6 @@
 # Codex task queue
 
-> **27 October user reorder — quick fixes first:** follow [QUICK-FIX-ORDER.md](QUICK-FIX-ORDER.md) for the new draft execution order Q01–Q32. Historical IDs/status rows below are retained. Terrain72 is saved WIP; next implementation is campsite owl Q01, then station steam Q02. Time estimates exclude mandatory validation and saving; do not tick unverified findings. Safety regressions override cosmetic ordering.
+> **27 October user reorder — quick fixes first:** follow [QUICK-FIX-ORDER.md](QUICK-FIX-ORDER.md) for the new draft execution order Q01–Q32. Historical IDs/status rows below are retained. Q01–Q11 are now saved/ticked; Q12 is next but not started. Terrain72 remains saved WIP. Time estimates exclude mandatory validation and saving; do not tick unverified findings. Safety regressions override cosmetic ordering.
 
 Work top to bottom. When a task is done (result file written, committed), mark it `done` here,
 commit, then start the next one at once on a new branch from the tip of the branch you just
@@ -243,3 +243,6 @@ meadow & lake, crystal mine & balloon.
 > Q10 completed: reproduced Willow chapel crop repaired,18 margin samples at3 aspects, real portrait and Film/Oil/Blocky evidence, full2015+2. Q11 campsite composition/firelight is last in authorised batch.
 
 > Q04–Q10 saved/ticked. Q11 campsite built and focused checks pass; final full suite running. Current area/quick-11-campsite. Preserve task84 broader ground/background polish. No Q12 work authorised in this batch.
+
+
+> Q04–Q11 authorised batch completed and saved separately. Q11 final full2015+2 passed, four Film59/60 day/night + Oil, route/tent/light checks passed. Broader scene work remains open; Q12 not started. Current area/quick-11-campsite.

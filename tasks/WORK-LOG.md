@@ -36,3 +36,5 @@ Q01 done: smaller camp-facing owl on grounded stump; size/contact/collider check
 Q02 done: reduced train/chimney steam, no train movement/scale changes; full2015+2, four Film station day/night captures, no page errors/audio. Saved separately.
 
 Q03 done: local Willow rain/dust readability adjustment; outside-region/weather/wetness preservation verified, full2015+2 no errors, Film day/night/rain and Oil saved. User-requested first three quick fixes saved separately and ticked.
+
+27 October Q04–Q11 batch saved on stacked branches. Q04 actual festival preset reset and Q08 authored whole-train bounds verified (no speculative code edits). Q05 Film defaults softened; Q06 foreground tree moved with representations/collider; Q07 eleven street signs standardised; Q09 town approach framing and Q10 reproduced Willow chapel crop repaired; Q11 camp camera/spacing/warm pooled light improved. Each task has full2015+2 and day/night evidence. Q11 initial new-light startup timeout was caught, probe replaced by fixed-pool reuse before final passing suite. Checklist Q01–Q11 ticked. Q12 and larger outstanding corrections not started/closed by this batch. No push/merge/publish.

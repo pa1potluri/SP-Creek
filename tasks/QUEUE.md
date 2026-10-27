@@ -252,3 +252,5 @@ meadow & lake, crystal mine & balloon.
 > Coastal task89 active WIP: first footing/path/pier continuity increment verified full2015+2; all15 approaches clear/dry, supports grounded. Shore foam/shallow-water and planting/material/light polish remain. Current area/coastal-village-polish; quickQ12 still deferred.
 
 > Coastal second increment saved as WIP: shallow-water/foam blend,18 varied coastal palms, small clear-route shrub/rock groups. Full31 suites2015+2 passed, no browser errors; Film/Clean/Oil overview and beach day/night captured. Remaining cottage materials/window warmth and hillside/landscape finish; Q20 unchecked.
+
+> Balloon Hill repeated reference saved as tasks/ref/balloon-hill-review-latest.png; task91 retains all6 requests. Task67 structural increments do not close visual/boarding work. Beach task89 remains active WIP; boarding scope request remains in STUCK.md.

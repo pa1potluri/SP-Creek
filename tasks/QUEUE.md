@@ -96,7 +96,7 @@ finished. Re-read this file each time; Claude may change it.
 | 78 | `tasks/firefly-forest-review.md` | `area/quick-12-forest` | WIP broader forest; Q12 path/light/firefly increment done:601 static route samples clear, full2015+2, Film Trail/Tour/Deer day/night + Oil; tree/root/deer/hillside/sky remain |
 | 79 | `tasks/river-railway-review.md` | planned | queued combined river/rail/hill review: banks/crossings and camera first, terrain/prop grouping next, distant depth/mill visibility; all earlier points retained |
 | 80 | `tasks/town-scene-review.md` | planned | queued town review: camera/road, building edges/landmark, signs/prop spacing/ground texture; preserve approved names |
-| 81 | `tasks/station-town-layout-review.md` | planned | queued station/town + elevation/playground references: continuous routes/gentler upper access, station/layout, playground/steam/tree/ground; train bounds gate before scaling |
+| 81 | `tasks/station-town-layout-review.md` | `area/quick-13-playground` | WIP broader layout; Q13 surface/entrance increment done:201 static samples clear, native36 + full2015+2, Film45/64 day/night + Oil45; upper access/town/crossings remain |
 | 82 | `tasks/willow-creek-review.md` | planned | queued seven Willow Creek corrections: camera/road, landmark/storefronts, weather/cast/terrain; verify multiple distances and aspect ratios |
 | 83 | `tasks/road-drawing-repair.md` | `area/road-drawing-repair` | done verified interaction increment, awaiting retest; 12 focused + full 2015 + 2; markers/Finish/Enter/save-reload pass; Film day/night; original cause unconfirmed |
 | 84 | `tasks/campsite-review.md` | planned | queued seven campsite corrections and navigation check |
@@ -264,3 +264,5 @@ meadow & lake, crystal mine & balloon.
 > Pond task87/Q23 complete functional increment:11 focused + full2015+2 passed,7203 body poses clear; silent pointer/Draw Road ownership and mock audio envelope checks. Film pond tour/moment day/night + Clean/Oil saved. Result updated. Resume quick order at Q12 forest path/light/fireflies; broader older WIPs retained.
 
 > Q12 saved: trail ground mismatch reproduced(-.303..+.573m), widened/fitted to+.1m;7 lanterns,90 soft fireflies distributed/above ground, log/seats moved with proper bounds.601 static samples clear, seeking identical, full2015+2 passed. Q12 ticked; Q13 playground next. Broader forest task78/Q17 remains WIP.
+
+> Q13 complete on area/quick-13-playground, approved module scope: neutral fine-grain surface,5 pastel equipment zones, single continuous ground-fitted entrance.201 static route samples clear/dry; native playground36 and full2015+2 passed, Film45/64 before/after day/night + Oil45 saved. Q13 ticked; broader task81 remains WIP. Next Q14 current UI review, no old screenshots assumed current.

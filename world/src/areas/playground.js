@@ -51,8 +51,13 @@ export function buildPlayground(world,life){
   const m={wood:world.mat.wood,...Object.fromEntries(Object.entries({green:'#9aba8c',pink:'#e7adc0',blue:'#a8ccd8',cream:'#f7e5bc',sand:'#ead6a2'}).map(([key,color])=>[key,new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide})]))};
   world.extraBuildPieces??={};for(const [type,spec]of Object.entries(PLAY_PIECES)){world.extraBuildPieces[type]={...spec,build:g=>makePiece(g,type,m)};const button=document.createElement('button');button.dataset.build=type;button.textContent=spec.label;document.querySelector('#buildCatalogue').append(button);}
   const root=new THREE.Group();root.name='Town playground';root.position.set(36,terrainHeight(36,48),48);world.root.add(root);world.registerAreaPad({x:36,z:48,hx:14,hz:13,blend:3,y:root.position.y});world.registerAreaPad({x:38,z:51,hx:24,hz:26,blend:1,clearOnly:true});world.updateTerrain();
-  const ground=new THREE.Mesh(new THREE.CylinderGeometry(13.5,13.5,0.08,64),m.sand);ground.scale.z=0.95;ground.position.y=0.025;ground.receiveShadow=true;root.add(ground);
-  const positions={playSwing:[-6,-5],playSlide:[-5,5],playSeesaw:[5,-5],playSandbox:[6,5],playClimber:[1,0]},pieces={};
+  const surface=document.createElement('canvas');surface.width=surface.height=128;const ctx=surface.getContext('2d'),pixels=ctx.createImageData(128,128);
+  for(let i=0;i<128*128;i++){const grain=228+((Math.imul(i+713,1103515245)>>>16)%24);pixels.data.set([grain,grain,grain,255],i*4);}ctx.putImageData(pixels,0,0);
+  const sandMap=new THREE.CanvasTexture(surface);sandMap.colorSpace=THREE.SRGBColorSpace;sandMap.wrapS=sandMap.wrapT=THREE.RepeatWrapping;sandMap.repeat.set(8,8);
+  const groundMaterial=new THREE.MeshLambertMaterial({map:sandMap,color:'#e5d4ad'});groundMaterial.userData.sets={oil:sandMap,clean:sandMap};world.surfaces.add(groundMaterial);
+  const ground=new THREE.Mesh(new THREE.CylinderGeometry(13.5,13.5,0.08,64),groundMaterial);ground.scale.z=0.95;ground.position.y=0.025;ground.receiveShadow=true;root.add(ground);
+  const positions={playSwing:[-6,-5],playSlide:[-5,5],playSeesaw:[5,-5],playSandbox:[6,5],playClimber:[1,0]},pieces={},safetySurfaces=[];
+  for(const [i,[type,[x,z]]]of Object.entries(positions).entries()){const bounds=PLAY_PIECES[type].bounds,patch=new THREE.Mesh(new THREE.CircleGeometry(1,48),[m.cream,m.blue,m.pink,m.cream,m.green][i]);patch.rotation.x=-Math.PI/2;patch.scale.set(bounds[0]+.45,bounds[1]+.45,1);patch.position.set(x,.075,z);patch.receiveShadow=true;root.add(patch);safetySurfaces.push(patch);}
   for(const [type,[x,z]]of Object.entries(positions)){const g=makePiece(new THREE.Group(),type,m);g.position.set(x,0.08,z);root.add(g);pieces[type]=g;const b=PLAY_PIECES[type].bounds;world.colliders.rects.push(world._rectOf(g,0,0,...b));}
   const fences=[];for(const z of [-13,13])fences.push([[-14,z],[14,z]]);fences.push([[14,-13],[14,13]],[[-14,-13],[-14,-1]],[[-14,7],[-14,13]]);
   for(const points of fences){const worldPoints=points.map(([x,z])=>[x+36,z+48]);const fence=world._fence(worldPoints,true);root.attach(fence);fence.scale.y=0.65;}
@@ -61,9 +66,10 @@ export function buildPlayground(world,life){
   const flowers=new THREE.InstancedMesh(new THREE.SphereGeometry(0.13,8,5),m.pink,36),stems=new THREE.InstancedMesh(new THREE.CylinderGeometry(0.025,0.025,0.24,6),m.green,36),beds=new THREE.InstancedMesh(new THREE.SphereGeometry(1,12,7),m.wood,6),matrix=new THREE.Matrix4();
   for(let i=0;i<6;i++){const angle=i/6*Math.PI*2,x=Math.cos(angle)*11.8,z=Math.sin(angle)*10.8;beds.setMatrixAt(i,matrix.makeScale(0.85,0.08,0.65).setPosition(x,0.1,z));for(let k=0;k<6;k++){const n=i*6+k,px=x+Math.cos(k*2.4)*0.5,pz=z+Math.sin(k*2.4)*0.38;flowers.setMatrixAt(n,matrix.makeTranslation(px,0.43,pz));stems.setMatrixAt(n,matrix.makeTranslation(px,0.27,pz));}}
   root.add(flowers,stems,beds);
-  const path=world._ribbon([[0,64],[18,64],[18,51],[24,51]],2.8,world._pathMaterial(),{lift:0.08,step:1});root.attach(path);
+  const accessRoutes=[[[0,64],[18,64],[18,51],[24,51],[27.5,49.5],[29,48]]],accessPaths=[];
+  for(const [i,points]of accessRoutes.entries()){const path=world._ribbon(points,i?1.5:2.8,world._pathMaterial(),{lift:.1,step:.5,fitGround:true});root.attach(path);accessPaths.push(path);}
   const pavi=makeCharacter(CAST.pavi),siri=makeCharacter(CAST.siri),slider=makeCharacter({...CAST.kid,shirt:'#a9cfd8',pants:'#c3a78b',hat:null});pieces.playSwing.userData.swingPivot.add(pavi.g);root.add(siri.g,slider.g);pavi.g.position.set(0,-2.55,0);siri.g.position.set(6,-0.1,5.1);siri.g.rotation.y=-0.5;
-  const area={root,pieces,kids:[pavi,siri,slider],update(t,camera){
+  const area={root,pieces,ground,safetySurfaces,accessRoutes,accessPaths,kids:[pavi,siri,slider],update(t,camera){
     const focus=camera.position.x>20&&camera.position.x<80&&camera.position.z>20&&camera.position.z<90;pavi.g.visible=siri.g.visible=focus;if(focus){area.hiddenStars??=Object.values(life.stars).map(p=>({p,visible:p.g.visible}));for(const p of Object.values(life.stars))p.g.visible=false;}else if(area.hiddenStars){for(const {p,visible}of area.hiddenStars)p.g.visible=visible;area.hiddenStars=null;}
     for(const g of [...Object.values(pieces),...world.buildings.map(e=>e.obj)])for(const motion of g.userData.playMotion||[]){if(motion.kind==='swing')motion.pivot.rotation.x=Math.sin(t*0.65)*0.12;else motion.pivot.rotation.z=Math.sin(t*0.4)*0.07;}
     posePlaygroundChild(pavi,'swing',t);posePlaygroundChild(siri,'dig',t);

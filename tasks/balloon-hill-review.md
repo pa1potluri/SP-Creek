@@ -10,3 +10,5 @@ Status: queued, not implemented. Saved-road surface visibility remains immediate
 ## Latest repeated reference
 Saved unchanged as tasks/ref/balloon-hill-review-latest.png. All six requests remain tracked: deck/landing/railings; gradual lit approach; identify/remove cyan placeholders or intentionally use friendly cube ghosts; boarding prompt and safe ride interaction; hill planting/materials; gentle anchored balloon/rope/basket movement.
 Prior task67 structural work includes deck/rail bounds, graded ascent, grouped mine crystals and anchored idle basket. These are partial implementations, not acceptance of the full visual reference. Verify the current live view against this image before further edits. Landscape finish and gameplay boarding remain open; boarding game.js/main.js scope request is in STUCK.md. Keep existing Clean 3D, UI and shot/preset IDs.
+
+Scope approved by user in this session: world/src/game.js and world/src/main.js for boarding prompt, ride activation and safe return. Implement on area/balloon-hill-review from saved coastal tip; beach WIP remains retained.

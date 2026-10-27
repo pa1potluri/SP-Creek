@@ -42,3 +42,6 @@ Partial swept traffic, visible crowd and market-spacing repairs are saved and in
 
 ## 27 October — Balloon Hill gameplay boarding scope
 Task91 asks for a boarding prompt and gameplay ride. Existing cinematic ride is intact and tested; game.js _interact supports horses only. Task67 permits areas/crystal-mine.js and camera.js, so no game/main wiring edited. Needed scope: game.js proximity/prompt/interact and main.js existing ride activation/return wiring, with collision and real-click-only sound checks. Keep this request open; proceed with independent queue corrections without asking the user to repeat it.
+
+## Resolved — Balloon Hill gameplay boarding scope
+User approved game.js/main.js changes in this session. Implemented on area/balloon-hill-review: E prompt/boarding,240-second route, automatic deck return, early return, exit restoration and non-overlapping player ownership.13 focused checks and final full2015+2 passed. Earlier boarding scope request is closed; global actor-routing request remains open.

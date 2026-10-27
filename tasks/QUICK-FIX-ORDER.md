@@ -53,7 +53,7 @@ Tick an item only after its relevant checks and required full suite/day-night ev
 | [ ] | Q26 | Old Hollow cube ghosts/reactions, connected street and decoration | 90 | Multiple sessions |
 | [ ] | Q27 | Genuine consistent block-built style | 76 | Multiple sessions |
 | [ ] | Q28 | Terrain brush integration, protected structures/water/rail, support updates, undo/save and UI | 72 | Multiple sessions; foundation saved |
-| [ ] | Q29 | Gameplay balloon boarding/return interaction | 91 | Scope boundary logged; estimate after integration inspection |
+| [x] | Q29 | Gameplay balloon boarding/return interaction | 91 | User approved scope;13 focused + full2015+2 passed; safe automatic/early return and exit |
 | [ ] | Q30 | Remaining character profile identity/fit/expressions | 52 | Multiple sessions |
 | [ ] | Q31 | Remaining Oil/Paper/Pixel/Watercolour identity, atmosphere/colour/depth; seven-style same-view comparisons | 60,85 | Multiple sessions |
 | [ ] | Q32 | Remaining first-use loading stalls/performance, persistence and whole-game regression | 50,61 | Profile as changes land; no fixed estimate |

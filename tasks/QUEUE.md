@@ -112,7 +112,7 @@ finished. Re-read this file each time; Claude may change it.
 | 88 | `tasks/railway-crossing.md` | planned | queued functional crossing: advance warnings/barriers, full train/tail clearance, actor safety; road/gate/building/fence visual reference retained |
 | 89 | `tasks/coastal-village-polish.md` | `area/coastal-village-polish` | WIP: cottage foundations,21 connected paths and supported pier verified; shallow-water/foam and coastal planting increment built; final material/landscape polish remains |
 | 31h | `tasks/road-surface-fit.md` | `area/road-surface-fit` | done repair, awaiting review: 85,400 curved/width samples clear; save/reload/rebuild/seven switches pass; final full 2015 + 2; Film high/low day/night |
-| 91 | `tasks/balloon-hill-review.md` | planned | queued deck/boarding, gentle access, anchored animation, landscape and matching safety boundaries; coordinate task 67 |
+| 91 | `tasks/balloon-hill-review.md` | `area/balloon-hill-review` | boarding/return complete; deck/sign/supports/lanterns and31 planting groups built, full2015+2 passed; broader hill terrain art remains WIP with task67/Q19 |
 | 90 | `tasks/old-hollow-review.md` | planned | queued friendly 3D cube ghosts/reactions and continuous street first; buildings/decor/warm light, matching collisions/clear paths; preserve UI/Clean style |
 | — | `tasks/kids-presets.md` | — | dropped: the renames are part of kid-cleanup |
 | — | `tasks/cafe-bar-light.md` | — | dropped: the café counter is part of kid-cleanup |
@@ -254,3 +254,5 @@ meadow & lake, crystal mine & balloon.
 > Coastal second increment saved as WIP: shallow-water/foam blend,18 varied coastal palms, small clear-route shrub/rock groups. Full31 suites2015+2 passed, no browser errors; Film/Clean/Oil overview and beach day/night captured. Remaining cottage materials/window warmth and hillside/landscape finish; Q20 unchecked.
 
 > Balloon Hill repeated reference saved as tasks/ref/balloon-hill-review-latest.png; task91 retains all6 requests. Task67 structural increments do not close visual/boarding work. Beach task89 remains active WIP; boarding scope request remains in STUCK.md.
+
+> User prioritised Balloon Hill now and approved game.js/main.js. Gameplay boarding/automatic landing/E early return/exit safety implemented;13 focused checks + full2015+2 passed. Film28/29/33 day/night, Clean/Oil29 and gameplay captures saved. Q29 complete; broader terrain art Q19 and coastal task89 still WIP.

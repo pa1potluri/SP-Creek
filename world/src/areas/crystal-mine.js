@@ -4,10 +4,11 @@ import { terrainHeight, walkHeight } from '../world.js';
 import { signTexture } from '../textures.js';
 
 export const CRYSTAL_HILL={x:173,z:-115,topX:202,topZ:-145};
-let rideReader=()=>null,rideHomeY=0;
+let rideReader=()=>null,gameRideReader=()=>null,rideHomeY=0;
 export const BALLOON_RIDE_SECONDS=240;
 export function setBalloonRideReader(reader){rideReader=reader;}
-export function balloonRideState(){return rideReader();}
+export function setBalloonGameReader(reader){gameRideReader=reader;}
+export function balloonRideState(){return gameRideReader()||rideReader();}
 const rideCurve=new THREE.CatmullRomCurve3([[202,-145],[-90,-204],[0,-35],[40,150],[-225,0],[-375,-50],[202,-145]].map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
 const ease=u=>{u=THREE.MathUtils.clamp(u,0,1);return u*u*u*(u*(u*6-15)+10);};
 // Ease only the departure/return, then travel at an even pace along the curve.
@@ -73,20 +74,34 @@ export function buildCrystalMine(world) {
   for(const sx of [-1,1])for(const sz of [-1,1])solid(new THREE.CylinderGeometry(0.25,0.25,0.1,12),stone,sx*0.78,0.3,sz*0.55,cart,[0,0,Math.PI/2]);
   for(let i=0;i<6;i++)crystal(176.25+(i%2)*0.7,y+1.2,-108.5+Math.floor(i/2)*0.45,0.45);
   rect(176.6,-108,0.85,0.95);
-  function lamp(x,z){const h=terrainHeight(x,z);box(0.12,2.4,0.12,wood,x,h+1.2,z);box(0.28,0.4,0.28,world.mat.lantern,x,h+2.2,z);const sp=new THREE.Sprite(world.haloMat);sp.position.set(x,h+2.2,z);sp.scale.setScalar(2);root.add(sp);world.colliders.circles.push({x,z,r:0.15});}
+  function lamp(x,z){const h=world.groundY(x,z);box(0.14,2.4,0.14,timber,x,h+1.2,z);box(0.34,0.45,0.34,world.mat.lantern,x,h+2.2,z);for(const sx of [-1,1])for(const sz of [-1,1])box(.035,.5,.035,timber,x+sx*.19,h+2.2,z+sz*.19);box(.48,.08,.48,timber,x,h+2.48,z);const sp=new THREE.Sprite(world.haloMat);sp.position.set(x,h+2.2,z);sp.scale.setScalar(1.6);root.add(sp);world.colliders.circles.push({x,z,r:0.2});}
   for(const [x,z]of [[169,-111],[177,-111],[171,-118],[175,-118],[207,-140]])lamp(x,z);
   for(const u of [.18,.4,.62,.82]){const p=approach.getPointAt(u),t=approach.getTangentAt(u);lamp(p.x-t.z*2.9,p.z+t.x*2.9);}
   const pathPoints=Array.from({length:49},(_,i)=>{const p=approach.getPointAt(i/48);return[p.x,p.z];});
   const path=world._ribbon(pathPoints,3.4,world._pathMaterial(),{step:.5,fitGround:true,lift:.1});root.attach(path);
   for(const side of [-1,1]){const points=[];for(let i=1;i<=21;i++){const p=approach.getPointAt(i/24),t=approach.getTangentAt(i/24);points.push([p.x-t.z*side*2.25,p.z+t.x*side*2.25]);}root.attach(world._fence(points,true));}
-  box(10,0.18,8,wood,202,top.y+0.06,-145);
+  box(10,0.18,8,timber,202,top.y+0.015,-145);
+  for(let i=0;i<20;i++)box(.48,.06,8,timber,197.25+i*.5,top.y+.12,-145);
+  // Supports meet the rendered slope, rather than hovering over its edge.
+  const deckSupports=[];
+  for(const x of [197.3,202,206.7])for(const z of [-148.7,-141.3]){const bottom=world.groundY(x,z)-.25,height=top.y+.1-bottom;box(.26,height,.26,timber,x,bottom+height/2,z);deckSupports.push({x,z,bottom,top:top.y+.1});}
+  for(const z of [-148.7,-141.3])box(9.6,.25,.22,timber,202,top.y-.08,z);
   world.floors.push({cx:202,cz:-145,ax:1,az:0,bx:0,bz:1,hx:5,hz:4,y:top.y+.15});
   const deckRails=[[197,-149,207,-149],[197,-149,197,-141],[207,-149,207,-141],[197,-141,200.5,-141],[203.5,-141,207,-141]];
   for(const [ax,az,bx,bz]of deckRails){const length=Math.hypot(bx-ax,bz-az),angle=Math.atan2(bz-az,bx-ax);for(const h of [.5,1])solid(new THREE.CapsuleGeometry(.07,length-.14,3,8),wood,(ax+bx)/2,top.y+h,(az+bz)/2,root,[0,-angle,Math.PI/2]);world.colliders.segs.push({ax,az,bx,bz});for(const [x,z]of [[ax,az],[bx,bz]])solid(new THREE.CapsuleGeometry(.09,.95,3,8),wood,x,top.y+.6,z);}
   const landing=new THREE.Mesh(new THREE.RingGeometry(1.55,1.65,48),cream);landing.rotation.x=-Math.PI/2;landing.position.set(202,top.y+.16,-145);root.add(landing);
+  for(const x of [200,204]){solid(new THREE.CapsuleGeometry(.13,2.9,3,8),timber,x,top.y+1.6,-140.8);world.colliders.circles.push({x,z:-140.8,r:.16});}
+  box(4.6,.8,.24,timber,202,top.y+3.1,-140.8);
+  solid(new THREE.PlaneGeometry(4.2,.62),new THREE.MeshLambertMaterial({map:signTexture('BALLOON RIDES',768,160,[248,231,189],'#68482e')}),202,top.y+3.1,-140.665);
+  for(const [x,z]of [[197.6,-148.4],[206.4,-148.4]])lamp(x,z);
   const bench=group(206,top.y+0.15,-144);box(1.8,0.1,0.5,wood,0,0.45,0,bench);box(1.8,0.35,0.1,wood,0,0.8,-0.2,bench);
   for(const x of [-0.7,0.7])box(0.12,0.45,0.45,wood,x,0.22,0,bench);
   for(const dx of [-0.4,0.4])world.benches.push({x:206+dx,y:top.y+0.65,z:-144,yaw:0,who:null});
+  rect(206,-144,1,.35);
+  const planting=[];
+  const greens=['#829a60','#9eae70','#687f52'].map(c=>mat(c)),petals=['#f3c86c','#dec0df','#f0dfa5'].map(c=>mat(c,.02));
+  const clearTrail=(x,z)=>{for(let i=0;i<=96;i++){const p=approach.getPointAt(i/96);if(Math.hypot(x-p.x,z-p.z)<3.8)return false;}return x<196||x>208||z<-150.5||z>-139.5;};
+  for(let i=0;i<34;i++){const a=i*2.399,x=202+Math.cos(a)*(9+(i%5)*1.6),z=-145+Math.sin(a)*(8+(i%4)*2);if(!clearTrail(x,z))continue;const h=world.groundY(x,z),s=.6+(i%4)*.18;ball(1,greens[i%3],x,h+.35*s,z,root,[s,.65*s,s*.8]);world.colliders.circles.push({x,z,r:s*.7});planting.push({x,z,r:s*.7});if(i%3===0)solid(new THREE.DodecahedronGeometry(.45,1).scale(1.2,.7,1),rockMats[i%3],x+s,h+.2,z+.4);for(let j=0;j<5;j++){const fx=x+Math.cos(j*2.4)*(s+.4),fz=z+Math.sin(j*2.4)*(s+.4),fy=world.groundY(fx,fz);ball(.12,petals[(i+j)%3],fx,fy+.22,fz,root,[1,.55,1]);}}
   const balloon=group(202,top.y+.2,-145);
   const basketCollider={cx:202,cz:-145,ax:1,az:0,bx:0,bz:1,hx:.98,hz:.85};
   world.colliders.rects.push(basketCollider);
@@ -110,11 +125,11 @@ export function buildCrystalMine(world) {
   for(const sx of [-1,1])for(const sz of [-1,1])solid(new THREE.CylinderGeometry(0.025,0.025,3.5,6),cream,sx*0.8,2.7,sz*0.65,balloon);
   const burner=new THREE.Mesh(new THREE.SphereGeometry(0.25,12,8),new THREE.MeshBasicMaterial({color:'#ffe3a6'}));burner.position.y=2.1;balloon.add(burner);
   const ropes=[];for(const sx of [-1,1])for(const sz of [-1,1]){const start=v(202+sx*4,top.y+0.6,-145+sz*3),geo=new THREE.BufferGeometry().setFromPoints([start,start.clone()]);const line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:'#b19c7d'}));root.add(line);box(0.14,1,0.14,wood,start.x,top.y+0.5,start.z);ropes.push({line,start,sx,sz});}
-  for(const [x,z]of [[198,-149],[206,-149],[198,-141]]){box(0.08,2.1,0.08,wood,x,top.y+1.1,z);const g=group(x,top.y+1.9,z);solid(new THREE.PlaneGeometry(0.8,0.45),crystalMats[flags.length%4],0.4,0,0,g);flags.push(g);}
+  for(const [x,z]of [[198,-149],[206,-149],[198,-141]]){box(0.08,2.1,0.08,wood,x,top.y+1.1,z);const g=group(x,top.y+1.9,z);solid(new THREE.PlaneGeometry(0.8,0.45),petals[flags.length%3],0.4,0,0,g);flags.push(g);}
   const positions=new Float32Array(90*3),geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));const sparkles=new THREE.Points(geo,new THREE.PointsMaterial({color:'#f6e5f5',size:0.1,transparent:true,opacity:0.7,depthWrite:false,blending:THREE.AdditiveBlending}));sparkles.frustumCulled=false;root.add(sparkles);
   for(const {parent,m,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),m);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}root.updateMatrixWorld(true);
   world.balloonRide={balloon,top};
-  return {root,pad,top,approach,path,deckRails,balloon,crystalMats,clusters,sparkles,ropes,update(t,atmos){
+  return {root,pad,top,approach,path,deckRails,deckSupports,planting,balloon,crystalMats,clusters,sparkles,ropes,update(t,atmos){
     const night=Math.max(atmos.stars,world.lanternLevel),wind=Math.min(1.5,Math.abs(world.wind??1));
     crystalMats.forEach((m,i)=>m.emissiveIntensity=0.22+night*0.2+Math.sin(t*0.35+i)*0.025);
     glowMats.forEach((m,i)=>m.opacity=0.12+night*0.08+Math.sin(t*0.6+i)*0.015);

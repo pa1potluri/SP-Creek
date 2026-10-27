@@ -32,7 +32,7 @@ import { buildTownCenter } from './areas/town-center.js';
 import { buildGhostTown } from './areas/ghost-town.js';
 import { buildForest } from './areas/forest.js';
 import { buildMeadowLake } from './areas/meadow-lake.js';
-import { buildCrystalMine } from './areas/crystal-mine.js';
+import { buildCrystalMine, setBalloonGameReader } from './areas/crystal-mine.js';
 
 const $ = (s) => document.querySelector(s);
 const LS = {
@@ -79,6 +79,7 @@ const recorder = new Recorder();
 const timeline = new Timeline(director, atmos);
 const life = new Life(scene, world);
 const game = new Game({ scene, camera, canvas, world, life, director });
+setBalloonGameReader(()=>game.active?game.balloon:null);
 const cafe = new CafeInterior(world);
 const townCenter = buildTownCenter(world, life);
 const ghostTown = buildGhostTown(world);
@@ -1052,6 +1053,8 @@ function step(dt) {
   camping.update(time,camera,atmos.cur);
   cafe.update(motionDt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
+  // Gameplay uses the player's avatar; cinematic rides keep their existing pair.
+  if(game.balloon)for(const rider of life.balloonRiders||[])rider.g.visible=false;
   audio.tick(listener(), dt);
   if (backdrop) {
     backdrop.position.set(camera.position.x, 2, camera.position.z);

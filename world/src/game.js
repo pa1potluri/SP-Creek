@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { terrainHeight, WATER_Y, RAIL_X } from './world.js';
 import { makePerson, animatePerson, animateHorse, seat, stand } from './life.js';
 import { CAST } from './characters.js';
+import { sampleBalloonRide, BALLOON_RIDE_SECONDS, balloonRideState } from './areas/crystal-mine.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const wrapAngle = (a) => Math.atan2(Math.sin(a), Math.cos(a));
@@ -29,6 +30,7 @@ export class Game {
     this.phase = 0;
     this.walk = 0;
     this.horse = null; // the Grazer we are riding
+    this.balloon = null;
     this.speed = 0;
     this.prompt = '';
     this._cam = V();
@@ -45,7 +47,9 @@ export class Game {
     // start on the ground where the camera was looking (or in the square if that's somewhere odd)
     const l = this.director.state.look;
     this.pos.set(l.x, 0, l.z);
-    if (this.camera.position.distanceTo(l) > 40 || this._blocked(this.pos.x, this.pos.z, 0.4)) this.pos.set(0, 0, 14);
+    // The hill view looks at the basket, which is solid: enter beside it.
+    if(this.world.balloonRide&&Math.hypot(l.x-202,l.z+145)<6)this.pos.set(202,this.world.balloonRide.top.y+.15,-142.5);
+    else if (this.camera.position.distanceTo(l) > 40 || this._blocked(this.pos.x, this.pos.z, 0.4)) this.pos.set(0, 0, 14);
     this.pos.y = this._ground(this.pos.x, this.pos.z, 99);
     const d = V().subVectors(l, this.camera.position);
     this.yaw = Math.atan2(d.x, d.z);
@@ -60,6 +64,7 @@ export class Game {
 
   exit() {
     if (!this.active) return;
+    if (this.balloon) this._landBalloon();
     if (this.horse) this._dismount();
     this.active = false;
     this.person.g.visible = false;
@@ -76,7 +81,7 @@ export class Game {
       if (!this.active || isTyping(e)) return;
       this.keys.add(e.code);
       if (e.code === 'Space' || e.code.startsWith('Arrow')) e.preventDefault();
-      if (e.code === 'Space' && this.grounded && !this.horse) {
+      if (e.code === 'Space' && this.grounded && !this.horse && !this.balloon) {
         this.vy = JUMP;
         this.grounded = false;
       }
@@ -209,11 +214,50 @@ export class Game {
   }
 
   _interact() {
+    if (!this.active) return;
+    if (this.balloon) return this._landBalloon();
     if (this.horse) this._dismount();
+    else if (this._canBoardBalloon()) this._boardBalloon();
     else {
       const h = this._nearestHorse();
       if (h) this._mount(h);
     }
+  }
+
+  _canBoardBalloon() {
+    const ride=this.world.balloonRide;
+    return !!ride&&!this.horse&&!balloonRideState()&&Math.hypot(this.pos.x-202,this.pos.z+145)<3&&this.pos.z<=-141.3&&Math.abs(this.pos.y-ride.top.y-.15)<1;
+  }
+
+  _boardBalloon() {
+    if (!this._canBoardBalloon()) return;
+    this.balloon={t:0,game:true};
+    this.keys.clear();this.vy=0;this.speed=0;this.walk=0;
+    stand(this.person);
+    this.world.balloonRide.balloon.add(this.person.g);
+    this.person.g.position.set(0,.18,0);this.person.g.rotation.set(0,0,0);
+  }
+
+  _landBalloon() {
+    this.balloon=null;
+    this.scene.add(this.person.g);
+    this.pos.set(202,this.world.balloonRide.top.y+.15,-142.5);
+    this.person.g.position.copy(this.pos);this.person.g.rotation.set(0,0,0);
+    this.keys.clear();this.vy=0;this.walk=0;this.grounded=true;this.facing=0;this.prompt='';
+    this.director.state.look.set(this.pos.x,this.pos.y+1.6,this.pos.z);
+  }
+
+  _flyBalloon(dt) {
+    this.balloon.t=Math.min(BALLOON_RIDE_SECONDS,this.balloon.t+dt);
+    if(this.balloon.t>=BALLOON_RIDE_SECONDS){this._landBalloon();this._camera(1);return;}
+    this.pos.copy(sampleBalloonRide(this.balloon.t));
+    animatePerson(this.person,this.balloon.t*.6,0);
+    this.person.g.position.set(0,.18,0);this.person.g.rotation.set(0,0,0);
+    this._target.copy(this.pos);this._target.y+=5;
+    this._cam.set(this.pos.x-12,this.pos.y+7,this.pos.z+18);
+    this.camera.position.copy(this._cam);this.camera.lookAt(this._target);
+    this.director.state.pos.copy(this._cam);this.director.state.look.copy(this._target);
+    this.prompt='Balloon ride — E to return to the boarding deck';
   }
 
   _mount(g) {
@@ -259,6 +303,7 @@ export class Game {
   // ---------- every frame ----------
   update(dt) {
     if (!this.active) return;
+    if (this.balloon) return this._flyBalloon(dt);
     const k = this.keys;
     const f = (k.has('KeyW') || k.has('ArrowUp') ? 1 : 0) - (k.has('KeyS') || k.has('ArrowDown') ? 1 : 0);
     const s = (k.has('KeyD') || k.has('ArrowRight') ? 1 : 0) - (k.has('KeyA') || k.has('ArrowLeft') ? 1 : 0);
@@ -271,7 +316,7 @@ export class Game {
     if (this.horse) this._ride(dt, dx, dz, len > 0, fast);
     else this._walk(dt, dx, dz, len > 0, fast);
 
-    this.prompt = this.horse ? 'E — get off' : this._nearestHorse() ? 'E — ride this horse' : '';
+    this.prompt = this.horse ? 'E — get off' : this._canBoardBalloon() ? 'E — board the balloon' : this._nearestHorse() ? 'E — ride this horse' : '';
     this._camera(dt);
   }
 

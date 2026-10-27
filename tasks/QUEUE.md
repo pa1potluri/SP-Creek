@@ -233,3 +233,5 @@ meadow & lake, crystal mine & balloon.
 > Q05 Film defaults completed on area/quick-05-film-readability; full2015+2, eight fixed-view before/after captures. Q06 identified foreground cottonwood at90.8103,14.1191 via station-view raycast; relocate shared plant/collider next.
 
 > Q06 completed: identified cottonwood relocated with all4 representations/collider, full2015+2, Film64 before/after day/night. NextQ07 sign contrast/placement inspection.
+
+> Q07 sign contrast increment completed: eleven main-street labels match Willow palette, full2015+2 and Film/Oil/Blocky evidence. View-dependent framing remains Q09/Q10. Q08 train bounds diagnostic next.

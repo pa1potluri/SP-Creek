@@ -595,6 +595,8 @@ export class World {
   }
 
   _building(s) {
+    // Match the legible cream-on-dark signs used by Willow Creek; keep approved shop names.
+    if(s.mainStreet)s={...s,signBg:[30,30,22],signInk:'#f0e0c0'};
     const g = new THREE.Group();
     const two = s.floors === 2, fh = two ? 8 : 5.4, bh = two ? 7.2 : 4.6, depth = s.depth ?? 12, w = s.w;
     const pm = (name, rx, ry, extra) => (s.painted ? this.paintedMaterial(name, rx, ry, extra) : null);

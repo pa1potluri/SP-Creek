@@ -1,0 +1,3 @@
+# Q07 — main-street sign consistency — done increment
+Eleven main-street facades now use the same cream-on-dark sign palette as existing Willow Creek build signs. Approved displayed business names unchanged; existing consistent sign band sizes/positions retained. User-built/custom facade palettes are not overridden. Camera-dependent obstructions/framing remain Q09/Q10.
+Focused runtime confirms all11 sign palettes/names and locked audio; no page errors. Film3/4 day/night, Oil/Blocky4 comparisons saved; quick-07-check.json/cjs. Full31 suites2015+2 startup passed, Browser errors []; quick-07-full.txt. No new geometry/colliders or camera IDs.

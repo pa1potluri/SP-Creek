@@ -235,3 +235,5 @@ meadow & lake, crystal mine & balloon.
 > Q06 completed: identified cottonwood relocated with all4 representations/collider, full2015+2, Film64 before/after day/night. NextQ07 sign contrast/placement inspection.
 
 > Q07 sign contrast increment completed: eleven main-street labels match Willow palette, full2015+2 and Film/Oil/Blocky evidence. View-dependent framing remains Q09/Q10. Q08 train bounds diagnostic next.
+
+> Q08 verified authored train framing at two aspects: full train fits, scale unchanged; no speculative code change. Full2015+2 and four Film captures. Freecam crop not constrained; wider station layout remains open. Next Q09 town camera.

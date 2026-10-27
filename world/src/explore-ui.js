@@ -10,6 +10,13 @@ const PLACES=[
 export function setupExploreUI(app){
  let buildMode=null;
  const panel=document.querySelector('#panel'),bar=document.querySelector('#styleBar'),brush=document.querySelector('#brushPanel'),toggle=document.querySelector('#brushToggle');
+ const styles=document.querySelector('#styles'),picker=document.createElement('div');picker.id='stylePicker';bar.insertBefore(picker,styles);picker.append(styles);
+ const styleScroll=(label,text,direction)=>{const b=document.createElement('button');b.type='button';b.className='styleScroll';b.textContent=text;b.title=label;b.setAttribute('aria-label',label);b.setAttribute('aria-controls','styles');b.onclick=()=>styles.scrollBy({left:direction*Math.max(120,styles.clientWidth*.75),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});return b;};
+ const previous=styleScroll('Previous art styles','‹',-1),next=styleScroll('More art styles','›',1);picker.prepend(previous);picker.append(next);
+ let selectedStyle=null;
+ const syncStyles=()=>{const overflow=styles.scrollWidth>styles.clientWidth+2;previous.hidden=next.hidden=!overflow;previous.disabled=styles.scrollLeft<2;next.disabled=styles.scrollLeft+styles.clientWidth>=styles.scrollWidth-2;for(const b of styles.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.classList.contains('on')));const selected=styles.querySelector('button.on');if(selected&&selected!==selectedStyle){selectedStyle=selected;selected.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'});}};
+ styles.addEventListener('scroll',syncStyles,{passive:true});new ResizeObserver(syncStyles).observe(styles);new MutationObserver(syncStyles).observe(styles,{subtree:true,attributes:true,attributeFilter:['class']});
+ styles.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key)||!e.target.matches('button'))return;const buttons=[...styles.querySelectorAll('button')],i=buttons.indexOf(e.target),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;e.preventDefault();buttons[n].focus();buttons[n].scrollIntoView({block:'nearest',inline:'nearest'});});syncStyles();
  const popup=document.createElement('section');popup.id='brushPopover';popup.hidden=true;popup.setAttribute('aria-label','Brush and finish settings');popup.append(brush);document.body.append(popup);
  const close=()=>{popup.hidden=true;toggle.setAttribute('aria-expanded','false');};
  const layout=()=>{const closed=document.body.classList.contains('ui-hidden')||getComputedStyle(panel).display==='none';document.body.style.setProperty('--pictureInset',closed?'0px':panel.getBoundingClientRect().width+'px');popup.style.top=(bar.getBoundingClientRect().bottom+7)+'px';if(app.game.active)buildMode?.hide();};
@@ -24,6 +31,7 @@ export function setupExploreUI(app){
  const buildPanel=document.querySelector('#buildPanel'),buildPopup=document.createElement('section'),dock=document.createElement('nav');
  buildPopup.id='buildPopover';buildPopup.hidden=true;buildPopup.setAttribute('aria-label','Building tools');buildPopup.append(buildPanel);document.body.append(buildPopup);
  dock.id='buildDock';dock.hidden=true;dock.setAttribute('aria-label','Build categories');document.body.append(dock);
+ dock.addEventListener('focusin',e=>{if(e.target.matches('button'))e.target.scrollIntoView({block:'nearest',inline:'nearest'});});
  const roads=document.createElement('div');roads.id='buildRoadTools';const roadHeading=[...buildPanel.children].find(e=>e.tagName==='H3');let roadNode=roadHeading;while(roadNode){const next=roadNode.nextElementSibling;roads.append(roadNode);roadNode=next;}buildPanel.append(roads);
  const roadStatus=document.createElement('p');roadStatus.id='roadStatus';roadStatus.setAttribute('role','status');roadStatus.setAttribute('aria-live','polite');roads.prepend(roadStatus);
  const syncRoadStatus=()=>{roadStatus.textContent=document.querySelector('#hint').textContent||'Choose Draw road, click ground points, then Save road.';};

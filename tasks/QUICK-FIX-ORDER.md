@@ -28,7 +28,7 @@ Tick an item only after its relevant checks and required full suite/day-night ev
 | [x] | Q11 | Campsite framing, campers/tent spacing and firelight | 84 | 20–40 min |
 | [x] | Q12 | Forest path/lantern readability and firefly visibility | 78 |601 static samples clear; ground-fit/light/firefly increment, full2015+2, Film/Oil evidence |
 | [x] | Q13 | Playground ground/contrast and connection to paths | 81 |201 static route samples clear/dry; native36 + full2015+2; Film/Oil before/after saved |
-| [ ] | Q14 | Remaining top/side/build UI hierarchy and composition | 77 | 20–40 min |
+| [x] | Q14 | Remaining top/side/build UI hierarchy and composition | 77 |Style overflow/keyboard/pressed state + Build focus repaired;110 focused,full2015+2; broad scene composition still open |
 
 ## C — Diagnose rendering and refine environments
 

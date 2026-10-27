@@ -14,3 +14,5 @@ Related: task 75 surface lines and task 76 Blocky review remain separate. Task 6
 Follow-up screenshot codex-clipboard-435a2d0b-1a9b-4c21-bdcf-9fb8933bae57.png: the bridge reads as overly long/flat; inspect depth, perspective and proportions, not merely hiding its railing. Palm trees/buildings crowded at the right edge, sky/background transition and top/side control density reconfirmed. Preserve bridge safety and saved view IDs.
 
 Readability increment includes local road-progress status inside the road popup so accepted-point/save feedback is not hidden by the bottom dock. Larger toolbar/dock/place labels and hit targets, distinct style/mode grouping and active states. This is a UI increment; sky/bridge/camera/scene-composition requests remain open and require their own runtime diagnosis.
+
+Q14 UI increment completed on area/quick-14-ui: style overflow controls, Left/Right/Home/End focus, aria-pressed selection, focused Build category visibility.110 current friendly/Studio viewport checks and full2015+2 passed, Film day/night saved. This supersedes the old UI result's pending-full note; sky/bridge/character composition stays WIP. See quick-14-ui.result.md.

@@ -92,7 +92,7 @@ finished. Re-read this file each time; Claude may change it.
 | 74 | `tasks/station-residents.md` | planned | queued user request: calm standing/seated/readers at station |
 | 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
 | 76 | `tasks/blocky-style-review.md` | planned | queued user review: Blocky style selection/menu and genuine block-built silhouettes |
-| 77 | `tasks/readability-composition.md` | `area/readability-composition` | WIP larger grouped controls + visible road status; 34 checks and Film day/night; full suite and scene composition remain pending |
+| 77 | `tasks/readability-composition.md` | `area/quick-14-ui` | UI increment done:style overflow/keyboard/selected state + Build focus;110 focused + full2015+2, Film day/night; sky/bridge/scene composition still WIP |
 | 78 | `tasks/firefly-forest-review.md` | `area/quick-12-forest` | WIP broader forest; Q12 path/light/firefly increment done:601 static route samples clear, full2015+2, Film Trail/Tour/Deer day/night + Oil; tree/root/deer/hillside/sky remain |
 | 79 | `tasks/river-railway-review.md` | planned | queued combined river/rail/hill review: banks/crossings and camera first, terrain/prop grouping next, distant depth/mill visibility; all earlier points retained |
 | 80 | `tasks/town-scene-review.md` | planned | queued town review: camera/road, building edges/landmark, signs/prop spacing/ground texture; preserve approved names |
@@ -268,3 +268,5 @@ meadow & lake, crystal mine & balloon.
 > Q13 complete on area/quick-13-playground, approved module scope: neutral fine-grain surface,5 pastel equipment zones, single continuous ground-fitted entrance.201 static route samples clear/dry; native playground36 and full2015+2 passed, Film45/64 before/after day/night + Oil45 saved. Q13 ticked; broader task81 remains WIP. Next Q14 current UI review, no old screenshots assumed current.
 
 > Current area/quick-14-ui WIP baseline only, no runtime edits. Friendly/Studio at1600/1024/768:0 horizontal page overflow,6 main tabs available,36px style targets, no errors/audio. Six screenshots/report saved. Next verify keyboard style access, Build dock/popovers and side-panel hierarchy before choosing fixes. Pond/Q12/Q13 completed separately; Q14 not ticked.
+
+> Q14 completed: reproduced style-strip discoverability and clipped keyboard Roads target, repaired within explore-ui.js/style.css.110 focused + full2015+2 passed, six layout checks + Film world/Studio day/night saved. Q14 ticked; next Q15 cove surface-line/edge diagnosis. Task77 broader scene requests remain open.

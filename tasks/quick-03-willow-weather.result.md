@@ -1,0 +1,5 @@
+# Q03 — Willow Creek rain/particles — done, awaiting review
+Local presentation now fades in around Willow Creek: at its centre rain opacity/drawn streak count are 65% of normal, streak length60%, floating dust opacity50%. Smooth45–85m regional fade restores normal presentation outside. Weather selection, rain sliders, physical rain/wet ground, fireflies, clouds and sound unchanged.
+Focused runtime check: Willow rain .65 vs town1, 5200 vs8000 line vertices, length .54 vs .9; physical rain1 in both, weather auto retained; golden dust .5 vs1. Audio locked, no page errors. quick-03-check.cjs/json.
+Full suite31 suites2015 +2 startup passed; Browser errors []; quick-03-full.txt. Film Willow view21 day/night/strong-rain and Oil comparison saved as quick-03-21-{day,night,rain,oil}.png. Day view inspected: storefront/landmark readable with subtler streaks. Camera/scene layout and saved IDs unchanged.
+This completes Q03 presentation only. Willow camera/framing, signs, cast and ground polish remain queued; do not claim whole Willow Creek review complete.

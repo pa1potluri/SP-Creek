@@ -225,3 +225,5 @@ meadow & lake, crystal mine & balloon.
 > Quick batch: Q01 completed on area/quick-01-camp-owl; full2015+2, Film59 day/night, quick-01-owl.result.md. Next Q02 steam, then Q03 Willow rain/particles. User limits this batch to1–3; save each separately.
 
 > Q02 steam completed on area/quick-02-steam: smaller/fainter/fewer train/chimney puffs, full2015+2 and four Film station views; quick-02-steam.result.md. Q03 rain/particles is next and last in this authorised batch.
+
+> Quick batch1–3 complete: Q01 owl (0a3d04c), Q02 steam (a4969f8), Q03 local Willow weather on area/quick-03-willow-weather. Each full2015+2, evidence/results saved; checklist Q01/Q02/Q03 ticked. Larger campsite/station/Willow requests remain open. No Q04 work started.

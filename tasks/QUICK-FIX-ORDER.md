@@ -12,7 +12,7 @@ Tick an item only after its relevant checks and required full suite/day-night ev
 |---|---|---|---|---|
 | [x] | Q01 | Resize/reposition campsite owl onto a natural perch | 84 | 3–5 min |
 | [x] | Q02 | Reduce oversized station/train steam where it obscures buildings | 81 | 3–5 min |
-| [ ] | Q03 | Reduce distracting Willow Creek rain/particle density while preserving manual weather | 82 | 5–10 min |
+| [x] | Q03 | Reduce distracting Willow Creek rain/particle density while preserving manual weather | 82 | 5–10 min |
 | [ ] | Q04 | Check warm Kite Festival weather activation; correct only if reproduced | 65 | 5–10 min |
 | [ ] | Q05 | Improve Film focus/bloom without washing out signs | 85 | 5–10 min |
 | [ ] | Q06 | Move the obstructing station foreground tree; retain safe routes | 81 | 5–10 min |
@@ -70,5 +70,6 @@ Safety/collision regressions found during any earlier batch take priority immedi
 ## First implementation batch
 
 Start Q01 (campsite owl): inspect current camera and geometry, adjust only if the report is reproduced, verify existing campsite/character access, save Film day/night and full suite, result and commit on its own stacked area branch. Then Q02. Escalate unexpectedly complex findings without losing them.
+
 
 

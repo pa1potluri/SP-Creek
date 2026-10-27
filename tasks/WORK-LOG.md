@@ -34,3 +34,5 @@ Episode12: runtime clips/cast activate correctly; identical wide/closing camera 
 Q01 done: smaller camp-facing owl on grounded stump; size/contact/collider checked, full2015+2 and Film59 day/night saved. Next Q02 steam, then Q03 rain/particles only, per user10% limit.
 
 Q02 done: reduced train/chimney steam, no train movement/scale changes; full2015+2, four Film station day/night captures, no page errors/audio. Saved separately.
+
+Q03 done: local Willow rain/dust readability adjustment; outside-region/weather/wetness preservation verified, full2015+2 no errors, Film day/night/rain and Oil saved. User-requested first three quick fixes saved separately and ticked.

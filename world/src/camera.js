@@ -96,10 +96,10 @@ function makeShots() {
   ].map((s) => ({ ...s, group: 'Characters' }));
   const h = HAMLET, chapel = h.buildings[0];
   const hamlet = [
-    pathShot('Willow Creek Approach', [[G(-72, 7, 67), G(-116, 4, 65)], [G(-99, 7, 66), G(-145, 6, 65)], [G(-124, 8, 65), G(chapel.x, 10, chapel.z)]], 85),
+    pathShot('Willow Creek Approach', [[G(-72, 7, 67), G(-145, 9, 65)], [G(-99, 7, 66), G(-145, 10, 65)], [G(-110, 8, 65), G(chapel.x, 12, chapel.z)]], 85),
     pathShot('Willow Creek Chapel', [
-      [G(-120, 10, 60), G(chapel.x, 10, chapel.z)], [G(-125, 11, 65), G(chapel.x, 10, chapel.z)],
-      [G(-122, 12, 70), G(chapel.x, 10, chapel.z)], [G(-116, 14, 71), G(chapel.x, 10, chapel.z)],
+      [G(-110, 10, 60), G(chapel.x, 12, chapel.z)], [G(-115, 11, 65), G(chapel.x, 12, chapel.z)],
+      [G(-112, 12, 70), G(chapel.x, 12, chapel.z)], [G(-106, 14, 71), G(chapel.x, 12, chapel.z)],
     ], 100),
     pathShot('Willow Creek Overlook', [
       [G(h.x + 45, 26, h.z - 26), G(h.x - 8, 4, h.z)],
@@ -405,6 +405,7 @@ export class Director {
     window.addEventListener('blur', () => this.free.keys.clear());
   }
 }
+
 
 
 

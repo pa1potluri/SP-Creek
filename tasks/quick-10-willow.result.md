@@ -1,0 +1,4 @@
+# Q10 — Willow Creek framing — done camera increment
+Reproduced chapel crop near the old approach ending: topNDC1.155 and bottom-1.055 (outside frame), consistent at all3 aspect ratios. Approach now ends farther back with higher landmark aim; Chapel views also stand farther back. Existing road width/layout, signs, cast scales, IDs/durations and freecam retained.
+Both changed shots21/22 pass18 landmark margin samples across16:9,4:3 andportrait aspect. Max top.625, bottom-.883. Film21/22 day/night, Oil/Blocky comparisons, before captures and real768x1024 portrait21 day/night saved. Portrait inspected: chapel and steeple clear of top controls.
+Full31 suites2015+2 startup passed, Browser errors []; quick-10-full.txt. Other Willow ground/props/cast/material polish stays task82; no promise of uncropped buildings from every arbitrary Freecam angle.

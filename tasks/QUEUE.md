@@ -246,3 +246,5 @@ meadow & lake, crystal mine & balloon.
 
 
 > Q04–Q11 authorised batch completed and saved separately. Q11 final full2015+2 passed, four Film59/60 day/night + Oil, route/tent/light checks passed. Broader scene work remains open; Q12 not started. Current area/quick-11-campsite.
+
+> Latest user priority: beach/coastal reference task89/Q20 now comes FIRST, before Q12. Current area/coastal-village-polish. Q01–Q11 were small fixes, not completion of coastal imagery. New supplied image saved unchanged; finish physical continuity then shoreline/planting/materials.

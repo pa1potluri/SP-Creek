@@ -1,6 +1,6 @@
 # Codex task queue
 
-> **27 October user reorder — quick fixes first:** follow [QUICK-FIX-ORDER.md](QUICK-FIX-ORDER.md) for the new draft execution order Q01–Q32. Historical IDs/status rows below are retained. Q01–Q11 are now saved/ticked; Q12 is next but not started. Terrain72 remains saved WIP. Time estimates exclude mandatory validation and saving; do not tick unverified findings. Safety regressions override cosmetic ordering.
+> **27 October user reorder — quick fixes first:** follow [QUICK-FIX-ORDER.md](QUICK-FIX-ORDER.md) for the new draft execution order Q01–Q32. Historical IDs/status rows below are retained. Q01–Q14, Q23 and Q29 are saved/ticked as bounded increments; Q15 is active WIP. See PROJECT-HANDOVER.md for the current verified checkpoint. Terrain72 remains saved WIP. Time estimates exclude mandatory validation and saving; do not tick unverified findings. Safety regressions override cosmetic ordering.
 
 Work top to bottom. When a task is done (result file written, committed), mark it `done` here,
 commit, then start the next one at once on a new branch from the tip of the branch you just
@@ -90,7 +90,7 @@ finished. Re-read this file each time; Claude may change it.
 | 72 | `tasks/terrain-shaping.md` | `area/terrain-shaping` | WIP isolated bounded brush/history foundation, 206 unit checks; not wired into game; protection/support/UI/persistence and full validation next |
 | 73 | `tasks/river-life.md` | planned | queued user request: placeable boats, gentle fish jumps and river life |
 | 74 | `tasks/station-residents.md` | planned | queued user request: calm standing/seated/readers at station |
-| 75 | `tasks/cove-surface-lines.md` | planned | queued screenshot: diagonal sea/sand lines and hard dune edges; diagnose geometry versus art effect |
+| 75 | `tasks/cove-surface-lines.md` | `area/quick-15-cove-edges` | WIP: smooth sand normals, sea/sand depth and panorama-edge changes saved; seven-style focused capture has no page errors/audio; final visual review, alpha-discard ordering check and full suite pending; see cove-surface-lines.result.md |
 | 76 | `tasks/blocky-style-review.md` | planned | queued user review: Blocky style selection/menu and genuine block-built silhouettes |
 | 77 | `tasks/readability-composition.md` | `area/quick-14-ui` | UI increment done:style overflow/keyboard/selected state + Build focus;110 focused + full2015+2, Film day/night; sky/bridge/scene composition still WIP |
 | 78 | `tasks/firefly-forest-review.md` | `area/quick-12-forest` | WIP broader forest; Q12 path/light/firefly increment done:601 static route samples clear, full2015+2, Film Trail/Tour/Deer day/night + Oil; tree/root/deer/hillside/sky remain |
@@ -270,3 +270,5 @@ meadow & lake, crystal mine & balloon.
 > Current area/quick-14-ui WIP baseline only, no runtime edits. Friendly/Studio at1600/1024/768:0 horizontal page overflow,6 main tabs available,36px style targets, no errors/audio. Six screenshots/report saved. Next verify keyboard style access, Build dock/popovers and side-panel hierarchy before choosing fixes. Pond/Q12/Q13 completed separately; Q14 not ticked.
 
 > Q14 completed: reproduced style-strip discoverability and clipped keyboard Roads target, repaired within explore-ui.js/style.css.110 focused + full2015+2 passed, six layout checks + Film world/Studio day/night saved. Q14 ticked; next Q15 cove surface-line/edge diagnosis. Task77 broader scene requests remain open.
+
+> 28 October handover: PROJECT-HANDOVER.md is the consolidated entry point; SESSION-HANDOFF.md and cove-surface-lines.result.md record exact Q15 WIP. Q14 finished at f545a23. No Q15 full-suite pass or completion claimed. This handover saves current source/evidence unchanged; no new building, merge, push or publication.

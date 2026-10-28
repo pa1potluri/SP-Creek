@@ -1030,14 +1030,14 @@ export class World {
     for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){const a=j*(cols+1)+i,b=a+cols+1;idx.push(a,b,a+1,b,b+1,a+1);}
     const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
     const mat=this._waterMaterial(0),before=mat.onBeforeCompile;
-    mat.userData.waterUniforms.uWaterDetail={value:0.22};mat.fog=false;
+    mat.userData.waterUniforms.uWaterDetail={value:0.22};mat.fog=false;mat.transparent=false;mat.opacity=1;mat.depthWrite=true;
     mat.onBeforeCompile=(shader,renderer)=>{before(shader,renderer);Object.assign(shader.uniforms,mat.userData.covePicture||{});shader.fragmentShader=shader.fragmentShader
       .replace('#include <common>','#include <common>\nuniform sampler2D uCovePicture; uniform vec3 uCoveTint; uniform float uCoveRotation,uCoveHeight,uCoveFade;')
       .replace('float shore = uWaterKind < 0.5 ? abs(vWaterUV.y * 2.0 - 1.0) * 1.09 : length(vWaterUV * 2.0 - 1.0);','float shore = clamp(1.0-(1.0-vWaterUV.y)*3000.0/14.0+sin(uWaterTime*0.22+wp.y*0.025)*0.025,0.0,1.0);')
       .replace('float banks = smoothstep(0.40, 0.96, shore);','float banks = smoothstep(0.0,0.9,shore)*0.7;')
       .replace('glint * 0.22','glint * 0.07').replace('float foam = smoothstep(0.88, 0.99, shore) * smoothstep(0.15, 0.75, broken) * 0.28;','float foam = smoothstep(0.86,0.95,shore)*(1.0-smoothstep(0.985,1.0,shore))*(0.45+0.2*smoothstep(0.2,0.8,broken));')
-      .replace('#include <opaque_fragment>','vec3 ray=vCloudWorld-cameraPosition;float dist=length(ray.xz);float theta=mod(atan(ray.x,ray.z)-uCoveRotation+6.2831853,6.2831853);vec2 pictureUV=vec2(1.0-(theta-3.14159265)/3.14159265,0.435+ray.y/max(0.1,dist)*1800.0/uCoveHeight);vec3 picture=texture2D(uCovePicture,pictureUV).rgb*uCoveTint;picture=mix(uWaterHorizon*0.45,picture,uCoveFade);outgoingLight=mix(outgoingLight,picture,smoothstep(25.0,140.0,dist)*smoothstep(0.06,0.25,pictureUV.y)*smoothstep(8.0,55.0,(1.0-vWaterUV.y)*3000.0));diffuseColor.a=1.0;\n#include <opaque_fragment>');};
-    mat.customProgramCacheKey=()=> 'cove-sea-v2';const sea=mesh(geo,mat,false,true);sea.name='Sunset Cove sea';sea.renderOrder=2;this.root.add(sea);return {area,sea};
+      .replace('#include <opaque_fragment>','vec3 ray=vCloudWorld-cameraPosition;float dist=length(ray.xz);float theta=mod(atan(ray.x,ray.z)-uCoveRotation+6.2831853,6.2831853);vec2 pictureUV=vec2(1.0-(theta-3.14159265)/3.14159265,0.435+ray.y/max(0.1,dist)*1800.0/uCoveHeight);vec3 picture=texture2D(uCovePicture,pictureUV).rgb*uCoveTint;picture=mix(uWaterHorizon*0.45,picture,uCoveFade);outgoingLight=mix(outgoingLight,picture,smoothstep(25.0,140.0,dist)*smoothstep(0.06,0.25,pictureUV.y)*smoothstep(8.0,55.0,(1.0-vWaterUV.y)*3000.0)*smoothstep(0.0,0.20,pictureUV.x)*(1.0-smoothstep(0.80,1.0,pictureUV.x)));diffuseColor.a=1.0;\n#include <opaque_fragment>');};
+    mat.customProgramCacheKey=()=> 'cove-sea-v3';const sea=mesh(geo,mat,false,true);sea.name='Sunset Cove sea';sea.renderOrder=2;this.root.add(sea);return {area,sea};
   }
 
   palmGeometry() {

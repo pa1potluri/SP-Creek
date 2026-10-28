@@ -1,10 +1,8 @@
-# Current WIP — Q14 UI baseline
-Current branch area/quick-14-ui from playground2191b1f. All work committed locally; never push/merge/publish.
-Q14 investigation only, no runtime edits. Read task77/readability-composition.md and old result. Existing readability-ui.cjs assumes pre-kids mode; do not blindly reuse its visible Gameplay-button assertion. Friendly mode intentionally uses the Play tab; Studio exposes original controls.
-Baseline quick-14-ui-baseline.cjs/.json and six screenshots at1600x900,1024x768,768x1024: friendly/Studio0 horizontal page overflow,36px style target heights, six friendly tabs, Free camera visible; Studio Gameplay/Auto/Free/Pause/Brush/Build visible. No page errors/audio. Result tasks/quick-14-ui.result.md.
-Exact next step: keyboard/focus style-strip access, Create/Build dock/categories/popovers and side-panel hierarchy at these widths, control transitions/style persistence. Fix only reproduced defects inside task77 scope. Full suite + day/night before Q14 done; checkbox remains unchecked. No new full run needed for baseline-only WIP, parent app state unchanged.
-Completed this resumed session:
-- Pond5a65f5d task87/Q23:3 swimming yellow ducks, click turn/flap/ripples, quiet trusted-click quack, pond/dock/mutual clearance7203 poses; broken rim bands fixed.11 focused + pointer/audio ownership + full2015+2. Film tour/moment day/night + Clean/Oil. Exploration/Freecam interaction; Play/Build retain controls.
-- Forestc6a3fbe Q12: widened ground-fitted trail,7 guide lanterns,90 terrain-aware distributed fireflies, log/seats moved with matching bound.601 static route samples clear, repeated seeking exact, full2015+2, Film before/after Trail/Tour/Deer day/night + Oil. Broader forest roots/trees/hillside/deer/sky still task78/Q17 WIP.
-- Playground2191b1f Q13 (user-approved module scope): neutral fine-grain sand,5 soft equipment zones, continuous ground-fitted entrance.201 static route samples clear/dry, native36 + full2015+2, Film45/64 before/after day/night + Oil45. Broader task81 town/elevation/crossing work remains.
-Older WIPs retained: Old Hollow facade/roof/autumn art; Balloon hill terrain art (boarding done); coastal roof/window/hillside; global actor routing and terrain brush integration. No existing reference needs resending. Q01–Q13, Q23 and Q29 ticked as specific increments only.
+# Current checkpoint — 28 October 2026
+
+Read PROJECT-HANDOVER.md first for the complete human/AI handover and queue/status snapshot.
+Current branch area/quick-15-cove-edges, parent completed Q14 f545a23. Current tip is the WIP handover save; use git log -1 for its hash. Never push/merge/publish.
+Q14 is DONE (110 focused + full31 suites2015+2, Film day/night). Earlier Q14-baseline-only handoff is superseded.
+Q15/task75 is WIP, source/evidence preserved: smooth copied sand normals, sea/sand surface depth and panorama/reflection edge fades. Focused7style run has errors[],audio locked,3294 matching normals. No Q15 full suite or final visual acceptance.
+Exact next: read cove-surface-lines.result.md; inspect after captures; address sand alpha discard ordering concern; validate paths/boats/night/allstyles, full suite once stable, update result/QUEUE/tick only after completion. Then Q16; other large WIPs remain in QUICK-FIX-ORDER.md.
+This handover task made documentation updates only; existing candidate code was saved unchanged. No new runtime tests/server check run for documentation. No new building started.

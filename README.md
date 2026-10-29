@@ -23,7 +23,13 @@ a friendly ghost town and a glowing crystal mine.
 - 🔨 **Build mode**: place fences, wells, houses and lanterns to grow the town
 - 🎨 **Art styles**: oil paint, animated film, clean and flat
 
-## Try it
+## Play in your browser
+
+**https://pa1potluri.github.io/SP-Creek/**
+
+Nothing to install: it opens straight in the browser. It works best on a computer or tablet.
+
+## Try it locally
 
 ```bash
 python serve_world.py 8810

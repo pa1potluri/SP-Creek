@@ -1,0 +1,13 @@
+{
+  "passed": 254,
+  "styles": [
+    "oil",
+    "film",
+    "toy",
+    "clean",
+    "paper",
+    "pixel",
+    "watercolor"
+  ],
+  "errors": []
+}

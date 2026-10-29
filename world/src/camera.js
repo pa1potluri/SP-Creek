@@ -4,7 +4,7 @@ import { gardenViews, GARDEN } from './areas/garden.js';
 import * as THREE from 'three';
 import { terrainHeight, walkHeight, riverZ, roadX, RAIL_X, RANCH, CAMP, sampleTrainTrack } from './world.js';
 import { HAMLET } from './hamlet.js';
-import { starCameraFocus, MOMENTS, momentFocus, setMomentCameraReader, sampleTrainTrip, setTrainTripReader, rainyFocus, setRainyCameraReader, marketFocus, setMarketCameraReader, rowingFocus, setRowingCameraReader, setGardenCameraReader } from './life.js';
+import { starCameraFocus, MOMENTS, momentFocus, setMomentCameraReader, sampleTrainTrip, setTrainTripReader, rainyFocus, setRainyCameraReader, marketFocus, setMarketCameraReader, rowingFocus, setRowingCameraReader, setGardenCameraReader, snowDayFocus, setSnowDayCameraReader, meadowOutingFocus, setMeadowOutingCameraReader } from './life.js';
 import { sampleBalloonRide, setBalloonRideReader } from './areas/crystal-mine.js';
 import { farmViews } from './areas/pony-farm.js';
 import { campingViews } from './areas/camping.js';
@@ -54,10 +54,10 @@ function orbitShot(name, center, radius, height, duration, lookY = 2) {
 function makeShots() {
   const town = [
     panShot('Town Square 360°', G(0, 1.7, 10), 90, Math.PI),
-    pathShot('Arrival', [[G(3, 2.4, 125), G(1, 4, 40)], [G(0.8, 2.0, 82), G(0, 3.5, 30)], [G(0, 1.8, 48), G(0, 2.6, 0)]], 42),
+    pathShot('Arrival', [[G(3, 3.4, 125), G(1, 4, 40)], [G(0.8, 3.8, 82), G(0, 4, 30)], [G(0, 4.2, 48), G(0, 4.2, 0)]], 42),
     pathShot('Café to Town Hall', [[G(-2.5, 1.7, -5), G(7.5, 3.8, 8)], [G(-0.5, 1.7, 7), G(2, 2.8, 20)], [G(1.8, 1.7, 13), G(-7.5, 2.8, 22)]], 30),
     pathShot('Boardwalk Stroll', [[G(-6.2, 2.05, 46), G(-4.5, 2.1, 30)], [G(-6.2, 2.05, 10), G(-4.5, 2.2, -5)], [G(-6.2, 2.05, -28), G(-3, 2.6, -45)]], 55),
-    pathShot('Church Approach', [[G(0, 1.7, -18), G(0, 3.5, -62)], [G(0.4, 1.6, -46), G(0, 10, -64)]], 30),
+    pathShot('Church Approach', [[G(0, 3.6, -12), G(0, 11, -65)], [G(0.4, 4.3, -30), G(0, 11, -65)]], 30),
     pathShot('Crane Reveal', [[G(0, 1.8, 24), G(0, 2.5, -10)], [G(5, 14, 40), G(0, 4, -5)], [G(12, 42, 88), G(0, 0, -40)]], 36),
     orbitShot('Golden Orbit', V(0, 0, -5), 72, 32, 150, 3),
     pathShot('Hilltop Vista', [[G(-95, 22, 104), G(0, 4, 5)], [G(-108, 24, 109), G(0, 4, -10)]], 45),
@@ -96,10 +96,10 @@ function makeShots() {
   ].map((s) => ({ ...s, group: 'Characters' }));
   const h = HAMLET, chapel = h.buildings[0];
   const hamlet = [
-    pathShot('Willow Creek Approach', [[G(-72, 7, 67), G(-116, 4, 65)], [G(-99, 7, 66), G(-145, 6, 65)], [G(-124, 8, 65), G(chapel.x, 10, chapel.z)]], 85),
+    pathShot('Willow Creek Approach', [[G(-72, 7, 67), G(-145, 9, 65)], [G(-99, 7, 66), G(-145, 10, 65)], [G(-110, 8, 65), G(chapel.x, 12, chapel.z)]], 85),
     pathShot('Willow Creek Chapel', [
-      [G(-120, 10, 60), G(chapel.x, 10, chapel.z)], [G(-125, 11, 65), G(chapel.x, 10, chapel.z)],
-      [G(-122, 12, 70), G(chapel.x, 10, chapel.z)], [G(-116, 14, 71), G(chapel.x, 10, chapel.z)],
+      [G(-110, 10, 60), G(chapel.x, 12, chapel.z)], [G(-115, 11, 65), G(chapel.x, 12, chapel.z)],
+      [G(-112, 12, 70), G(chapel.x, 12, chapel.z)], [G(-106, 14, 71), G(chapel.x, 12, chapel.z)],
     ], 100),
     pathShot('Willow Creek Overlook', [
       [G(h.x + 45, 26, h.z - 26), G(h.x - 8, 4, h.z)],
@@ -175,7 +175,15 @@ function makeShots() {
     {name:'Cove boat from above',rowing:'cove',rowingPhase:65,sample(t,out){const f=rowingFocus('cove',65+t);out.pos.set(f.pos.x-14,f.pos.y+34,f.pos.z+15);out.look.copy(f.pos);out.look.x-=16;out.look.y+=1;}},
     {name:'A garden full of good things',gardenPhase:210,sample(t,out){out.pos.copy(G(GARDEN.x+21,17,GARDEN.z+22));out.look.copy(G(GARDEN.x,0.7,GARDEN.z));}}
   ].map(view=>({...view,duration:40,loop:false,group:'Episode establishing views',clearance:1.8,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews,...balloonViews,...trainViews,...campingViews().map(view=>({...view,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}})),...farmViews(),{name:'SP Creek station from above',group:'Episode establishing views',duration:40,loop:true,clearance:1.5,sample(t,out){const x=97+Math.sin(t/40*Math.PI*2)*0.7;out.pos.copy(G(x,25,50));out.look.set(66,2,10);}},{name:'Welcome to SP Creek: one cove walk',group:'Sunset Cove',duration:180,loop:false,clearance:1.8,sample(t,out){const u=clamp01(t/180),wide=Math.cos(u*Math.PI)**2,p=stageCove('beach',u*70),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw),distance=8+38*wide,x=p.x-dx*distance,z=p.z-dz*distance;out.pos.set(x,Math.max(p.y+2.8+35*wide,walkHeight(x,z)+1.8),z);out.look.set(p.x+dx*3,p.y+1,p.z+dz*3);}},...rainyViews,...marketViews,...rowingViews,...gardenViews(),...episodeViews];
+  const snowDayViews=[['A snowman with friends','snowman'],['Soft snow angels','angels'],['A gentle sled ride','sled'],['Cocoa by the window','cocoa']].map(([name,kind])=>({name,snowDay:kind,group:'Snow day',duration:60,loop:false,clearance:1.5,sample(t,out){const f=snowDayFocus(kind);if(kind==='cocoa'){out.pos.copy(f.camera);out.look.copy(f.pos);out.look.y+=0.95;}else{out.pos.set(f.pos.x+8,f.pos.y+(kind==='angels'?9:6),f.pos.z+11);out.look.copy(f.pos);out.look.y+=kind==='angels'?0.1:0.9;}}}));
+  const outingViews=[['Kites above the meadow','kite',0],['Colourful kites and friends','kite',1],['A quiet kite-day ending','kite',2],['Picnic by the waterfall','picnic',0],['Fruit and little duck friends','picnic',1],['A wide waterfall picnic','picnic',2]].map(([name,kind,view])=>({name,meadowOuting:kind,group:kind==='kite'?'Kite day':'Waterfall picnic',duration:80,loop:false,clearance:1.5,sample(t,out){const f=meadowOutingFocus(kind),wide=view!==1;if(kind==='kite'){out.pos.set(f.x+(wide?16:9),f.y+(wide?10:8.5),f.z+(wide?12:15));out.look.set(f.x,f.y+(wide?5.5:6),f.z-1);}else{out.pos.set(f.x+(view===2?-12:wide?13:7),f.y+(wide?8:4.5),f.z+(wide?16:10));out.look.set(f.x-(view===1?1:4),f.y+1.1,f.z-(view===1?1:4));}}}));
+  const episodeMoreViews=[
+    {name:'Snow day from above',snowDay:'snowman',sample(t,out){const f=snowDayFocus('snowman');out.pos.set(f.pos.x+17,f.pos.y+14,f.pos.z+20);out.look.copy(f.pos);out.look.y+=.8;}},
+    {name:'Kite festival from above',meadowOuting:'kite',sample(t,out){const f=meadowOutingFocus('kite');out.pos.set(f.x+22,f.y+15,f.z+19);out.look.copy(f);out.look.y+=5.2;}},
+    {name:'Waterfall picnic from above',meadowOuting:'picnic',sample(t,out){const f=meadowOutingFocus('picnic');out.pos.set(f.x+21,f.y+14,f.z+21);out.look.copy(f);out.look.x-=5;out.look.z-=5;}},
+    {name:'Quiet water at the cove',rowing:'cove',rowingPhase:65,sample(t,out){const f=rowingFocus('cove',65+t);out.pos.set(f.pos.x-14,f.pos.y+34,f.pos.z+15);out.look.copy(f.pos);out.look.x-=16;out.look.y+=1;}}
+  ].map(view=>({...view,duration:40,loop:false,group:'Episode establishing views',clearance:1.8}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews,...balloonViews,...trainViews,...campingViews().map(view=>({...view,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}})),...farmViews(),{name:'SP Creek station from above',group:'Episode establishing views',duration:40,loop:true,clearance:1.5,sample(t,out){const x=97+Math.sin(t/40*Math.PI*2)*0.7;out.pos.copy(G(x,25,50));out.look.set(66,2,10);}},{name:'Welcome to SP Creek: one cove walk',group:'Sunset Cove',duration:180,loop:false,clearance:1.8,sample(t,out){const u=clamp01(t/180),wide=Math.cos(u*Math.PI)**2,p=stageCove('beach',u*70),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw),distance=8+38*wide,x=p.x-dx*distance,z=p.z-dz*distance;out.pos.set(x,Math.max(p.y+2.8+35*wide,walkHeight(x,z)+1.8),z);out.look.set(p.x+dx*3,p.y+1,p.z+dz*3);}},...rainyViews,...marketViews,...rowingViews,...gardenViews(),...episodeViews,...snowDayViews,...outingViews,...episodeMoreViews];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');
@@ -190,6 +198,8 @@ export class Director {
     setGardenCameraReader(()=>this.mode==='shot'&&this.shot?.gardenPhase!=null?{t:this.shot.gardenPhase+Math.min(this.t,this.shot.duration)}:null);
     setRowingCameraReader(()=>this.mode==='shot'&&this.shot?.rowing?{kind:this.shot.rowing,t:this.shot.rowingPhase+Math.min(this.t,this.shot.duration)}:null);
     setMarketCameraReader(()=>this.mode==='shot'&&this.shot?.market?{kind:this.shot.market,t:Math.min(this.t,this.shot.duration)}:null);
+    setSnowDayCameraReader(()=>this.mode==='shot'&&this.shot?.snowDay?{kind:this.shot.snowDay,t:Math.min(this.t,this.shot.duration)}:null);
+    setMeadowOutingCameraReader(()=>this.mode==='shot'&&this.shot?.meadowOuting?{kind:this.shot.meadowOuting,t:Math.min(this.t,this.shot.duration)}:null);
     this.dom = dom;
     this.shots = makeShots();
     this.speed = 1;
@@ -395,3 +405,7 @@ export class Director {
     window.addEventListener('blur', () => this.free.keys.clear());
   }
 }
+
+
+
+

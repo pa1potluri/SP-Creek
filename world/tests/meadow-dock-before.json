@@ -1,0 +1,18 @@
+{
+  "side": false,
+  "end": false,
+  "blocked": 0,
+  "wet": 0,
+  "floor": {
+    "cx": -227,
+    "cz": -18,
+    "ax": 1,
+    "az": 0,
+    "bx": 0,
+    "bz": 1,
+    "hx": 5,
+    "hz": 1.1,
+    "y": 23.345939308561597
+  },
+  "audioLocked": true
+}

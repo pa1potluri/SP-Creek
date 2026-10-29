@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SP Creek</title>
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
 <script type="importmap">
 { "imports": {
@@ -14,6 +15,13 @@
 </head>
 <body>
 <canvas id="view"></canvas>
+<nav id="styleBar" aria-label="Art style"><div id="styles" role="toolbar" aria-label="Choose art style"></div><div id="modeControls" role="toolbar" aria-label="Explore controls">
+<button id="playBtn" title="Walk and ride (G)">Gameplay: Off</button>
+<button id="autoBtn" title="Automatic camera tour">Auto director</button>
+<button id="freeBtn" title="Free camera (F)">Free camera: Off</button>
+<button id="pauseBtn" title="Pause the camera (P)">Pause (P)</button>
+<button id="brushToggle" aria-expanded="false" aria-controls="brushPopover">Brush &amp; finish</button>
+</div></nav>
 <div id="loading">Painting the town…</div>
 <div id="exportOverlay" class="hidden">
   <div class="box">
@@ -40,17 +48,17 @@
     <p>A painted frontier town · H hides this panel</p>
   </header>
 
-  <details open>
-    <summary>Ready-made videos</summary>
+  <details id="explorePlaces" open><summary>Places to explore</summary><div id="placeList" class="grid"></div></details>
+  <details id="videoLibrary">
+    <summary>Videos &amp; episodes (optional)</summary>
     <p class="hint">Peaceful background videos, ready to go: each sets the shots, mood, sounds and town life, and starts a looping preview. Then render it under <i>Video</i> at any length.</p>
     <div id="videoPresets" class="presetlist"></div>
-    <label class="row check"><span>Use the preset's art style</span><input type="checkbox" id="presetStyle" checked></label>
+    <label class="row check"><span>Change art style with location (optional)</span><input type="checkbox" id="presetStyle"></label>
   </details>
 
-  <details open>
-    <summary>Art style</summary>
+  <details>
+    <summary>Style adjustments</summary>
     <label class="row check"><span>Family mode (kid-friendly)</span><input type="checkbox" id="familyMode"></label>
-    <div id="styles" class="grid"></div>
     <label class="row"><span>Textures</span>
       <select id="texSet"><option value="auto">Follow the style</option><option value="oil">Oil painted</option><option value="clean">Clean cartoon</option><option value="flat">Flat toy colours</option></select>
     </label>
@@ -61,17 +69,21 @@
     <label class="row" data-for="paper"><span>Paper layers</span><input type="range" data-look="layers" min="2" max="14" step="1" value="7"><output></output></label>
     <label class="row" data-for="paper"><span>Layer shadows</span><input type="range" data-look="paperShadow" min="0" max="2" step="0.05" value="1"><output></output></label>
     <label class="row" data-for="pixel"><span>Pixel size</span><input type="range" data-look="pixel" min="2" max="16" step="1" value="4"><output></output></label>
+    <label class="row" data-for="watercolor"><span>Wash softness</span><input type="range" data-look="wash" min="0" max="1" step="0.05" value="0.65"><output></output></label>
+    <label class="row" data-for="watercolor"><span>Edge pigment</span><input type="range" data-look="pigment" min="0" max="1" step="0.05" value="0.45"><output></output></label>
+    <label class="row" data-for="watercolor"><span>Paper texture</span><input type="range" data-look="paper" min="0" max="1" step="0.05" value="0.55"><output></output></label>
+    <p class="hint off" data-for="watercolor">Preview look: try Sunset Cove at golden hour.</p>
     <p class="hint">A style also sets the sliders under <i>Brush &amp; finish</i>; adjust them freely afterwards.</p>
   </details>
 
-  <details open>
+  <details>
     <summary>Camera</summary>
-    <div class="btnrow"><button id="playBtn" class="primary">🎮 Play — walk &amp; ride (G)</button></div>
+    
     <div id="shots" class="grid"></div>
     <div class="btnrow">
-      <button id="autoBtn">Auto director</button>
-      <button id="freeBtn">Free camera (F)</button>
-      <button id="pauseBtn">Pause (P)</button>
+      
+      
+      
     </div>
     <label class="row"><span>Speed</span><input type="range" data-cam="speed" min="0.1" max="3" step="0.05" value="1"><output></output></label>
     <label class="row"><span>Hand-held sway</span><input type="range" data-cam="sway" min="0" max="2" step="0.05" value="0.4"><output></output></label>
@@ -86,7 +98,7 @@
     <div id="keyCount" class="hint">0 keys</div>
   </details>
 
-  <details open>
+  <details>
     <summary>Timeline</summary>
     <p class="hint">Plan a whole video: each clip is a shot, how long it lasts, an optional mood change, and how the camera gets there (<b>fly</b> over the roofs, or <b>cut</b>). Paths are timed to end exactly when their clip ends.</p>
     <div id="clips"></div>
@@ -105,7 +117,7 @@
     </div>
   </details>
 
-  <details open>
+  <details>
     <summary>Atmosphere</summary>
     <label class="row check"><span>Festival</span><input type="checkbox" id="festival"></label>
     <label class="row check"><span>Market day</span><input type="checkbox" id="marketDay"></label>
@@ -120,7 +132,7 @@
     <label class="row"><span>Mood change (s)</span><input type="range" data-atmos="transition" min="0.5" max="30" step="0.5" value="5"><output></output></label>
   </details>
 
-  <details open>
+  <details>
     <summary>Town life</summary>
     <label class="row"><span>People walking</span><input type="range" data-life="people" min="0" max="24" step="1" value="10"><output></output></label>
     <label class="row"><span>Horse riders</span><input type="range" data-life="riders" min="0" max="4" step="1" value="2"><output></output></label>
@@ -136,7 +148,7 @@
     <p class="hint">Riders and the stagecoach come down the road, turn in front of the church and ride back out. Wind moves the shop signs, the flag and the tumbleweeds.</p>
   </details>
 
-  <details open>
+  <details id="brushPanel">
     <summary>Brush &amp; finish</summary>
     <label class="row"><span>Brush size</span><input type="range" data-paint="radius" min="1" max="7" step="1" value="4"><output></output></label>
     <label class="row"><span>Paint amount</span><input type="range" data-paint="strength" min="0" max="1" step="0.05" value="1"><output></output></label>
@@ -168,9 +180,13 @@
     <div class="btnrow"><button id="undoProp">Undo last</button><button id="clearProps">Remove all placed</button></div>
   </details>
 
-  <details id="buildPanel" open>
+  <details id="buildPanel">
     <summary>Build</summary>
-    <p class="hint">Pick a building, then click the ground. R or mouse wheel rotates. Esc stops. With no tool, click a placed building to select it.</p>
+    <p class="hint">Pick a building, set Rotation and Size, then click the ground. R or mouse wheel also rotates. Esc stops placing. To edit: press Esc, click your placed building, adjust Rotation/Size and press Apply.</p>
+    <label class="row"><span>Rotation</span><input id="buildRotation" type="range" min="0" max="345" step="15" value="0"><output>0°</output></label>
+    <div class="btnrow"><button id="buildRotateLeft">↶ Rotate left</button><button id="buildRotateRight">↷ Rotate right</button></div>
+    <label class="row"><span>Size</span><input id="buildScale" type="range" min="0.5" max="2" step="0.1" value="1"><output>100%</output></label>
+    <button id="applyBuildTransform" disabled>Apply rotation and size to selected</button>
     <div id="buildCatalogue" class="grid">
       <button data-build="shop">Shop front</button><button data-build="hotel">Two-storey hotel</button>
       <button data-build="house">House</button><button data-build="barn">Barn</button>
@@ -205,10 +221,18 @@
     <label class="row"><span>Pieces per second</span><input id="replaySpeed" type="range" min="1" max="5" step="0.5" value="2"><output>2</output></label>
     <div id="buildSelection" class="hint">No building selected</div>
     <h3>Dirt roads</h3>
+    <fieldset id="terrainTools"><legend>Terrain workshop (WIP)</legend>
+    <p class="hint">Editable hill test area only. Open workshop, then choose a brush and click ground. Each click saves automatically. Towns, water and railway stay protected.</p>
+    <button id="terrainWorkshop">Open terrain workshop</button>
+    <label class="row"><span>Brush radius (m)</span><input id="terrainRadius" type="range" min="8" max="32" value="20"><output>20</output></label>
+    <label class="row"><span>Strength (m)</span><input id="terrainStrength" type="range" min="0.25" max="2" step="0.25" value="1"><output>1</output></label>
+    <div class="btnrow"><button data-terrain="lower">Lower hill</button><button data-terrain="raise">Raise hill</button><button data-terrain="flatten">Flatten</button></div>
+    <div class="btnrow"><button id="terrainUndo">Undo terrain</button><button id="terrainReset">Reset terrain</button></div>
+    </fieldset>
     <label class="row"><span>Road width (m)</span><input id="roadWidth" type="range" min="1" max="14" step="0.5" value="5"><output>5</output></label>
-    <div class="btnrow"><button id="drawRoad">Draw road</button><button id="finishRoad">Finish (Enter)</button><button id="undoRoad">Remove last road</button></div>
-    <div class="btnrow"><button id="drawFence">Draw fence</button><button id="finishFence">Finish fence</button><button id="undoFence">Remove last fence</button></div>
-    <p class="hint">Click ground points. Enter or double-click finishes; Esc cancels the unfinished road.</p>
+    <div class="btnrow"><button id="drawRoad">Draw road</button><button id="finishRoad">Save road (Enter)</button><button id="undoRoad">Remove last road</button></div>
+    <div class="btnrow"><button id="drawFence">Draw fence</button><button id="finishFence">Save fence</button><button id="undoFence">Remove last fence</button></div>
+    <p class="hint">Click ground points. Save road (or Enter/double-click) saves your points. Esc cancels the unfinished road.</p>
   </details>
 
   <details>
@@ -230,7 +254,7 @@
     <div class="hint">Birds by day, crickets and owls at night, the river, mill, train, café piano and rain, following the camera. Click anywhere once to start the sound. Videos get the same sounds.</div>
   </details>
 
-  <details open>
+  <details>
     <summary>Video</summary>
     <label class="row"><span>Output size</span>
       <select id="outputSize"><option value="window">Fit window</option><option value="1080p">1920 × 1080</option><option value="720p">1280 × 720</option></select>
@@ -260,3 +284,8 @@
 <script type="module" src="src/main.js"></script>
 </body>
 </html>
+
+
+
+
+

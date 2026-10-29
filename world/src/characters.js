@@ -7,6 +7,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import {selectCharacterProfile,profileSkin,attachCharacterProfile} from './character-profiles.js';
 
 export const HIP = 0.95;
 const R = Math.random;
@@ -204,9 +205,11 @@ function joint(parent, x, y, z) {
 const live = new Set(); // WeakRefs, for blinking and idle glances
 
 export function makeCharacter(outfit = CAST.cowboy) {
-  if(outfit.star)return makeStarCharacter(outfit);
+  const pipelineId=selectCharacterProfile(outfit);
+  if(outfit.star&&starSources[outfit.star]&&!pipelineId)return makeStarCharacter(outfit);
   const o = { skin: '#e9b48c', hair: '#5a3a22', eyes: '#4a2c18', shirt: '#efe2c6', pants: '#4a4038', boots: '#4a3020', belt: '#4a2e1a', buckle: GOLD, build: 1, sleeves: 'long', hat: 'none', hairStyle: 'short', ...outfit };
   const g = new THREE.Group(), rig = new Rig(), b = o.build;
+  if(pipelineId)o.skin=profileSkin(pipelineId)||o.skin;
   const skin = mat(o.skin), shirt = mat(o.shirt), pants = mat(o.female ? o.boots : o.pants), boots = mat(o.boots);
   const sleeve = mat(o.coat || o.shirt);
 
@@ -309,6 +312,11 @@ export function makeCharacter(outfit = CAST.cowboy) {
     g, legs, knees, arms, elbows, upper, head, eyes, skirt, apron, hat, hatRest: hat && { y: hat.position.y, rx: hat.rotation.x },
     outfit: o, amt: 0, headYaw: 0, headPitch: 0, blinkOff: R() * 5, blinkEvery: 3 + R() * 3, lookOff: R() * 20,
   };
+  if(o.star){
+    g.name=o.label;g.scale.setScalar(0.84);
+    p.feet=knees.map(knee=>joint(knee,0,-0.44,0));
+  }
+  if(pipelineId)attachCharacterProfile(p,pipelineId);
   stand(p);
   live.add(new WeakRef(p));
   return p;
@@ -316,9 +324,15 @@ export function makeCharacter(outfit = CAST.cowboy) {
 
 // These original meshes/textures are shared; every appearance owns its own skeleton.
 const starSources=Object.fromEntries(await Promise.all(['pavi','siri'].map(async role=>{
-  const gltf=await new GLTFLoader().loadAsync(new URL('../assets/characters/'+role+'.glb',import.meta.url).href);let source;gltf.scene.updateMatrixWorld(true);gltf.scene.traverse(o=>{if(o.isMesh)source=o;});
+  try{
+  // This standalone page uses only code-built bodies; do not block it on unused GLBs.
+  if(location.pathname.endsWith('/character-pipeline-test.html'))return [role,null];
+  const url=new URL('../assets/characters/'+role+'.glb',import.meta.url),response=await fetch(url);
+  if(!response.ok)return [role,null];
+  const gltf=await new GLTFLoader().parseAsync(await response.arrayBuffer(),new URL('.',url).href);let source;gltf.scene.updateMatrixWorld(true);gltf.scene.traverse(o=>{if(o.isMesh)source=o;});
   const geometry=source.geometry.clone().applyMatrix4(source.matrixWorld),material=source.material.clone();material.emissive.set(0xffffff);material.emissiveMap=material.map;material.emissiveIntensity=0.07;
   return [role,{geometry,material}];
+  }catch{return [role,null];}
 })));
 const STAR_BONES=[['hips',null,[0,0.43,0.04]],['spine',0,[0,0.57,0.04]],['chest',1,[0,0.70,0.04]],['neck',2,[0,0.745,0.04]],['head',3,[0,0.79,0.025]],['armR',2,[-0.12,0.70,0.04]],['elbowR',5,[-0.215,0.49,0.055]],['armL',2,[0.12,0.70,0.04]],['elbowL',7,[0.215,0.49,0.055]],['legR',0,[-0.08,0.40,0.05]],['kneeR',9,[-0.09,0.20,0.065]],['footR',10,[-0.09,0.055,0.09]],['legL',0,[0.08,0.40,0.05]],['kneeL',12,[0.09,0.20,0.065]],['footL',13,[0.09,0.055,0.09]],['skirt',0,[0,0.43,0.04]],['Thick side braid',4,[0,0.83,-0.10]]];
 function starRigSpecs(role){
@@ -353,7 +367,7 @@ function skinStarGeometry(role,geometry){
   }
   geometry.setAttribute('skinIndex',new THREE.Uint16BufferAttribute(indices,4));geometry.setAttribute('skinWeight',new THREE.Float32BufferAttribute(weights,4));
 }
-for(const [role,source]of Object.entries(starSources))skinStarGeometry(role,source.geometry);
+for(const [role,source]of Object.entries(starSources))if(source)skinStarGeometry(role,source.geometry);
 function makeStarCharacter(o){
   const source=starSources[o.star],g=new THREE.Group(),upper=new THREE.Bone(),specs=starRigSpecs(o.star),bones=specs.map(([name])=>{const b=new THREE.Bone();b.name=name;return b;});g.name=o.label;upper.name='torsoMotion';g.add(bones[0]);bones[0].add(upper);
   specs.forEach(([,parent,pos],i)=>{bones[i].position.fromArray(pos);if(parent!==null){bones[i].position.sub(new THREE.Vector3(...specs[parent][2]));(i===1?upper:bones[parent]).add(bones[i]);}});

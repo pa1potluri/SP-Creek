@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "Loading overlay clears when ready",
+    "Standalone preview never downloads unused GLBs",
+    "All 14 head centres fit narrow in-app viewport",
+    "No horizontal page overflow",
+    "Failed module load produces an explicit retry message"
+  ],
+  "errors": [],
+  "readyMs": 361,
+  "failureText": "The preview code could not load. Check the server connection, then reload.",
+  "passed": 5
+}

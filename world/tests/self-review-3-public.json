@@ -1,0 +1,108 @@
+{
+  "poses": 132,
+  "landActorChecks": 78,
+  "walks": [
+    {
+      "name": "town",
+      "mood": "golden",
+      "distance": 1.800000000000001,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "snow",
+      "mood": "golden",
+      "distance": 1.8006086445353986,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "kite",
+      "mood": "golden",
+      "distance": 1.8000000000000016,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "picnic",
+      "mood": "golden",
+      "distance": 1.7999999999996419,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "cove",
+      "mood": "golden",
+      "distance": 1.7999999999999616,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "lane",
+      "mood": "golden",
+      "distance": 1.8333130799967448,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "cafe",
+      "mood": "golden",
+      "distance": 0.5000000000000009,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "town",
+      "mood": "night",
+      "distance": 1.800000000000001,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "snow",
+      "mood": "night",
+      "distance": 1.8006086445353986,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "kite",
+      "mood": "night",
+      "distance": 1.8000000000000016,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "picnic",
+      "mood": "night",
+      "distance": 1.7999999999996419,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "cove",
+      "mood": "night",
+      "distance": 1.7999999999999616,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "lane",
+      "mood": "night",
+      "distance": 1.8333130799967448,
+      "dry": true,
+      "finite": true
+    },
+    {
+      "name": "cafe",
+      "mood": "night",
+      "distance": 0.5000000000000009,
+      "dry": true,
+      "finite": true
+    }
+  ],
+  "privateModels": false,
+  "audioLocked": true,
+  "errors": [],
+  "url": "http://127.0.0.1:8812"
+}

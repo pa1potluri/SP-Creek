@@ -46,7 +46,8 @@ export async function runBuildTests() {
       walkables: world.walkables.length, emitters: world.emitters.length, spinners: world.spinners.length, windows: world.windowMats.length, pois: window.__life.pois.length, surfaces: world.surfaces.size };
     const types = ['shop', 'hotel', 'house', 'barn', 'chapel', 'tower', 'windmill'];
     let initialYaw = null;
-    for (const style of Object.keys(STYLES)) {
+    const styles=Object.keys(STYLES);
+    for (const [styleIndex,style] of styles.entries()) {
       document.title = `Build tests: ${style}`;
       app.applyStyle(style);
       for (const [i, type] of types.entries()) {
@@ -76,10 +77,11 @@ export async function runBuildTests() {
         for (const m of e.additions.windowMats) check(m.map === m.userData.sets[world.textureSet]?.map || world.textureSet === 'flat', `${style}/${type}: facade texture set`);
       }
       await nextFrame(); // Compile/render every style with every catalogue model present.
-      if (style !== 'pixel') for (const e of [...world.buildings]) world.removeBuilding(e);
+      // Keep only the final style fixture for the following editor checks.
+      if (styleIndex < styles.length-1) for (const e of [...world.buildings]) world.removeBuilding(e);
     }
     const shop = world.buildings[0];
-    check(Math.abs(shop.spec.yaw - initialYaw - Math.PI) < 1e-6, 'R and wheel rotation persisted');
+    check(Math.abs(shop.spec.yaw - initialYaw - styles.length * Math.PI / 6) < 1e-6, 'R and wheel rotation persisted');
     const instance = world.plantInstances.find(({ mesh }) => mesh.count > 100);
     const matrix = new THREE.Matrix4();
     const plantIndex = Array.from({ length: instance.mesh.count }, (_, i) => i).find((i) => {
@@ -102,7 +104,7 @@ export async function runBuildTests() {
     check(world.roads.length === 2, 'Esc cancels unfinished road');
     click('#undoRoad'); check(world.roads.length === 1, 'Remove last road');
     const road = world.roads[0].obj.geometry.attributes.position;
-    check(Math.abs(road.getY(6) - terrainHeight(road.getX(6), road.getZ(6)) - 0.06) < 1e-4, 'Road follows terrain');
+    check(Math.abs(road.getY(6) - world.groundY(road.getX(6), road.getZ(6)) - 0.1) < 1e-4, 'Road follows rendered terrain');
     key('KeyG');
     check(game.active, 'G enters play mode');
     const rect = shop.additions.rects[0];

@@ -1,0 +1,28 @@
+{
+  "status": "complete; stopped after task 31",
+  "branch": "area/watercolor-resume",
+  "base": "b046535",
+  "appCheckpoint": "02674e3",
+  "testCheckpoint": "70bd17d",
+  "focusedBeforeFinalRefinement": 25,
+  "finalCaptureProof": "watercolor-resume-check.json",
+  "fullSuitePassed": true,
+  "firstFullAttempt": {
+    "completedSuites": {
+      "area-shots": 7,
+      "balloon-ride": 20,
+      "boat-trip": 22
+    },
+    "buildProgressOnly": 400,
+    "error": "watercolor/shop: placed through canvas",
+    "cause": "Pixel-last test-fixture assumption",
+    "fix": "70bd17d"
+  },
+  "secondFullAttempt": {
+    "status": "interrupted at user request before any suite output",
+    "completedSuites": {},
+    "running": false
+  },
+  "resume": "No remaining task work. Await Claude review; never push or merge.",
+  "finalFullResult": "watercolor-resume-full.json"
+}

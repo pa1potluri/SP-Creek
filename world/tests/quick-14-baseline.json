@@ -1,0 +1,881 @@
+{
+  "rows": [
+    {
+      "mode": "world",
+      "width": 1600,
+      "height": 900,
+      "overflow": 0,
+      "header": [
+        {
+          "text": "Home",
+          "width": 139,
+          "height": 64,
+          "font": 19,
+          "visible": true
+        },
+        {
+          "text": "Create",
+          "width": 147.25,
+          "height": 64,
+          "font": 19,
+          "visible": true
+        },
+        {
+          "text": "Play",
+          "width": 125.03125,
+          "height": 64,
+          "font": 19,
+          "visible": true
+        },
+        {
+          "text": "Watch",
+          "width": 142.734375,
+          "height": 64,
+          "font": 19,
+          "visible": true
+        },
+        {
+          "text": "Settings",
+          "width": 158.3125,
+          "height": 64,
+          "font": 19,
+          "visible": true
+        },
+        {
+          "text": "Help",
+          "width": 128.59375,
+          "height": 64,
+          "font": 19,
+          "visible": true
+        }
+      ],
+      "styles": [
+        {
+          "text": "Oil painting",
+          "width": 108.140625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Animated film (Pixar-like)",
+          "width": 191.484375,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Blocky toy (Roblox-like)",
+          "width": 180.75,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Clean 3D",
+          "width": 91.625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Paper cut",
+          "width": 93.875,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Pixel art",
+          "width": 84.953125,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Watercolour (preview)",
+          "width": 171.890625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        }
+      ],
+      "modes": [
+        {
+          "text": "Gameplay: Off",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Auto director",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Free camera: Off",
+          "width": 174,
+          "height": 56,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Pause (P)",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Brush & finish",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Build",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        }
+      ],
+      "audioLocked": true
+    },
+    {
+      "mode": "studio",
+      "width": 1600,
+      "height": 900,
+      "overflow": 0,
+      "header": [
+        {
+          "text": "Home",
+          "width": 0,
+          "height": 0,
+          "font": 19,
+          "visible": false
+        },
+        {
+          "text": "Create",
+          "width": 0,
+          "height": 0,
+          "font": 19,
+          "visible": false
+        },
+        {
+          "text": "Play",
+          "width": 0,
+          "height": 0,
+          "font": 19,
+          "visible": false
+        },
+        {
+          "text": "Watch",
+          "width": 0,
+          "height": 0,
+          "font": 19,
+          "visible": false
+        },
+        {
+          "text": "Settings",
+          "width": 0,
+          "height": 0,
+          "font": 19,
+          "visible": false
+        },
+        {
+          "text": "Help",
+          "width": 0,
+          "height": 0,
+          "font": 19,
+          "visible": false
+        }
+      ],
+      "styles": [
+        {
+          "text": "Oil painting",
+          "width": 108.140625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Animated film (Pixar-like)",
+          "width": 191.484375,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Blocky toy (Roblox-like)",
+          "width": 180.75,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Clean 3D",
+          "width": 91.625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Paper cut",
+          "width": 93.875,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Pixel art",
+          "width": 84.953125,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Watercolour (preview)",
+          "width": 171.890625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        }
+      ],
+      "modes": [
+        {
+          "text": "Gameplay: Off",
+          "width": 103.546875,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Auto director",
+          "width": 98,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Free camera: Off",
+          "width": 116.09375,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Pause (P)",
+          "width": 73.8125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Brush & finish",
+          "width": 102.328125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Build",
+          "width": 50.765625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        }
+      ],
+      "audioLocked": true
+    },
+    {
+      "mode": "world",
+      "width": 1024,
+      "height": 768,
+      "overflow": 0,
+      "header": [
+        {
+          "text": "Home",
+          "width": 114.9375,
+          "height": 64,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Create",
+          "width": 121.890625,
+          "height": 64,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Play",
+          "width": 103.171875,
+          "height": 64,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Watch",
+          "width": 118.09375,
+          "height": 64,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Settings",
+          "width": 131.203125,
+          "height": 64,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Help",
+          "width": 106.171875,
+          "height": 64,
+          "font": 16,
+          "visible": true
+        }
+      ],
+      "styles": [
+        {
+          "text": "Oil painting",
+          "width": 108.140625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Animated film (Pixar-like)",
+          "width": 191.484375,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Blocky toy (Roblox-like)",
+          "width": 180.75,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Clean 3D",
+          "width": 91.625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Paper cut",
+          "width": 93.875,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Pixel art",
+          "width": 84.953125,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Watercolour (preview)",
+          "width": 171.890625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        }
+      ],
+      "modes": [
+        {
+          "text": "Gameplay: Off",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Auto director",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Free camera: Off",
+          "width": 174,
+          "height": 56,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Pause (P)",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Brush & finish",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Build",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        }
+      ],
+      "audioLocked": true
+    },
+    {
+      "mode": "studio",
+      "width": 1024,
+      "height": 768,
+      "overflow": 0,
+      "header": [
+        {
+          "text": "Home",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Create",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Play",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Watch",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Settings",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Help",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        }
+      ],
+      "styles": [
+        {
+          "text": "Oil painting",
+          "width": 108.140625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Animated film (Pixar-like)",
+          "width": 191.484375,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Blocky toy (Roblox-like)",
+          "width": 180.75,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Clean 3D",
+          "width": 91.625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Paper cut",
+          "width": 93.875,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Pixel art",
+          "width": 84.953125,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        },
+        {
+          "text": "Watercolour (preview)",
+          "width": 171.890625,
+          "height": 36,
+          "font": 14,
+          "visible": true
+        }
+      ],
+      "modes": [
+        {
+          "text": "Gameplay: Off",
+          "width": 103.546875,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Auto director",
+          "width": 98,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Free camera: Off",
+          "width": 116.09375,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Pause (P)",
+          "width": 73.8125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Brush & finish",
+          "width": 102.328125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Build",
+          "width": 50.765625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        }
+      ],
+      "audioLocked": true
+    },
+    {
+      "mode": "world",
+      "width": 768,
+      "height": 1024,
+      "overflow": 0,
+      "header": [
+        {
+          "text": "Home",
+          "width": 64.9375,
+          "height": 83,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Create",
+          "width": 71.890625,
+          "height": 83,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Play",
+          "width": 64,
+          "height": 83,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Watch",
+          "width": 68.09375,
+          "height": 83,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Settings",
+          "width": 81.203125,
+          "height": 83,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Help",
+          "width": 64,
+          "height": 83,
+          "font": 16,
+          "visible": true
+        }
+      ],
+      "styles": [
+        {
+          "text": "Oil painting",
+          "width": 103,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Animated film (Pixar-like)",
+          "width": 180.390625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Blocky toy (Roblox-like)",
+          "width": 170.40625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Clean 3D",
+          "width": 87.65625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Paper cut",
+          "width": 89.75,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Pixel art",
+          "width": 81.453125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Watercolour (preview)",
+          "width": 162.1875,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        }
+      ],
+      "modes": [
+        {
+          "text": "Gameplay: Off",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Auto director",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Free camera: Off",
+          "width": 174,
+          "height": 56,
+          "font": 16,
+          "visible": true
+        },
+        {
+          "text": "Pause (P)",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Brush & finish",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        },
+        {
+          "text": "Build",
+          "width": 0,
+          "height": 0,
+          "font": 13,
+          "visible": false
+        }
+      ],
+      "audioLocked": true
+    },
+    {
+      "mode": "studio",
+      "width": 768,
+      "height": 1024,
+      "overflow": 0,
+      "header": [
+        {
+          "text": "Home",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Create",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Play",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Watch",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Settings",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        },
+        {
+          "text": "Help",
+          "width": 0,
+          "height": 0,
+          "font": 16,
+          "visible": false
+        }
+      ],
+      "styles": [
+        {
+          "text": "Oil painting",
+          "width": 103,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Animated film (Pixar-like)",
+          "width": 180.390625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Blocky toy (Roblox-like)",
+          "width": 170.40625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Clean 3D",
+          "width": 87.65625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Paper cut",
+          "width": 89.75,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Pixel art",
+          "width": 81.453125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Watercolour (preview)",
+          "width": 162.1875,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        }
+      ],
+      "modes": [
+        {
+          "text": "Gameplay: Off",
+          "width": 103.546875,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Auto director",
+          "width": 98,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Free camera: Off",
+          "width": 116.09375,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Pause (P)",
+          "width": 73.8125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Brush & finish",
+          "width": 102.328125,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        },
+        {
+          "text": "Build",
+          "width": 50.765625,
+          "height": 36,
+          "font": 13,
+          "visible": true
+        }
+      ],
+      "audioLocked": true
+    }
+  ],
+  "errors": []
+}

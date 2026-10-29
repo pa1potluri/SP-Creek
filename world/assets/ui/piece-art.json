@@ -1,0 +1,16 @@
+{
+  "house": "asset-pack/03_Buildings/03_asset_001.png",
+  "shop": "asset-pack/03_Buildings/03_asset_002.png",
+  "chapel": "asset-pack/03_Buildings/03_asset_004.png",
+  "barn": "asset-pack/03_Buildings/03_asset_005.png",
+  "tower": "asset-pack/03_Buildings/03_asset_006.png",
+  "waterWell": "asset-pack/04_Props/04_asset_002.png",
+  "gardenBench": "asset-pack/04_Props/04_asset_006.png",
+  "gardenFence": "asset-pack/05_Structures/05_asset_001.png",
+  "littleBridge": "asset-pack/05_Structures/05_asset_002.png",
+  "farmBarn": "asset-pack/03_Buildings/03_asset_005.png",
+  "ponyRail": "asset-pack/05_Structures/05_asset_001.png",
+  "farmHay": "asset-pack/04_Props/04_asset_009.png",
+  "flowerBed": "asset-pack/02_Nature/02_asset_008.png",
+  "lanternString": "asset-pack/04_Props/04_asset_011.png"
+}

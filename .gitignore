@@ -22,3 +22,9 @@ world/showroom*
 *.wav
 __pycache__/
 world/tests/*.log
+
+# Local review snapshot; source is saved on the WIP branch.
+/WIP version/
+
+# Local source/assets/evidence backup archives.
+/_local-backups/

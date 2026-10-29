@@ -1,0 +1,53 @@
+area-shots {"passed":7}
+balloon-ride {"passed":20,"maxSpeed":13.28099588237132}
+boat-trip {"passed":22}
+Build checks: 50
+Build checks: 100
+Build checks: 150
+Build checks: 200
+Build checks: 250
+Build checks: 300
+Build checks: 350
+Build checks: 400
+Build checks: 450
+Build checks: 500
+Build checks: 550
+build-mode {"passed":583}
+camping-night {"passed":14}
+clouds-water {"passed":246,"clearedPlants":80,"skyEdgeWorst":5.9875}
+episode-presets-2 {"passed":25}
+episode-presets-3 {"passed":35}
+family-mode {"passed":47}
+Family startup reload checks: 2 passed
+finish-wip {"passed":13,"maxCameraStep":0.108170100919028,"maxActorStep":0.02177174945274094,"minTownsperson":null}
+garden-time-lapse {"passed":42,"maxGardenStep":1.0641399416909678}
+hamlet-shots {"passed":47,"samples":27009,"minGround":6.7626917314632,"minTree":12.352775467998}
+hamlet {"passed":37}
+kite-picnic {"passed":33}
+lantern-evening {"passed":27}
+market-day {"passed":42,"pianoRange":33.367986154396554}
+More buildings: oil
+More buildings: film
+More buildings: toy
+More buildings: clean
+More buildings: paper
+More buildings: pixel
+More buildings: watercolor
+more-buildings {"passed":179}
+names-tour-shots {"passed":51}
+pavi-siri-moments {"passed":35}
+pavi-siri {"passed":53}
+playground {"passed":36}
+pony-farm {"passed":32}
+public-ready {"passed":14,"privateModels":true}
+rainy-day-fun {"passed":29}
+review-feedback {"passed":113,"maxTerrainError":0.000010938192374965183,"maxRootGap":-0.15988318403397273,"maxNativeHeightError":0.0000018371548833329143}
+Shot clearance: {"shots":96,"samples":19296,"solidPieces":12095,"buildingVolumes":32,"cutouts":12133,"worst":[],"closestGround":[{"index":8,"name":"Mill Wheel","metres":1.3999999999999952},{"index":12,"name":"Trackside","metres":1.4},{"index":20,"name":"Meet the Cast","metres":1.45},{"index":57,"name":"Window view","metres":1.4999999999999964},{"index":26,"name":"Forest Trail","metres":1.504543963476717}],"closestFurniture":[{"index":19,"name":"Board Game Table","metres":0.6263502166735098},{"index":67,"name":"Raindrops on the cafe window","metres":0.6506981410634117},{"index":85,"name":"Cocoa by the window","metres":0.6506981410634117}]}
+shot-clearance {"passed":97,"samples":19296,"solidPieces":12095,"buildingVolumes":32}
+snow-day {"passed":31,"maxSledSpeed":0.9386141157426294}
+startup-hang {"passed":7,"failed":0}
+sunset-cove {"passed":41}
+Train route: {"length":422.1469568684015,"maxHalfSecondStep":2.2433438719199197,"maxBurial":-0.8276684883056653}
+train-trip {"passed":32,"length":422.1469568684015,"maxBurial":-0.8276684883056653}
+watercolor-resume {"passed":25,"legacyModes":5}
+Browser errors: []

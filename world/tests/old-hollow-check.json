@@ -1,0 +1,13 @@
+{
+  "blocked": [],
+  "ghosts": 6,
+  "opaqueBodies": true,
+  "reactionRepeatable": true,
+  "audioLocked": true,
+  "clicks": {
+    "hit": true,
+    "protectedRoad": true,
+    "audioLocked": true
+  },
+  "errors": []
+}

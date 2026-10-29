@@ -1,0 +1,16 @@
+{
+  "blocked": [],
+  "maxGrade": 0.3206437115829167,
+  "entryBlocked": 0,
+  "edgeStops": [
+    true,
+    true,
+    true
+  ],
+  "entranceClear": true,
+  "pathVertices": 4050,
+  "clusters": 10,
+  "audioLocked": true,
+  "errors": [],
+  "startupMs": 15109
+}

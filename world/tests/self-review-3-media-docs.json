@@ -1,0 +1,50 @@
+{
+  "clips": [
+    {
+      "file": "docs/media/balloon-ride.webp",
+      "frames": 38,
+      "milliseconds": 3800,
+      "bytes": 369304
+    },
+    {
+      "file": "docs/media/garden-growth.webp",
+      "frames": 38,
+      "milliseconds": 3800,
+      "bytes": 362860
+    },
+    {
+      "file": "docs/media/lantern-evening.webp",
+      "frames": 38,
+      "milliseconds": 3800,
+      "bytes": 727318
+    },
+    {
+      "file": "docs/media/market-day.webp",
+      "frames": 38,
+      "milliseconds": 3800,
+      "bytes": 475280
+    },
+    {
+      "file": "docs/media/rainbow.webp",
+      "frames": 38,
+      "milliseconds": 3800,
+      "bytes": 440496
+    },
+    {
+      "file": "docs/media/sunset-cove.webp",
+      "frames": 38,
+      "milliseconds": 3800,
+      "bytes": 372550
+    }
+  ],
+  "draftLinksResolve": true,
+  "firstIdeas": 10,
+  "staticFocusedCounts": {
+    "public-ready": 14,
+    "snow-day": 31,
+    "kite-picnic": 33,
+    "episode-presets-3": 35,
+    "watercolor-resume": 25
+  },
+  "staticFocusedTotal": 138
+}

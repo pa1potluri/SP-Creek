@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "Play from hill view starts beside the basket",
+    "Boarding prompt at accessible deck point",
+    "Player boards basket",
+    "Cinematic pair does not overlap gameplay avatar",
+    "Paused time freezes gameplay flight",
+    "Ride stays airborne until landing",
+    "Full flight returns player to deck",
+    "Landing is clear and dry",
+    "Early return lands safely",
+    "Leaving gameplay during flight restores avatar ownership",
+    "Idle tethers restored",
+    "Deck supports reach terrain",
+    "Checks never start sound"
+  ],
+  "passed": 13,
+  "planting": 31,
+  "errors": []
+}

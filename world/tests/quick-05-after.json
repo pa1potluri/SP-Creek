@@ -1,0 +1,35 @@
+{
+  "look": {
+    "dof": 0.25,
+    "bloom": 0.1,
+    "outline": 1,
+    "poster": 6,
+    "layers": 7,
+    "paperShadow": 1,
+    "pixel": 4,
+    "wash": 0.65,
+    "pigment": 0.45,
+    "paper": 0.55
+  },
+  "treeCandidates": [
+    {
+      "x": 86.25179290771484,
+      "z": 58.220252990722656,
+      "geo": "BufferGeometry",
+      "rootRadius": 0.45
+    },
+    {
+      "x": 91.7586441040039,
+      "z": 33.566036224365234,
+      "geo": "BufferGeometry",
+      "rootRadius": 0.45
+    },
+    {
+      "x": 89.30795288085938,
+      "z": 30.859535217285156,
+      "geo": "BufferGeometry",
+      "rootRadius": 0.45
+    }
+  ],
+  "audioLocked": true
+}

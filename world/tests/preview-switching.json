@@ -1,0 +1,804 @@
+{
+  "viewport": [
+    2560,
+    1440
+  ],
+  "errors": [],
+  "contextLosses": 0,
+  "switches": [
+    {
+      "index": 47,
+      "label": "Episode 13: Night at the cove",
+      "clickMs": 3.800000000046566,
+      "frames": 51,
+      "maxGap": 700.6000000000004,
+      "audioLocked": true
+    },
+    {
+      "index": 0,
+      "label": "Golden afternoon in town",
+      "clickMs": 44.699999999953434,
+      "frames": 77,
+      "maxGap": 283.5,
+      "audioLocked": true
+    },
+    {
+      "index": 46,
+      "label": "Episode 12: Picnic by the waterfall",
+      "clickMs": 3.199999999953434,
+      "frames": 29,
+      "maxGap": 1067.5,
+      "audioLocked": true
+    },
+    {
+      "index": 1,
+      "label": "Rainy night at the Honey Bun Café",
+      "clickMs": 5.199999999953434,
+      "frames": 76,
+      "maxGap": 250.20000000000073,
+      "audioLocked": true
+    },
+    {
+      "index": 45,
+      "label": "Episode 11: Kite day",
+      "clickMs": 5.699999999953434,
+      "frames": 87,
+      "maxGap": 100,
+      "audioLocked": true
+    },
+    {
+      "index": 2,
+      "label": "River at dawn",
+      "clickMs": 17.300000000046566,
+      "frames": 91,
+      "maxGap": 33.29999999999927,
+      "audioLocked": true
+    },
+    {
+      "index": 44,
+      "label": "Episode 10: Snow day",
+      "clickMs": 3.699999999953434,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 3,
+      "label": "Campfire under the stars",
+      "clickMs": 7,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 43,
+      "label": "Picnic by the waterfall",
+      "clickMs": 2.3999999999068677,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 4,
+      "label": "Dusk over the valley",
+      "clickMs": 27.800000000046566,
+      "frames": 49,
+      "maxGap": 733.8999999999978,
+      "audioLocked": true
+    },
+    {
+      "index": 42,
+      "label": "Kite day",
+      "clickMs": 2.6000000000931323,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 5,
+      "label": "Cozy Honey Bun Café (animated film look)",
+      "clickMs": 27.5,
+      "frames": 91,
+      "maxGap": 50.099999999998545,
+      "audioLocked": true
+    },
+    {
+      "index": 41,
+      "label": "A snow day in SP Creek",
+      "clickMs": 2.800000000046566,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 6,
+      "label": "Village at dusk",
+      "clickMs": 31.5,
+      "frames": 79,
+      "maxGap": 250.20000000000073,
+      "audioLocked": true
+    },
+    {
+      "index": 40,
+      "label": "Episode 9: Let's grow a garden",
+      "clickMs": 2.3999999999068677,
+      "frames": 90,
+      "maxGap": 33.400000000001455,
+      "audioLocked": true
+    },
+    {
+      "index": 7,
+      "label": "Cozy town center",
+      "clickMs": 19.9000000001397,
+      "frames": 90,
+      "maxGap": 50.099999999998545,
+      "audioLocked": true
+    },
+    {
+      "index": 39,
+      "label": "Episode 8: A little boat trip",
+      "clickMs": 2.6000000000931323,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 8,
+      "label": "Friendly ghost town",
+      "clickMs": 10.200000000186265,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 38,
+      "label": "Episode 7: Market day",
+      "clickMs": 2.3999999999068677,
+      "frames": 90,
+      "maxGap": 33.299999999995634,
+      "audioLocked": true
+    },
+    {
+      "index": 9,
+      "label": "Firefly forest",
+      "clickMs": 4.899999999906868,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 37,
+      "label": "Episode 6: A rainy day",
+      "clickMs": 2.6000000000931323,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 10,
+      "label": "Dreamy meadow",
+      "clickMs": 6,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 36,
+      "label": "Let's grow a garden",
+      "clickMs": 2,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 11,
+      "label": "Magic crystal hill",
+      "clickMs": 6.5,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 35,
+      "label": "A little boat trip",
+      "clickMs": 2,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 12,
+      "label": "Grand tour of SP Creek (2:30)",
+      "clickMs": 41.10000000009313,
+      "frames": 90,
+      "maxGap": 66.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 34,
+      "label": "Market day in the square",
+      "clickMs": 3.300000000046566,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 13,
+      "label": "Misty morning in the valley",
+      "clickMs": 4.2999999998137355,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 33,
+      "label": "A rainy day in SP Creek",
+      "clickMs": 2.2999999998137355,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 14,
+      "label": "Golden sunbeams over town",
+      "clickMs": 8.700000000186265,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 32,
+      "label": "Episode 4: Camping under the stars",
+      "clickMs": 2.3999999999068677,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 15,
+      "label": "Moonlit night with fireflies",
+      "clickMs": 8.599999999860302,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 31,
+      "label": "Episode 5: A day at the pony farm",
+      "clickMs": 2.5,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 16,
+      "label": "Autumn leaves in Willow Creek",
+      "clickMs": 5.900000000139698,
+      "frames": 89,
+      "maxGap": 33.30000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 30,
+      "label": "Episode 3: The little train",
+      "clickMs": 4.600000000093132,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 17,
+      "label": "Snowy winter evening",
+      "clickMs": 4.399999999906868,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 29,
+      "label": "Episode 2: Balloon over the valley",
+      "clickMs": 2.300000000046566,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 18,
+      "label": "Deer at the forest edge",
+      "clickMs": 3.5999999998603016,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 28,
+      "label": "A day at the pony farm",
+      "clickMs": 1.8000000000465661,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 19,
+      "label": "A day with Pavi & Siri",
+      "clickMs": 10.600000000093132,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 27,
+      "label": "Camping under the stars",
+      "clickMs": 1.8000000000465661,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 20,
+      "label": "Sunset at the cove",
+      "clickMs": 8.5,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 26,
+      "label": "A little train trip",
+      "clickMs": 4.300000000046566,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 21,
+      "label": "Episode 1: Welcome to SP Creek",
+      "clickMs": 3.699999999953434,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 25,
+      "label": "Balloon ride over SP Creek",
+      "clickMs": 2.0999999998603016,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 22,
+      "label": "Let's build SP Creek",
+      "clickMs": 1.7000000001862645,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 24,
+      "label": "Pavi & Siri: a little day",
+      "clickMs": 15.199999999953434,
+      "frames": 89,
+      "maxGap": 33.40000000000873,
+      "audioLocked": true
+    },
+    {
+      "index": 23,
+      "label": "Lantern evening by the lake",
+      "clickMs": 7.699999999953434,
+      "frames": 88,
+      "maxGap": 66.70000000001164,
+      "audioLocked": true
+    },
+    {
+      "index": 47,
+      "label": "Episode 13: Night at the cove",
+      "clickMs": 2.800000000046566,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 0,
+      "label": "Golden afternoon in town",
+      "clickMs": 41.5,
+      "frames": 91,
+      "maxGap": 49.89999999999418,
+      "audioLocked": true
+    },
+    {
+      "index": 46,
+      "label": "Episode 12: Picnic by the waterfall",
+      "clickMs": 3.300000000046566,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 1,
+      "label": "Rainy night at the Honey Bun Café",
+      "clickMs": 5.600000000093132,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 45,
+      "label": "Episode 11: Kite day",
+      "clickMs": 6.199999999953434,
+      "frames": 92,
+      "maxGap": 16.89999999999418,
+      "audioLocked": true
+    },
+    {
+      "index": 2,
+      "label": "River at dawn",
+      "clickMs": 16.199999999953434,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 44,
+      "label": "Episode 10: Snow day",
+      "clickMs": 3.4000000001396984,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 3,
+      "label": "Campfire under the stars",
+      "clickMs": 7.300000000046566,
+      "frames": 91,
+      "maxGap": 16.89999999999418,
+      "audioLocked": true
+    },
+    {
+      "index": 43,
+      "label": "Picnic by the waterfall",
+      "clickMs": 2.199999999953434,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 4,
+      "label": "Dusk over the valley",
+      "clickMs": 27.199999999953434,
+      "frames": 91,
+      "maxGap": 49.90000000000873,
+      "audioLocked": true
+    },
+    {
+      "index": 42,
+      "label": "Kite day",
+      "clickMs": 2.699999999953434,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 5,
+      "label": "Cozy Honey Bun Café (animated film look)",
+      "clickMs": 26.699999999953434,
+      "frames": 92,
+      "maxGap": 33.29999999998836,
+      "audioLocked": true
+    },
+    {
+      "index": 41,
+      "label": "A snow day in SP Creek",
+      "clickMs": 3,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 6,
+      "label": "Village at dusk",
+      "clickMs": 28.4000000001397,
+      "frames": 92,
+      "maxGap": 33.40000000000873,
+      "audioLocked": true
+    },
+    {
+      "index": 40,
+      "label": "Episode 9: Let's grow a garden",
+      "clickMs": 2.800000000046566,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 7,
+      "label": "Cozy town center",
+      "clickMs": 18.600000000093132,
+      "frames": 90,
+      "maxGap": 33.5,
+      "audioLocked": true
+    },
+    {
+      "index": 39,
+      "label": "Episode 8: A little boat trip",
+      "clickMs": 2.699999999953434,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 8,
+      "label": "Friendly ghost town",
+      "clickMs": 10.5,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 38,
+      "label": "Episode 7: Market day",
+      "clickMs": 2.3999999999068677,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 9,
+      "label": "Firefly forest",
+      "clickMs": 3.4000000001396984,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 37,
+      "label": "Episode 6: A rainy day",
+      "clickMs": 2.5,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 10,
+      "label": "Dreamy meadow",
+      "clickMs": 5.899999999906868,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 36,
+      "label": "Let's grow a garden",
+      "clickMs": 1.8999999999068677,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 11,
+      "label": "Magic crystal hill",
+      "clickMs": 5.599999999860302,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 35,
+      "label": "A little boat trip",
+      "clickMs": 1.8999999999068677,
+      "frames": 91,
+      "maxGap": 18.30000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 12,
+      "label": "Grand tour of SP Creek (2:30)",
+      "clickMs": 43,
+      "frames": 90,
+      "maxGap": 66.69999999999709,
+      "audioLocked": true
+    },
+    {
+      "index": 34,
+      "label": "Market day in the square",
+      "clickMs": 3.3999999999068677,
+      "frames": 92,
+      "maxGap": 16.89999999999418,
+      "audioLocked": true
+    },
+    {
+      "index": 13,
+      "label": "Misty morning in the valley",
+      "clickMs": 4.399999999906868,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 33,
+      "label": "A rainy day in SP Creek",
+      "clickMs": 2,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 14,
+      "label": "Golden sunbeams over town",
+      "clickMs": 7.800000000046566,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 32,
+      "label": "Episode 4: Camping under the stars",
+      "clickMs": 2.0999999998603016,
+      "frames": 91,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 15,
+      "label": "Moonlit night with fireflies",
+      "clickMs": 8.399999999906868,
+      "frames": 92,
+      "maxGap": 16.80000000000291,
+      "audioLocked": true
+    },
+    {
+      "index": 31,
+      "label": "Episode 5: A day at the pony farm",
+      "clickMs": 2.4000000001396984,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 16,
+      "label": "Autumn leaves in Willow Creek",
+      "clickMs": 6.599999999860302,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 30,
+      "label": "Episode 3: The little train",
+      "clickMs": 4.5,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 17,
+      "label": "Snowy winter evening",
+      "clickMs": 4.399999999906868,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 29,
+      "label": "Episode 2: Balloon over the valley",
+      "clickMs": 2.199999999953434,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 18,
+      "label": "Deer at the forest edge",
+      "clickMs": 3.3999999999068677,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 28,
+      "label": "A day at the pony farm",
+      "clickMs": 1.9000000001396984,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 19,
+      "label": "A day with Pavi & Siri",
+      "clickMs": 10.900000000139698,
+      "frames": 92,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 27,
+      "label": "Camping under the stars",
+      "clickMs": 1.6999999999534339,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 20,
+      "label": "Sunset at the cove",
+      "clickMs": 8.300000000046566,
+      "frames": 92,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 26,
+      "label": "A little train trip",
+      "clickMs": 4,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 21,
+      "label": "Episode 1: Welcome to SP Creek",
+      "clickMs": 3.699999999953434,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 25,
+      "label": "Balloon ride over SP Creek",
+      "clickMs": 1.9000000001396984,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 22,
+      "label": "Let's build SP Creek",
+      "clickMs": 1.2999999998137355,
+      "frames": 91,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 24,
+      "label": "Pavi & Siri: a little day",
+      "clickMs": 16.199999999953434,
+      "frames": 92,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    },
+    {
+      "index": 23,
+      "label": "Lantern evening by the lake",
+      "clickMs": 7.099999999860302,
+      "frames": 92,
+      "maxGap": 16.800000000017462,
+      "audioLocked": true
+    }
+  ],
+  "errorCount": 0,
+  "gpu": [
+    {
+      "vendor": "",
+      "device": "NVIDIA GeForce RTX 5060 Ti"
+    },
+    {
+      "vendor": "",
+      "device": "Microsoft Basic Render Driver"
+    }
+  ],
+  "startupMs": 8631,
+  "heapBefore": 35689308,
+  "presetCount": 48,
+  "heapAfterRound": [
+    52550720,
+    58580292
+  ],
+  "heapAfter": 58597220,
+  "canvas": [
+    1600,
+    900
+  ],
+  "maxClickMs": 44.699999999953434,
+  "maxFrameGapMs": 1067.5,
+  "passed": true
+}

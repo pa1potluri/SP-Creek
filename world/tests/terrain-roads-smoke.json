@@ -1,0 +1,77 @@
+{
+  "tests": [
+    {
+      "n": "Protected town rejects brush",
+      "pass": true
+    },
+    {
+      "n": "Raise accepted",
+      "pass": true
+    },
+    {
+      "n": "Raised visible ground",
+      "pass": true
+    },
+    {
+      "n": "Flatten accepted",
+      "pass": true
+    },
+    {
+      "n": "Flatten changes visible ground",
+      "pass": true
+    },
+    {
+      "n": "Lower accepted",
+      "pass": true
+    },
+    {
+      "n": "Visible ground lowered",
+      "pass": true
+    },
+    {
+      "n": "Terrain stored in layout",
+      "pass": true
+    },
+    {
+      "n": "Undo",
+      "pass": true
+    },
+    {
+      "n": "Reload restores height",
+      "pass": true
+    },
+    {
+      "n": "Road created",
+      "pass": true
+    },
+    {
+      "n": "Road and terrain reload",
+      "pass": true
+    },
+    {
+      "n": "Terrain accessible from Create",
+      "pass": true
+    },
+    {
+      "n": "Workshop camera moved",
+      "pass": true
+    },
+    {
+      "n": "Pointer brush edits ground",
+      "pass": true
+    },
+    {
+      "n": "Pointer brush saves layout",
+      "pass": true
+    },
+    {
+      "n": "UI undo restores",
+      "pass": true
+    },
+    {
+      "n": "Audio locked",
+      "pass": true
+    }
+  ],
+  "errors": []
+}

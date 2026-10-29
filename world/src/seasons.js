@@ -22,8 +22,8 @@ export class Seasons {
     this.colliders={autumn:{x:-3.8,z:-50,r:1},winter:{x:4.8,z:-53,r:0.65}};
     const positions=new Float32Array(700*3);for(let i=0;i<700;i++)positions.set([(i*17.43)%64-32,(i*0.71)%26,(i*31.73)%64-32],i*3);
     const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
-    this.particles=new THREE.Points(geometry,new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uCam:{value:new THREE.Vector3()},uMode:{value:0},uScale:{value:600},uWind:{value:1}},transparent:true,depthWrite:false,
-      vertexShader:`uniform float uTime,uMode,uScale,uWind;uniform vec3 uCam;varying vec3 vTint;void main(){vec3 p=position;float winter=step(1.5,uMode);p.y=mod(p.y-uTime*mix(0.38,0.75,winter),26.0)-5.0;p.x+=sin(uTime*0.17+position.z)*mix(3.0,1.0,winter)*uWind;p.z+=cos(uTime*0.13+position.x)*1.3;vec3 w=uCam+vec3(mod(p.x-uCam.x+32.0,64.0)-32.0,p.y,mod(p.z-uCam.z+32.0,64.0)-32.0);vec4 mv=viewMatrix*vec4(w,1.0);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(uScale*mix(0.12,0.065,winter)/max(1.0,-mv.z),1.0,12.0);vTint=mix(mix(vec3(0.8,0.3,0.06),vec3(0.95,0.65,0.14),fract(position.x*0.27)),vec3(0.94,0.97,1.0),winter);}`,
+    this.particles=new THREE.Points(geometry,new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uCam:{value:new THREE.Vector3()},uMode:{value:0},uScale:{value:600},uWind:{value:1},uCafeInverse:{value:new THREE.Matrix4()},uCafeSize:{value:new THREE.Vector3()}},transparent:true,depthWrite:false,
+      vertexShader:`uniform float uTime,uMode,uScale,uWind;uniform vec3 uCam,uCafeSize;uniform mat4 uCafeInverse;varying vec3 vTint;void main(){vec3 p=position;float winter=step(1.5,uMode);p.y=mod(p.y-uTime*mix(0.38,0.75,winter),26.0)-5.0;p.x+=sin(uTime*0.17+position.z)*mix(3.0,1.0,winter)*uWind;p.z+=cos(uTime*0.13+position.x)*1.3;vec3 w=uCam+vec3(mod(p.x-uCam.x+32.0,64.0)-32.0,p.y,mod(p.z-uCam.z+32.0,64.0)-32.0);vec4 mv=viewMatrix*vec4(w,1.0);gl_Position=projectionMatrix*mv;vec3 localCafe=(uCafeInverse*vec4(w,1.0)).xyz;if(abs(localCafe.x)<uCafeSize.x&&localCafe.z<0.0&&localCafe.z>-uCafeSize.y&&localCafe.y<uCafeSize.z)gl_Position=vec4(2.0,2.0,2.0,1.0);gl_PointSize=clamp(uScale*mix(0.12,0.065,winter)/max(1.0,-mv.z),1.0,12.0);vTint=mix(mix(vec3(0.8,0.3,0.06),vec3(0.95,0.65,0.14),fract(position.x*0.27)),vec3(0.94,0.97,1.0),winter);}`,
       fragmentShader:`varying vec3 vTint;void main(){vec2 p=gl_PointCoord-0.5;float alpha=1.0-smoothstep(0.08,0.25,dot(p,p));gl_FragColor=vec4(vTint,alpha*0.65);}`}));
     this.particles.frustumCulled=false;atmos.scene.add(this.particles);this.set('summer');
   }
@@ -63,7 +63,9 @@ export class Seasons {
     this.hook(w.ground.material,false,true);
     for(const material of w.surfaces){const roof=material===w.mat.roof||material.userData.sets?.oil?.image===w.painted.oil.roof||material.userData.sets?.clean?.image===w.painted.clean.roof;if(roof||material.userData.keepMap)this.hook(material,false,true);}
     this.areas.meadowLake.root.traverse(m=>{if(m.isMesh&&m.material.map?.image?.src?.includes('/textures/dream/meadow'))this.hook(m.material,false,true);});
-    const u=this.particles.material.uniforms;u.uTime.value=t;u.uCam.value.copy(camera.position);u.uMode.value=this.key==='winter'?2:1;u.uWind.value=w.wind??1;u.uScale.value=this.atmos.renderer.domElement.height/(2*Math.tan(camera.fov*Math.PI/360));
+    this.particles.visible=this.key!=='summer';
+    const u=this.particles.material.uniforms,it=w.interiors.cafe;if(it){it.group.updateWorldMatrix(true,false);u.uCafeInverse.value.copy(it.group.matrixWorld).invert();u.uCafeSize.value.set(it.hx,it.depth,3.8);}u.uTime.value=t;u.uCam.value.copy(camera.position);u.uMode.value=this.key==='winter'?2:1;u.uWind.value=w.wind??1;u.uScale.value=this.atmos.renderer.domElement.height/(2*Math.tan(camera.fov*Math.PI/360));
     if(this.key==='winter'){w.lanternLevel=Math.max(0.55,w.lanternLevel);this.atmos.poolMaterial.opacity=w.lanternLevel*0.22;if(this.atmos.key==='morning'){this.atmos.hemi.color.lerp(new THREE.Color('#bddcf4'),0.22);this.atmos.scene.fog.color.lerp(new THREE.Color('#c7deef'),0.25);}}
   }
 }
+

@@ -1,4 +1,7 @@
+import { solidAt, blockedPath } from './traffic-solids.js';
 import { buildGarden, GARDEN } from './areas/garden.js';
+import { SNOW_DAY } from './areas/town-center.js';
+import { MEADOW_OUTING } from './areas/meadow-lake.js';
 import { buildPonyFarm } from './areas/pony-farm.js';
 import { balloonRideState } from './areas/crystal-mine.js';
 import { familySign } from './family.js';
@@ -190,7 +193,9 @@ function makeCoachCar(colour) {
   const g = new THREE.Group(), wheels = [];
   const body=mat(colour),trim=mat([35,30,45]);body.emissive.set('#6d4d30');body.emissiveIntensity=0.12;trim.emissive.set('#f4d99b');trim.emissiveIntensity=0.12;
   part(new THREE.BoxGeometry(2.7,0.15,9),body,0,1.1,0,g);
-  for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,0.85,3.7),body,x,1.55,z,g);part(new THREE.BoxGeometry(0.12,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.12,1.25,0.12),trim,x,2.65,z,g);}
+  // Trim stands proud of the end walls, and posts meet rather than overlap the header.
+  // Coplanar corner faces previously alternated between wall and trim as the camera moved.
+  for(const x of [-1.3,1.3]){for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(0.12,0.85,3.7),body,x,1.55,z,g);part(new THREE.BoxGeometry(0.16,0.18,9),trim,x,3.25,0,g);for(const z of [-4.4,-3,-1.3,1.3,3,4.4])part(new THREE.BoxGeometry(0.16,1.18,0.18),trim,x,2.57,z,g);}
   for(const z of [-4.4,4.4])part(new THREE.BoxGeometry(2.7,2.2,0.12),body,0,2.25,z,g);
   for(const z of [-2.6,2.6])part(new THREE.BoxGeometry(2,0.3,0.8),mat([35,40,50]),0,1.5,z,g);
   const boardingSteps=new THREE.Group();g.add(boardingSteps);for(let i=0;i<5;i++)part(new THREE.BoxGeometry(0.6,0.14,1.5),trim,-3.9+i*0.55,-0.17+i*0.3,0,boardingSteps);
@@ -219,7 +224,7 @@ class Train {
     ];
     for (const c of this.cars) root.add(c.g);
     this.friends=['pavi','siri'].map(role=>{const p=makeCharacter(CAST[role]);root.add(p.g);p.g.visible=false;return p;});
-    this.steam = { type: 'smoke', pos: V(), rate: 0, acc: 0, life: 6, s0: 1, s1: 6, alpha: 0.35, rise: 2 };
+    this.steam = { type: 'smoke', pos: V(), rate: 0, acc: 0, life: 4.5, s0: 0.55, s1: 3, alpha: 0.18, rise: 1.4 };
     world.emitters.push(this.steam);
     this.dir = 1;
     this.s = -400;
@@ -244,7 +249,7 @@ class Train {
     const f=sampleTrainTrip(time),p0=sampleTrainTrip(Math.max(0,time-0.05)),p1=sampleTrainTrip(Math.min(240,time+0.05));this.v=Math.abs(p1.distance-p0.distance)/0.1;this.s=f.pos.z;this.stopped=f.stopped;this.state=f.stopped?'stopped':'run';
     for(const c of this.cars){const p=sampleTrainTrack(f.distance-c.off);c.g.visible=true;if(c.boardingSteps){c.boardingSteps.visible=c===this.cars[2]&&time<25;c.doors[0].visible=!c.boardingSteps.visible;}c.g.position.copy(p.pos);c.g.rotation.y=p.yaw;for(const {w,r}of c.wheels)w.rotation.x=-f.distance/r;}
     const coach=this.cars[2].g;coach.updateMatrixWorld(true);this.friends.forEach((p,i)=>{p.g.visible=true;const u=THREE.MathUtils.smoothstep(time,3+i*3,18+i*3),local=V(-4.2+3.35*u,-0.16+1.26*u,i?0.55:-0.55);if(u===1){local.x=-0.85+1.7*THREE.MathUtils.smoothstep(time,21,27);local.y=1.1;}const base=coach.localToWorld(local);p.g.position.copy(base);p.g.rotation.y=coach.rotation.y+(Math.PI/2);animatePerson(p,time*4,u<1?0.45:0);if(u===1)gesture(p,'wave',0.3+Math.sin(time*0.3+i)*0.15,time*0.7);});
-    this.cars[0].g.updateMatrixWorld(true);this.steam.pos.copy(this.cars[0].g.localToWorld(V(0,4.4,2.6)));this.steam.rate=f.stopped?0.8:3;
+    this.cars[0].g.updateMatrixWorld(true);this.steam.pos.copy(this.cars[0].g.localToWorld(V(0,4.4,2.6)));this.steam.rate=f.stopped?0.55:1.6;
     this.world.trainTripActive=true;
   }
   update(dt) {
@@ -283,7 +288,7 @@ class Train {
       for (const { w, r } of c.wheels) w.rotation.x += (this.v * dt) / r;
     }
     this.steam.pos.set(RAIL_X, 4.4, this.s + this.dir * 2.6);
-    this.steam.rate = !visible ? 0 : this.state === 'stopped' ? 1.5 : 4 + this.v * 0.5;
+    this.steam.rate = !visible ? 0 : this.state === 'stopped' ? 0.65 : 1.8 + this.v * 0.18;
   }
   remove(root) {
     for (const c of this.cars) root.remove(c.g);
@@ -326,9 +331,10 @@ export class Grazer {
         this.target = null;
         this.timer = 6 + R() * 12;
       } else {
-        this.pos.x += Math.sin(this.yaw) * 0.8 * dt;
-        this.pos.z += Math.cos(this.yaw) * 0.8 * dt;
-        this.phase += dt * 3;
+        const x=this.pos.x+Math.sin(this.yaw)*.8*dt,z=this.pos.z+Math.cos(this.yaw)*.8*dt;
+        if(this.world?.ambientBlocked&&blockedPath(this.world.ambientBlocked,this.pos.x,this.pos.z,x,z,.85,this)){
+          this.target=null;this.timer=2;
+        }else{this.pos.x=x;this.pos.z=z;this.phase+=dt*3;}
       }
       animateHorse(this.h, this.phase, 0.6);
     } else {
@@ -450,10 +456,10 @@ class Walker {
     this.yaw += Math.sign(diff) * Math.min(Math.abs(diff), dt * 5);
     const v = Math.min(d, this.speed * dt * (Math.abs(diff) < 1 ? 1 : 0.3));
     const nx=this.pos.x+Math.sin(this.yaw)*v,nz=this.pos.z+Math.cos(this.yaw)*v;
-    let best=this.world.inPond(nx,nz,0.45)?null:{x:nx,z:nz,yaw:this.yaw},score=Infinity;
+    let best=(this.world.inPond(nx,nz,0.45)||this.world.ambientBlocked?.(nx,nz,this,0.38))?null:{x:nx,z:nz,yaw:this.yaw},score=Infinity;
     if(!best) for(const turn of [0.65,-0.65,1.3,-1.3,1.75,-1.75,2.2,-2.2]) {
       const yaw=this.yaw+turn,x=this.pos.x+Math.sin(yaw)*v,z=this.pos.z+Math.cos(yaw)*v;
-      if(this.world.inPond(x,z,0.45))continue;
+      if(this.world.inPond(x,z,0.45)||this.world.ambientBlocked?.(x,z,this,0.38))continue;
       const cost=Math.hypot(this.target.x-x,this.target.z-z)+Math.abs(turn)*0.01;
       if(cost<score){score=cost;best={x,z,yaw};}
     }
@@ -469,6 +475,10 @@ class Walker {
   leaveSeat() {
     if (this.seat) this.seat.who = null;
     this.seat = null;
+    if (['toSeat', 'sitDown', 'sit', 'getUp'].includes(this.state)) {
+      this.state = 'wait';
+      this.wait = 0.3;
+    }
   }
   endChat() {
     const c = this.chat;
@@ -579,14 +589,14 @@ class Walker {
 function roadLoop() {
   const pts = [];
   for (let z = 330; z >= 70; z -= 26) pts.push(V(roadX(z) + 2.4, 0, z));
-  pts.push(V(2.4, 0, 40), V(2.4, 0, 0), V(2.4, 0, -35), V(2.7, 0, -46), V(0, 0, -52), V(-2.7, 0, -46), V(-2.4, 0, -35), V(-2.4, 0, 0), V(-2.4, 0, 40));
+  pts.push(V(2.4, 0, 40), V(2.4, 0, 0), V(2.4, 0, -35), V(2.7, 0, -46), V(0, 0, -48), V(-2.7, 0, -46), V(-2.4, 0, -35), V(-2.4, 0, 0), V(-2.4, 0, 40));
   for (let z = 70; z <= 330; z += 26) pts.push(V(roadX(z) - 2.4, 0, z));
   return new THREE.CatmullRomCurve3(pts, true, 'centripetal');
 }
 
 class RoadTraveller {
   constructor(model, curve, u0, speed, world) {
-    this.m = model;
+    this.m = model;this.world=world;
     this.curve = curve;
     this.len = curve.getLength();
     this.u = u0;
@@ -600,7 +610,9 @@ class RoadTraveller {
     this.update(0, true);
   }
   update(dt, snap = false) {
-    this.u = (this.u + (this.speed * dt) / this.len) % 1;
+    const next=(this.u+(this.speed*dt)/this.len)%1,candidate=this.curve.getPointAt(next);
+    if(!snap&&dt>0&&this.world.ambientBlocked){const coach=this.m.wheels.length>0,steps=Math.max(1,Math.ceil(this.speed*dt/.25));for(let i=1;i<=steps;i++){const u=(this.u+(this.speed*dt*i/steps)/this.len)%1,p=this.curve.getPointAt(u),tangent=this.curve.getTangentAt(u);for(const offset of (coach?[-3,-1.5,0,1.5,3,4.5]:[-1.1,0,1.1]))if(this.world.ambientBlocked(p.x+tangent.x*offset,p.z+tangent.z*offset,this,coach?1.1:.75))return;}}
+    this.u=next;
     this.curve.getPointAt(this.u, this.p);
     this.curve.getTangentAt(this.u, this.t);
     const target = Math.atan2(this.t.x, this.t.z);
@@ -655,6 +667,12 @@ export function setMarketCameraReader(reader){marketCameraReader=reader;}
 export function marketFocus(kind){const x=kind==='balloon'?0.9:kind==='bun'?-1.5:0,z=kind==='balloon'?-27:kind==='bun'?-23:-43;return V(x,walkHeight(x,z),z);}
 
 let gardenCameraReader=()=>null;
+let snowDayCameraReader=()=>null;
+let meadowOutingCameraReader=()=>null;
+export function setMeadowOutingCameraReader(reader){meadowOutingCameraReader=reader;}
+export function meadowOutingFocus(kind){const p=MEADOW_OUTING[kind];return V(p.x,terrainHeight(p.x,p.z)+(kind==='kite'?0.04:0.12),p.z);}
+export function setSnowDayCameraReader(reader){snowDayCameraReader=reader;}
+export function snowDayFocus(kind){if(kind==='cocoa')return rainyFocus('window');const p=SNOW_DAY[kind];return {pos:V(p.x,walkHeight(p.x,p.z),p.z),yaw:0};}
 export function setGardenCameraReader(reader){gardenCameraReader=reader;}
 let rowingCameraReader=()=>null;
 export function setRowingCameraReader(reader){rowingCameraReader=reader;}
@@ -672,6 +690,8 @@ export class Life {
     addCharacterPoseLayer(t=>this.updateRainy(t));
     addCharacterPoseLayer(t=>this.updateRowing(t));
     addCharacterPoseLayer(t=>this.updateGarden(t));
+    addCharacterPoseLayer(t=>this.updateSnowDay(t));
+    addCharacterPoseLayer(t=>this.updateMeadowOuting(t));
     this.stars={pavi:makeCharacter(CAST.pavi),siri:makeCharacter(CAST.siri)};
     for(const p of Object.values(this.stars))scene.add(p.g);
     this.settings = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1, hamlet: 1 };
@@ -927,6 +947,38 @@ export class Life {
     this.root.add(this.tumbleGroup);
   }
 
+  updateMeadowOuting(time){
+    const state=meadowOutingCameraReader(),area=this.world.meadowOuting;if(!area)return;area.update(state?.kind,state?.t??time);if(!state)return;
+    const {kind,t}=state,f=meadowOutingFocus(kind);
+    const faceKite=(p,index)=>{const target=area.kites[index].g.getWorldPosition(V()),pos=p.g.getWorldPosition(V());p.g.rotation.y=Math.atan2(target.x-pos.x,target.z-pos.z);p.headYaw=0;p.headPitch=-.2;};
+    this.outingHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.outingHidden.has(p))this.outingHidden.set(p,p.g.visible);p.g.visible=false;}
+    this.outingFriends??=[CAST.teacher,CAST.rancher,CAST.kid].map(o=>{const p=makeCharacter(o);this.scene.add(p.g);return p;});
+    for(const [i,p]of Object.values(this.stars).entries()){
+      seat(p,false,0);animatePerson(p,t*.65,0);p.g.visible=true;p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);p.g.position.copy(f).add(V((i?1:-1)*1.3,0,kind==='kite'?0:1.15));
+      if(kind==='kite'){p.g.position.y=walkHeight(p.g.position.x,p.g.position.z)+.04;faceKite(p,i?3:1);pointCharacterArm(p,i?1:0,f.clone().add(V((i?1:-1)*1.3,1.27,0)));p.elbows[i?1:0].rotation.x=-.25;}
+      else{p.arms.forEach((arm,j)=>arm.rotation.x=-.5+Math.sin(t*.45+j)*.08);p.elbows.forEach(elbow=>elbow.rotation.x=-.8);}
+    }
+    this.outingFriends.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f).add(V((i-1)*2.6,0,kind==='kite'?1.1:-2.0));p.g.rotation.set(0,kind==='kite'?0:Math.PI,0);animatePerson(p,t*.4+i,0);if(kind==='kite'){p.g.position.y=walkHeight(p.g.position.x,p.g.position.z)+.04;faceKite(p,i*2);pointCharacterArm(p,0,area.groups.kite.localToWorld(V((i*2-2)*1.3,1.31,0)));}});
+  }
+
+  updateSnowDay(time){
+    const state=snowDayCameraReader(),area=this.world.snowDay;if(!area)return;area.setKind(state?.kind);
+    if(!state)return;
+    const {kind,t}=state,f=snowDayFocus(kind);
+    this.snowHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.snowHidden.has(p))this.snowHidden.set(p,p.g.visible);p.g.visible=false;}
+    if(!this.snowAdults){this.snowAdults=[makeCharacter(CAST.teacher),makeCharacter(CAST.rancher)];this.snowAdults.forEach(p=>this.scene.add(p.g));}
+    const u=(1-Math.cos(t/20*Math.PI*2))/2,z=-3+6*u,sledY=0.05+0.42*Math.sqrt(1-z*z/25);area.sled.position.set(0,sledY,z);
+    area.balls.forEach((ball,i)=>{ball.scale.setScalar(i===0?1:THREE.MathUtils.lerp(0.18,1,THREE.MathUtils.smoothstep(t,i*8,i*8+14)));});area.scarf.visible=t>=20;
+    for(const [i,p]of Object.values(this.stars).entries()){
+      p.g.visible=true;p.g.rotation.set(0,0,0);seat(p,false,0);animatePerson(p,t*0.8,0);p.g.position.copy(f.pos);p.g.position.x+=(i?1:-1)*(kind==='angels'?1.2:0.9);p.g.position.z+=1.3;
+      if(kind==='snowman'){p.g.rotation.y=i?-Math.PI+0.6:Math.PI-0.6;p.upper.rotation.x=0.15;for(const arm of p.arms)arm.rotation.x=-0.8-Math.sin(t*0.7)*0.1;for(const elbow of p.elbows)elbow.rotation.x=-0.7;}
+      if(kind==='angels'){p.g.position.z=f.pos.z;p.g.position.y=f.pos.y+0.28;p.g.rotation.x=-Math.PI/2;const sweep=0.35+0.35*(1+Math.sin(t*0.8));p.arms.forEach((arm,j)=>arm.rotation.z=(j?1:-1)*sweep);p.legs.forEach((leg,j)=>leg.rotation.z=(j?1:-1)*(0.1+0.16*(1+Math.sin(t*0.8))));}
+      if(kind==='sled'){const hip=(p.bones?.[0].position.y??HIP)*p.g.scale.y;p.g.position.set(f.pos.x,f.pos.y+sledY+0.26-hip,f.pos.z+z+(i?0.35:-0.35));seat(p,false,1);p.arms.forEach(arm=>arm.rotation.x=-0.65);}
+      if(kind==='cocoa'){const it=this.world.interiors.cafe,localZ=-Math.min(it.depth*0.45,5);p.g.position.copy(it.group.localToWorld(V(-it.hx+1.8,0.02,localZ+(i?0.65:-0.65))));p.g.rotation.y=it.group.rotation.y-Math.PI/2;for(const arm of p.arms)arm.rotation.x=-0.7;for(const elbow of p.elbows)elbow.rotation.x=-0.9;const r=this.rainy??=this._buildRainy();r.window.visible=true;r.drops.forEach(g=>g.visible=false);if(r.rain)r.rain.visible=false;}
+    }
+    this.snowAdults.forEach((p,i)=>{p.g.visible=true;p.g.position.copy(f.pos).add(V((i?1:-1)*3,0,-1.5));p.g.rotation.y=i?-0.4:0.4;animatePerson(p,t*0.3,0);if(kind==='cocoa')p.g.visible=false;});
+  }
+
   updateGarden(time){
     const state=gardenCameraReader(),area=this.garden;if(!area)return;const t=state?.t??((time%240+240)%240);area.update(t);area.pickedCarrot.visible=!!state&&t>=190&&t<210;area.can.visible=!!state&&t>=52&&t<190;area.drops.forEach(g=>g.visible=area.can.visible);area.seeds.forEach(g=>g.visible=!!state&&t<38);if(!state)return;
     this.gardenHidden??=new Map();for(const p of [...Object.values(this.world.sunsetCove?.siblings||{}),...(this.world.playground?.kids||[]).filter(p=>p.outfit.star)]){if(!this.gardenHidden.has(p)){const park=this.world.playground?.hiddenStars?.find(e=>e.p===p);this.gardenHidden.set(p,park?park.visible:p.g.visible);}p.g.visible=false;}
@@ -946,10 +998,10 @@ export class Life {
 
   updateMarket(time){
     const market=this.world.market,state=marketCameraReader(),active=!!this.world.marketDay&&!gardenCameraReader()&&!rowingCameraReader()&&!rainyCameraReader()&&!momentCameraReader()&&!balloonRideState()&&!trainTripReader()&&(!!state||this.marketNear);
-    if(!active){if(this.marketProps){this.marketProps.balloon.visible=this.marketProps.bun.visible=false;this.marketProps.balloon.removeFromParent();}return;}if(!market)return;
+    if(!active){if(this.marketProps){this.marketProps.balloon.visible=this.marketProps.bun.visible=false;this.marketProps.shoppers.forEach(p=>p.g.visible=false);this.marketProps.balloon.removeFromParent();}return;}if(!market)return;
     if(!this.marketProps){const balloon=new THREE.Group();balloon.name='Pavi market balloon';const mat=new THREE.MeshLambertMaterial({color:'#e5b1c3',emissive:'#e5b1c3',emissiveIntensity:0.08}),top=new THREE.Mesh(new THREE.SphereGeometry(0.2,14,10),mat);top.scale.y=1.25;top.position.y=1.95;balloon.add(top);const string=new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,1,5),new THREE.MeshLambertMaterial({color:'#e5dbc4'}));string.position.y=1.2;balloon.add(string);balloon.position.x=-0.35;this.stars.pavi.g.add(balloon);const bun=new THREE.Mesh(new THREE.CapsuleGeometry(0.12,0.12,4,12),new THREE.MeshLambertMaterial({color:'#d9b57c'}));bun.rotation.z=Math.PI/2;this.world.root.add(bun);const shoppers=Array.from({length:6},(_,i)=>{const p=makeCharacter(randomTownsfolk(i%2?'townswoman':'shopkeeper'));market.root.add(p.g);return p;});this.marketProps={balloon,bun,shoppers};}
     const props=this.marketProps,t=state?.t??time,kind=state?.kind||'wide',focus=marketFocus(kind),phase=(Math.sin(t*0.025)+1)/2;
-    props.shoppers.forEach((p,i)=>{const stall=market.stalls[i%5].root.position;p.g.position.set(stall.x-2.7+Math.sin(t*0.08+i)*0.35,walkHeight(stall.x-2.7,stall.z+2.2),stall.z+2.2+Math.cos(t*0.06+i)*0.35);p.g.rotation.y=0.5+Math.sin(t*0.04+i)*0.4;animatePerson(p,t*0.7+i,0.12);gesture(p,i%2?'talk':'listen',((t+i*2)%20)/20,t);});
+    props.shoppers.forEach((p,i)=>{const stall=market.stalls[i%5].root.position,x=stall.x+(i>=5?2.7:-2.7)+Math.sin(t*.08+i)*.35,z=stall.z+2.2+Math.cos(t*.06+i)*.35;p.g.visible=true;p.g.position.set(x,walkHeight(x,z),z);p.g.rotation.y=0.5+Math.sin(t*0.04+i)*0.4;animatePerson(p,t*0.7+i,0.12);gesture(p,i%2?'talk':'listen',((t+i*2)%20)/20,t);});
     for(const [i,p]of Object.values(this.stars).entries()){p.g.visible=true;p.g.position.copy(focus);if(kind==='wide'){p.g.position.set(0.9-2.4*phase,walkHeight(0.9-2.4*phase,-27+4*phase),-27+4*phase);p.g.position.z+=(i?0.5:-0.5);}else if(kind==='balloon')p.g.position.z+=(i?0.65:-0.65);else p.g.position.x+=(i?0.55:-0.55);p.g.rotation.y=kind==='bun'?(i?-Math.PI/2:Math.PI/2):kind==='balloon'?Math.PI/2:-0.54;animatePerson(p,t*0.8+i,kind==='wide'?0.25:0);if(kind==='balloon')gesture(p,'wave',0.3+Math.sin(t*0.3)*0.1,t*0.4);}
     if(props.balloon.parent!==this.stars.pavi.g)this.stars.pavi.g.add(props.balloon);props.balloon.visible=true;props.balloon.rotation.z=Math.sin(t*0.35)*0.035;props.bun.visible=kind==='bun';props.bun.position.copy(focus);props.bun.position.y+=0.95;
     if(kind==='bun')for(const [i,p]of Object.values(this.stars).entries()){p.g.updateWorldMatrix(true,true);pointCharacterArm(p,i?0:1,props.bun.position,0.8);p.headPitch=0.12;}
@@ -1036,11 +1088,38 @@ export class Life {
     if(!trainTripReader()&&this.trainHidden){this._restoreSceneStars(this.trainHidden);this.trainHidden=null;}
     if(!balloonRideState()&&this.balloonHidden){this._restoreSceneStars(this.balloonHidden);this.balloonHidden=null;}
     if(!gardenCameraReader()&&this.gardenHidden){this._restoreSceneStars(this.gardenHidden);this.gardenHidden=null;}
+    if(!snowDayCameraReader()){
+      if(this.snowHidden){this._restoreSceneStars(this.snowHidden);this.snowHidden=null;for(const p of Object.values(this.stars)){p.g.rotation.x=p.g.rotation.z=0;seat(p,false,0);}}
+      this.snowAdults?.forEach(p=>p.g.visible=false);
+      this.rainy?.drops.forEach(g=>g.visible=true);
+    }
+    if(!meadowOutingCameraReader()){
+      if(this.outingHidden){this._restoreSceneStars(this.outingHidden);this.outingHidden=null;}
+      this.outingFriends?.forEach(p=>p.g.visible=false);
+    }
     if(!rowingCameraReader()&&this.rowHidden){this._restoreSceneStars(this.rowHidden);this.rowHidden=null;}
     if(!rainyCameraReader()&&this.rainHidden){this._restoreSceneStars(this.rainHidden);this.rainHidden=null;}
     this.marketNear=camera.position.x>-35&&camera.position.x<40&&camera.position.z>-75&&camera.position.z< -15;
     const wind = this.settings.wind;
     this.world.wind = wind; // painted plants sway with the same wind
+    const walkers=[...this.walkers,...(this.townKids||[]),...(this.settings.hamlet?this.hamletWalkers:[])];
+    const people=[...walkers.map(w=>({owner:w,p:w.p})),...[
+      ...Object.values(this.stars),...Object.values(this.world.sunsetCove?.siblings||{}),
+      ...(this.marketProps?.shoppers||[]),...(this.outingFriends||[]),...(this.snowAdults||[]),
+      ...(this.world.playground?.kids||[]),...(this.ponyFarm?.stars||[]),
+    ].map(p=>({owner:p,p}))],point=V();
+    const visible=g=>{for(let o=g;o;o=o.parent)if(!o.visible)return false;return !!g.parent;};
+    this.world.ambientBlocked=(x,z,self,r)=>{
+      if(solidAt(this.world,x,z,r))return true;
+      const y=terrainHeight(x,z);
+      for(const {owner,p}of people){if(owner===self||!visible(p.g))continue;p.g.updateWorldMatrix(true,false);p.g.getWorldPosition(point);if(Math.abs(point.y-y)<2&&Math.hypot(x-point.x,z-point.z)<r+.45)return true;}
+      for(const traveller of [...this.riders,...(this.coach?[this.coach]:[])]){
+        if(traveller===self||!visible(traveller.m.g))continue;const coach=traveller.m.wheels.length>0;
+        for(const offset of (coach?[-3,-1.5,0,1.5,3,4.5]:[-1.1,0,1.1]))if(Math.hypot(x-traveller.p.x-Math.sin(traveller.yaw)*offset,z-traveller.p.z-Math.cos(traveller.yaw)*offset)<r+(coach?1.1:.75))return true;
+      }
+      for(const grazer of this.grazers){if(grazer===self||grazer.ridden||!visible(grazer.h.g))continue;if(Math.abs(grazer.h.g.position.y-y)<2&&Math.hypot(x-grazer.pos.x,z-grazer.pos.z)<r+.85)return true;}
+      return false;
+    };
     this._socialise(dt, t);
     for (const w of this.walkers) w.update(dt, t);
     this.updateStars(t);
@@ -1054,7 +1133,7 @@ export class Life {
     if (this.coach) this.coach.update(dt);
     if (this.train) this.train.update(dt);
     if (this.ponyFarm && this.world.areaAnimationVisible(camera,-180,this.ponyFarm.y+5,-80,70)) this.ponyFarm.update(t,camera);
-    for (const g of this.grazers) g.update(dt, t);
+    for (const g of this.grazers) {g.world=this.world;g.update(dt, t);}
 
     for (const s of this.signs) s.pivot.rotation.z = (Math.sin(t * 1.4 + s.ph) * 0.1 + Math.sin(t * 2.3 + s.ph) * 0.04) * wind;
 
@@ -1144,3 +1223,8 @@ export function posePlaygroundChild(p,kind,t){
   if(kind==='dig'){p.upper.rotation.x=0.25;for(let i=0;i<2;i++){p.arms[i].rotation.x=-0.9+Math.sin(t*0.8+i)*0.15;p.elbows[i].rotation.x=-0.65;}for(const knee of p.knees||[])knee.rotation.x=0.9;}
   return kind==='slide'?0.72*sit:0;
 }
+
+
+
+
+

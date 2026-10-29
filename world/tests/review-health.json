@@ -1,0 +1,120 @@
+{
+  "checkedAtUTC": "2026-10-25T09:07:35.018786+00:00",
+  "url": "http://127.0.0.1:8811",
+  "appCheckpoint": "2fd7bcc",
+  "fullSuiteEvidence": {
+    "passed": 1900,
+    "startupReloadChecks": 2,
+    "suites": 30
+  },
+  "newShotDayNightFilesVerified": 28,
+  "startupSmokeFromServerRestart": {
+    "passed": 5,
+    "failed": 0,
+    "browserErrors": []
+  },
+  "httpChecks": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 20154
+    },
+    {
+      "path": "/src/main.js",
+      "status": 200,
+      "bytes": 52237
+    },
+    {
+      "path": "/src/presets.js",
+      "status": 200,
+      "bytes": 24363
+    },
+    {
+      "path": "/src/painterly.js",
+      "status": 200,
+      "bytes": 12102
+    },
+    {
+      "path": "/src/areas/meadow-lake.js",
+      "status": 200,
+      "bytes": 23963
+    },
+    {
+      "path": "/vendor/three/build/three.module.js",
+      "status": 200,
+      "bytes": 1326016
+    },
+    {
+      "path": "/assets/characters/pavi.glb",
+      "status": 200,
+      "bytes": 10168184
+    },
+    {
+      "path": "/assets/characters/siri.glb",
+      "status": 200,
+      "bytes": 12544664
+    },
+    {
+      "path": "/tests/self-review-3-index.html",
+      "status": 200,
+      "bytes": 3448
+    },
+    {
+      "path": "/index.html",
+      "status": 200,
+      "bytes": 20154
+    },
+    {
+      "path": "/tests/self-review-3-full.json",
+      "status": 200,
+      "bytes": 970
+    },
+    {
+      "path": "/tests/self-review-3-check.json",
+      "status": 200,
+      "bytes": 2071
+    },
+    {
+      "path": "/tests/self-review-3-public.json",
+      "status": 200,
+      "bytes": 2072
+    },
+    {
+      "path": "/tests/self-review-3-film-contact.png",
+      "status": 200,
+      "bytes": 1547847
+    },
+    {
+      "path": "/tests/self-review-3-oil-contact.png",
+      "status": 200,
+      "bytes": 875278
+    },
+    {
+      "path": "/tests/watercolor-resume-39-comparison.png",
+      "status": 200,
+      "bytes": 1129405
+    },
+    {
+      "path": "/tests/watercolor-resume-40-comparison.png",
+      "status": 200,
+      "bytes": 1190726
+    },
+    {
+      "path": "/tests/self-review-3-walk-contact.png",
+      "status": 200,
+      "bytes": 692644
+    },
+    {
+      "path": "/tests/self-review-3-40-night.png",
+      "status": 200,
+      "bytes": 421356
+    },
+    {
+      "path": "/tests/self-review-3-41-fallback-day.png",
+      "status": 200,
+      "bytes": 895535
+    }
+  ],
+  "appChanged": false,
+  "largerBuildStarted": false
+}

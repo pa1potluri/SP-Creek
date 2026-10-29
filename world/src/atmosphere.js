@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import * as T from './textures.js';
 import { installCloudLighting, cloudUniforms } from './environment.js';
 import { terrainHeight, walkHeight, riverZ } from './world.js';
+import { HAMLET } from './hamlet.js';
 
 export const PRESETS = {
   golden: {
@@ -462,7 +463,9 @@ export class Atmosphere {
     this.mistMaterial.opacity=this.key==='morning'?0.065*(0.45+0.55*Math.exp(-Math.max(0,time)/220)):0;
     this.mistMaterial.color.copy(c.fogColor).lerp(new THREE.Color('#f2f5e9'),0.4);
     for(const {plane,x,z,y,phase} of this.mistPatches){plane.position.set(x+Math.sin(time*0.014+phase)*3,y+Math.sin(time*0.02+phase)*0.12,z+Math.cos(time*0.012+phase)*2);plane.rotation.y=Math.atan2(camera.position.x-plane.position.x,camera.position.z-plane.position.z);}
-    setMotes(this.dust, c.dust * m.dust, c.dustColor);
+    // Keep Willow Creek storefronts readable without changing the chosen weather or wet ground.
+    const willowView=1-smooth(45,85,Math.hypot(camera.position.x-HAMLET.x,camera.position.z-HAMLET.z));
+    setMotes(this.dust, c.dust * m.dust * (1-.5*willowView), c.dustColor);
     setMotes(this.flies, Math.min(1,c.fireflies*1.5));
     const elapsed=Math.max(0,time-this.weatherStart), clear=this.weather==='clearing';
     const rain=this.weather==='drizzle'?0.3:clear?0.3*(1-smooth(0,35,elapsed)):this.weather==='windy'?0:THREE.MathUtils.clamp(c.rain+m.rain,0,1);
@@ -473,10 +476,11 @@ export class Atmosphere {
     this.rainbow.position.set(camera.position.x-this.sunDir.x*115,terrainHeight(camera.position.x,camera.position.z)+5,camera.position.z-this.sunDir.z*115);
     this.rainbow.rotation.y=Math.atan2(camera.position.x-this.rainbow.position.x,camera.position.z-this.rainbow.position.z);
     this.petals.visible=this.weather==='windy';this.petals.material.uniforms.uTime.value=time;this.petals.material.uniforms.uCam.value.copy(camera.position);
-    const ru=this.rain.material.uniforms;ru.uSpeed.value=this.weather==='auto'?16:4;ru.uLength.value=this.weather==='auto'?0.9:0.24;
+    const ru=this.rain.material.uniforms;ru.uSpeed.value=this.weather==='auto'?16:4;ru.uLength.value=(this.weather==='auto'?0.9:0.24)*(1-.4*willowView);
     ru.uTime.value = time;
     ru.uCam.value.copy(camera.position);
-    ru.uAmount.value = rain;
+    ru.uAmount.value = rain*(1-.35*willowView);
+    this.rain.geometry.setDrawRange(0,Math.floor(this.rain.geometry.attributes.position.count/2*(1-.35*willowView))*2);
     this.rain.visible = rain > 0.01;
 
     this.birds.mesh.visible = c.birds > 0.5;

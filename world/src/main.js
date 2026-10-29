@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {setupKidsUI} from './kids-ui.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { TexturePass } from 'three/addons/postprocessing/TexturePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
@@ -9,6 +10,7 @@ import { createSky, createMountains } from './sky.js';
 import { Atmosphere, PRESETS } from './atmosphere.js';
 import { OilShader, LookShader, FinalShader } from './painterly.js';
 import { STYLES } from './styles.js';
+import { setupExploreUI } from './explore-ui.js';
 import { Seasons } from './seasons.js';
 import { buildSunsetCove } from './areas/sunset-cove.js';
 import { buildPlayground } from './areas/playground.js';
@@ -30,7 +32,7 @@ import { buildTownCenter } from './areas/town-center.js';
 import { buildGhostTown } from './areas/ghost-town.js';
 import { buildForest } from './areas/forest.js';
 import { buildMeadowLake } from './areas/meadow-lake.js';
-import { buildCrystalMine } from './areas/crystal-mine.js';
+import { buildCrystalMine, setBalloonGameReader } from './areas/crystal-mine.js';
 
 const $ = (s) => document.querySelector(s);
 const LS = {
@@ -77,6 +79,7 @@ const recorder = new Recorder();
 const timeline = new Timeline(director, atmos);
 const life = new Life(scene, world);
 const game = new Game({ scene, camera, canvas, world, life, director });
+setBalloonGameReader(()=>game.active?game.balloon:null);
 const cafe = new CafeInterior(world);
 const townCenter = buildTownCenter(world, life);
 const ghostTown = buildGhostTown(world);
@@ -140,9 +143,14 @@ function resize(fw, fh) {
     const s = Math.min(innerWidth / w, innerHeight / h);
     Object.assign(canvas.style, { width: `${w * s}px`, height: `${h * s}px`, left: `${(innerWidth - w * s) / 2}px`, top: `${(innerHeight - h * s) / 2}px` });
   } else if (outputSize === 'window') {
-    w = Math.max(2, innerWidth);
-    h = Math.max(2, innerHeight);
-    Object.assign(canvas.style, { width: '100vw', height: '100vh', left: '0px', top: '0px' });
+    const preview=window.__app?.kidsUI?.previewRect();
+    w = Math.max(2, preview?.width||innerWidth);
+    h = Math.max(2, preview?.height||innerHeight);
+    // Review at a bounded pixel count; explicit video/export sizes remain exact.
+    const previewScale = Math.min(1, 1600 / w, 900 / h);
+    w = Math.max(2, Math.round(w * previewScale));
+    h = Math.max(2, Math.round(h * previewScale));
+    Object.assign(canvas.style,preview?{width:preview.width+'px',height:preview.height+'px',left:preview.left+'px',top:preview.top+'px'}:{width:'100vw',height:'100vh',left:'0px',top:'0px'});
   } else {
     [w, h] = outputSize === '1080p' ? [1920, 1080] : [1280, 720];
     const s = Math.min(innerWidth / w, innerHeight / h);
@@ -158,21 +166,6 @@ function resize(fw, fh) {
   atmos.setViewport(h, camera.fov);
 }
 addEventListener('resize', () => { if (!exporting) resize(); });
-
-// Painted cut-outs (transparent PNGs from ChatGPT) in assets/cutouts/ stand around the cafe.
-const CUTOUTS = [
-  { file: 'lady', x: 6.4, z: 13.2, h: 1.72 },
-  { file: 'horse', x: 2.6, z: 13.8, h: 2.2 },
-];
-for (const c of CUTOUTS) {
-  const img = new Image();
-  img.onload = () => {
-    const tex = T.imageTexture(img);
-    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping; // no bleeding at the transparent edges
-    world.placeCutout(tex, img.width / img.height, c.x, c.z, c.h);
-  };
-  img.src = `assets/cutouts/${c.file}.png`; // missing files are simply skipped
-}
 
 // ---------- saved state ----------
 world.loadLayout(LS.get('dh.layout') || []);
@@ -254,10 +247,17 @@ function setSlider(attr, key, value) {
   inp.dispatchEvent(new Event('input'));
 }
 let styleKey = 'oil';
+$('#presetStyle').checked = LS.get('dh.followPresetStyle') === true;
+$('#presetStyle').onchange = () => LS.set('dh.followPresetStyle', $('#presetStyle').checked);
 const styleButtons = Object.entries(STYLES).map(([key, s]) => {
   const b = document.createElement('button');
   b.textContent = s.label;
-  b.onclick = () => { applyStyle(key); LS.set('dh.styleChoice', key); };
+  b.dataset.style=key;b.title=s.label;b.setAttribute('aria-pressed','false');
+  b.onclick = () => {
+    applyStyle(key); LS.set('dh.styleChoice', key);
+    $('#presetStyle').checked = false; LS.set('dh.followPresetStyle', false);
+    if(window.__app?.showcase)window.__app.showcase.styleOverride=key;
+  };
   $('#styles').append(b);
   return [key, b];
 });
@@ -272,7 +272,7 @@ function applyStyle(key) {
   fxaa.enabled = s.fxaa;
   fin.uniforms.uWeave.value = s.weave;
   applyTextures();
-  styleButtons.forEach(([k, b]) => b.classList.toggle('on', k === styleKey));
+  styleButtons.forEach(([k, b]) => {b.classList.toggle('on', k === styleKey);b.setAttribute('aria-pressed',String(k===styleKey));});
   document.querySelectorAll('[data-for]').forEach((row) => row.classList.toggle('off', !row.dataset.for.split(' ').includes(styleKey)));
 }
 // texture set: 'auto' follows the style; or force oil / clean / flat for every style
@@ -311,6 +311,7 @@ const shotButtons = director.shots.map((s, i) => {
 function refreshCamera() {
   shotButtons.forEach((b, i) => b.classList.toggle('on', director.mode === 'shot' && director.index === i));
   $('#freeBtn').classList.toggle('on', director.mode === 'free');
+  $('#freeBtn').textContent=director.mode==='free'?'Free camera: On':'Free camera: Off';
   $('#autoBtn').classList.toggle('on', director.auto);
   $('#pauseBtn').classList.toggle('on', director.paused);
   $('#keyCount').textContent = `${director.custom.length} key${director.custom.length === 1 ? '' : 's'} saved`;
@@ -327,6 +328,8 @@ const addKey = () => { director.addKey(); saveKeys(); refreshCamera(); flash(`Ke
 $('#freeBtn').onclick = toggleFree;
 $('#pauseBtn').onclick = togglePause;
 $('#autoBtn').onclick = () => {
+  if(game.active)game.exit();
+  timeline.stop();
   director.auto = !director.auto;
   if (director.auto && director.mode === 'free') director.setFree(false);
   refreshCamera();
@@ -353,17 +356,24 @@ function setTool(t) {
   clearBuildPreview();
   roadPoints = [];
   tool = tool === t ? null : t;
+  if (tool) {
+    game.exit();timeline.stop();director.auto=false;director.flight=null;director.paused=true;
+    refreshCamera();
+  }
   selectBuilding(null);
   buildButtons.forEach((b) => b.classList.toggle('on', `build:${b.dataset.build}` === tool));
   $('#drawRoad').classList.toggle('on', tool === 'road');
   $('#drawFence').classList.toggle('on', tool === 'fence');
+  document.querySelectorAll('[data-terrain]').forEach(b=>b.classList.toggle('on',tool==='terrain:'+b.dataset.terrain));
   if (tool?.startsWith('build:')) refreshBuildGhost();
   propButtons.forEach((b) => b.classList.toggle('on', b.dataset.prop === tool));
   canvas.classList.toggle('placing', !!tool);
+  canvas.dataset.tool=tool||'';
   showToolHint();
 }
 function showToolHint() {
-  if (tool === 'road' || tool === 'fence') { $('#hint').textContent = 'Click ground points · Enter/double-click to finish · Esc to cancel'; return; }
+  if(tool?.startsWith('terrain:')) {$('#hint').textContent='Terrain workshop · Click ground to '+tool.split(':')[1]+' · Automatically saved · Esc stops';return;}
+  if (tool === 'road' || tool === 'fence') { $('#hint').textContent = `${roadPoints.length} points · Click ground · Save road/fence or Enter · Esc cancels`; return; }
   if (tool?.startsWith('build:')) { $('#hint').textContent = 'Click ground to build · R/wheel rotates · Esc stops'; return; }
   $('#hint').textContent = tool ? `Click the ground to place: ${tool === 'cutout' ? 'cut-out' : tool} (Esc to stop)` : '';
 }
@@ -375,18 +385,26 @@ canvas.addEventListener('pointerup', (e) => {
   ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   raycaster.setFromCamera(ndc, camera);
   if (!tool) {
+    const pondDucks=world.momentProps?.pondDucks;
+    if(pondDucks?.root.visible){const hit=raycaster.intersectObjects(pondDucks.birds,true)[0];if(hit){const cover=raycaster.intersectObjects([world.ground,world.hamlet.pond.obj],true).find(h=>h.distance<hit.distance-.05&&h.object.isMesh&&!h.object.material?.transparent);if(!cover&&pondDucks.react(hit.object,camera.position)){audio.quack(e);return;}}}
+    const ghostHit=raycaster.intersectObjects(ghostTown.ghosts.map(e=>e.g),true)[0];
+    if(ghostHit){const solidHit=raycaster.intersectObjects([world.ground,ghostTown.root],true).find(h=>h.distance<ghostHit.distance-.05&&h.object.isMesh&&!h.object.material?.transparent);if(!solidHit&&ghostTown.react(ghostHit.object))return;}
     const selected = raycaster.intersectObjects([...world.buildings, ...world.fences].map((b) => b.obj), true)[0];
     selectBuilding(selected ? [...world.buildings, ...world.fences].find((b) => { let o = selected.object; while (o && o !== b.obj) o = o.parent; return o === b.obj; }) : null);
     return;
   }
   const hit = raycaster.intersectObjects(tool.startsWith('build:') || (tool === 'road' || tool === 'fence') ? [world.ground] : world.walkables, false)[0];
   if (!hit) return;
+  if(tool.startsWith('terrain:')) {
+    const ok=world.shapeTerrain({mode:tool.split(':')[1],x:hit.point.x,z:hit.point.z,radius:+$('#terrainRadius').value,amount:+$('#terrainStrength').value,target:terrainHeight(hit.point.x,hit.point.z)});
+    if(ok){saveLayout();flash('Terrain saved');}else flash('Protected ground. Use Open terrain workshop; avoid buildings.');return;
+  }
   if (tool.startsWith('build:')) {
     world.placeBuilding(buildSpec(hit.point)); saveLayout(); return;
   }
   if (tool === 'road' || tool === 'fence') {
     if (e.detail < 2 && (!roadPoints.length || Math.hypot(hit.point.x - roadPoints.at(-1)[0], hit.point.z - roadPoints.at(-1)[1]) > 0.2)) roadPoints.push([hit.point.x, hit.point.z]);
-    previewRoad(); return;
+    previewRoad();showToolHint();return;
   }
   if (tool === 'cutout') {
     if (cutout) {
@@ -432,11 +450,14 @@ document.addEventListener('artstylechange', () => { if (tool?.startsWith('build:
 let buildSignCustom = false;
 let ghost = null, buildYaw = 0, groundPoint = null, selectedBuilding = null, selectionBox = null;
 let roadPoints = [], roadPreview = null;
+const roadMarkers=new THREE.Group(),roadMarkerGeo=new THREE.SphereGeometry(.18,8,6),roadMarkerMat=new THREE.MeshBasicMaterial({color:'#fff3a1',depthTest:false});
+world.root.add(roadMarkers);
 function buildSpec(p = { x: 0, z: 0 }) {
-  return { type: tool.slice(6), x: p.x, z: p.z, yaw: buildYaw, w: +$('#buildWidth').value,
+  return { type: tool.slice(6), x: p.x, z: p.z, yaw: buildYaw, scale: +$('#buildScale').value, w: +$('#buildWidth').value,
     floors: +$('#buildFloors').value, wall: $('#buildWall').value.split(',').map(Number), sign: $('#buildSign').value, signCustom: buildSignCustom };
 }
 function clearBuildPreview() {
+  roadMarkers.clear();
   if (ghost) world.disposeBuilding(ghost);
   ghost = null;
   if (roadPreview) { world.root.remove(roadPreview); roadPreview.geometry.dispose(); roadPreview = null; }
@@ -447,11 +468,20 @@ function refreshBuildGhost() {
   ghost = world.makeBuilding(buildSpec(groundPoint || undefined), true);
   ghost.obj.visible = !!groundPoint;
 }
-function rotateBuild(delta) { buildYaw += delta; refreshBuildGhost(); }
+function syncBuildTransform(){const degrees=((Math.round(buildYaw*180/Math.PI)%360)+360)%360;
+  $('#buildRotation').value=degrees;$('#buildRotation').nextElementSibling.textContent=degrees+'°';$('#buildScale').nextElementSibling.textContent=Math.round(+$('#buildScale').value*100)+'%';}
+function rotateBuild(delta) { buildYaw += delta;syncBuildTransform();refreshBuildGhost(); }
+$('#buildRotateLeft').onclick=()=>rotateBuild(-Math.PI/12);
+$('#buildRotateRight').onclick=()=>rotateBuild(Math.PI/12);
+$('#buildRotation').oninput=()=>{buildYaw=+$('#buildRotation').value*Math.PI/180;syncBuildTransform();refreshBuildGhost();};
+$('#buildScale').oninput=()=>{syncBuildTransform();refreshBuildGhost();};
+$('#applyBuildTransform').onclick=()=>{if(!selectedBuilding||!world.buildings.includes(selectedBuilding))return;const spec={...selectedBuilding.spec,yaw:buildYaw,scale:+$('#buildScale').value};world.removeBuilding(selectedBuilding,false);selectBuilding(world.placeBuilding(spec));saveLayout();};
 function selectBuilding(e) {
   if (selectionBox) { scene.remove(selectionBox); selectionBox.geometry.dispose(); selectionBox.material.dispose(); }
   selectedBuilding = e; selectionBox = null;
   $('#deleteBuilding').disabled = !e;
+  $('#applyBuildTransform').disabled=!e||!world.buildings.includes(e);
+  if(e&&world.buildings.includes(e)){buildYaw=e.spec.yaw||0;$('#buildScale').value=e.spec.scale||1;syncBuildTransform();}
   $('#buildSelection').textContent = e ? `Selected: ${e.spec.sign || e.spec.type}` : 'No building selected';
   if (e) { selectionBox = new THREE.BoxHelper(e.obj, 0xe2a24a); scene.add(selectionBox); }
 }
@@ -460,6 +490,8 @@ function deleteBuilding() {
   if (selectedBuilding.spec.type === 'fence') world.removeFence(selectedBuilding); else world.removeBuilding(selectedBuilding); selectBuilding(null); saveLayout();
 }
 function previewRoad(cursor) {
+  roadMarkers.clear();
+  for(const [x,z]of roadPoints){const m=new THREE.Mesh(roadMarkerGeo,roadMarkerMat);m.position.set(x,terrainHeight(x,z)+.24,z);m.renderOrder=5;roadMarkers.add(m);}
   if (roadPreview) { world.root.remove(roadPreview); roadPreview.geometry.dispose(); roadPreview = null; }
   const pts = [...roadPoints];
   if (cursor && (!pts.length || Math.hypot(cursor.x - pts.at(-1)[0], cursor.z - pts.at(-1)[1]) > 0.2)) pts.push([cursor.x, cursor.z]);
@@ -467,20 +499,20 @@ function previewRoad(cursor) {
   world.userRoadMat ??= world._pathMaterial();
   if (tool === 'fence') {
     const n = world.colliders.segs.length; roadPreview = world._fence(pts, true); world.colliders.segs.splice(n);
-  } else roadPreview = world._ribbon(pts, +$('#roadWidth').value, world.userRoadMat, { lift: 0.12, step: 1 });
+  } else roadPreview = world._ribbon(pts, +$('#roadWidth').value, world.userRoadMat, { lift: 0.12, step: 1, fitGround: true });
   world.setTextureSet(world.textureSet || 'oil');
 }
 function finishRoad() {
   if (roadPoints.length < 2) return flash('Click at least two different road points');
   if (tool === 'fence') world.addFence(roadPoints); else world.addRoad(roadPoints, +$('#roadWidth').value);
-  setTool(null); saveLayout();
+  const kind=tool==='fence'?'Fence':'Road';setTool(null);saveLayout();flash(`${kind} saved`);
 }
 buildButtons.forEach((b) => { b.onclick = () => {
   if (b.dataset.build === 'hotel') $('#buildFloors').value = 2;
   $('#buildFloors').nextElementSibling.textContent = $('#buildFloors').value;
   const signs = { shop: 'GENERAL STORE', hotel: 'HOTEL', house: 'HOMESTEAD', barn: 'LIVERY STABLE', chapel: '', tower: '', windmill: '', cabin: '', brick: 'GENERAL STORE', blacksmith: 'BLACKSMITH', hitch: '' };
   $('#buildSign').value = signs[b.dataset.build] || '';  buildSignCustom = false;
-  setTool(`build:${b.dataset.build}`);
+  selectBuilding(null);setTool(`build:${b.dataset.build}`);
 }; });
 for (const id of ['buildWidth', 'buildFloors', 'buildWall', 'buildSign', 'roadWidth']) {
   const inp = $('#' + id);
@@ -521,6 +553,15 @@ $('#clearBuilt').onclick = () => {
   world.updateTerrain();
   saveLayout();
 };
+$('#terrainWorkshop').onclick=()=>{
+  game.exit();timeline.stop();setTool(null);director.auto=false;director.paused=true;director.flight=null;
+  director.mode='free';director.state.pos.set(400,terrainHeight(400,-400)+65,-320);Object.assign(director.free,{yaw:Math.PI,pitch:-.65});refreshCamera();
+  flash('Terrain workshop: select Lower, Raise or Flatten, then click the hill.');
+};
+document.querySelectorAll('[data-terrain]').forEach(b=>b.onclick=()=>setTool('terrain:'+b.dataset.terrain));
+for(const id of ['terrainRadius','terrainStrength'])$('#'+id).oninput=()=>{$('#'+id).nextElementSibling.textContent=$('#'+id).value;};
+$('#terrainUndo').onclick=()=>{if(world.undoTerrain()){saveLayout();flash('Terrain undone and saved');}};
+$('#terrainReset').onclick=()=>{if(confirm('Reset terrain edits? You can undo this reset.')&&world.resetTerrain()){saveLayout();flash('Terrain reset and saved');}};
 $('#drawRoad').onclick = () => setTool('road');
 $('#drawFence').onclick = () => setTool('fence');
 $('#finishFence').onclick = finishRoad;
@@ -533,6 +574,14 @@ $('#undoRoad').onclick = () => {
 };
 canvas.addEventListener('dblclick', () => { if (tool === 'road' || tool === 'fence') finishRoad(); });
 canvas.addEventListener('wheel', (e) => {
+  if (!game.active && director.mode === 'free' && !e.altKey) {
+    e.preventDefault();
+    const f=director.free,dir=new THREE.Vector3(Math.sin(f.yaw)*Math.cos(f.pitch),Math.sin(f.pitch),Math.cos(f.yaw)*Math.cos(f.pitch));
+    const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?canvas.clientHeight:1);
+    director.state.pos.addScaledVector(dir,-THREE.MathUtils.clamp(delta*.025,-12,12));
+    director.state.pos.y=Math.max(director.state.pos.y,terrainHeight(director.state.pos.x,director.state.pos.z)+.5);
+    director.update(0);return;
+  }
   if (!tool?.startsWith('build:')) return;
   e.preventDefault(); rotateBuild(Math.sign(e.deltaY) * Math.PI / 12);
 }, { passive: false });
@@ -903,7 +952,8 @@ function togglePlay() {
   game.enter();
 }
 game.onChange = () => {
-  $('#playBtn').textContent = game.active ? '■ Stop playing (G)' : '🎮 Play — walk & ride (G)';
+  $('#playBtn').textContent = game.active ? 'Gameplay: On' : 'Gameplay: Off';
+  $('#playBtn').setAttribute('aria-pressed',String(game.active));
   $('#playBtn').classList.toggle('on', game.active);
   document.body.classList.toggle('ui-hidden', game.active);
   $('#gameHelp').classList.toggle('hidden', !game.active);
@@ -916,7 +966,11 @@ game.onChange = () => {
 $('#playBtn').onclick = togglePlay;
 
 // ---------- keys ----------
-const toggleUI = () => document.body.classList.toggle('ui-hidden');
+const toggleUI = () => {
+  document.body.style.cursor='';
+  if($('#panel').style.display==='none'){$('#panel').style.removeProperty('display');$('#hud').style.removeProperty('display');document.body.classList.remove('ui-hidden');}
+  else document.body.classList.toggle('ui-hidden');
+};
 $('#uiToggle').onclick = toggleUI;
 // Review controls: freeze the whole scene (time stops, the frame keeps drawing), and full screen.
 let frozen = false;
@@ -952,7 +1006,7 @@ addEventListener('keydown', (e) => {
   else if (e.code === 'KeyP') togglePause();
   else if (e.code === 'Escape') setTool(null);
   else if (e.code === 'KeyR' && tool?.startsWith('build:')) rotateBuild(Math.PI / 12);
-  else if (e.code === 'Enter' && (tool === 'road' || tool === 'fence')) finishRoad();
+  else if (e.code === 'Enter' && (tool === 'road' || tool === 'fence')) {e.preventDefault();finishRoad();}
   else if (e.code === 'Delete' && selectedBuilding) deleteBuilding();
   else if (/^Digit[1-9]$/.test(e.code)) {
     const i = +e.code.slice(5) - 1;
@@ -997,26 +1051,29 @@ function listener() {
 // Advance the whole world by exactly `dt` seconds and draw one frame.
 // The live loop passes real elapsed time; the exporter passes 1/fps.
 function step(dt) {
-  time += dt;
+  const motionDt=dt*(window.__app?.showcase?.playing?0.4:1);
+  time += motionDt;
   if (timeline.update(dt) === 'ended') refreshTimeline();
   if (game.active) game.update(dt);
   else director.update(dt);
   world.wind=life.settings.wind*(atmos.weather==='windy'?2.2:1);
-  atmos.update(dt, time, camera);
+  atmos.update(motionDt, time, camera);
   seasons.update(time,camera);
-  world.update(dt, time, camera);
+  world.update(motionDt, time, camera);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
   if (world.areaAnimationVisible(camera,-90,forest.pad.y+10,-204,90)) forest.update(time, camera, atmos.cur);
   if (world.areaAnimationVisible(camera,-225,meadowLake.pad.y+10,0,110)) meadowLake.update(time, camera, atmos.cur, atmos.key);
   crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
-  life.update(dt, time, camera);
+  life.update(motionDt, time, camera);
   sunsetCove.update(time,camera,atmos.cur);
   playground.update(time,camera);
   camping.update(time,camera,atmos.cur);
-  cafe.update(dt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
+  cafe.update(motionDt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
+  // Gameplay uses the player's avatar; cinematic rides keep their existing pair.
+  if(game.balloon)for(const rider of life.balloonRiders||[])rider.g.visible=false;
   audio.tick(listener(), dt);
   if (backdrop) {
     backdrop.position.set(camera.position.x, 2, camera.position.z);
@@ -1050,6 +1107,9 @@ function step(dt) {
   l.uLayers.value = lookParams.layers;
   l.uPaperShadow.value = lookParams.paperShadow;
   l.uPixel.value = lookParams.pixel;
+  l.uWash.value = lookParams.wash;
+  l.uPigment.value = lookParams.pigment;
+  l.uPaper.value = lookParams.paper;
   // focus follows whatever the camera is looking at, eased so it racks smoothly
   const focusTarget = camera.position.distanceTo(director.state.look);
   l.uFocus.value += (focusTarget - l.uFocus.value) * Math.min(1, dt * 2.5);
@@ -1078,5 +1138,12 @@ function frame() {
   if (++frames === 2) $('#loading').classList.add('done');
 }
 atmos.setPreset('golden', true);
+setupExploreUI(window.__app);
+setupKidsUI(window.__app);
+document.querySelector('#createLaunch')?.remove();
+document.querySelector('#createScreen')?.remove();
 frame();
 if (new URLSearchParams(location.search).has('showcase')) import('./showcase.js').then((m) => setTimeout(() => m.startShowcase(window.__app), 3000));
+
+
+

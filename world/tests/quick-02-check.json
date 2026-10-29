@@ -1,0 +1,15 @@
+{
+  "steam": {
+    "type": "smoke",
+    "rate": 0.65,
+    "acc": 0.36306600001126527,
+    "life": 4.5,
+    "s0": 0.55,
+    "s1": 3,
+    "alpha": 0.18,
+    "rise": 1.4
+  },
+  "chimneys": 12,
+  "audioLocked": true,
+  "errors": []
+}

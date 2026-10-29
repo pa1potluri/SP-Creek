@@ -1,0 +1,12 @@
+{
+  "vertices": 4858,
+  "minLift": 0.09999601431412941,
+  "maxLift": 0.10000435029431998,
+  "blocked": [],
+  "minFlyHeight": 0.6001591865613491,
+  "repeatable": true,
+  "lanterns": 7,
+  "fireflySize": 0.23,
+  "audioLocked": true,
+  "errors": []
+}

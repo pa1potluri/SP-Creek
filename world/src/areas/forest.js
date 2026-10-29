@@ -15,6 +15,7 @@ export function buildForest(world) {
     const u=i/steps,p=curve.getPointAt(u),tangent=curve.getTangentAt(u);routeSamples.push(p);
     world.registerAreaPad({x:p.x,z:p.z,y:startY+(y-startY)*u,yaw:Math.atan2(tangent.x,tangent.z),hx:6,hz:3.5,blend:3});
   }
+  world.registerAreaPad({x:-65,z:-201,hx:10,hz:12,blend:0,clearOnly:true});
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color});
   const bark=m('#8c7056'),moss=m('#759b6f'),cream=m('#f5ebd5'),dark=m('#455c62'),pink=m('#e8b6cb');
   const glows=['#a4ded8','#e6b8d7','#f4dda1'].map(color=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.1}));
@@ -24,52 +25,56 @@ export function buildForest(world) {
   const ball=(radius,mat,x,h,z,g=root,scale=[1,1,1])=>solid(new THREE.SphereGeometry(radius,12,8).scale(...scale),mat,x,h,z,g);
   function group(x,h,z,parent=root){const g=new THREE.Group();g.position.set(x,h,z);parent.add(g);return g;}
   world.updateTerrain();
-  const trail=world._ribbon(route,2.4,world._pathMaterial(),{step:1});root.attach(trail);
+  const trail=world._ribbon(route,3.2,world._pathMaterial(),{step:.5,fitGround:true,lift:.1});root.attach(trail);
+  trail.material.emissive.set('#80684a');
   // Copy the existing plant variants and sway materials so every art style keeps its own trees.
   const spots=[];
   for(let i=0;i<65;i++){
     const a=r()*Math.PI*2,d=13+r()*28,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d;
-    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||routeSamples.some(p=>Math.hypot(x-p.x,z-p.z)<8))continue;
-    spots.push([x,terrainHeight(x,z)-0.1,z,0.85+r()*0.5]);world.colliders.circles.push({x,z,r:0.45});
+    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||routeSamples.some(p=>Math.hypot(x-p.x,z-p.z)<8)||(Math.abs(x+65)<12&&Math.abs(z+201)<14))continue;
+    spots.push([x,world.groundY(x,z)-0.1,z,0.85+r()*0.5]);world.colliders.circles.push({x,z,r:0.45});
   }
   function instances(source,list,visibleSource){if(!source||!list.length)return;const im=new THREE.InstancedMesh(source.geometry,source.material,list.length),matrix=new THREE.Matrix4();list.forEach(([x,h,z,s],i)=>im.setMatrixAt(i,matrix.makeScale(s,s,s).setPosition(x,h,z)));im.castShadow=source.castShadow;im.receiveShadow=true;im.computeBoundingSphere();root.add(im);variants.push({im,source:visibleSource});}
   for(const set of ['oil','clean']){
     const g=world.foliage?.[set];if(!g)continue;
     instances(g.children[1]||g.children[0],spots,g);
-    const bushes=spots.filter((_,i)=>i%2===0).map(([x,h,z])=>[x+1,h,z+0.7,0.8]);
+    const bushes=spots.filter((_,i)=>i%2===0).map(([x,h,z])=>[x+1,world.groundY(x+1,z+0.7)-0.1,z+0.7,0.8]);
     instances(g.children[4],bushes,g);
   }
   const low={geometry:world.treeGeos[3],material:world.mat.foliage,castShadow:true};instances(low,spots,world.lowPoly[0]);
   instances(world.blocky[3]||world.blocky[0],spots,world.blocky[0]);
   for(let i=0;i<34;i++){
-    const a=r()*Math.PI*2,d=6+r()*23,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=terrainHeight(x,z);
+    const a=r()*Math.PI*2,d=6+r()*23,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=world.groundFootY(x,z,1);
     const rock=new THREE.DodecahedronGeometry(0.7+r()*0.5,0).scale(1.5,0.5,1);solid(rock,moss,x,h+0.2,z);
     for(let k=0;k<5;k++){const angle=k*1.257;solid(new THREE.SphereGeometry(0.25,6,4).scale(0.4,0.17,2.1),moss,x+Math.cos(angle)*0.4,h+0.15,z+Math.sin(angle)*0.4,root,[0,-angle,0.25]);}
   }
-  for(const [x,z]of [[-88,-175],[-115,-190],[-105,-216]]){
-    const g=group(x,terrainHeight(x,z),z);box(0.1,2.3,0.1,bark,0,1.15,0,g);box(0.25,0.4,0.25,world.mat.lantern,0,2.1,0,g);
-    const halo=new THREE.Sprite(world.haloMat);halo.position.y=2.1;halo.scale.setScalar(2);g.add(halo);world.colliders.circles.push({x,z,r:0.15});
+  const lanterns=[];
+  for(let i=0;i<7;i++){
+    const u=.08+i*.14,p=curve.getPointAt(u),t=curve.getTangentAt(u),side=i%2?1:-1,x=p.x-t.z*side*2.6,z=p.z+t.x*side*2.6;
+    const g=group(x,world.groundY(x,z),z);box(0.12,2.3,0.12,bark,0,1.15,0,g);box(0.28,0.4,0.28,world.mat.lantern,0,2.1,0,g);
+    for(const sx of [-1,1])for(const sz of [-1,1])box(.025,.45,.025,bark,sx*.16,2.1,sz*.16,g);box(.4,.07,.4,bark,0,2.36,0,g);
+    const halo=new THREE.Sprite(world.haloMat);halo.position.y=2.1;halo.scale.setScalar(1.6);g.add(halo);world.colliders.circles.push({x,z,r:0.18});lanterns.push({x,z,g});
   }
   const sign=group(CAMP.x-7,terrainHeight(CAMP.x-7,CAMP.z-7),CAMP.z-7);
   box(0.13,2,0.13,bark,0,1,0,sign);solid(new THREE.BoxGeometry(2.8,0.6,0.12),new THREE.MeshLambertMaterial({map:signTexture('FOREST TRAIL',768,192,[70,22,80],'#47654f')}),0,1.85,0,sign);
-  const log=group(FOREST.x-1,y,FOREST.z-2);
+  const log=group(FOREST.x-6,y,FOREST.z-2);
   solid(new THREE.CylinderGeometry(0.5,0.57,4.3,12),bark,0,0.5,0,log,[0,0,Math.PI/2]);
   solid(new THREE.CylinderGeometry(0.51,0.51,0.03,16),cream,2.16,0.5,0,log,[0,0,Math.PI/2]);
   for(let i=0;i<8;i++)ball(0.3,moss,-1.6+i*0.45,0.86,0,log,[1.2,0.4,0.8]);
-  world.colliders.circles.push({x:FOREST.x-1,z:FOREST.z-2,r:1});
-  for(const dx of [-0.6,0.6])world.benches.push({x:FOREST.x-1+dx,y:y+0.95,z:FOREST.z-1.85,yaw:0,who:null});
+  world.colliders.rects.push({cx:FOREST.x-6,cz:FOREST.z-2,ax:1,az:0,bx:0,bz:1,hx:2.2,hz:.6});
+  for(const dx of [-0.6,0.6])world.benches.push({x:FOREST.x-6+dx,y:y+0.95,z:FOREST.z-1.85,yaw:0,who:null});
   const stump=group(FOREST.x+5,y,FOREST.z-3);
   solid(new THREE.CylinderGeometry(0.7,0.9,1.1,12),bark,0,0.55,0,stump);solid(new THREE.CylinderGeometry(0.7,0.7,0.06,12),cream,0,1.13,0,stump);
   solid(new THREE.SphereGeometry(0.34,12,8).scale(0.85,1.25,0.15),glows[1],0,0.43,0.78,stump);ball(0.05,cream,0.16,0.4,0.84,stump);
   world.colliders.circles.push({x:FOREST.x+5,z:FOREST.z-3,r:0.9});
   for(let i=0;i<36;i++){
-    const a=i*Math.PI*2/18,d=i<18?4.4:7.7,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=terrainHeight(x,z),s=0.7+(i%4)*0.16;
+    const a=i*Math.PI*2/18,d=i<18?4.4:7.7,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d,h=world.groundY(x,z),s=0.7+(i%4)*0.16;
     solid(new THREE.CylinderGeometry(0.06*s,0.09*s,0.45*s,8),cream,x,h+0.23*s,z);
     solid(new THREE.SphereGeometry(0.3*s,12,8,0,Math.PI*2,0,Math.PI/2),glows[i%3],x,h+0.43*s,z);
     for(let j=0;j<3;j++)ball(0.04,cream,x+Math.cos(j*2.094)*0.15*s,h+0.64*s,z+Math.sin(j*2.094)*0.15*s);
   }
   for(let i=0;i<3;i++){
-    const x=FOREST.x-8+i*8,z=FOREST.z-15,h=terrainHeight(x,z),perch=group(x,h,z);
+    const x=FOREST.x-8+i*8,z=FOREST.z-15,h=world.groundY(x,z),perch=group(x,h,z);
     solid(new THREE.CylinderGeometry(0.22,0.35,4,8),bark,0,2,0,perch);box(2,0.15,0.2,bark,0.5,3.8,0,perch);
     const owl=group(0.65,4.15,0,perch);ball(0.38,bark,0,0.25,0,owl,[0.9,1.2,0.8]);ball(0.3,cream,0,0.25,0.19,owl,[0.8,1.1,0.4]);
     const head=group(0,0.67,0,owl),eyes=[];ball(0.38,bark,0,0,0,head,[1.1,1,0.9]);
@@ -78,7 +83,7 @@ export function buildForest(world) {
   }
   const deerCoat=m('#b58a62');deerCoat.emissive.set('#b58a62');deerCoat.emissiveIntensity=0.08;
   for(const [i,[x,z,scale]] of [[-67,-204,1],[-64,-206,0.95],[-66,-208,0.62]].entries()){
-    const g=group(x,terrainHeight(x,z),z);g.scale.setScalar(scale);g.rotation.y=-0.6+i*0.35;
+    const g=group(x,world.groundY(x,z),z);g.scale.setScalar(scale);g.rotation.y=-0.6+i*0.35;
     ball(0.6,deerCoat,0,1.05,0,g,[0.85,0.7,1.4]);
     for(const sx of [-1,1])for(const sz of [-1,1])ball(0.095,deerCoat,sx*0.29,0.43,sz*0.5,g,[1,4.4,1]);
     const head=group(0,1.4,0.55,g);ball(0.29,deerCoat,0,0,0.12,head,[0.9,1,1.25]);ball(0.15,cream,0,-0.08,0.37,head,[1,0.7,0.9]);
@@ -94,17 +99,21 @@ export function buildForest(world) {
     const g=group(0,0,0),wings=[];for(const sx of [-1,1]){const wing=new THREE.Mesh(new THREE.CircleGeometry(0.17,12),glows[i%3]);wing.material.side=THREE.DoubleSide;wing.position.x=sx*0.13;wing.scale.set(1,1.4,1);g.add(wing);wings.push(wing);}butterflies.push({g,wings});
   }
   const fp=new Float32Array(90*3),fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.BufferAttribute(fp,3));
-  const fireflies=new THREE.Points(fg,new THREE.PointsMaterial({color:'#fff5b8',size:0.14,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));fireflies.frustumCulled=false;root.add(fireflies);
+  const flyHomes=Array.from({length:90},(_,i)=>{if(i>=60){const a=i*2.399,d=4+(i%11)*1.5;return {x:FOREST.x+Math.cos(a)*d,z:FOREST.z+Math.sin(a)*d};}const p=curve.getPointAt(i/59),t=curve.getTangentAt(i/59),side=(i%2?1:-1)*(1.8+(i%3)*.4);return {x:p.x-t.z*side,z:p.z+t.x*side};});
+  const flyColors=[];for(let i=0;i<90;i++){const brightness=.65+(i%5)*.0875;flyColors.push(brightness,brightness,brightness*.8);}fg.setAttribute('color',new THREE.Float32BufferAttribute(flyColors,3));
+  const fireflies=new THREE.Points(fg,new THREE.PointsMaterial({color:'#fff5b8',size:0.23,vertexColors:true,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));fireflies.frustumCulled=false;root.add(fireflies);
   const canvas=document.createElement('canvas');canvas.width=canvas.height=64;const ctx=canvas.getContext('2d'),grad=ctx.createRadialGradient(32,32,0,32,32,32);grad.addColorStop(0,'rgba(255,248,210,0.5)');grad.addColorStop(1,'rgba(255,248,210,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,64,64);const tex=new THREE.CanvasTexture(canvas);
+  fireflies.material.map=tex;fireflies.material.needsUpdate=true;
   const shafts=[];for(let i=0;i<4;i++){const g=new THREE.Mesh(new THREE.PlaneGeometry(3,14),new THREE.MeshBasicMaterial({map:tex,color:'#fff0b7',transparent:true,opacity:0.08,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));g.position.set(FOREST.x-9+i*6,y+7,FOREST.z-2+i%2*5);root.add(g);shafts.push(g);}
   const nightGlow=new THREE.Mesh(new THREE.PlaneGeometry(22,22),new THREE.MeshBasicMaterial({map:tex,color:'#a4cbbb',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));nightGlow.rotation.x=-Math.PI/2;nightGlow.position.set(FOREST.x,y+0.07,FOREST.z);root.add(nightGlow);
   for(const {parent,mat,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),mat);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}
-  root.updateMatrixWorld(true);
-  return {root,pad,owls,rabbit,deer,fireflies,variants,trail,update(t,camera,atmos){
+  root.updateMatrixWorld(true);let groundRevision=-1;const groundMatrix=new THREE.Matrix4();
+  return {root,pad,owls,rabbit,deer,fireflies,variants,trail,curve,lanterns,update(t,camera,atmos){
+    if(groundRevision!==world.terrainRevision){for(const {im}of variants){for(let i=0;i<im.count;i++){im.getMatrixAt(i,groundMatrix);groundMatrix.elements[13]=world.groundFootY(groundMatrix.elements[12],groundMatrix.elements[14],0.65*groundMatrix.getMaxScaleOnAxis())-0.15;im.setMatrixAt(i,groundMatrix);}im.instanceMatrix.needsUpdate=true;im.computeBoundingSphere();}groundRevision=world.terrainRevision;}
     const night=Math.max(atmos.stars,world.lanternLevel*0.8),day=1-smoothstep(0.2,0.75,night);
     variants.forEach(({im,source})=>im.visible=source.visible);
-    glows.forEach(mat=>mat.emissiveIntensity=0.1+night*0.9);fireflies.material.opacity=night*0.8;
-    for(let i=0;i<90;i++){const a=i*2.399,d=4+(i%11)*1.5;fp[i*3]=FOREST.x+Math.cos(a)*d+Math.sin(t*0.23+i)*0.8;fp[i*3+1]=y+0.7+(i%7)*0.45+Math.sin(t*0.5+i)*0.35;fp[i*3+2]=FOREST.z+Math.sin(a)*d+Math.cos(t*0.2+i)*0.8;}fg.attributes.position.needsUpdate=true;
+    glows.forEach(mat=>mat.emissiveIntensity=0.1+night*0.9);fireflies.material.opacity=night*.95;trail.material.emissiveIntensity=night*.12;
+    for(let i=0;i<90;i++){const x=flyHomes[i].x+Math.sin(t*.23+i)*.35,z=flyHomes[i].z+Math.cos(t*.2+i)*.35;fp[i*3]=x;fp[i*3+1]=world.groundY(x,z)+.8+(i%7)*.28+Math.sin(t*.5+i)*.2;fp[i*3+2]=z;}fg.attributes.position.needsUpdate=true;
     owls.forEach(({owl,head,eyes},i)=>{owl.visible=night>0.2;head.rotation.y=Math.sin(t*0.25+i)*0.25;const blink=(t+i*3)%11;eyes.forEach(e=>e.scale.y=blink<0.22?0.12:1);});
     deer.forEach(({g,head},i)=>{head.rotation.x=0.3+Math.sin(t*0.37+i)*0.18;head.rotation.y=Math.sin(t*0.19+i)*0.08;g.visible=true;});
     rabbit.visible=day>0.2;const hop=Math.max(0,Math.sin((t%14)*1.6))*((t%14)<4?1:0);rabbit.position.set(FOREST.x-4+Math.sin(t*0.2)*1.2,y+hop*0.22,FOREST.z+2);rabbit.rotation.y=Math.sin(t*0.2)*0.4;

@@ -1,6 +1,7 @@
 # Only SP Creek is tracked here; this folder also holds other projects.
 /*
 !/.gitignore
+!/.github/
 !/AGENTS.md
 !/CLAUDE.md
 !/tasks/

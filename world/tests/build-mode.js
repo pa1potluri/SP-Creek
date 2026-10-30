@@ -155,6 +155,10 @@ export async function runBuildTests() {
     const confirm=window.confirm;try{window.confirm=()=>true;click('#clearBuilt');}finally{window.confirm=confirm;}
     check(world.buildings.length===0&&countPhysics()===clean,'Remove all built clears detail physics, bridge floors and walkables');
     await checkBuildReplay(app,check);
+    const roads=world.roads.length;world.addRoad([[300,-300],[300,-280],[310,-260]],5);
+    const slider=document.getElementById('roadWidth');slider.value=11;slider.dispatchEvent(new Event('change'));
+    check(world.roads.length===roads+1&&world.roads.at(-1).width===11&&!!world.roads.at(-1).obj.parent,'Road width slider resizes the road just drawn');
+    click('#undoRoad');slider.value=5;
     return { passed: results.length, results };
   } finally {
     document.title = originalTitle;

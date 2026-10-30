@@ -11,7 +11,7 @@ const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const wrapAngle = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');
 
-const WALK = 2.2, RUN = 5.5, TROT = 3.4, GALLOP = 10, GRAVITY = 14, JUMP = 5;
+const WALK = 2.2, RUN = 5.5, TROT = 3.4, GALLOP = 10, GRAVITY = 14, JUMP = 6.5; // a jump clears a 1.1 m fence
 
 export class Game {
   constructor({ scene, camera, canvas, world, life, director }) {
@@ -145,12 +145,13 @@ export class Game {
   }
 
   // Push the point (p.x, p.z) out of everything solid within radius r.
-  _resolve(p, r) {
+  _resolve(p, r, feet = 0) {
     const moving = this._moving();
     const rects = [...this.world.colliders.rects, ...moving.rects];
     const circles = [...this.world.colliders.circles, ...moving.circles];
     const { segs } = this.world.colliders;
     for (const c of rects) {
+      if (c.low && feet > 1.15) continue; // jumping over a low piece
       const dx = p.x - c.cx, dz = p.z - c.cz;
       let lx = dx * c.ax + dz * c.az, lz = dx * c.bx + dz * c.bz;
       const px = c.hx + r - Math.abs(lx), pz = c.hz + r - Math.abs(lz);
@@ -170,6 +171,7 @@ export class Game {
       }
     }
     for (const s of segs) {
+      if (s.low && feet > 1.15) continue; // jumping over a low fence
       const ex = s.bx - s.ax, ez = s.bz - s.az, len2 = ex * ex + ez * ez;
       const t = Math.max(0, Math.min(1, ((p.x - s.ax) * ex + (p.z - s.az) * ez) / len2));
       const qx = s.ax + ex * t, qz = s.az + ez * t, dx = p.x - qx, dz = p.z - qz, d = Math.hypot(dx, dz), min = r + 0.08;
@@ -188,13 +190,13 @@ export class Game {
 
   // Move by (mx, mz), sliding along walls and refusing to walk into deep water.
   _move(mx, mz, r) {
-    const p = { x: this.pos.x + mx, z: this.pos.z + mz };
-    this._resolve(p, r);
+    const p = { x: this.pos.x + mx, z: this.pos.z + mz }, feet = this.pos.y - terrainHeight(this.pos.x, this.pos.z);
+    this._resolve(p, r, feet);
     if (this._deepWater(p.x, p.z, this.pos.y)) {
       // try each axis on its own so you slide along the bank
       const a = { x: this.pos.x + mx, z: this.pos.z }, b = { x: this.pos.x, z: this.pos.z + mz };
-      this._resolve(a, r);
-      this._resolve(b, r);
+      this._resolve(a, r, feet);
+      this._resolve(b, r, feet);
       if (!this._deepWater(a.x, a.z, this.pos.y)) Object.assign(p, a);
       else if (!this._deepWater(b.x, b.z, this.pos.y)) Object.assign(p, b);
       else return;

@@ -2,7 +2,6 @@
 import * as THREE from 'three';
 import { TerrainEdits } from './terrain-edit.js';
 const terrainEdits = new TerrainEdits();
-const editableTerrain = s => s.x-s.radius>=240 && s.x+s.radius<=640 && s.z-s.radius>=-640 && s.z+s.radius<=-240;
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import * as T from './textures.js';
 import { HAMLET } from './hamlet.js';
@@ -10,6 +9,7 @@ import { familySign } from './family.js';
 import { cloudShader, waterMaterial } from './environment.js';
 import { dressHamletHouse, dressPondShore } from './areas/pond-details.js';
 import { makeCanvasTent } from './props/canvas-tent.js';
+import { registerPlaceables } from './props/placeables.js';
 
 // Batch only rigid siblings: animated joints and their exact transforms stay separate.
 export function batchRigidParts(root) {
@@ -225,7 +225,7 @@ function prism(w, h, len) {
 
 // Three planes crossed at 60°, standing on y = 0, so a plant looks full from every side. Normals
 // point up so the painting is lit evenly, like a soft canopy.
-function crossedPlanes(w, h) {
+export function crossedPlanes(w, h) {
   const a = new THREE.PlaneGeometry(w, h);
   a.translate(0, h / 2, 0);
   const g = mergeGeometries([a, a.clone().rotateY(Math.PI / 3), a.clone().rotateY((2 * Math.PI) / 3)]);
@@ -292,6 +292,7 @@ export class World {
     // for the playable mode: what you bump into, and raised floors you can stand on
     this.colliders = { rects: [], circles: [], segs: [], water: [] };
     this.floors = [];
+    registerPlaceables(this);
     this.ceilings = []; // rooms you can walk into: the play camera stays below these
     this.interiors = {}; // name -> the building group and room size, furnished by interior.js
     this.lanternLevel = 0;
@@ -1458,6 +1459,7 @@ export class World {
         const mat = new THREE.MeshLambertMaterial({ map: tex, alphaTest: 0.5, side: THREE.DoubleSide });
         this._sway(mat, height, sway);
         const im = new THREE.InstancedMesh(crossedPlanes((height * img.width) / img.height, height), mat, list.length);
+        im.name = name; // areas reuse a kind by name (see areas/forest-lush.js)
         if (name === 'pine' || name === 'cottonwood') im.userData.rootRadius = 0.65;
         list.forEach(([x, y, z, sc], i) => {
           q.setFromAxisAngle(up, r() * 6.28);
@@ -1541,6 +1543,9 @@ export class World {
     for (const g of Object.values(this.foliage || {})) g.visible = g === painted;
     for (const m of this.blocky || []) m.visible = blocks;
     for (const m of this.lowPoly) m.visible = !painted && !blocks;
+    // Placed plant pieces carry both looks: painted cut-outs, or low-poly for the toy/flat styles.
+    this.plantLook = painted ? 'painted' : 'plain';
+    for (const e of this.buildings) e.obj.traverse((o) => { if (o.userData.plantLook) o.visible = o.userData.plantLook === this.plantLook; });
   }
 
   // Bend a plant with the wind: nothing at the base, most at the top.
@@ -1573,7 +1578,7 @@ export class World {
       const [ax, az] = points[i], [bx, bz] = points[i + 1];
       const A = V(ax, terrainHeight(ax, az), az), B = V(bx, terrainHeight(bx, bz), bz);
       const len = A.distanceTo(B), n = Math.max(1, Math.round(len / 2.4));
-      this.colliders.segs.push({ ax, az, bx, bz });
+      this.colliders.segs.push({ ax, az, bx, bz, low: true });
       for (let k = 0; k <= n; k++) {
         if (k === n && i < points.length - 2) continue;
         const P = A.clone().lerp(B, k / n);
@@ -1623,10 +1628,15 @@ export class World {
     // station platform
     P('crate', 66.2, 1.5, 0.2); P('crate', 66.3, 2.4, 0.9); P('barrel', 66, 17.5);
     this._fence([[23, -46], [38, -46], [38, -22], [23, -22], [23, -30]]);
+    // Roadside fences stop 3.5 m either side of the branch line, so nothing stands on the tracks.
+    const rails = TRAIN_SPUR_CURVE.getSpacedPoints(400);
     for (const side of [-1, 1]) {
-      const pts = [];
-      for (let z = 72; z <= 132; z += 10) pts.push([roadX(z) + side * 7.5, z]);
-      this._fence(pts);
+      const at = z => [roadX(z) + side * 7.5, z];
+      const cross = rails.reduce((b, p) => { const d = Math.abs(p.x - at(p.z)[0]); return p.z > 72 && p.z < 132 && d < b.d ? { d, z: p.z } : b; }, { d: Infinity, z: 0 }).z;
+      const before = [], after = [];
+      for (let z = 72; z <= 132; z += 10) if (Math.abs(z - cross) > 3.5) (z < cross ? before : after).push(at(z));
+      before.push(at(cross - 3.5)); after.unshift(at(cross + 3.5));
+      this._fence(before); this._fence(after);
     }
   }
 
@@ -1854,7 +1864,7 @@ export class World {
   loadLayout(layout = []) {
     this.endBuildReplay();this.buildOrder=0;
     layout=layout.map((e,i)=>({...e,order:Number.isFinite(e.order)?e.order:i}));
-    terrainEdits.load({version:1,strokes:(layout.find(e=>e.kind==='terrain')?.data?.strokes||[]).filter(editableTerrain)});
+    terrainEdits.load({version:1,strokes:layout.find(e=>e.kind==='terrain')?.data?.strokes||[]});
     this.clearPlaced();
     for (const e of [...this.fences]) this.removeFence(e);
     for (const e of [...this.buildings]) this.removeBuilding(e, false);
@@ -1921,7 +1931,10 @@ export class World {
   _buildDetail(type, s) {
     const g=new THREE.Group(), scale=s.w/10, bounds=this._detailBounds(type);
     g.name=type;g.userData.buildPiece=true;g.position.set(s.x,s.y,s.z);g.rotation.y=s.rot;g.scale.setScalar(scale);this.root.add(g);
-    if(this.extraBuildPieces?.[type]){this.extraBuildPieces[type].build(g);this.colliders.rects.push(this._rectOf(g,0,0,bounds[0]*scale,bounds[1]*scale));return g;}
+    if(this.extraBuildPieces?.[type]){const piece=this.extraBuildPieces[type];g.updateMatrixWorld(true);
+      piece.build(g,{world:this,walk:o=>this.walkables.push(o),rect:(x,z,hx,hz)=>this.colliders.rects.push(this._rectOf(g,x,z,hx*scale,hz*scale)),
+        floor:(x,z,hx,hz,y)=>this.floors.push({...this._rectOf(g,x,z,hx*scale,hz*scale),y:s.y+y*scale}),circle:(x,z,r)=>{const p=g.localToWorld(V(x,0,z));this.colliders.circles.push({x:p.x,z:p.z,r:r*scale});}});
+      if(piece.solid!==false)this.colliders.rects.push({...this._rectOf(g,0,0,bounds[0]*scale,bounds[1]*scale),...piece.low&&{low:true}});return g;}
     this.detailMats??=Object.fromEntries(Object.entries({cream:'#f2dfb5',green:'#84a477',soil:'#8d7057',pink:'#e6b1c7',blue:'#accbdc',gold:'#ebc676',orange:'#d79450',snow:'#eff3ee',ink:'#5a514b'}).map(([key,color])=>[key,new THREE.MeshLambertMaterial({color,side:THREE.DoubleSide})]));
     const m=this.detailMats,wood=this.mat.wood,dark=this.mat.darkWood;
     const add=(geo,mat,x=0,y=0,z=0)=>{const o=mesh(geo,mat);o.position.set(x,y,z);g.add(o);return o;};
@@ -2157,10 +2170,18 @@ export class World {
   }
 
   shapeTerrain(spec) {
-    // Keep the first playable brush away from established areas, water and railway grades.
-    if (!editableTerrain(spec)) return false;
-    for(let x=spec.x-spec.radius;x<=spec.x+spec.radius;x+=2)for(let z=spec.z-spec.radius;z<=spec.z+spec.radius;z+=2)
-      if(nearbyPads(x,z).some(p=>withinPad(p,x,z,4)))return false;
+    // Edit anywhere except towns and buildings (pads), water and shores, and the railway grades.
+    const rails = this.railSamples ??= TRAIN_SPUR_CURVE.getSpacedPoints(300), r = spec.radius;
+    let n = 0, sum = 0, sx = 0, sz = 0, sxx = 0, szz = 0;
+    for(let x=spec.x-r;x<=spec.x+r;x+=2)for(let z=spec.z-r;z<=spec.z+r;z+=2){
+      if(Math.hypot(x-spec.x,z-spec.z)>r)continue;
+      if(nearbyPads(x,z).some(p=>withinPad(p,x,z,4))||Math.abs(x-RAIL_X)<10||rails.some(p=>Math.hypot(p.x-x,p.z-z)<10))return false;
+      if(this.colliders.rects.some(c=>{const dx=x-c.cx,dz=z-c.cz;return Math.abs(dx*c.ax+dz*c.az)<c.hx+3&&Math.abs(dx*c.bx+dz*c.bz)<c.hz+3;}))return false; // buildings and pieces
+      const h=terrainHeight(x,z);if(h<this.waterLevel(x,z)+0.6)return false;
+      const dx=x-spec.x,dz=z-spec.z;n++;sum+=h;sx+=dx*h;sz+=dz*h;sxx+=dx*dx;szz+=dz*dz;
+    }
+    // Soften: aim for the brush's average height with half of its slope.
+    if(spec.mode==='soften'&&n)Object.assign(spec,{target:sum/n,gx:sxx?sx/sxx*0.5:0,gz:szz?sz/szz*0.5:0});
     if(!terrainEdits.add(spec))return false;
     this.updateTerrain();return true;
   }

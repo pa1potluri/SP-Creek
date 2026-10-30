@@ -8,7 +8,11 @@ import { starCameraFocus, MOMENTS, momentFocus, setMomentCameraReader, sampleTra
 import { sampleBalloonRide, setBalloonRideReader } from './areas/crystal-mine.js';
 import { farmViews } from './areas/pony-farm.js';
 import { campingViews } from './areas/camping.js';
+import { dreamyLakeViews } from './areas/dreamy-lake.js';
+import { dreamyCoveViews } from './areas/dreamy-cove.js';
 import { beachWalk, stageCove } from './areas/sunset-cove.js';
+import { FOREST_ROUTE, forestTrailKeys } from './areas/forest.js';
+import { BROOK, BROOK_SHOT, deepForestSample } from './areas/forest-lush.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 const clamp01 = (t) => Math.min(1, Math.max(0, t));
@@ -123,15 +127,8 @@ function makeShots() {
     [G(121.8,4.5,26),G(125,3,-7)],[G(121.8,3.5,8),G(135,3,-14)],
     [G(121.8,3.5,-16),G(115,3,-35)],[G(121.8,4,-31),G(133,7,-45)],
   ], 100), group:'Ghost town', clearance:2.5 }];
-  const fy=terrainHeight(-72,-179),cy=terrainHeight(-90,-204),mh=terrainHeight(-225,0);
-  const forest = [{...pathShot('Forest Trail',[
-    [V(-77,fy+3.2,-179),V(-94,fy+(cy-fy)*0.3+1.8,-181)],
-    [V(-86,fy+(cy-fy)*0.18+3.2,-179),V(-107,fy+(cy-fy)*0.45+1.8,-186)],
-    [V(-108,fy+(cy-fy)*0.48+3.5,-185),V(-110,fy+(cy-fy)*0.7+1.8,-202)],
-    [V(-111,fy+(cy-fy)*0.68+3.5,-202),V(-99,cy+1.8,-212)],
-    [V(-101,cy+3.2,-214),V(-90,cy+1.8,-204)],
-    [V(-93,cy+3.2,-207),V(-86,cy+1.8,-207)],
-  ],100),group:'Forest',clearance:2.5}];
+  const mh=terrainHeight(-225,0);
+  const forest = [{...pathShot('Forest Trail',forestTrailKeys(),100),group:'Forest',clearance:2.5}];
   const meadow=[{...pathShot('Meadow and Waterfall',[
     [V(-207,mh+15,29),V(-240,mh+2,-18)],[V(-216,mh+14,16),V(-244,mh+3,-20)],
     [V(-222,mh+13,5),V(-247,mh+4,-23)],[V(-223,mh+11,-7),V(-251,mh+5,-23)],
@@ -183,7 +180,12 @@ function makeShots() {
     {name:'Waterfall picnic from above',meadowOuting:'picnic',sample(t,out){const f=meadowOutingFocus('picnic');out.pos.set(f.x+21,f.y+14,f.z+21);out.look.copy(f);out.look.x-=5;out.look.z-=5;}},
     {name:'Quiet water at the cove',rowing:'cove',rowingPhase:65,sample(t,out){const f=rowingFocus('cove',65+t);out.pos.set(f.pos.x-14,f.pos.y+34,f.pos.z+15);out.look.copy(f.pos);out.look.x-=16;out.look.y+=1;}}
   ].map(view=>({...view,duration:40,loop:false,group:'Episode establishing views',clearance:1.8}));
-  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews,...balloonViews,...trainViews,...campingViews().map(view=>({...view,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}})),...farmViews(),{name:'SP Creek station from above',group:'Episode establishing views',duration:40,loop:true,clearance:1.5,sample(t,out){const x=97+Math.sin(t/40*Math.PI*2)*0.7;out.pos.copy(G(x,25,50));out.look.set(66,2,10);}},{name:'Welcome to SP Creek: one cove walk',group:'Sunset Cove',duration:180,loop:false,clearance:1.8,sample(t,out){const u=clamp01(t/180),wide=Math.cos(u*Math.PI)**2,p=stageCove('beach',u*70),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw),distance=8+38*wide,x=p.x-dx*distance,z=p.z-dz*distance;out.pos.set(x,Math.max(p.y+2.8+35*wide,walkHeight(x,z)+1.8),z);out.look.set(p.x+dx*3,p.y+1,p.z+dz*3);}},...rainyViews,...marketViews,...rowingViews,...gardenViews(),...episodeViews,...snowDayViews,...outingViews,...episodeMoreViews];
+  const trailCurve=new THREE.CatmullRomCurve3(FOREST_ROUTE.map(([x,z])=>V(x,0,z)),false,'centripetal'),brookLook=i=>G(BROOK.x+(i-1.5)*0.5,0.8,BROOK.z);
+  const lushForestViews=[
+    {name:'Deep forest path',duration:100,loop:false,sample(t,out){deepForestSample(trailCurve,smoother(clamp01(t/100)),out);}},
+    pathShot('Forest clearing stream',BROOK_SHOT.map(([x,h,z],i)=>[G(x,h,z),brookLook(i)]),100),
+  ].map(view=>({...view,group:'Forest',clearance:2}));
+  return [...town, ...places, ...cafe, ...cast, ...hamlet, ...townCenter, ...ghostTown, ...forest, ...meadow, ...crystalHill, ...grandTour, ...seasonalViews, ...starViews, ...coveViews, {...pathShot('Playground',[[G(54,15,69),G(36,1,48)],[G(58,16,63),G(36,1,48)]],100),group:'Town playground',clearance:1.5},...momentViews,...balloonViews,...trainViews,...campingViews().map(view=>({...view,sample(t,out){view.sample(t,out);out.pos.y=Math.max(out.pos.y,walkHeight(out.pos.x,out.pos.z)+1.8);}})),...farmViews(),{name:'SP Creek station from above',group:'Episode establishing views',duration:40,loop:true,clearance:1.5,sample(t,out){const x=97+Math.sin(t/40*Math.PI*2)*0.7;out.pos.copy(G(x,25,50));out.look.set(66,2,10);}},{name:'Welcome to SP Creek: one cove walk',group:'Sunset Cove',duration:180,loop:false,clearance:1.8,sample(t,out){const u=clamp01(t/180),wide=Math.cos(u*Math.PI)**2,p=stageCove('beach',u*70),dx=Math.sin(p.yaw),dz=Math.cos(p.yaw),distance=8+38*wide,x=p.x-dx*distance,z=p.z-dz*distance;out.pos.set(x,Math.max(p.y+2.8+35*wide,walkHeight(x,z)+1.8),z);out.look.set(p.x+dx*3,p.y+1,p.z+dz*3);}},...rainyViews,...marketViews,...rowingViews,...gardenViews(),...episodeViews,...snowDayViews,...outingViews,...episodeMoreViews,...lushForestViews,...dreamyLakeViews(),...dreamyCoveViews()];
 }
 
 const isTyping = (e) => e.target && e.target.closest && e.target.closest('input, select, textarea');

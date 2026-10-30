@@ -2,12 +2,26 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { CAMP, terrainHeight, smoothstep } from '../world.js';
 import { rng, signTexture } from '../textures.js';
+import { planLushForest, buildLushForest } from './forest-lush.js';
 
 export const FOREST = { x:CAMP.x-28, z:CAMP.z-32 };
+export const FOREST_ROUTE=[[-72,-179],[-86,-179],[-108,-185],[-111,-202],[-99,-214],[FOREST.x,FOREST.z]];
+// Camera keys of the 'Forest Trail' shot (camera.js); the lush forest keeps its trees clear of them.
+export function forestTrailKeys(){
+  const fy=terrainHeight(-72,-179),cy=terrainHeight(-90,-204),V=(x,y,z)=>new THREE.Vector3(x,y,z);
+  return [
+    [V(-77,fy+3.2,-179),V(-94,fy+(cy-fy)*0.3+1.8,-181)],
+    [V(-86,fy+(cy-fy)*0.18+3.2,-179),V(-107,fy+(cy-fy)*0.45+1.8,-186)],
+    [V(-108,fy+(cy-fy)*0.48+3.5,-185),V(-110,fy+(cy-fy)*0.7+1.8,-202)],
+    [V(-111,fy+(cy-fy)*0.68+3.5,-202),V(-99,cy+1.8,-212)],
+    [V(-101,cy+3.2,-214),V(-90,cy+1.8,-204)],
+    [V(-93,cy+3.2,-207),V(-86,cy+1.8,-207)],
+  ];
+}
 export function buildForest(world) {
   const root=new THREE.Group();root.name='Firefly forest';world.root.add(root);
   const pad=world.registerAreaPad({...FOREST,hx:10,hz:10,blend:8}),y=pad.y,r=rng(307);
-  const route=[[-72,-179],[-86,-179],[-108,-185],[-111,-202],[-99,-214],[FOREST.x,FOREST.z]];
+  const route=FOREST_ROUTE;
   const curve=new THREE.CatmullRomCurve3(route.map(([x,z])=>new THREE.Vector3(x,0,z)),false,'centripetal');
   const startY=terrainHeight(...route[0]),steps=Math.ceil(curve.getLength()/2);
   const routeSamples=[];
@@ -16,6 +30,7 @@ export function buildForest(world) {
     world.registerAreaPad({x:p.x,z:p.z,y:startY+(y-startY)*u,yaw:Math.atan2(tangent.x,tangent.z),hx:6,hz:3.5,blend:3});
   }
   world.registerAreaPad({x:-65,z:-201,hx:10,hz:12,blend:0,clearOnly:true});
+  planLushForest(world);
   const v=(x,h,z)=>new THREE.Vector3(x,h,z),m=color=>new THREE.MeshLambertMaterial({color});
   const bark=m('#8c7056'),moss=m('#759b6f'),cream=m('#f5ebd5'),dark=m('#455c62'),pink=m('#e8b6cb');
   const glows=['#a4ded8','#e6b8d7','#f4dda1'].map(color=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:0.1}));
@@ -31,7 +46,7 @@ export function buildForest(world) {
   const spots=[];
   for(let i=0;i<65;i++){
     const a=r()*Math.PI*2,d=13+r()*28,x=FOREST.x+Math.cos(a)*d,z=FOREST.z+Math.sin(a)*d;
-    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||routeSamples.some(p=>Math.hypot(x-p.x,z-p.z)<8)||(Math.abs(x+65)<12&&Math.abs(z+201)<14))continue;
+    if(Math.hypot(x-CAMP.x,z-CAMP.z)<19||world._reserved(x,z)||routeSamples.some(p=>Math.hypot(x-p.x,z-p.z)<8)||(Math.abs(x+65)<12&&Math.abs(z+201)<14))continue;
     spots.push([x,world.groundY(x,z)-0.1,z,0.85+r()*0.5]);world.colliders.circles.push({x,z,r:0.45});
   }
   function instances(source,list,visibleSource){if(!source||!list.length)return;const im=new THREE.InstancedMesh(source.geometry,source.material,list.length),matrix=new THREE.Matrix4();list.forEach(([x,h,z,s],i)=>im.setMatrixAt(i,matrix.makeScale(s,s,s).setPosition(x,h,z)));im.castShadow=source.castShadow;im.receiveShadow=true;im.computeBoundingSphere();root.add(im);variants.push({im,source:visibleSource});}
@@ -74,12 +89,12 @@ export function buildForest(world) {
     for(let j=0;j<3;j++)ball(0.04,cream,x+Math.cos(j*2.094)*0.15*s,h+0.64*s,z+Math.sin(j*2.094)*0.15*s);
   }
   for(let i=0;i<3;i++){
-    const x=FOREST.x-8+i*8,z=FOREST.z-15,h=world.groundY(x,z),perch=group(x,h,z);
+    const c=curve.getPointAt(0.25+i*0.25),ct=curve.getTangentAt(0.25+i*0.25),side=i%2?4:-4,x=c.x-ct.z*side,z=c.z+ct.x*side,h=world.groundY(x,z),perch=group(x,h,z); // beside the path, never on it
     solid(new THREE.CylinderGeometry(0.22,0.35,4,8),bark,0,2,0,perch);box(2,0.15,0.2,bark,0.5,3.8,0,perch);
     const owl=group(0.65,4.15,0,perch);ball(0.38,bark,0,0.25,0,owl,[0.9,1.2,0.8]);ball(0.3,cream,0,0.25,0.19,owl,[0.8,1.1,0.4]);
     const head=group(0,0.67,0,owl),eyes=[];ball(0.38,bark,0,0,0,head,[1.1,1,0.9]);
     for(const sx of [-1,1]){ball(0.17,cream,sx*0.17,0.02,0.28,head);const eye=new THREE.Mesh(new THREE.SphereGeometry(0.09,12,8),dark);eye.position.set(sx*0.17,0.02,0.43);head.add(eye);eyes.push(eye);}
-    ball(0.065,glows[2],0,-0.12,0.36,head);owls.push({owl,head,eyes,x,z});
+    ball(0.065,glows[2],0,-0.12,0.36,head);owls.push({owl,perch,head,eyes,x,z});
   }
   const deerCoat=m('#b58a62');deerCoat.emissive.set('#b58a62');deerCoat.emissiveIntensity=0.08;
   for(const [i,[x,z,scale]] of [[-67,-204,1],[-64,-206,0.95],[-66,-208,0.62]].entries()){
@@ -101,23 +116,27 @@ export function buildForest(world) {
   const fp=new Float32Array(90*3),fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.BufferAttribute(fp,3));
   const flyHomes=Array.from({length:90},(_,i)=>{if(i>=60){const a=i*2.399,d=4+(i%11)*1.5;return {x:FOREST.x+Math.cos(a)*d,z:FOREST.z+Math.sin(a)*d};}const p=curve.getPointAt(i/59),t=curve.getTangentAt(i/59),side=(i%2?1:-1)*(1.8+(i%3)*.4);return {x:p.x-t.z*side,z:p.z+t.x*side};});
   const flyColors=[];for(let i=0;i<90;i++){const brightness=.65+(i%5)*.0875;flyColors.push(brightness,brightness,brightness*.8);}fg.setAttribute('color',new THREE.Float32BufferAttribute(flyColors,3));
-  const fireflies=new THREE.Points(fg,new THREE.PointsMaterial({color:'#fff5b8',size:0.23,vertexColors:true,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));fireflies.frustumCulled=false;root.add(fireflies);
+  const fireflies=new THREE.Points(fg,new THREE.PointsMaterial({color:'#fff5b8',size:0.3,vertexColors:true,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));fireflies.frustumCulled=false;root.add(fireflies);
   const canvas=document.createElement('canvas');canvas.width=canvas.height=64;const ctx=canvas.getContext('2d'),grad=ctx.createRadialGradient(32,32,0,32,32,32);grad.addColorStop(0,'rgba(255,248,210,0.5)');grad.addColorStop(1,'rgba(255,248,210,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,64,64);const tex=new THREE.CanvasTexture(canvas);
   fireflies.material.map=tex;fireflies.material.needsUpdate=true;
   const shafts=[];for(let i=0;i<4;i++){const g=new THREE.Mesh(new THREE.PlaneGeometry(3,14),new THREE.MeshBasicMaterial({map:tex,color:'#fff0b7',transparent:true,opacity:0.08,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));g.position.set(FOREST.x-9+i*6,y+7,FOREST.z-2+i%2*5);root.add(g);shafts.push(g);}
   const nightGlow=new THREE.Mesh(new THREE.PlaneGeometry(22,22),new THREE.MeshBasicMaterial({map:tex,color:'#a4cbbb',transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));nightGlow.rotation.x=-Math.PI/2;nightGlow.position.set(FOREST.x,y+0.07,FOREST.z);root.add(nightGlow);
+  // Low drifting mist: the soft, dreamy haze the user asked for.
+  const mist=[];for(let i=0;i<6;i++){const g=new THREE.Mesh(new THREE.PlaneGeometry(18,18),new THREE.MeshBasicMaterial({map:tex,color:'#e8f0ff',transparent:true,opacity:0,depthWrite:false}));g.rotation.x=-Math.PI/2;const a=i*1.047,d=3+(i%3)*5;g.userData.x=FOREST.x+Math.cos(a)*d;g.position.set(g.userData.x,y+0.6+(i%2)*0.5,FOREST.z+Math.sin(a)*d);root.add(g);mist.push(g);}
   for(const {parent,mat,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),mat);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}
+  const api={variants};const lush=buildLushForest(world,{curve,routeSamples,forest:api,glade:FOREST,trailKeys:forestTrailKeys()});
   root.updateMatrixWorld(true);let groundRevision=-1;const groundMatrix=new THREE.Matrix4();
-  return {root,pad,owls,rabbit,deer,fireflies,variants,trail,curve,lanterns,update(t,camera,atmos){
-    if(groundRevision!==world.terrainRevision){for(const {im}of variants){for(let i=0;i<im.count;i++){im.getMatrixAt(i,groundMatrix);groundMatrix.elements[13]=world.groundFootY(groundMatrix.elements[12],groundMatrix.elements[14],0.65*groundMatrix.getMaxScaleOnAxis())-0.15;im.setMatrixAt(i,groundMatrix);}im.instanceMatrix.needsUpdate=true;im.computeBoundingSphere();}groundRevision=world.terrainRevision;}
+  return Object.assign(api,{root,pad,lush,owls,rabbit,deer,fireflies,variants,trail,curve,lanterns,update(t,camera,atmos){
+    if(groundRevision!==world.terrainRevision){for(const {im}of variants){for(let i=0;i<im.count;i++){im.getMatrixAt(i,groundMatrix);groundMatrix.elements[13]=world.groundFootY(groundMatrix.elements[12],groundMatrix.elements[14],(im.userData.rootRadius??0.65)*groundMatrix.getMaxScaleOnAxis())+(im.userData.groundOffset??-0.15);im.setMatrixAt(i,groundMatrix);}im.instanceMatrix.needsUpdate=true;im.computeBoundingSphere();}groundRevision=world.terrainRevision;}
     const night=Math.max(atmos.stars,world.lanternLevel*0.8),day=1-smoothstep(0.2,0.75,night);
-    variants.forEach(({im,source})=>im.visible=source.visible);
-    glows.forEach(mat=>mat.emissiveIntensity=0.1+night*0.9);fireflies.material.opacity=night*.95;trail.material.emissiveIntensity=night*.12;
+    lush.update(t,camera,atmos,night,day);variants.forEach(({im,source})=>im.visible=source.visible);
+    glows.forEach(mat=>mat.emissiveIntensity=0.15+night*1.3);fireflies.material.opacity=night*.95;trail.material.emissiveIntensity=night*.12;
     for(let i=0;i<90;i++){const x=flyHomes[i].x+Math.sin(t*.23+i)*.35,z=flyHomes[i].z+Math.cos(t*.2+i)*.35;fp[i*3]=x;fp[i*3+1]=world.groundY(x,z)+.8+(i%7)*.28+Math.sin(t*.5+i)*.2;fp[i*3+2]=z;}fg.attributes.position.needsUpdate=true;
-    owls.forEach(({owl,head,eyes},i)=>{owl.visible=night>0.2;head.rotation.y=Math.sin(t*0.25+i)*0.25;const blink=(t+i*3)%11;eyes.forEach(e=>e.scale.y=blink<0.22?0.12:1);});
+    owls.forEach(({owl,perch,head,eyes},i)=>{perch.visible=owl.visible=night>0.2;head.rotation.y=Math.sin(t*0.25+i)*0.25;const blink=(t+i*3)%11;eyes.forEach(e=>e.scale.y=blink<0.22?0.12:1);});
     deer.forEach(({g,head},i)=>{head.rotation.x=0.3+Math.sin(t*0.37+i)*0.18;head.rotation.y=Math.sin(t*0.19+i)*0.08;g.visible=true;});
     rabbit.visible=day>0.2;const hop=Math.max(0,Math.sin((t%14)*1.6))*((t%14)<4?1:0);rabbit.position.set(FOREST.x-4+Math.sin(t*0.2)*1.2,y+hop*0.22,FOREST.z+2);rabbit.rotation.y=Math.sin(t*0.2)*0.4;
     butterflies.forEach(({g,wings},i)=>{g.visible=day>0.3;g.position.set(FOREST.x+Math.sin(t*0.25+i)*4,y+1.3+Math.sin(t*0.6+i)*0.6,FOREST.z+Math.cos(t*0.23+i)*4);wings.forEach((w,k)=>w.rotation.y=Math.sin(t*6+i)*(k?1:-1)*0.7);});
-    shafts.forEach((s,i)=>{s.rotation.set(0,Math.atan2(camera.position.x-s.position.x,camera.position.z-s.position.z),-0.22);s.material.opacity=day*0.065*(0.7+0.3*Math.abs(Math.sin(t*0.05+i)));});nightGlow.material.opacity=night*0.15;
-  }};
+    shafts.forEach((s,i)=>{s.rotation.set(0,Math.atan2(camera.position.x-s.position.x,camera.position.z-s.position.z),-0.22);s.material.opacity=day*0.14*(0.7+0.3*Math.abs(Math.sin(t*0.05+i)));});nightGlow.material.opacity=night*0.3;
+    mist.forEach((p,i)=>{p.position.x=p.userData.x+Math.sin(t*0.03+i)*2;p.material.opacity=0.1+night*0.12;});
+  }});
 }

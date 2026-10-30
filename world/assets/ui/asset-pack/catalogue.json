@@ -5,7 +5,8 @@
     "height": 103,
     "bytes": 50493,
     "label": "Grass tile",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "tileGrass"
   },
   {
     "file": "01_Terrain/01_asset_002.png",
@@ -13,7 +14,8 @@
     "height": 95,
     "bytes": 45857,
     "label": "Sand tile",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "tileSand"
   },
   {
     "file": "01_Terrain/01_asset_003.png",
@@ -21,7 +23,8 @@
     "height": 96,
     "bytes": 48839,
     "label": "Grass and stone path",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "tileStonePath"
   },
   {
     "file": "01_Terrain/01_asset_004.png",
@@ -29,7 +32,8 @@
     "height": 99,
     "bytes": 49709,
     "label": "Cobblestone tile",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "tileCobble"
   },
   {
     "file": "01_Terrain/01_asset_005.png",
@@ -37,7 +41,8 @@
     "height": 108,
     "bytes": 47279,
     "label": "Wooden platform",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "tileWood"
   },
   {
     "file": "01_Terrain/01_asset_006.png",
@@ -45,7 +50,8 @@
     "height": 125,
     "bytes": 53050,
     "label": "Rocky hillside",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "rockyHillside"
   },
   {
     "file": "01_Terrain/01_asset_007.png",
@@ -53,7 +59,8 @@
     "height": 132,
     "bytes": 74323,
     "label": "Snowy mountains",
-    "group": "Terrain"
+    "group": "Terrain",
+    "artwork": true
   },
   {
     "file": "01_Terrain/01_asset_008.png",
@@ -61,7 +68,8 @@
     "height": 126,
     "bytes": 155050,
     "label": "Grass ramp set",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "grassRamp"
   },
   {
     "file": "01_Terrain/01_asset_009.png",
@@ -69,7 +77,8 @@
     "height": 117,
     "bytes": 44869,
     "label": "Small cliff",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "smallCliff"
   },
   {
     "file": "01_Terrain/01_asset_010.png",
@@ -77,7 +86,8 @@
     "height": 112,
     "bytes": 53534,
     "label": "Rock plateau",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "rockPlateau"
   },
   {
     "file": "01_Terrain/01_asset_011.png",
@@ -85,7 +95,8 @@
     "height": 115,
     "bytes": 61561,
     "label": "Snowy pine group",
-    "group": "Terrain"
+    "group": "Terrain",
+    "build": "snowyPines"
   },
   {
     "file": "01_Terrain/01_asset_012.png",
@@ -93,7 +104,8 @@
     "height": 111,
     "bytes": 64473,
     "label": "Snowy mountain group",
-    "group": "Terrain"
+    "group": "Terrain",
+    "artwork": true
   },
   {
     "file": "02_Nature/02_asset_001.png",
@@ -102,7 +114,7 @@
     "bytes": 53259,
     "label": "Green shade tree",
     "group": "Nature",
-    "prop": "tree"
+    "build": "shadeTree"
   },
   {
     "file": "02_Nature/02_asset_002.png",
@@ -110,7 +122,8 @@
     "height": 166,
     "bytes": 55454,
     "label": "Blossom tree",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "blossomTree"
   },
   {
     "file": "02_Nature/02_asset_003.png",
@@ -118,7 +131,8 @@
     "height": 168,
     "bytes": 51815,
     "label": "Autumn tree",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "autumnTree"
   },
   {
     "file": "02_Nature/02_asset_004.png",
@@ -126,7 +140,8 @@
     "height": 163,
     "bytes": 79847,
     "label": "Snowy and green pines",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "pineGroup"
   },
   {
     "file": "02_Nature/02_asset_005.png",
@@ -134,7 +149,8 @@
     "height": 165,
     "bytes": 57297,
     "label": "Fruit tree",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "fruitTree"
   },
   {
     "file": "02_Nature/02_asset_006.png",
@@ -142,7 +158,8 @@
     "height": 132,
     "bytes": 35488,
     "label": "Small shade tree",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "smallTree"
   },
   {
     "file": "02_Nature/02_asset_007.png",
@@ -150,7 +167,8 @@
     "height": 120,
     "bytes": 32179,
     "label": "Rounded tree",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "roundTree"
   },
   {
     "file": "02_Nature/02_asset_008.png",
@@ -167,7 +185,8 @@
     "height": 85,
     "bytes": 24249,
     "label": "Meadow flowers",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "meadowFlowers"
   },
   {
     "file": "02_Nature/02_asset_010.png",
@@ -175,7 +194,8 @@
     "height": 104,
     "bytes": 34876,
     "label": "Flowering bush",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "floweringBush"
   },
   {
     "file": "02_Nature/02_asset_011.png",
@@ -183,7 +203,8 @@
     "height": 89,
     "bytes": 26509,
     "label": "Rock cluster",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "rockCluster"
   },
   {
     "file": "02_Nature/02_asset_012.png",
@@ -191,7 +212,8 @@
     "height": 79,
     "bytes": 20402,
     "label": "Green bush",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "greenBush"
   },
   {
     "file": "02_Nature/02_asset_013.png",
@@ -199,7 +221,8 @@
     "height": 78,
     "bytes": 20691,
     "label": "Mossy rock",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "mossyRock"
   },
   {
     "file": "02_Nature/02_asset_014.png",
@@ -208,7 +231,7 @@
     "bytes": 20001,
     "label": "Tall lantern",
     "group": "Nature",
-    "prop": "lantern"
+    "build": "tallLantern"
   },
   {
     "file": "02_Nature/02_asset_015.png",
@@ -216,7 +239,8 @@
     "height": 66,
     "bytes": 14648,
     "label": "Tree stump",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "treeStump"
   },
   {
     "file": "02_Nature/02_asset_016.png",
@@ -224,7 +248,8 @@
     "height": 79,
     "bytes": 21156,
     "label": "Small tree stump",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "smallStump"
   },
   {
     "file": "02_Nature/02_asset_017.png",
@@ -232,7 +257,8 @@
     "height": 72,
     "bytes": 13821,
     "label": "Friendly mushrooms",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "mushrooms"
   },
   {
     "file": "02_Nature/02_asset_018.png",
@@ -241,7 +267,7 @@
     "bytes": 17256,
     "label": "Round rock",
     "group": "Nature",
-    "prop": "rock"
+    "build": "roundRock"
   },
   {
     "file": "02_Nature/02_asset_019.png",
@@ -249,7 +275,8 @@
     "height": 160,
     "bytes": 18136,
     "label": "Short lantern",
-    "group": "Nature"
+    "group": "Nature",
+    "build": "shortLantern"
   },
   {
     "file": "03_Buildings/03_asset_001.png",
@@ -275,7 +302,8 @@
     "height": 213,
     "bytes": 82347,
     "label": "Town hall artwork",
-    "group": "Buildings"
+    "group": "Buildings",
+    "artwork": true
   },
   {
     "file": "03_Buildings/03_asset_004.png",
@@ -310,7 +338,8 @@
     "height": 178,
     "bytes": 60970,
     "label": "Lookout tower",
-    "group": "Buildings"
+    "group": "Buildings",
+    "build": "lookoutTower"
   },
   {
     "file": "04_Props/04_asset_001.png",
@@ -318,7 +347,8 @@
     "height": 144,
     "bytes": 45004,
     "label": "Gazebo",
-    "group": "Props"
+    "group": "Props",
+    "build": "gazebo"
   },
   {
     "file": "04_Props/04_asset_002.png",
@@ -336,7 +366,7 @@
     "bytes": 32227,
     "label": "Campfire",
     "group": "Props",
-    "prop": "campfire"
+    "build": "campfirePit"
   },
   {
     "file": "04_Props/04_asset_004.png",
@@ -344,7 +374,8 @@
     "height": 139,
     "bytes": 47143,
     "label": "Canvas tent",
-    "group": "Props"
+    "group": "Props",
+    "build": "canvasTent"
   },
   {
     "file": "04_Props/04_asset_005.png",
@@ -352,7 +383,8 @@
     "height": 127,
     "bytes": 38813,
     "label": "Picnic table",
-    "group": "Props"
+    "group": "Props",
+    "build": "picnicTable"
   },
   {
     "file": "04_Props/04_asset_006.png",
@@ -370,7 +402,7 @@
     "bytes": 31763,
     "label": "Supply cart",
     "group": "Props",
-    "prop": "wagon"
+    "build": "supplyCart"
   },
   {
     "file": "04_Props/04_asset_008.png",
@@ -379,7 +411,7 @@
     "bytes": 18479,
     "label": "Barrel group",
     "group": "Props",
-    "prop": "barrel"
+    "build": "barrelGroup"
   },
   {
     "file": "04_Props/04_asset_009.png",
@@ -396,7 +428,8 @@
     "height": 105,
     "bytes": 29040,
     "label": "Haystack",
-    "group": "Props"
+    "group": "Props",
+    "build": "haystack"
   },
   {
     "file": "04_Props/04_asset_011.png",
@@ -413,7 +446,8 @@
     "height": 167,
     "bytes": 71021,
     "label": "Wooden shop",
-    "group": "Props"
+    "group": "Props",
+    "build": "cabin"
   },
   {
     "file": "04_Props/04_asset_013.png",
@@ -421,7 +455,8 @@
     "height": 161,
     "bytes": 82155,
     "label": "Station artwork",
-    "group": "Props"
+    "group": "Props",
+    "artwork": true
   },
   {
     "file": "04_Props/04_asset_014.png",
@@ -429,7 +464,8 @@
     "height": 170,
     "bytes": 111231,
     "label": "Train and balloon artwork",
-    "group": "Props"
+    "group": "Props",
+    "artwork": true
   },
   {
     "file": "04_Props/04_asset_015.png",
@@ -437,7 +473,8 @@
     "height": 173,
     "bytes": 38732,
     "label": "Farm windmill",
-    "group": "Props"
+    "group": "Props",
+    "build": "windmill"
   },
   {
     "file": "04_Props/04_asset_016.png",
@@ -445,7 +482,8 @@
     "height": 163,
     "bytes": 64181,
     "label": "Flower arch",
-    "group": "Props"
+    "group": "Props",
+    "build": "flowerArch"
   },
   {
     "file": "04_Props/04_asset_017.png",
@@ -453,7 +491,8 @@
     "height": 141,
     "bytes": 43191,
     "label": "Lantern arch",
-    "group": "Props"
+    "group": "Props",
+    "build": "lanternArch"
   },
   {
     "file": "04_Props/04_asset_018.png",
@@ -461,7 +500,8 @@
     "height": 151,
     "bytes": 66723,
     "label": "Timber mine entrance",
-    "group": "Props"
+    "group": "Props",
+    "build": "mineEntrance"
   },
   {
     "file": "04_Props/04_asset_019.png",
@@ -469,7 +509,8 @@
     "height": 157,
     "bytes": 68422,
     "label": "Crystal grotto",
-    "group": "Props"
+    "group": "Props",
+    "build": "crystalGrotto"
   },
   {
     "file": "05_Structures/05_asset_001.png",
@@ -495,7 +536,8 @@
     "height": 86,
     "bytes": 28634,
     "label": "Picket fence",
-    "group": "Structures"
+    "group": "Structures",
+    "build": "picketFence"
   },
   {
     "file": "05_Structures/05_asset_004.png",
@@ -503,7 +545,8 @@
     "height": 90,
     "bytes": 20969,
     "label": "Rope fence",
-    "group": "Structures"
+    "group": "Structures",
+    "build": "ropeFence"
   },
   {
     "file": "05_Structures/05_asset_005.png",
@@ -511,7 +554,8 @@
     "height": 103,
     "bytes": 52577,
     "label": "Stone bridge",
-    "group": "Structures"
+    "group": "Structures",
+    "build": "stoneBridge"
   },
   {
     "file": "05_Structures/05_asset_006.png",
@@ -519,7 +563,8 @@
     "height": 285,
     "bytes": 134945,
     "label": "Dock and windmill artwork",
-    "group": "Structures"
+    "group": "Structures",
+    "artwork": true
   },
   {
     "file": "05_Structures/05_asset_007.png",
@@ -527,6 +572,7 @@
     "height": 97,
     "bytes": 47801,
     "label": "Little waterfall",
-    "group": "Structures"
+    "group": "Structures",
+    "build": "waterfall"
   }
 ]

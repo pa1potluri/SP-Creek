@@ -37,12 +37,14 @@ export function setupExploreUI(app){
  const syncRoadStatus=()=>{roadStatus.textContent=document.querySelector('#hint').textContent||'Choose Draw road, click ground points, then Save road.';};
  new MutationObserver(syncRoadStatus).observe(document.querySelector('#hint'),{childList:true,characterData:true,subtree:true});syncRoadStatus();
  const categories=[
-  ['🏠','Buildings','shop hotel house barn chapel tower windmill cabin brick blacksmith'],
+  ['🏠','Buildings','shop hotel house barn chapel tower windmill cabin brick blacksmith gazebo lookoutTower mineEntrance crystalGrotto'],
   ['🌻','Gardens','gardenFence vegetablePatch flowerBox seedBed sunflowerBed carrotBed pumpkinBed flowerBed'],
   ['🐴','Farm','farmBarn ponyRail farmHay farmVegetables farmPond'],
   ['🧺','Market','marketFruit marketFlowers marketBread marketToys marketBalloons'],
   ['🎠','Playground','playSwing playSlide playSeesaw playSandbox playClimber'],
-  ['📦','Props','hitch laundryLine waterWell woodPile mailbox lanternString gardenBench snowman pumpkinPile littleBridge'],
+  ['📦','Props','hitch laundryLine waterWell woodPile mailbox lanternString gardenBench snowman pumpkinPile littleBridge tallLantern shortLantern campfirePit canvasTent picnicTable supplyCart barrelGroup haystack flowerArch lanternArch picketFence ropeFence'],
+  ['🌳','Nature','shadeTree smallTree autumnTree blossomTree fruitTree roundTree pineGroup snowyPines greenBush floweringBush meadowFlowers mushrooms rockCluster mossyRock roundRock treeStump smallStump'],
+  ['🧱','Terrain','tileGrass tileSand tileStonePath tileCobble tileWood grassRamp smallCliff rockPlateau rockyHillside stoneBridge waterfall'],
   ['🛤','Roads',''],
  ];
  const closeBuild=()=>{buildPopup.hidden=true;};

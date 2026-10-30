@@ -32,6 +32,8 @@ import { buildTownCenter } from './areas/town-center.js';
 import { buildGhostTown } from './areas/ghost-town.js';
 import { buildForest } from './areas/forest.js';
 import { buildMeadowLake } from './areas/meadow-lake.js';
+import { buildDreamyLake } from './areas/dreamy-lake.js';
+import { buildDreamyCove } from './areas/dreamy-cove.js';
 import { buildCrystalMine, setBalloonGameReader } from './areas/crystal-mine.js';
 
 const $ = (s) => document.querySelector(s);
@@ -85,8 +87,10 @@ const townCenter = buildTownCenter(world, life);
 const ghostTown = buildGhostTown(world);
 const forest = buildForest(world);
 const meadowLake = await buildMeadowLake(world);
+const dreamyLake = buildDreamyLake(world, meadowLake.lake);
 const crystalMine = buildCrystalMine(world);
 const sunsetCove=await buildSunsetCove(world,life);
+const dreamyCove=buildDreamyCove(world);
 const playground=buildPlayground(world,life);
 const camping=buildCamping(world);
 const seasons=new Seasons(world,atmos,{forest,meadowLake});
@@ -397,7 +401,7 @@ canvas.addEventListener('pointerup', (e) => {
   if (!hit) return;
   if(tool.startsWith('terrain:')) {
     const ok=world.shapeTerrain({mode:tool.split(':')[1],x:hit.point.x,z:hit.point.z,radius:+$('#terrainRadius').value,amount:+$('#terrainStrength').value,target:terrainHeight(hit.point.x,hit.point.z)});
-    if(ok){saveLayout();flash('Terrain saved');}else flash('Protected ground. Use Open terrain workshop; avoid buildings.');return;
+    if(ok){saveLayout();flash('Terrain saved');}else flash('That spot is protected (town, water or railway). Try open hills and fields.');return;
   }
   if (tool.startsWith('build:')) {
     world.placeBuilding(buildSpec(hit.point)); saveLayout(); return;
@@ -554,9 +558,10 @@ $('#clearBuilt').onclick = () => {
   saveLayout();
 };
 $('#terrainWorkshop').onclick=()=>{
+  const position=camera.position.clone(),direction=camera.getWorldDirection(new THREE.Vector3());
   game.exit();timeline.stop();setTool(null);director.auto=false;director.paused=true;director.flight=null;
-  director.mode='free';director.state.pos.set(400,terrainHeight(400,-400)+65,-320);Object.assign(director.free,{yaw:Math.PI,pitch:-.65});refreshCamera();
-  flash('Terrain workshop: select Lower, Raise or Flatten, then click the hill.');
+  director.state.pos.copy(position);director.state.look.copy(position).add(direction);director.setFree(true);refreshCamera();
+  flash('Terrain workshop: choose Lower, Raise, Flatten or Soften, then click the ground.');
 };
 document.querySelectorAll('[data-terrain]').forEach(b=>b.onclick=()=>setTool('terrain:'+b.dataset.terrain));
 for(const id of ['terrainRadius','terrainStrength'])$('#'+id).oninput=()=>{$('#'+id).nextElementSibling.textContent=$('#'+id).value;};
@@ -567,6 +572,14 @@ $('#drawFence').onclick = () => setTool('fence');
 $('#finishFence').onclick = finishRoad;
 $('#undoFence').onclick = () => { const e = world.fences.at(-1); if (e) { world.removeFence(e); if (selectedBuilding === e) selectBuilding(null); saveLayout(); } };
 $('#finishRoad').onclick = finishRoad;
+// The width slider also resizes the road just drawn, not only the next one.
+$('#roadWidth').addEventListener('change', () => {
+  if (tool === 'road' || !world.roads.length) return;
+  world.endBuildReplay();
+  const e = world.roads.pop();
+  world.root.remove(e.obj); e.obj.geometry.dispose();
+  world.addRoad(e.points, +$('#roadWidth').value, e.order); saveLayout();
+});
 $('#undoRoad').onclick = () => {
   world.endBuildReplay();
   const e = world.roads.pop();
@@ -939,7 +952,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { seasons, setSeason, setWeather, setFestival, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { seasons, setSeason, setWeather, setFestival, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, dreamyLake, dreamyCove, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;
@@ -1064,10 +1077,12 @@ function step(dt) {
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
   if (world.areaAnimationVisible(camera,-90,forest.pad.y+10,-204,90)) forest.update(time, camera, atmos.cur);
   if (world.areaAnimationVisible(camera,-225,meadowLake.pad.y+10,0,110)) meadowLake.update(time, camera, atmos.cur, atmos.key);
+  if (world.areaAnimationVisible(camera,-240,meadowLake.pad.y+5,-12,40)) dreamyLake.update(time, camera, atmos.cur);
   crystalMine.update(time, atmos.cur);
   life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
   life.update(motionDt, time, camera);
   sunsetCove.update(time,camera,atmos.cur);
+  if (camera.position.x < -280) dreamyCove.update(time, camera, atmos.cur);
   playground.update(time,camera);
   camping.update(time,camera,atmos.cur);
   cafe.update(motionDt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
@@ -1103,7 +1118,8 @@ function step(dt) {
   l.uPoster.value = lookParams.poster;
   l.uOutline.value = lookParams.outline;
   l.uDof.value = lookParams.dof;
-  l.uBloom.value = lookParams.bloom;
+  // Dreamy nights get extra film bloom; other styles get bigger halos instead (dreamy-lake.js).
+  l.uBloom.value = lookParams.bloom + (atmos.key === 'dreamyNight' ? 0.18 : 0);
   l.uLayers.value = lookParams.layers;
   l.uPaperShadow.value = lookParams.paperShadow;
   l.uPixel.value = lookParams.pixel;

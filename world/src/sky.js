@@ -37,16 +37,29 @@ const skyFrag = /* glsl */ `
       float n2 = fbm(uv * 1.3 + drift + normalize(uSunDir.xz + 1e-4) * 0.08);
       float lit = clamp(0.55 + (n - n2) * 5.0 + pow(sd, 3.0) * 0.5, 0.0, 1.0);
       col = mix(col, mix(uCloudShade, uCloudLit, lit), m * 0.95);
-      float band = exp(-pow(dot(d, normalize(vec3(0.65, 0.28, -0.7))), 2.0) * 90.0);
-      col += vec3(0.075, 0.09, 0.16) * band * (0.35 + fbm(d.xz * 23.0)) * uStars * (1.0 - m);
+      // Milky Way: a soft lilac-blue band with darker dust lanes and its own fine stars.
+      float bd = dot(d, normalize(vec3(0.65, 0.28, -0.7)));
+      float band = exp(-bd * bd * 70.0), core = exp(-bd * bd * 260.0);
+      float lanes = smoothstep(0.35, 0.75, fbm(d.xz * 9.0 + 3.0));
+      vec3 milky = mix(vec3(0.16, 0.13, 0.30), vec3(0.30, 0.34, 0.55), fbm(d.xz * 17.0));
+      col += milky * (band * (0.25 + 0.6 * fbm(d.xz * 23.0)) + core * 0.2) * (1.0 - lanes * 0.6) * 0.55 * uStars * (1.0 - m);
+      vec2 fp = d.xz / (h + 0.3) * 330.0; vec2 fid = floor(fp);
+      col += vec3(0.85, 0.88, 1.0) * step(0.93, hash(fid)) * smoothstep(0.22, 0.0, length(fract(fp) - 0.5)) * band * uStars * (1.0 - m) * 0.7;
+      // Aurora: slow, gentle teal-to-violet curtains low in the northern sky (never flashing).
+      float az = atan(d.z, d.x);
+      float rays = fbm(vec2(az * 7.0 + uTime * 0.015, uTime * 0.01)) * fbm(vec2(az * 23.0 - uTime * 0.01, 1.7));
+      float sway = 0.20 + 0.06 * sin(az * 3.0 + uTime * 0.05);
+      float curtain = smoothstep(0.14, sway + 0.1, h) * (1.0 - smoothstep(sway + 0.1, sway + 0.45, h)) * smoothstep(0.1, 0.45, -d.z);
+      vec3 auroraCol = mix(vec3(0.20, 0.85, 0.70), vec3(0.62, 0.38, 0.95), smoothstep(0.16, sway + 0.35, h));
+      col += auroraCol * rays * curtain * 0.7 * uStars * uStars * (1.0 - m * 0.7);
       float moonAngle = acos(clamp(sd, 0.0, 1.0));
       float moon = 1.0 - smoothstep(0.026, 0.029, moonAngle);
       float pigment = 0.82 + 0.18 * fbm(d.xz * 270.0);
       col += vec3(0.25, 0.32, 0.5) * exp(-moonAngle * 17.0) * uStars;
       col = mix(col, vec3(0.91, 0.94, 1.0) * pigment, moon * uStars);
       vec2 sp = d.xz / (h + 0.3) * 120.0; vec2 id = floor(sp);
-      float st = step(0.985, hash(id)) * smoothstep(0.15, 0.0, length(fract(sp) - 0.5));
-      col += st * uStars * (1.0 - m) * (0.6 + 0.4 * sin(uTime * 2.0 + hash(id) * 40.0));
+      float st = step(0.978, hash(id)) * smoothstep(0.17, 0.0, length(fract(sp) - 0.5));
+      col += st * uStars * (1.0 - m) * (0.65 + 0.35 * sin(uTime * 0.9 + hash(id) * 40.0)) * 1.25; // slow, soft twinkle
     } else {
       col = mix(uHorizon, uGround, smoothstep(0.0, -0.25, h));
     }

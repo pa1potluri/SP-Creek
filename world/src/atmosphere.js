@@ -55,6 +55,15 @@ PRESETS.villageDusk = {
   fogColor: '#b28a7c', mountain: '#665a76', exposure: 1.45, stars: 0.12, warmth: 0.10,
 };
 
+// Deep blue lake night: brighter than Moonlit Night, with warm sparkles in the air.
+PRESETS.dreamyNight = {
+  ...PRESETS.night, label: 'Dreamy blue night',
+  skyTop: '#0c1c58', skyHorizon: '#2f4c96', skyGround: '#141c40', sunColor: '#b4c8ff',
+  cloudLit: '#6a80c0', cloudShade: '#1e2a5a', cloudCover: 0.25,
+  hemiSky: '#7a96e8', hemiGround: '#46588f', hemiIntensity: 1.8, fogColor: '#1f2f66', fogNear: 35, fogFar: 380,
+  dust: 0.7, dustColor: '#ffe2a0', mountain: '#26366e', exposure: 1.55, warmth: -0.04, sat: 1.12,
+};
+
 const COLOR_KEYS = ['skyTop', 'skyHorizon', 'skyGround', 'sunColor', 'cloudLit', 'cloudShade', 'hemiSky', 'hemiGround', 'fogColor', 'dustColor', 'mountain'];
 
 function prepare(p) {

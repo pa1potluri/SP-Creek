@@ -1,0 +1,482 @@
+[
+  {
+    "shot": 86,
+    "t": 0,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 0,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 86,
+    "t": 0,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 0,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 86,
+    "t": 0,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 86,
+    "t": 20,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 20,
+    "person": 1,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 20,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 20,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 86,
+    "t": 20,
+    "person": 4,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 40,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 40,
+    "person": 1,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 40,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 40,
+    "person": 3,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 40,
+    "person": 4,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 60,
+    "person": 0,
+    "facing": 0.9999999999999999
+  },
+  {
+    "shot": 86,
+    "t": 60,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 86,
+    "t": 60,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 86,
+    "t": 60,
+    "person": 3,
+    "facing": 0.9999999999999998
+  },
+  {
+    "shot": 86,
+    "t": 60,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 87,
+    "t": 0,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 0,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 87,
+    "t": 0,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 0,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 87,
+    "t": 0,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 87,
+    "t": 20,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 20,
+    "person": 1,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 20,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 20,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 87,
+    "t": 20,
+    "person": 4,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 40,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 40,
+    "person": 1,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 40,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 40,
+    "person": 3,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 40,
+    "person": 4,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 60,
+    "person": 0,
+    "facing": 0.9999999999999999
+  },
+  {
+    "shot": 87,
+    "t": 60,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 87,
+    "t": 60,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 87,
+    "t": 60,
+    "person": 3,
+    "facing": 0.9999999999999998
+  },
+  {
+    "shot": 87,
+    "t": 60,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 88,
+    "t": 0,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 0,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 88,
+    "t": 0,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 0,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 88,
+    "t": 0,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 88,
+    "t": 20,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 20,
+    "person": 1,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 20,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 20,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 88,
+    "t": 20,
+    "person": 4,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 40,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 40,
+    "person": 1,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 40,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 40,
+    "person": 3,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 40,
+    "person": 4,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 60,
+    "person": 0,
+    "facing": 0.9999999999999999
+  },
+  {
+    "shot": 88,
+    "t": 60,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 88,
+    "t": 60,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 88,
+    "t": 60,
+    "person": 3,
+    "facing": 0.9999999999999998
+  },
+  {
+    "shot": 88,
+    "t": 60,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 0,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 0,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 0,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 0,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 0,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 20,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 20,
+    "person": 1,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 20,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 20,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 20,
+    "person": 4,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 40,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 40,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 40,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 40,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 40,
+    "person": 4,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 60,
+    "person": 0,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 60,
+    "person": 1,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 60,
+    "person": 2,
+    "facing": 1
+  },
+  {
+    "shot": 93,
+    "t": 60,
+    "person": 3,
+    "facing": 1.0000000000000002
+  },
+  {
+    "shot": 93,
+    "t": 60,
+    "person": 4,
+    "facing": 1.0000000000000002
+  }
+]

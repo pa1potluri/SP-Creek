@@ -1,0 +1,105 @@
+{
+  "signs": [
+    {
+      "text": "GENERAL STORE",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "TOWN HALL",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "SWEET SHOP",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "POST OFFICE",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "DOCTOR",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "BAKERY",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "TOY SHOP",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "BARBER",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "HONEY BUN CAFÉ",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "HOTEL",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    },
+    {
+      "text": "LIVERY STABLE",
+      "bg": [
+        30,
+        30,
+        22
+      ],
+      "ink": "#f0e0c0"
+    }
+  ],
+  "audioLocked": true,
+  "errors": []
+}

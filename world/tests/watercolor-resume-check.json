@@ -1,0 +1,99 @@
+{
+  "defaultStyle": "film",
+  "staticFrame": {
+    "identical": true,
+    "delayMs": 400,
+    "sha256": "28e2bb54c6e2c1b5ca2d663971c54030e62c465c66726f985674f145c833f6c5"
+  },
+  "samePose": true,
+  "audioLocked": true,
+  "checks": [
+    {
+      "shot": 39,
+      "mood": "golden",
+      "style": "film",
+      "time": 2.035500000000001
+    },
+    {
+      "shot": 39,
+      "mood": "golden",
+      "style": "oil",
+      "time": 2.035500000000001
+    },
+    {
+      "shot": 39,
+      "mood": "golden",
+      "style": "watercolor",
+      "time": 2.035500000000001
+    },
+    {
+      "shot": 39,
+      "mood": "night",
+      "style": "film",
+      "time": 2.435500000000001
+    },
+    {
+      "shot": 39,
+      "mood": "night",
+      "style": "oil",
+      "time": 2.435500000000001
+    },
+    {
+      "shot": 39,
+      "mood": "night",
+      "style": "watercolor",
+      "time": 2.435500000000001
+    },
+    {
+      "shot": 40,
+      "mood": "golden",
+      "style": "film",
+      "time": 2.835500000000001
+    },
+    {
+      "shot": 40,
+      "mood": "golden",
+      "style": "oil",
+      "time": 2.835500000000001
+    },
+    {
+      "shot": 40,
+      "mood": "golden",
+      "style": "watercolor",
+      "time": 2.835500000000001
+    },
+    {
+      "shot": 40,
+      "mood": "night",
+      "style": "film",
+      "time": 3.235500000000001
+    },
+    {
+      "shot": 40,
+      "mood": "night",
+      "style": "oil",
+      "time": 3.235500000000001
+    },
+    {
+      "shot": 40,
+      "mood": "night",
+      "style": "watercolor",
+      "time": 3.235500000000001
+    }
+  ],
+  "screenshots": [
+    "world/tests/watercolor-resume-39-day.png",
+    "world/tests/watercolor-resume-39-oil-day.png",
+    "world/tests/watercolor-resume-39-watercolor-day.png",
+    "world/tests/watercolor-resume-39-night.png",
+    "world/tests/watercolor-resume-39-oil-night.png",
+    "world/tests/watercolor-resume-39-watercolor-night.png",
+    "world/tests/watercolor-resume-40-day.png",
+    "world/tests/watercolor-resume-40-oil-day.png",
+    "world/tests/watercolor-resume-40-watercolor-day.png",
+    "world/tests/watercolor-resume-40-night.png",
+    "world/tests/watercolor-resume-40-oil-night.png",
+    "world/tests/watercolor-resume-40-watercolor-night.png"
+  ],
+  "errors": []
+}

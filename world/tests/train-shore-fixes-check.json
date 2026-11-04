@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-26",
+  "errors": [],
+  "views": [
+    {
+      "shot": 11,
+      "mood": "golden",
+      "name": "Station Platform",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 11,
+      "mood": "night",
+      "name": "Station Platform",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 12,
+      "mood": "golden",
+      "name": "Trackside",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 12,
+      "mood": "night",
+      "name": "Trackside",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 56,
+      "mood": "golden",
+      "name": "All aboard",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 56,
+      "mood": "night",
+      "name": "All aboard",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 57,
+      "mood": "golden",
+      "name": "Window view",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 57,
+      "mood": "night",
+      "name": "Window view",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 58,
+      "mood": "golden",
+      "name": "Seaside halt",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 58,
+      "mood": "night",
+      "name": "Seaside halt",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 40,
+      "mood": "golden",
+      "name": "Beach walk at sunset",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 40,
+      "mood": "night",
+      "name": "Beach walk at sunset",
+      "cameraFinite": true,
+      "audioLocked": true
+    }
+  ],
+  "startupMs": 9259,
+  "motion": {
+    "frames": 600,
+    "cameraFinite": true
+  },
+  "mountains": {
+    "layers": 3,
+    "coveHidden": true,
+    "restored": true
+  },
+  "runtime": {
+    "audioLocked": true,
+    "residentHeads": 10
+  },
+  "defaultResidents": {
+    "pipelineHeads": 0,
+    "walkers": 10,
+    "audioLocked": true
+  }
+}

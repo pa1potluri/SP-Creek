@@ -1,0 +1,369 @@
+{
+  "probes": 272,
+  "walks": [
+    {
+      "name": "town",
+      "mood": "golden",
+      "travelled": 3.5200000000000187,
+      "dry": true,
+      "finite": true,
+      "end": [
+        1.0776891832496709e-16,
+        0,
+        14
+      ]
+    },
+    {
+      "name": "pond",
+      "mood": "golden",
+      "travelled": 3.5215947444977567,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -69,
+        26.742276129319837,
+        83.5
+      ]
+    },
+    {
+      "name": "ranch",
+      "mood": "golden",
+      "travelled": 3.520000000000124,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -95,
+        1.9552425239607114,
+        -30
+      ]
+    },
+    {
+      "name": "forest",
+      "mood": "golden",
+      "travelled": 3.55369559619096,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -90,
+        25.21334326783313,
+        -179
+      ]
+    },
+    {
+      "name": "meadow",
+      "mood": "golden",
+      "travelled": 3.519999999999783,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -220,
+        23.145939308561598,
+        12
+      ]
+    },
+    {
+      "name": "mine",
+      "mood": "golden",
+      "travelled": 3.5292109368963676,
+      "dry": true,
+      "finite": true,
+      "end": [
+        173,
+        32.88849128728423,
+        -105
+      ]
+    },
+    {
+      "name": "hilltop",
+      "mood": "golden",
+      "travelled": 3.519999999999527,
+      "dry": true,
+      "finite": true,
+      "end": [
+        202,
+        44.88849128728423,
+        -139
+      ]
+    },
+    {
+      "name": "cove",
+      "mood": "golden",
+      "travelled": 3.5199999999996976,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -355.9748090066216,
+        -0.04480000000000217,
+        -40
+      ]
+    },
+    {
+      "name": "village",
+      "mood": "golden",
+      "travelled": 3.5525727893290133,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -310,
+        7.6863890157268,
+        20
+      ]
+    },
+    {
+      "name": "camp",
+      "mood": "golden",
+      "travelled": 3.519999999999868,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -195,
+        31.07073579690274,
+        64
+      ]
+    },
+    {
+      "name": "farm",
+      "mood": "golden",
+      "travelled": 3.9758475501219728,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -180,
+        8.62465866759375,
+        -55
+      ]
+    },
+    {
+      "name": "station",
+      "mood": "golden",
+      "travelled": 3.520000000000124,
+      "dry": true,
+      "finite": true,
+      "end": [
+        64,
+        0.35,
+        15
+      ]
+    },
+    {
+      "name": "cafe",
+      "mood": "golden",
+      "travelled": 3.5200000000000387,
+      "dry": true,
+      "finite": true,
+      "end": [
+        9.5,
+        0.35,
+        8
+      ]
+    },
+    {
+      "name": "town",
+      "mood": "night",
+      "travelled": 3.5200000000000187,
+      "dry": true,
+      "finite": true,
+      "end": [
+        1.0776891832496709e-16,
+        0,
+        14
+      ]
+    },
+    {
+      "name": "pond",
+      "mood": "night",
+      "travelled": 3.5215947444977567,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -69,
+        26.742276129319837,
+        83.5
+      ]
+    },
+    {
+      "name": "ranch",
+      "mood": "night",
+      "travelled": 3.520000000000124,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -95,
+        1.9552425239607114,
+        -30
+      ]
+    },
+    {
+      "name": "forest",
+      "mood": "night",
+      "travelled": 3.55369559619096,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -90,
+        25.21334326783313,
+        -179
+      ]
+    },
+    {
+      "name": "meadow",
+      "mood": "night",
+      "travelled": 3.519999999999783,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -220,
+        23.145939308561598,
+        12
+      ]
+    },
+    {
+      "name": "mine",
+      "mood": "night",
+      "travelled": 3.5292109368963676,
+      "dry": true,
+      "finite": true,
+      "end": [
+        173,
+        32.88849128728423,
+        -105
+      ]
+    },
+    {
+      "name": "hilltop",
+      "mood": "night",
+      "travelled": 3.519999999999527,
+      "dry": true,
+      "finite": true,
+      "end": [
+        202,
+        44.88849128728423,
+        -139
+      ]
+    },
+    {
+      "name": "cove",
+      "mood": "night",
+      "travelled": 3.5199999999996976,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -355.9748090066216,
+        -0.04480000000000217,
+        -40
+      ]
+    },
+    {
+      "name": "village",
+      "mood": "night",
+      "travelled": 3.5525727893290133,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -310,
+        7.6863890157268,
+        20
+      ]
+    },
+    {
+      "name": "camp",
+      "mood": "night",
+      "travelled": 3.519999999999868,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -195,
+        31.07073579690274,
+        64
+      ]
+    },
+    {
+      "name": "farm",
+      "mood": "night",
+      "travelled": 3.9758475501219728,
+      "dry": true,
+      "finite": true,
+      "end": [
+        -180,
+        8.62465866759375,
+        -55
+      ]
+    },
+    {
+      "name": "station",
+      "mood": "night",
+      "travelled": 3.520000000000124,
+      "dry": true,
+      "finite": true,
+      "end": [
+        64,
+        0.35,
+        15
+      ]
+    },
+    {
+      "name": "cafe",
+      "mood": "night",
+      "travelled": 3.5200000000000387,
+      "dry": true,
+      "finite": true,
+      "end": [
+        9.5,
+        0.35,
+        8
+      ]
+    }
+  ],
+  "screenshots": [
+    "world/tests/self-review-1-21-day.png",
+    "world/tests/self-review-1-21-night.png",
+    "world/tests/self-review-1-21-oil.png",
+    "world/tests/self-review-1-22-day.png",
+    "world/tests/self-review-1-22-night.png",
+    "world/tests/self-review-1-22-oil.png",
+    "world/tests/self-review-1-23-day.png",
+    "world/tests/self-review-1-23-night.png",
+    "world/tests/self-review-1-23-oil.png",
+    "world/tests/self-review-1-24-day.png",
+    "world/tests/self-review-1-24-night.png",
+    "world/tests/self-review-1-24-oil.png",
+    "world/tests/self-review-1-25-day.png",
+    "world/tests/self-review-1-25-night.png",
+    "world/tests/self-review-1-25-oil.png",
+    "world/tests/self-review-1-26-day.png",
+    "world/tests/self-review-1-26-night.png",
+    "world/tests/self-review-1-26-oil.png",
+    "world/tests/self-review-1-27-day.png",
+    "world/tests/self-review-1-27-night.png",
+    "world/tests/self-review-1-27-oil.png",
+    "world/tests/self-review-1-28-day.png",
+    "world/tests/self-review-1-28-night.png",
+    "world/tests/self-review-1-28-oil.png",
+    "world/tests/self-review-1-28a-day.png",
+    "world/tests/self-review-1-28a-night.png",
+    "world/tests/self-review-1-28a-oil.png",
+    "world/tests/self-review-1-29-day.png",
+    "world/tests/self-review-1-29-night.png",
+    "world/tests/self-review-1-29-oil.png",
+    "world/tests/self-review-1-30-day.png",
+    "world/tests/self-review-1-30-night.png",
+    "world/tests/self-review-1-30-oil.png",
+    "world/tests/self-review-1-32-day.png",
+    "world/tests/self-review-1-32-night.png",
+    "world/tests/self-review-1-32-oil.png",
+    "world/tests/self-review-1-walk-forest-day.png",
+    "world/tests/self-review-1-walk-cove-day.png",
+    "world/tests/self-review-1-walk-camp-day.png",
+    "world/tests/self-review-1-walk-farm-day.png",
+    "world/tests/self-review-1-walk-station-day.png",
+    "world/tests/self-review-1-walk-cafe-day.png",
+    "world/tests/self-review-1-walk-forest-night.png",
+    "world/tests/self-review-1-walk-cove-night.png",
+    "world/tests/self-review-1-walk-camp-night.png",
+    "world/tests/self-review-1-walk-farm-night.png",
+    "world/tests/self-review-1-walk-station-night.png",
+    "world/tests/self-review-1-walk-cafe-night.png"
+  ],
+  "errors": [],
+  "audioLocked": true
+}

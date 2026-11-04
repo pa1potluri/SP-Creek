@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "All idle wing/position transforms finite",
+    "7203 full duck-body poses clear dock",
+    "All body corners stay inside pond",
+    "Duck bodies stay mutually separated",
+    "Duck mesh maps to selected reaction",
+    "Reaction flaps visible wings",
+    "Reaction and ripples seek repeatably",
+    "Reaction smoothly ends",
+    "Simulation never starts sound",
+    "Synthetic quack is silent",
+    "Mock audio graph has bounded envelope and click rate limit, no hardware output"
+  ],
+  "passed": 11,
+  "samples": 7203,
+  "dockHits": 0,
+  "boundaryHits": 0,
+  "overlaps": 0,
+  "minSeparation": 3.1177027615858917,
+  "clicks": {
+    "hit": true,
+    "protectedRoad": true,
+    "audioLocked": true
+  },
+  "errors": []
+}

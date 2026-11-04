@@ -1,0 +1,40 @@
+{
+  "passed": 30,
+  "results": [
+    "Single gameplay button",
+    "Fourteen clear locations",
+    "Videos and episodes start collapsed",
+    "#playBtn visible at top",
+    "#freeBtn visible at top",
+    "#autoBtn visible at top",
+    "#pauseBtn visible at top",
+    "#styles visible at top",
+    "Review buttons outside panel slider area",
+    "Brush controls open in separate popover",
+    "Outside click hides brush popover",
+    "Escape hides brush popover",
+    "Gameplay keeps top controls visible",
+    "Free camera leaves gameplay",
+    "Auto director remains functional",
+    "Town keeps selected style",
+    "River & mill keeps selected style",
+    "Train station keeps selected style",
+    "Honey Bun Café keeps selected style",
+    "Willow Creek keeps selected style",
+    "Old Hollow keeps selected style",
+    "Firefly forest keeps selected style",
+    "Meadow & waterfall keeps selected style",
+    "Crystal Mine keeps selected style",
+    "Balloon hill keeps selected style",
+    "Sunset beach keeps selected style",
+    "Playground keeps selected style",
+    "Camping keeps selected style",
+    "Pony farm keeps selected style",
+    "Checks never start sound"
+  ],
+  "narrow": {
+    "outsidePanel": true,
+    "styles": true
+  },
+  "errors": []
+}

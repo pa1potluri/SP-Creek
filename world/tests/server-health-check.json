@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-26T11:41:45.293Z",
+  "pages": [
+    {
+      "url": "/",
+      "status": 200,
+      "readyMs": 8777,
+      "contextLost": false,
+      "audioLocked": true,
+      "showcasePlaying": null,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "url": "/?showcase&showcaseStyle=watercolor&characterFaces=pipeline",
+      "status": 200,
+      "readyMs": 8359,
+      "contextLost": false,
+      "audioLocked": true,
+      "showcasePlaying": true,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "url": "/character-pipeline-test.html",
+      "status": 200,
+      "readyMs": 238,
+      "contextLost": false,
+      "audioLocked": true,
+      "showcasePlaying": null,
+      "errors": [],
+      "failed": []
+    }
+  ]
+}

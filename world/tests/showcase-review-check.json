@@ -1,0 +1,20 @@
+{
+  "passed": 13,
+  "results": [
+    "Fountain centre blocks traffic",
+    "Open ground remains passable",
+    "Building footprint blocks traffic",
+    "Fence blocks traffic",
+    "All showcase clips keep natural camera speed",
+    "World moves calmly while scenes keep real 20-second timing",
+    "Water friends stay clear of rowing hull and oars over two loops",
+    "Ambient rider available",
+    "Actual horse yields to a solid obstruction",
+    "Seasonal particles exclude cafe interior below roof",
+    "Cafe roof bounds loaded for snow exclusion",
+    "Camera-facing palms do not cast rotating shadows",
+    "Watercolour no longer draws pigment-black silhouette rims"
+  ],
+  "minDuckBoat": 3.167651464362462,
+  "errors": []
+}

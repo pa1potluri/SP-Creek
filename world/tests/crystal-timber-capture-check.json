@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-26",
+  "errors": [],
+  "views": [
+    {
+      "shot": 28,
+      "mood": "golden",
+      "name": "Crystal Mine",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 28,
+      "mood": "night",
+      "name": "Crystal Mine",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 29,
+      "mood": "golden",
+      "name": "Balloon Hilltop",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 29,
+      "mood": "night",
+      "name": "Balloon Hilltop",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 33,
+      "mood": "golden",
+      "name": "Crystal Mine Tour",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 33,
+      "mood": "night",
+      "name": "Crystal Mine Tour",
+      "cameraFinite": true,
+      "audioLocked": true
+    }
+  ],
+  "startupMs": 8909,
+  "runtime": {
+    "audioLocked": true,
+    "residentHeads": 10
+  },
+  "defaultResidents": {
+    "pipelineHeads": 10,
+    "walkers": 10,
+    "audioLocked": true
+  }
+}

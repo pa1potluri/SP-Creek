@@ -1,0 +1,19 @@
+{
+  "passed": 13,
+  "results": [
+    "Bottom Build dock opens",
+    "All 43 choices appear in exactly one category",
+    "Roads hide unrelated building sliders",
+    "Road tools visible",
+    "Drawing stops automatic camera motion",
+    "Three canvas clicks and Finish create a road",
+    "Road saves all three ground points",
+    "Road has visible mesh geometry",
+    "Road included in saved project",
+    "Remove last road works",
+    "Free camera wheel zooms in",
+    "Free camera wheel zooms out",
+    "No test starts audio"
+  ],
+  "errors": []
+}

@@ -1,0 +1,29 @@
+# Only SP Creek is tracked here; this folder also holds other projects.
+/*
+!/.gitignore
+!/.github/
+!/tasks/
+!/serve_world.py
+!/SP Creek.bat
+!/README.md
+!/CREDITS.md
+!/JOIN.md
+!/docs/
+!/world/
+
+# big outputs and other people's work inside world/
+world/renders/
+world/tests/village-dusk/
+world/src/showroom/
+world/assets/showroom/
+world/showroom*
+*.mp4
+*.wav
+__pycache__/
+world/tests/*.log
+
+# Local review snapshot; source is saved on the WIP branch.
+/WIP version/
+
+# Local source/assets/evidence backup archives.
+/_local-backups/

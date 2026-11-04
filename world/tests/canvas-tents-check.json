@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-26",
+  "errors": [],
+  "views": [
+    {
+      "shot": 15,
+      "mood": "golden",
+      "name": "Forest Camp",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 15,
+      "mood": "night",
+      "name": "Forest Camp",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 59,
+      "mood": "golden",
+      "name": "Cosy camping clearing",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 59,
+      "mood": "night",
+      "name": "Cosy camping clearing",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 60,
+      "mood": "golden",
+      "name": "Stars above camp",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 60,
+      "mood": "night",
+      "name": "Stars above camp",
+      "cameraFinite": true,
+      "audioLocked": true
+    }
+  ],
+  "startupMs": 8799,
+  "runtime": {
+    "audioLocked": true,
+    "residentHeads": 10
+  },
+  "defaultResidents": {
+    "pipelineHeads": 10,
+    "walkers": 10,
+    "audioLocked": true
+  }
+}

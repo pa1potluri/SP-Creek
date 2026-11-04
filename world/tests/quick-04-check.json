@@ -1,0 +1,64 @@
+{
+  "rows": [
+    {
+      "key": "kiteDay",
+      "shot": 86,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    },
+    {
+      "key": "kiteDay",
+      "shot": 87,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    },
+    {
+      "key": "kiteDay",
+      "shot": 88,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    },
+    {
+      "key": "episode11Kites",
+      "shot": 93,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    },
+    {
+      "key": "episode11Kites",
+      "shot": 86,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    },
+    {
+      "key": "episode11Kites",
+      "shot": 87,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    },
+    {
+      "key": "episode11Kites",
+      "shot": 88,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    },
+    {
+      "key": "episode11Kites",
+      "shot": 93,
+      "rain": 0,
+      "weather": "auto",
+      "extraRain": 0
+    }
+  ],
+  "manualRain": 0.3,
+  "manualWeather": "drizzle",
+  "audioLocked": true,
+  "errors": []
+}

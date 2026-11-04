@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-26",
+  "errors": [],
+  "views": [
+    {
+      "shot": 56,
+      "mood": "golden",
+      "name": "All aboard",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 56,
+      "mood": "night",
+      "name": "All aboard",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 57,
+      "mood": "golden",
+      "name": "Window view",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 57,
+      "mood": "night",
+      "name": "Window view",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 58,
+      "mood": "golden",
+      "name": "Seaside halt",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 58,
+      "mood": "night",
+      "name": "Seaside halt",
+      "cameraFinite": true,
+      "audioLocked": true
+    }
+  ],
+  "startupMs": 8358,
+  "motion": {
+    "frames": 600,
+    "cameraFinite": true
+  },
+  "mountains": {
+    "layers": 3,
+    "coveHidden": true,
+    "restored": true
+  },
+  "joinery": {
+    "localFaceZ": [
+      4.490000003576277,
+      4.459999998658894,
+      3.0900000035762787,
+      1.3900000035762794,
+      -1.209999996423722,
+      -2.9099999964237213,
+      -4.309999996423722,
+      -4.340000001341105
+    ],
+    "cornerSeparationMetres": 0.03
+  },
+  "runtime": {
+    "audioLocked": true,
+    "residentHeads": 10
+  },
+  "defaultResidents": {
+    "pipelineHeads": 10,
+    "walkers": 10,
+    "audioLocked": true
+  }
+}

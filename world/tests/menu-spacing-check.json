@@ -1,0 +1,18 @@
+[
+  {
+    "width": 1280,
+    "bar": 56,
+    "free": 56,
+    "aligned": true,
+    "space": 83.70403957366943,
+    "greetingBelowBar": true
+  },
+  {
+    "width": 1024,
+    "bar": 56,
+    "free": 56,
+    "aligned": true,
+    "space": 83.70403957366943,
+    "greetingBelowBar": true
+  }
+]

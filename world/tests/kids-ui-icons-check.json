@@ -1,0 +1,70 @@
+{
+  "icons": [
+    {
+      "name": "logo.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "home.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "create.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "play.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "watch.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "settings.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "help.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "cat_buildings.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "cat_nature.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "cat_characters.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "cat_props.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "cat_roads.png",
+      "loaded": true,
+      "visible": true
+    },
+    {
+      "name": "cat_style.png",
+      "loaded": true,
+      "visible": true
+    }
+  ],
+  "errors": []
+}

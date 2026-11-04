@@ -1,0 +1,10 @@
+area-shots {"passed":7}
+balloon-ride {"passed":20,"maxSpeed":13.28099588237132}
+page.evaluate: Error: Recording hotkey closes picture overlay
+    at check (http://127.0.0.1:8811/tests/board-assets.js:2:82)
+    at Module.runBoardAssetsTests (http://127.0.0.1:8811/tests/board-assets.js:8:431)
+    at async eval (eval at evaluate (:311:30), <anonymous>:3:14)
+    at async <anonymous>:337:30
+    at E:\claude pa1\painting_studio\world\tests\run-browser.cjs:12:31 {
+  log: []
+}

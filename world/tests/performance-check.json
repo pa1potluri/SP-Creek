@@ -1,0 +1,37 @@
+{
+  "result": {
+    "passed": 29,
+    "results": [
+      "Distant off-screen farm skips animation",
+      "Visible distant farm keeps animation",
+      "Nearby farm updates even behind camera",
+      "Life skips only the off-screen farm update",
+      "Returning camera updates the farm immediately",
+      "Return pose matches absolute-time update",
+      "Cached sparkles match exact terrain heights",
+      "Building placement invalidates sparkle terrain cache",
+      "Building removal restores sparkle heights",
+      "Fixed farm rails use one instance batch",
+      "Rail 0 retains its collider transform",
+      "Rail 1 retains its collider transform",
+      "Rail 2 retains its collider transform",
+      "Rail 3 retains its collider transform",
+      "Rail 4 retains its collider transform",
+      "Rail 5 retains its collider transform",
+      "Rail 6 retains its collider transform",
+      "Rail 7 retains its collider transform",
+      "Rail 8 retains its collider transform",
+      "Rail 9 retains its collider transform",
+      "Rail 10 retains its collider transform",
+      "Rail 11 retains its collider transform",
+      "Rail 12 retains its collider transform",
+      "Rail 13 retains its collider transform",
+      "Rail 14 retains its collider transform",
+      "Rail 15 retains its collider transform",
+      "Rail 16 retains its collider transform",
+      "Rail 17 retains its collider transform",
+      "Sound remains locked"
+    ]
+  },
+  "errors": []
+}

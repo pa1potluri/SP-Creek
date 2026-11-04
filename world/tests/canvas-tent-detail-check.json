@@ -1,0 +1,24 @@
+{
+  "passed": 17,
+  "checks": [
+    "Three forest tents and two family camp tents replaced",
+    "0: rigid detail batched into six materials",
+    "0: finite canvas/pole/rope geometry",
+    "0: actual open entrance reveals the rear interior",
+    "1: rigid detail batched into six materials",
+    "1: finite canvas/pole/rope geometry",
+    "1: actual open entrance reveals the rear interior",
+    "2: rigid detail batched into six materials",
+    "2: finite canvas/pole/rope geometry",
+    "2: actual open entrance reveals the rear interior",
+    "3: rigid detail batched into six materials",
+    "3: finite canvas/pole/rope geometry",
+    "3: actual open entrance reveals the rear interior",
+    "4: rigid detail batched into six materials",
+    "4: finite canvas/pole/rope geometry",
+    "4: actual open entrance reveals the rear interior",
+    "Repeated tents share cached geometry"
+  ],
+  "tents": 5,
+  "errors": []
+}

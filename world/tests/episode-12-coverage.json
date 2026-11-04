@@ -1,0 +1,86 @@
+{
+  "total": 180,
+  "frames": [
+    {
+      "shot": 94,
+      "name": "Waterfall picnic from above",
+      "kind": "picnic",
+      "position": [
+        -202.98067251950394,
+        37.28651947212637,
+        23
+      ],
+      "look": [
+        -229,
+        23.2659393085616,
+        -3
+      ],
+      "friends": 3
+    },
+    {
+      "shot": 89,
+      "name": "Picnic by the waterfall",
+      "kind": "picnic",
+      "position": [
+        -210.98067251950394,
+        31.286519472126372,
+        18
+      ],
+      "look": [
+        -228,
+        24.3659393085616,
+        -2
+      ],
+      "friends": 3
+    },
+    {
+      "shot": 90,
+      "name": "Fruit and little duck friends",
+      "kind": "picnic",
+      "position": [
+        -216.98067251950394,
+        27.786519472126372,
+        12
+      ],
+      "look": [
+        -225,
+        24.3659393085616,
+        1
+      ],
+      "friends": 3
+    },
+    {
+      "shot": 91,
+      "name": "A wide waterfall picnic",
+      "kind": "picnic",
+      "position": [
+        -235.98067251950394,
+        31.286519472126372,
+        18
+      ],
+      "look": [
+        -228,
+        24.3659393085616,
+        -2
+      ],
+      "friends": 3
+    },
+    {
+      "shot": 94,
+      "name": "Waterfall picnic from above",
+      "kind": "picnic",
+      "position": [
+        -202.98067251950394,
+        37.28651947212637,
+        23
+      ],
+      "look": [
+        -229,
+        23.2659393085616,
+        -3
+      ],
+      "friends": 3
+    }
+  ],
+  "audioLocked": true
+}

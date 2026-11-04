@@ -1,0 +1,15 @@
+{
+  "initialMeasurementSummary": true,
+  "readyMs": 37964,
+  "maxRootGap": 2.6062522733327853,
+  "minRootGap": -0.21172075678163083,
+  "menuClickMs": [
+    18,
+    34.1,
+    15.6,
+    15.3
+  ],
+  "cameraFlightSeconds": 10,
+  "browserErrors": [],
+  "provenance": "Summary from the first diagnostic output; follow-up measurement is in review-feedback-after.json."
+}

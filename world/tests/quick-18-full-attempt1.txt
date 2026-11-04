@@ -1,0 +1,24 @@
+area-shots {"passed":7}
+balloon-ride {"passed":20,"maxSpeed":13.28099588237132}
+boat-trip {"passed":22}
+Build checks: 50
+Build checks: 100
+Build checks: 150
+Build checks: 200
+Build checks: 250
+Build checks: 300
+Build checks: 350
+Build checks: 400
+Build checks: 450
+Build checks: 500
+Build checks: 550
+build-mode {"passed":583}
+camping-night {"passed":14}
+page.evaluate: TypeError: Cannot read properties of null (reading 'x')
+    at Walker._go (http://127.0.0.1:8811/src/life.js:453:28)
+    at Module.runCloudWaterTests (http://127.0.0.1:8811/tests/clouds-water.js:74:37)
+    at eval (eval at evaluate (:311:30), <anonymous>:3:68)
+    at async <anonymous>:337:30
+    at E:\claude pa1\painting_studio\world\tests\run-browser.cjs:12:31 {
+  log: []
+}

@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-26",
+  "errors": [],
+  "views": [
+    {
+      "shot": 18,
+      "mood": "golden",
+      "name": "At the Counter",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 18,
+      "mood": "night",
+      "name": "At the Counter",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 26,
+      "mood": "golden",
+      "name": "Forest Trail",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 26,
+      "mood": "night",
+      "name": "Forest Trail",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 40,
+      "mood": "golden",
+      "name": "Beach walk at sunset",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 40,
+      "mood": "night",
+      "name": "Beach walk at sunset",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 94,
+      "mood": "golden",
+      "name": "Waterfall picnic from above",
+      "cameraFinite": true,
+      "audioLocked": true
+    },
+    {
+      "shot": 94,
+      "mood": "night",
+      "name": "Waterfall picnic from above",
+      "cameraFinite": true,
+      "audioLocked": true
+    }
+  ],
+  "startupMs": 8259,
+  "runtime": {
+    "audioLocked": true,
+    "residentHeads": 10
+  },
+  "defaultResidents": {
+    "pipelineHeads": 0,
+    "walkers": 10,
+    "audioLocked": true
+  }
+}

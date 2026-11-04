@@ -1,0 +1,18 @@
+{
+  "passed": 12,
+  "checks": [
+    "Three ground clicks acknowledged",
+    "Finish controls stay open while placing points",
+    "Three visible placement markers",
+    "Pointer test remains silent",
+    "Enter with focused Draw button saves one road",
+    "Enter does not re-arm road tool",
+    "Save confirmation visible",
+    "Saved road visible and complete",
+    "Road survives browser reload with exact points",
+    "Reloaded road mesh visible",
+    "Reload remains silent",
+    "No browser errors"
+  ],
+  "errors": []
+}

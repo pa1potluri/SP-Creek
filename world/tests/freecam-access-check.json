@@ -1,0 +1,30 @@
+{
+  "passed": 24,
+  "checks": [
+    "Free camera visible beside art styles",
+    "Visible Free camera toggles On",
+    "Visible Free camera toggles Off",
+    "Home tab opens",
+    "Create tab opens",
+    "Play tab opens",
+    "Watch tab opens",
+    "Settings tab opens",
+    "Help tab opens",
+    "Six Create categories",
+    "Menu/category touch targets at least 64px",
+    "Real canvas fits preview with matching camera aspect",
+    "All 43 Build pieces grouped into categories",
+    "Road tools and all seven styles reachable",
+    "Placed building can be selected",
+    "Create Rotate edits selected building",
+    "Create Delete removes placed building",
+    "Studio keeps original panel reachable",
+    "Return from Studio",
+    "Tablet panel fits viewport",
+    "H hides friendly menus",
+    "H restores friendly menus",
+    "No check starts sound",
+    "No browser errors"
+  ],
+  "errors": []
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "screen": [
+      1200,
+      350
+    ],
+    "hits": [
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/oil/cottonwood.png",
+        "geo": "BufferGeometry"
+      },
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/clean/cottonwood.png",
+        "geo": "BufferGeometry"
+      },
+      {
+        "instance": 218,
+        "position": [
+          90.85286712646484,
+          18.940372467041016,
+          14.363605499267578
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/oil/bush.png",
+        "geo": "BufferGeometry"
+      },
+      {
+        "instance": 218,
+        "position": [
+          90.85286712646484,
+          18.940372467041016,
+          14.363605499267578
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/clean/bush.png",
+        "geo": "BufferGeometry"
+      }
+    ]
+  },
+  {
+    "screen": [
+      1300,
+      380
+    ],
+    "hits": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "geo": "BufferGeometry"
+      },
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "geo": "PlaneGeometry"
+      },
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/oil/cottonwood.png",
+        "geo": "BufferGeometry"
+      },
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/clean/cottonwood.png",
+        "geo": "BufferGeometry"
+      }
+    ]
+  },
+  {
+    "screen": [
+      1150,
+      300
+    ],
+    "hits": [
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/oil/cottonwood.png",
+        "geo": "BufferGeometry"
+      },
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/clean/cottonwood.png",
+        "geo": "BufferGeometry"
+      },
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/oil/cottonwood.png",
+        "geo": "BufferGeometry"
+      },
+      {
+        "instance": 103,
+        "position": [
+          90.8103256225586,
+          17.359291076660156,
+          14.119132041931152
+        ],
+        "texture": "http://127.0.0.1:8811/assets/foliage/clean/cottonwood.png",
+        "geo": "BufferGeometry"
+      }
+    ]
+  }
+]

@@ -1,0 +1,1 @@
+Optional local UI artwork lives here. Transparent PNG names and piece names are listed in tasks/kids-ui.md. Add supplied PNG filenames to index.json when installing them; the static manifest prevents missing-image requests and works on static/offline servers. Placeholders and generated 3D piece snapshots work without artwork. No external CDN requests.

@@ -1,0 +1,66 @@
+[
+  {
+    "style": "oil",
+    "mood": "golden",
+    "place": "river",
+    "cloudAmount": 0.43200000000000005,
+    "audioLocked": true,
+    "file": "clouds-water-preview.png"
+  },
+  {
+    "style": "oil",
+    "mood": "golden",
+    "place": "pond",
+    "cloudAmount": 0.43200000000000005,
+    "audioLocked": true,
+    "file": "pond-preview.png"
+  },
+  {
+    "style": "oil",
+    "mood": "night",
+    "place": "river",
+    "cloudAmount": 0,
+    "audioLocked": true,
+    "file": "river-oil-night.png"
+  },
+  {
+    "style": "oil",
+    "mood": "night",
+    "place": "pond",
+    "cloudAmount": 0,
+    "audioLocked": true,
+    "file": "pond-oil-night.png"
+  },
+  {
+    "style": "clean",
+    "mood": "golden",
+    "place": "river",
+    "cloudAmount": 0.43200000000000005,
+    "audioLocked": true,
+    "file": "river-clean-golden.png"
+  },
+  {
+    "style": "clean",
+    "mood": "golden",
+    "place": "pond",
+    "cloudAmount": 0.43200000000000005,
+    "audioLocked": true,
+    "file": "pond-clean-golden.png"
+  },
+  {
+    "style": "clean",
+    "mood": "night",
+    "place": "river",
+    "cloudAmount": 0,
+    "audioLocked": true,
+    "file": "river-clean-night.png"
+  },
+  {
+    "style": "clean",
+    "mood": "night",
+    "place": "pond",
+    "cloudAmount": 0,
+    "audioLocked": true,
+    "file": "pond-clean-night.png"
+  }
+]

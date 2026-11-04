@@ -1,0 +1,50 @@
+Startup ms 8215
+boot tasks [
+  { start: 2888.9000000059605, ms: 5320 },
+  { start: 715.5, ms: 1750 },
+  { start: 2466.4000000059605, ms: 225 },
+  { start: 8210.300000011921, ms: 162 },
+  { start: 382.90000000596046, ms: 123 },
+  { start: 2725.6000000089407, ms: 101 }
+]
+{ label: 'Dreamy meadow', clickMs: 4 }
+frames { frames: 122, maxGap: 16.80000000000109 }
+{ label: 'Firefly forest', clickMs: 2.0999999940395355 }
+frames { frames: 121, maxGap: 16.80000000000109 }
+{ label: 'Golden afternoon in town', clickMs: 37.20000000298023 }
+frames { frames: 121, maxGap: 33.29999999999927 }
+{ label: 'Dreamy meadow', clickMs: 2.3999999910593033 }
+frames { frames: 121, maxGap: 16.799999999999272 }
+canvas {
+  canvas: [ 1600, 900 ],
+  resources: [
+    { name: 'meadow.png', ms: 249.90000000596046, bytes: 3695031 },
+    {
+      name: 'tree_wisteria.png',
+      ms: 249.09999999403954,
+      bytes: 3363373
+    },
+    {
+      name: 'tree_blossom.png',
+      ms: 242.20000000298023,
+      bytes: 3056664
+    },
+    { name: 'bush.png', ms: 236, bytes: 3044056 },
+    { name: 'grass.png', ms: 235.5, bytes: 2206218 },
+    {
+      name: 'flowers_yellow.png',
+      ms: 235.3999999910593,
+      bytes: 2487375
+    },
+    {
+      name: 'flowers_pink.png',
+      ms: 228.79999999701977,
+      bytes: 2607563
+    },
+    {
+      name: 'flowers_purple.png',
+      ms: 227.90000000596046,
+      bytes: 2941761
+    }
+  ]
+}

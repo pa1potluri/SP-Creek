@@ -1,0 +1,72 @@
+{
+  "clips": [
+    {
+      "file": "docs/media/sunset-cove.webp",
+      "shot": 39,
+      "width": 640,
+      "height": 360,
+      "seconds": 3.8,
+      "frames": 38,
+      "bytes": 372550,
+      "excludedCharacterMeshes": 40,
+      "encodedAnimationVerified": true
+    },
+    {
+      "file": "docs/media/balloon-ride.webp",
+      "shot": 54,
+      "width": 640,
+      "height": 360,
+      "seconds": 3.8,
+      "frames": 38,
+      "bytes": 369304,
+      "excludedCharacterMeshes": 40,
+      "encodedAnimationVerified": true
+    },
+    {
+      "file": "docs/media/market-day.webp",
+      "shot": 69,
+      "width": 640,
+      "height": 360,
+      "seconds": 3.8,
+      "frames": 38,
+      "bytes": 475280,
+      "excludedCharacterMeshes": 40,
+      "encodedAnimationVerified": true
+    },
+    {
+      "file": "docs/media/rainbow.webp",
+      "shot": 79,
+      "width": 640,
+      "height": 360,
+      "seconds": 3.8,
+      "frames": 38,
+      "bytes": 440496,
+      "excludedCharacterMeshes": 48,
+      "encodedAnimationVerified": true
+    },
+    {
+      "file": "docs/media/garden-growth.webp",
+      "shot": 76,
+      "width": 640,
+      "height": 360,
+      "seconds": 3.8,
+      "frames": 38,
+      "bytes": 362860,
+      "excludedCharacterMeshes": 40,
+      "encodedAnimationVerified": true
+    },
+    {
+      "file": "docs/media/lantern-evening.webp",
+      "shot": 27,
+      "width": 640,
+      "height": 360,
+      "seconds": 3.8,
+      "frames": 38,
+      "bytes": 727318,
+      "excludedCharacterMeshes": 40,
+      "encodedAnimationVerified": true
+    }
+  ],
+  "audioLocked": true,
+  "errors": []
+}

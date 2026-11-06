@@ -3,20 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SP Creek: a gentle 3D valley for children</title>
-<meta name="description" content="A gentle, hand-painted 3D valley for children. Calm videos, building and simple play in your browser: friendly townsfolk, a cosy café, forests with fireflies, a flower meadow and a hot air balloon. Nothing scary, nothing to install.">
-<meta name="theme-color" content="#1c1612">
-<link rel="canonical" href="https://pa1potluri.github.io/SP-Creek/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="SP Creek">
-<meta property="og:title" content="SP Creek: a gentle 3D valley for children">
-<meta property="og:description" content="Calm videos, building and simple play in a hand-painted western valley. Day and night, four seasons, nothing scary. Plays in your browser.">
-<meta property="og:url" content="https://pa1potluri.github.io/SP-Creek/">
-<meta property="og:image" content="https://raw.githubusercontent.com/pa1potluri/SP-Creek/main/docs/images/town-day.png">
-<meta property="og:image:width" content="960">
-<meta property="og:image:height" content="600">
-<meta property="og:image:alt" content="Main street of SP Creek at golden hour">
-<meta name="twitter:card" content="summary_large_image">
+<title>SP Creek</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
 <script type="importmap">
@@ -25,6 +12,9 @@
   "three/addons/": "./vendor/three/examples/jsm/"
 } }
 </script>
+<link rel="stylesheet" href="adventure-theme.css">
+<link rel="stylesheet" href="layout-v2.css">
+<link rel="stylesheet" href="adventure-layout.css">
 </head>
 <body>
 <canvas id="view"></canvas>
@@ -230,12 +220,12 @@
     <label class="row"><span>Sign text</span><input id="buildSign" type="text" maxlength="60" value="GENERAL STORE"></label>
     <p class="hint">Floors and signs apply to shops, hotels, houses and barns. Width scales the chapel and towers.</p>
     <div class="btnrow"><button id="deleteBuilding" disabled>Delete selected (Delete)</button><button id="clearBuilt">Remove all built</button></div>
-    <div class="btnrow"><button id="replayBuild">Replay build</button></div>
+    <div class="btnrow"><button id="saveBuild">Save world</button><button id="replayBuild">Replay build</button></div>
     <label class="row"><span>Pieces per second</span><input id="replaySpeed" type="range" min="1" max="5" step="0.5" value="2"><output>2</output></label>
     <div id="buildSelection" class="hint">No building selected</div>
     <h3>Dirt roads</h3>
     <fieldset id="terrainTools"><legend>Terrain workshop</legend>
-    <p class="hint">Open the workshop where you are, choose a brush and click the ground. Soften makes steep slopes gentle. Each click saves automatically. Towns, water and railway stay protected.</p>
+    <p class="hint">Open the workshop where you are, choose a brush and click the ground. Soften makes steep slopes gentle. Press Save world to keep changes after a refresh. Towns, water and railway stay protected.</p>
     <button id="terrainWorkshop">Open terrain workshop</button>
     <label class="row"><span>Brush radius (m)</span><input id="terrainRadius" type="range" min="8" max="32" value="20"><output>20</output></label>
     <label class="row"><span>Strength (m)</span><input id="terrainStrength" type="range" min="0.25" max="2" step="0.25" value="1"><output>1</output></label>
@@ -251,7 +241,7 @@
   <details>
     <summary>Painted backdrop</summary>
     <p class="hint">Load a stitched 360° painting (sky + far mountains). It wraps around the whole valley.</p>
-    <a class="file" href="stitch.html">Stitch ChatGPT tiles…</a>
+    <a class="file" href="stitch.html">Stitch painted tiles…</a>
     <label class="file">Load backdrop…<input type="file" id="backdropFile" accept="image/*"></label>
     <div class="btnrow"><button id="backdropClear">Back to painted mountains</button></div>
   </details>

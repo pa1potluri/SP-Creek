@@ -1,4 +1,4 @@
-const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const { chromium } = require(process.env.PLAYWRIGHT_PATH||'playwright');
 const fs = require('fs');
 
 (async () => {

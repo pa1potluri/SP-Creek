@@ -41,13 +41,15 @@ export function buildPonyFarm(world,animals){
  rails.forEach((g,i)=>{g.updateMatrix();railInstances.setMatrixAt(i,g.matrix);const mesh=g.children[0];g.remove(mesh);if(mesh!==railSource)mesh.geometry.dispose();});
  railInstances.computeBoundingSphere();root.add(railInstances);
  const tray=new THREE.Mesh(new THREE.SphereGeometry(0.45,12,8),m.hay);tray.scale.set(1.6,0.25,1);tray.position.set(7,1.0,9.05);root.add(tray);
- const ponies=[0,1,2].map(i=>{const p=animals.makePony();p.g.scale.setScalar(0.68);p.g.position.set(i?5+i*4:7,0,i?-5+i*2:8.05);root.add(p.g);return p;});
- const babies=[];for(const [kind,x,z]of [['lamb',-5.8,9.4],['lamb',-8,5.5],['calf',-5,5],['piglet',-10,6],['piglet',-11,4],['chick',-8.5,8],['chick',-9,8.5],['chick',-10,8],['chick',-11,8.5],['duck',12,15],['duck',14,15]]){const p=animals.makeBaby(kind);p.kind=kind;p.home=V(x,kind==='duck'?0.12:0,z);p.g.position.copy(p.home);root.add(p.g);babies.push(p);}
+ const ponies=[0,1,2].map(i=>{const p=animals.makePony();p.kind='pony';p.reactAt=-Infinity;p.g.scale.setScalar(0.68);p.g.position.set(i?5+i*4:7,0,i?-5+i*2:8.05);root.add(p.g);return p;});
+ const babies=[];for(const [kind,x,z]of [['lamb',-5.8,9.4],['lamb',-8,5.5],['calf',-5,5],['piglet',-10,6],['piglet',-11,4],['chick',-8.5,8],['chick',-9,8.5],['chick',-10,8],['chick',-11,8.5],['duck',12,15],['duck',14,15]]){const p=animals.makeBaby(kind);p.kind=kind;p.reactAt=-Infinity;p.home=V(x,kind==='duck'?0.12:0,z);p.g.position.copy(p.home);root.add(p.g);babies.push(p);}
  const stars=['brother','sister'].map((role,i)=>{const p=makeCharacter(CAST[role]);p.g.position.set(i?-6.1:7,0.04,i?10.5:9.8);p.g.rotation.y=Math.PI;root.add(p.g);return p;});
  world._ribbon([[-125,-55],[-145,-42],[-164,-43],[PONY_FARM.x,-57]],2.7,world._pathMaterial(),{lift:0.07});
- const area={root,barn,pond,rails,ponies,babies,stars,y,update(t,camera){
-  ponies.forEach((p,i)=>{animals.animatePony(p,t*0.65+i,0.03);if(i===0){p.neck.rotation.x=0.55+Math.sin(t*0.4)*0.08;}else{p.g.position.x=5+i*4+Math.sin(t*0.07+i)*0.7;p.g.position.z=-5+i*2+Math.cos(t*0.06+i)*0.7;p.g.rotation.y=Math.sin(t*0.04+i)*0.3;}});
-  babies.forEach((p,i)=>{const pet=i===0,duck=p.kind==='duck';p.g.position.copy(p.home);if(!pet){p.g.position.x+=Math.sin(t*0.09+i)*0.3;p.g.position.z+=Math.cos(t*0.08+i)*0.3;}if(duck)p.g.position.y+=Math.sin(t*0.7+i)*0.015;animals.animateBaby(p,t*0.7+i,pet?0:0.15);});
+ let lastTime=0;
+ const area={root,barn,pond,rails,ponies,babies,stars,y,interactables:[...ponies,...babies].map(p=>p.g),react(hit){const friend=[...ponies,...babies].find(p=>{for(let o=hit;o;o=o.parent)if(o===p.g)return true;return false;});if(!friend)return null;friend.reactAt=lastTime;return friend.kind;},update(t,camera){
+  lastTime=t;
+  ponies.forEach((p,i)=>{const age=t-p.reactAt,hello=age>=0&&age<2.2?Math.sin(age/2.2*Math.PI):0;animals.animatePony(p,t*0.65+i,0.03);if(i===0){p.neck.rotation.x=0.55+Math.sin(t*0.4)*0.08-hello*.32;}else{p.g.position.x=5+i*4+Math.sin(t*0.07+i)*0.7;p.g.position.z=-5+i*2+Math.cos(t*0.06+i)*0.7;p.g.rotation.y=Math.sin(t*0.04+i)*0.3;}p.g.position.y=hello*.055;});
+  babies.forEach((p,i)=>{const pet=i===0,duck=p.kind==='duck',age=t-p.reactAt,hello=age>=0&&age<1.55?Math.sin(age/1.55*Math.PI):0;p.g.position.copy(p.home);if(!pet){p.g.position.x+=Math.sin(t*0.09+i)*0.3;p.g.position.z+=Math.cos(t*0.08+i)*0.3;}if(duck)p.g.position.y+=Math.sin(t*0.7+i)*0.015;p.g.position.y+=hello*.14;animals.animateBaby(p,t*0.7+i,pet?0:0.15);if(p.head)p.head.rotation.y+=hello*.22;});
   const [brother,sister]=stars;animatePerson(brother,t*0.5,0);brother.arms[1].rotation.set(-1.0+Math.sin(t*0.4)*0.04,0,-0.1);brother.elbows[1].rotation.x=-0.3;brother.headPitch=0.1;
   animatePerson(sister,t*0.4,0);sister.upper.rotation.x=0.28;sister.knees.forEach(k=>k.rotation.x=0.5);sister.headPitch=0.16;root.updateWorldMatrix(true,false);pointCharacterArm(sister,0,root.localToWorld(V(-5.8,0.75,9.9)),0.8+Math.sin(t*0.5)*0.04);
  }};world.ponyFarm=area;area.update(0,null);return area;

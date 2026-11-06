@@ -1,6 +1,6 @@
 import {walkHeight} from './world.js';
 import {setupCreateUI} from './create-ui.js';
-const PLACES=[
+export const PLACES=[
  ['Town',0,0,14],['River & mill',10,18,98],['Train station',11,65,22],
  ['Honey Bun Café',17,9,15],['Willow Creek',21,-55,80],['Old Hollow',25,125,-2],
  ['Firefly forest',26,-90,-204],['Meadow & waterfall',27,-215,4],['Crystal Mine',28,173,-106],
@@ -14,8 +14,8 @@ export function setupExploreUI(app){
  const styleScroll=(label,text,direction)=>{const b=document.createElement('button');b.type='button';b.className='styleScroll';b.textContent=text;b.title=label;b.setAttribute('aria-label',label);b.setAttribute('aria-controls','styles');b.onclick=()=>styles.scrollBy({left:direction*Math.max(120,styles.clientWidth*.75),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});return b;};
  const previous=styleScroll('Previous art styles','‹',-1),next=styleScroll('More art styles','›',1);picker.prepend(previous);picker.append(next);
  let selectedStyle=null;
- const syncStyles=()=>{const overflow=styles.scrollWidth>styles.clientWidth+2;previous.hidden=next.hidden=!overflow;previous.disabled=styles.scrollLeft<2;next.disabled=styles.scrollLeft+styles.clientWidth>=styles.scrollWidth-2;for(const b of styles.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.classList.contains('on')));const selected=styles.querySelector('button.on');if(selected&&selected!==selectedStyle){selectedStyle=selected;selected.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'});}};
- styles.addEventListener('scroll',syncStyles,{passive:true});new ResizeObserver(syncStyles).observe(styles);new MutationObserver(syncStyles).observe(styles,{subtree:true,attributes:true,attributeFilter:['class']});
+ const syncStyles=()=>{const overflow=styles.scrollWidth>styles.clientWidth+2;previous.hidden=next.hidden=!overflow;previous.disabled=styles.scrollLeft<2;next.disabled=styles.scrollLeft+styles.clientWidth>=styles.scrollWidth-2;for(const b of styles.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.classList.contains('on')));const selected=styles.querySelector('button.on');if(selected&&selected!==selectedStyle){selectedStyle=selected;selected.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'});requestAnimationFrame(()=>{const b=selected.getBoundingClientRect(),r=styles.getBoundingClientRect();if(b.right>r.right)styles.scrollLeft+=b.right-r.right+8;else if(b.left<r.left)styles.scrollLeft-=r.left-b.left+8;});}};
+ styles.addEventListener('scroll',syncStyles,{passive:true});new ResizeObserver(()=>{selectedStyle=null;syncStyles();}).observe(styles);new MutationObserver(syncStyles).observe(styles,{subtree:true,attributes:true,attributeFilter:['class']});
  styles.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key)||!e.target.matches('button'))return;const buttons=[...styles.querySelectorAll('button')],i=buttons.indexOf(e.target),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;e.preventDefault();buttons[n].focus();buttons[n].scrollIntoView({block:'nearest',inline:'nearest'});});syncStyles();
  const popup=document.createElement('section');popup.id='brushPopover';popup.hidden=true;popup.setAttribute('aria-label','Brush and finish settings');popup.append(brush);document.body.append(popup);
  const close=()=>{popup.hidden=true;toggle.setAttribute('aria-expanded','false');};
@@ -64,7 +64,7 @@ export function setupExploreUI(app){
    }
    list.querySelectorAll('button').forEach(p=>p.classList.toggle('on',p===b));app.renderClips();
   };list.append(b);}
- app.exploreUI={closeBrush:close,layout};
+ app.exploreUI={closeBrush:close,closeBuild:hideBuild,layout};
  setupCreateUI();
 }
 

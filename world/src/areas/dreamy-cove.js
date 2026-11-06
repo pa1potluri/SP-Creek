@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { WATER_Y } from '../world.js';
 import { dreamyGlow } from './dreamy-lake.js';
 
-// A small striped lighthouse on a rock past the Sunset Cove pier, with lanterns floating either side.
-export const DREAMY_COVE={x:-402,z:30};
+// One striped lighthouse on distant rocks beyond the Sunset Cove pier, with lanterns floating either side.
+export const DREAMY_COVE={x:-460,z:-55};
 const PIER_VIEW={x:-357,y:3.4,z:30};
 export function buildDreamyCove(world){
  const root=new THREE.Group();root.name='Dreamy cove lighthouse';world.root.add(root);
@@ -11,7 +11,7 @@ export function buildDreamyCove(world){
  const glow=dreamyGlow(world,root,{waterY:WATER_Y,spots,flyArea:{x:-385,z:30,rx:16,rz:10}}),halo=glow.halo;
  const mat=(color,g=0)=>new THREE.MeshLambertMaterial({color,emissive:color,emissiveIntensity:g});
  const m={rock:mat('#7f8aa0',0.04),white:mat('#f4efe4',0.06),red:mat('#e06a5a',0.06),door:mat('#6d4230'),window:mat('#ffc56b',0.9),lamp:mat('#ffe2a0',1)};
- const tower=new THREE.Group();tower.position.set(DREAMY_COVE.x,0,DREAMY_COVE.z);root.add(tower);
+ const tower=new THREE.Group();tower.position.set(DREAMY_COVE.x,0,DREAMY_COVE.z);tower.scale.setScalar(1.6);tower.name="Far-rock Cove lighthouse";root.add(tower);
  const add=(geo,material,y,x=0,z=0)=>{const o=new THREE.Mesh(geo,material);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;tower.add(o);return o;};
  add(new THREE.DodecahedronGeometry(3.2,1).scale(1,0.55,1),m.rock,-1.3);add(new THREE.CylinderGeometry(2.4,2.6,0.6,20),m.rock,0.6);
  add(new THREE.CylinderGeometry(1,1.4,8,20),m.white,4.9);

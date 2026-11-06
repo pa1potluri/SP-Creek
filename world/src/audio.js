@@ -84,6 +84,63 @@ export class AudioEngine {
     voice.onended=()=>{voice.disconnect();filter.disconnect();gain.disconnect();};
   }
 
+  chime(event) {
+    if (!event?.isTrusted) return;
+    this.ensure();
+    const ctx = this.ctx, start = ctx.currentTime;
+    [660, 880, 1050].forEach((frequency, index) => {
+      const voice = ctx.createOscillator(), gain = ctx.createGain();
+      const t = start + index * 0.08;
+      voice.type = 'sine';
+      voice.frequency.setValueAtTime(frequency, t);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.022 * this.ambVol, t + 0.025);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+      voice.connect(gain).connect(this.master); voice.start(t); voice.stop(t + 0.3);
+      voice.onended = () => { voice.disconnect(); gain.disconnect(); };
+    });
+  }
+
+  fairPhrase(event, solo=false) {
+    if(!event?.isTrusted)return;
+    this.ensure();this.fairUnlocked=true;this._fairNotes(solo);
+  }
+  fairTick(time){if(!this.fairActive||!this.fairUnlocked||!this.ctx||time<(this.nextFair??0))return;this.nextFair=time+4.8;this._fairNotes(false);}
+  stopFair(){for(const o of this.fairVoices||[])try{o.stop();}catch{}this.fairVoices?.clear();this.nextFair=0;}
+  _fairNotes(solo){this.fairVoices??=new Set();const start=this.ctx.currentTime;[392,440,494,587,494,440,392,330].forEach((f,i)=>{const o=this.ctx.createOscillator(),g=this.ctx.createGain(),t=start+i*.6;o.type=solo?'sine':'triangle';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.012*this.ambVol,t+.04);g.gain.exponentialRampToValueAtTime(.0001,t+.5);o.connect(g).connect(this.master);this.fairVoices.add(o);o.start(t);o.stop(t+.52);o.onended=()=>{this.fairVoices.delete(o);o.disconnect();g.disconnect();};});}
+
+  animalHello(event, kind = 'friend') {
+    if (!event?.isTrusted) return;
+    this.ensure();
+    const ctx = this.ctx, start = ctx.currentTime;
+    const notes = kind === 'pony' ? [330, 392] : [440, 520];
+    notes.forEach((frequency, index) => {
+      const voice = ctx.createOscillator(), gain = ctx.createGain();
+      const t = start + index * 0.12;
+      voice.type = kind === 'pony' ? 'triangle' : 'sine';
+      voice.frequency.setValueAtTime(frequency, t);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.018 * this.ambVol, t + 0.035);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
+      voice.connect(gain).connect(this.master); voice.start(t); voice.stop(t + 0.28);
+      voice.onended = () => { voice.disconnect(); gain.disconnect(); };
+    });
+  }
+
+  ghostGiggle(event) {
+    if (!event?.isTrusted) return;
+    this.ensure();
+    const ctx = this.ctx, start = ctx.currentTime;
+    [540, 660].forEach((frequency, index) => {
+      const voice = ctx.createOscillator(), gain = ctx.createGain();
+      const t = start + index * 0.13;
+      voice.type = 'sine'; voice.frequency.setValueAtTime(frequency, t);
+      gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(0.014 * this.ambVol, t + 0.03); gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+      voice.connect(gain).connect(this.master); voice.start(t); voice.stop(t + 0.27);
+      voice.onended = () => { voice.disconnect(); gain.disconnect(); };
+    });
+  }
+
   // Every frame: the soundscape follows where the camera (or player) is and the mood.
   // While a video renders, the state is recorded instead, for renderOffline.
   tick(state, dt) {

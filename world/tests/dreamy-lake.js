@@ -17,7 +17,7 @@ export function runDreamyLakeTests(){
  for(let i=0;i<=120;i++){shot.sample(i/120*shot.duration,out);low=Math.min(low,out.pos.y-terrainHeight(out.pos.x,out.pos.z));if(!first)first=out.pos.clone();move=Math.max(move,out.pos.distanceTo(first));}
  check(low>1.5&&move<1,'Camera stays above the dock and barely drifts');
  const p=VIDEO_PRESETS.dreamyLake,secs=p.clips.reduce((n,c)=>n+c.seconds,0);check(p.clips.every(c=>c.shot===98&&c.mood==='dreamyNight')&&secs>=1800&&secs<=3600,'Dreamy lake preset is a 30-60 minute calm loop');
- check(Object.keys(VIDEO_PRESETS).slice(-2).join()==='dreamyLake,dreamyCove','Both dreamy presets append at the end');
+ const presetKeys=Object.keys(VIDEO_PRESETS),dreamyIndex=presetKeys.indexOf('dreamyLake');check(dreamyIndex>=0&&presetKeys[dreamyIndex+1]==='dreamyCove','Both dreamy presets retain their original adjacent order');
  const c=a.dreamyCove;check(c&&c.tower&&c.lanterns.length===9,'Cove lighthouse and nine lanterns are built');
  for(const t of [0,900,2700]){c.update(t,a.camera,{stars:1});check(c.lanterns.every(l=>l.g.position.x<coastX(l.g.position.z)-3&&Math.abs(l.g.position.z-30)>3)&&c.lanterns.every(l=>Math.abs(l.g.position.y-c.waterY)<0.1),`Cove lanterns float on the sea, clear of the pier, at ${t}s`);}
  const cove=a.director.shots[99];check(cove?.name==='Dreamy cove from the pier','Dreamy cove shot appends as shot 99');

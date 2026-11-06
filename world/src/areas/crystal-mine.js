@@ -103,6 +103,13 @@ export function buildCrystalMine(world) {
   const clearTrail=(x,z)=>{for(let i=0;i<=96;i++){const p=approach.getPointAt(i/96);if(Math.hypot(x-p.x,z-p.z)<3.8)return false;}return x<196||x>208||z<-150.5||z>-139.5;};
   for(let i=0;i<34;i++){const a=i*2.399,x=202+Math.cos(a)*(9+(i%5)*1.6),z=-145+Math.sin(a)*(8+(i%4)*2);if(!clearTrail(x,z))continue;const h=world.groundY(x,z),s=.6+(i%4)*.18;ball(1,greens[i%3],x,h+.35*s,z,root,[s,.65*s,s*.8]);world.colliders.circles.push({x,z,r:s*.7});planting.push({x,z,r:s*.7});if(i%3===0)solid(new THREE.DodecahedronGeometry(.45,1).scale(1.2,.7,1),rockMats[i%3],x+s,h+.2,z+.4);for(let j=0;j<5;j++){const fx=x+Math.cos(j*2.4)*(s+.4),fz=z+Math.sin(j*2.4)*(s+.4),fy=world.groundY(fx,fz);ball(.12,petals[(i+j)%3],fx,fy+.22,fz,root,[1,.55,1]);}}
   const balloon=group(202,top.y+.2,-145);
+  // A single, bright valley star makes the playable scenic loop feel like a little journey.
+  const rewardShape=new THREE.Shape();
+  for(let i=0;i<10;i++){const a=Math.PI/2+i*Math.PI/5,r=i%2?.3:.68,x=Math.cos(a)*r,z=Math.sin(a)*r;if(!i)rewardShape.moveTo(x,z);else rewardShape.lineTo(x,z);}rewardShape.closePath();
+  const viewStar=new THREE.Group();viewStar.name='Balloon valley star';
+  const starMesh=new THREE.Mesh(new THREE.ExtrudeGeometry(rewardShape,{depth:.1,bevelEnabled:true,bevelSize:.035,bevelThickness:.035,bevelSegments:2}),new THREE.MeshLambertMaterial({color:'#ffda6e',emissive:'#a86a12',emissiveIntensity:.7}));starMesh.geometry.center();starMesh.castShadow=true;viewStar.add(starMesh);
+  const starHalo=new THREE.Sprite(new THREE.SpriteMaterial({map:world.haloMat.map,color:'#ffe7a2',transparent:true,opacity:.52,depthWrite:false}));starHalo.scale.setScalar(2.4);starHalo.position.z=-.08;viewStar.add(starHalo);root.add(viewStar);
+  let valleyStarClaimed=false;
   const basketCollider={cx:202,cz:-145,ax:1,az:0,bx:0,bz:1,hx:.98,hz:.85};
   world.colliders.rects.push(basketCollider);
   const wicker=mat('#d8b77f');
@@ -128,14 +135,15 @@ export function buildCrystalMine(world) {
   for(const [x,z]of [[198,-149],[206,-149],[198,-141]]){box(0.08,2.1,0.08,wood,x,top.y+1.1,z);const g=group(x,top.y+1.9,z);solid(new THREE.PlaneGeometry(0.8,0.45),petals[flags.length%3],0.4,0,0,g);flags.push(g);}
   const positions=new Float32Array(90*3),geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));const sparkles=new THREE.Points(geo,new THREE.PointsMaterial({color:'#f6e5f5',size:0.1,transparent:true,opacity:0.7,depthWrite:false,blending:THREE.AdditiveBlending}));sparkles.frustumCulled=false;root.add(sparkles);
   for(const {parent,m,geos}of buckets.values()){const mesh=new THREE.Mesh(mergeGeometries(geos),m);mesh.castShadow=mesh.receiveShadow=true;parent.add(mesh);for(const g of geos)g.dispose();}root.updateMatrixWorld(true);
-  world.balloonRide={balloon,top};
-  return {root,pad,top,approach,path,deckRails,deckSupports,planting,balloon,crystalMats,clusters,sparkles,ropes,update(t,atmos){
+  world.balloonRide={balloon,top,viewStar,claimViewStar(){if(valleyStarClaimed)return false;valleyStarClaimed=true;viewStar.visible=false;return true;}};
+  return {root,pad,top,approach,path,deckRails,deckSupports,planting,balloon,viewStar,crystalMats,clusters,sparkles,ropes,update(t,atmos){
     const night=Math.max(atmos.stars,world.lanternLevel),wind=Math.min(1.5,Math.abs(world.wind??1));
     crystalMats.forEach((m,i)=>m.emissiveIntensity=0.22+night*0.2+Math.sin(t*0.35+i)*0.025);
     glowMats.forEach((m,i)=>m.opacity=0.12+night*0.08+Math.sin(t*0.6+i)*0.015);
     const ride=balloonRideState();
     balloon.position.set(202+Math.sin(t*0.19)*0.08*wind,top.y+.2+Math.sin(t*0.35)*.025,-145+Math.cos(t*0.17)*.06*wind);balloon.rotation.z=Math.sin(t*0.2)*0.01*wind;
     if(ride){balloon.position.copy(sampleBalloonRide(ride.t));balloon.rotation.z=0;}
+    const reward=sampleBalloonRide(112);viewStar.position.set(reward.x,reward.y+2.3,reward.z);viewStar.rotation.y=t*.7;viewStar.visible=!!ride&&!valleyStarClaimed;
     const colliderIndex=world.colliders.rects.indexOf(basketCollider);
     if(ride&&colliderIndex>=0)world.colliders.rects.splice(colliderIndex,1);
     if(!ride){basketCollider.cx=balloon.position.x;basketCollider.cz=balloon.position.z;if(colliderIndex<0)world.colliders.rects.push(basketCollider);}

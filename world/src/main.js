@@ -1,3 +1,8 @@
+import {setupAdventureLayout} from './adventure-layout.js';
+import {setupLayoutV2} from './layout-v2.js';
+import {setDreamyAnime} from './dreamy-anime.js';
+import {setupAdventureFlow} from './adventure-flow.js';
+import {updateStarVisibility} from './characters.js';
 import * as THREE from 'three';
 import {setupKidsUI} from './kids-ui.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -35,6 +40,10 @@ import { buildMeadowLake } from './areas/meadow-lake.js';
 import { buildDreamyLake } from './areas/dreamy-lake.js';
 import { buildDreamyCove } from './areas/dreamy-cove.js';
 import { buildCrystalMine, setBalloonGameReader } from './areas/crystal-mine.js';
+import { buildHiddenStars } from './play/hidden-stars.js';
+import { buildMyCottage } from './play/my-cottage.js';
+import { buildRewardBook } from './play/reward-book.js';
+import { buildFairDay } from './areas/fair-day.js';
 
 const $ = (s) => document.querySelector(s);
 const LS = {
@@ -58,21 +67,25 @@ const mountains = createMountains();
 scene.add(sky, mountains.group);
 // Painted textures (e.g. made in ChatGPT) in assets/textures/oil/ and assets/textures/clean/
 // replace the built-in ones; the art style picks which set is shown.
-const painted = { oil: {}, clean: {} };
+const painted = { oil: {}, clean: {}, anime: {} };
+const ANIME_TEXTURES=['meadow','road','beach_sand','cobblestones','house_boards','roof','stone','backdrop'];
 const TEXTURE_NAMES = ['log_wall', 'brick_wall', 'barn_boards', 'chapel_boards', 'house_boards', 'window', 'door', 'wall_boards', 'wallpaper', 'floor', 'roof', 'dark_wood', 'meadow', 'road', 'boards', 'stone', 'backdrop'];
-await Promise.all(Object.keys(painted).flatMap((set) => TEXTURE_NAMES.map((name) => new Promise((done) => {
+await Promise.all(Object.keys(painted).flatMap((set) => (set==='anime'?ANIME_TEXTURES:TEXTURE_NAMES).map((name) => new Promise((done) => {
   const img = new Image();
   img.onload = () => { painted[set][name] = img; done(); };
   img.onerror = done; // not there yet: keep the code-made texture
   img.src = `assets/textures/${set}/${name}.png`;
 }))));
 // painted plant cut-outs: assets/foliage/<set>/<name>.png
-await Promise.all(Object.keys(painted).flatMap((set) => ['cottonwood', 'pine', 'bush', 'grass', 'flowers', 'cactus'].map((name) => new Promise((done) => {
+await Promise.all(Object.keys(painted).flatMap((set) => (set==='anime'?['cottonwood','pine','bush','grass','flowers']:['cottonwood', 'pine', 'bush', 'grass', 'flowers', 'cactus']).map((name) => new Promise((done) => {
   const img = new Image();
   img.onload = () => { (painted[set].foliage ??= {})[name] = img; done(); };
   img.onerror = done;
   img.src = `assets/foliage/${set}/${name}.png`;
 }))));
+// Only approved Anime paintings override clean; aliases reuse images rather than extra files.
+painted.anime={...painted.clean,...painted.anime,foliage:{...painted.clean.foliage,...painted.anime.foliage}};
+painted.anime.boards=painted.anime.wall_boards=painted.anime.house_boards;painted.anime.terracotta_roof=painted.anime.roof;
 const world = new World(scene, painted);
 const atmos = new Atmosphere(scene, renderer, world, sky, mountains);
 const director = new Director(camera, canvas);
@@ -83,6 +96,12 @@ const life = new Life(scene, world);
 const game = new Game({ scene, camera, canvas, world, life, director });
 setBalloonGameReader(()=>game.active?game.balloon:null);
 const cafe = new CafeInterior(world);
+const hiddenStars = buildHiddenStars(world, audio);
+const rewardBook = buildRewardBook();
+const fairDay = buildFairDay(world,audio,rewardBook);
+const fairControl=document.createElement('button');fairControl.textContent='Fair Day: Off';fairControl.type='button';
+fairControl.onclick=e=>{fairDay.setActive(!fairDay.root.visible);if(fairDay.root.visible)audio.fairPhrase(e);fairControl.textContent='Fair Day: '+(fairDay.root.visible?'On':'Off');};
+document.querySelector('#panel').append(fairControl);
 const townCenter = buildTownCenter(world, life);
 const ghostTown = buildGhostTown(world);
 const forest = buildForest(world);
@@ -172,9 +191,11 @@ function resize(fw, fh) {
 addEventListener('resize', () => { if (!exporting) resize(); });
 
 // ---------- saved state ----------
-world.loadLayout(LS.get('dh.layout') || []);
+world.loadLayout(LS.get('dh.layoutSaved') ? (LS.get('dh.layout') || []) : []);
+const cottage = buildMyCottage(world);
 for (const [pos, look] of LS.get('dh.keys') || []) director.custom.push({ pos: new THREE.Vector3(...pos), look: new THREE.Vector3(...look) });
-const saveLayout = () => LS.set('dh.layout', world.layout());
+const saveLayout = (explicit=false) => {if(explicit){LS.set('dh.layout',world.layout());LS.set('dh.layoutSaved',true);}if(window.__app)setDreamyAnime(scene,styleKey==='anime');};
+$('#saveBuild').onclick=()=>{saveLayout(true);flash('World saved on this computer');};
 const saveKeys = () => LS.set('dh.keys', director.custom.map((k) => [k.pos.toArray(), k.look.toArray()]));
 
 // ---------- sliders ----------
@@ -276,6 +297,7 @@ function applyStyle(key) {
   fxaa.enabled = s.fxaa;
   fin.uniforms.uWeave.value = s.weave;
   applyTextures();
+  setDreamyAnime(scene,styleKey==='anime');
   styleButtons.forEach(([k, b]) => {b.classList.toggle('on', k === styleKey);b.setAttribute('aria-pressed',String(k===styleKey));});
   document.querySelectorAll('[data-for]').forEach((row) => row.classList.toggle('off', !row.dataset.for.split(' ').includes(styleKey)));
 }
@@ -295,7 +317,7 @@ $('#texSet').onchange = applyTextures;
 document.querySelector('[data-paint="strength"]').addEventListener('input', (e) => (oil.enabled = +e.target.value > 0));
 // The kids' channel opens in the Animated-film look; a style is remembered only when the user picks
 // one (the old key 'dh.style' was written on every load and by presets, so it is ignored).
-applyStyle(LS.get('dh.styleChoice') || 'film');
+applyStyle(LS.get('dh.styleChoice') || 'anime');
 setLife(LS.get('dh.life'));
 
 // ---------- camera ----------
@@ -384,15 +406,20 @@ function showToolHint() {
 propButtons.forEach((b) => (b.onclick = () => setTool(b.dataset.prop)));
 canvas.addEventListener('pointerdown', (e) => (down = { x: e.clientX, y: e.clientY }));
 canvas.addEventListener('pointerup', (e) => {
+  if(game.active && e.button===0 && !tool){const r=canvas.getBoundingClientRect();ndc.set(document.pointerLockElement===canvas?0:(e.clientX-r.left)/r.width*2-1,document.pointerLockElement===canvas?0:1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(ndc,camera);if(hiddenStars.tryCollect(raycaster,e))return;}
+  if(fairDay.root.visible&&e.button===0&&down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<5){const r=canvas.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(ndc,camera);if(fairDay.tap(raycaster,e,game))return;}
   if (game.active || e.button !== 0 || !down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 5) return;
   const r = canvas.getBoundingClientRect();
   ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   raycaster.setFromCamera(ndc, camera);
   if (!tool) {
+    if (hiddenStars.tryCollect(raycaster, e)) return;
+    const ponyFarm=life.ponyFarm;
+    if(ponyFarm){const hit=raycaster.intersectObjects(ponyFarm.interactables,true)[0];if(hit){const kind=ponyFarm.react(hit.object);if(kind){audio.animalHello(e,kind);return;}}}
     const pondDucks=world.momentProps?.pondDucks;
     if(pondDucks?.root.visible){const hit=raycaster.intersectObjects(pondDucks.birds,true)[0];if(hit){const cover=raycaster.intersectObjects([world.ground,world.hamlet.pond.obj],true).find(h=>h.distance<hit.distance-.05&&h.object.isMesh&&!h.object.material?.transparent);if(!cover&&pondDucks.react(hit.object,camera.position)){audio.quack(e);return;}}}
     const ghostHit=raycaster.intersectObjects(ghostTown.ghosts.map(e=>e.g),true)[0];
-    if(ghostHit){const solidHit=raycaster.intersectObjects([world.ground,ghostTown.root],true).find(h=>h.distance<ghostHit.distance-.05&&h.object.isMesh&&!h.object.material?.transparent);if(!solidHit&&ghostTown.react(ghostHit.object))return;}
+    if(ghostHit){const solidHit=raycaster.intersectObjects([world.ground,ghostTown.root],true).find(h=>h.distance<ghostHit.distance-.05&&h.object.isMesh&&!h.object.material?.transparent);if(!solidHit&&ghostTown.react(ghostHit.object)){rewardBook.meetGhost();audio.ghostGiggle(e);return;}}
     const selected = raycaster.intersectObjects([...world.buildings, ...world.fences].map((b) => b.obj), true)[0];
     selectBuilding(selected ? [...world.buildings, ...world.fences].find((b) => { let o = selected.object; while (o && o !== b.obj) o = o.parent; return o === b.obj; }) : null);
     return;
@@ -401,7 +428,7 @@ canvas.addEventListener('pointerup', (e) => {
   if (!hit) return;
   if(tool.startsWith('terrain:')) {
     const ok=world.shapeTerrain({mode:tool.split(':')[1],x:hit.point.x,z:hit.point.z,radius:+$('#terrainRadius').value,amount:+$('#terrainStrength').value,target:terrainHeight(hit.point.x,hit.point.z)});
-    if(ok){saveLayout();flash('Terrain saved');}else flash('That spot is protected (town, water or railway). Try open hills and fields.');return;
+    if(ok){saveLayout();flash('Terrain changed · Save world to keep it');}else flash('That spot is protected (town, water or railway). Try open hills and fields.');return;
   }
   if (tool.startsWith('build:')) {
     world.placeBuilding(buildSpec(hit.point)); saveLayout(); return;
@@ -509,7 +536,7 @@ function previewRoad(cursor) {
 function finishRoad() {
   if (roadPoints.length < 2) return flash('Click at least two different road points');
   if (tool === 'fence') world.addFence(roadPoints); else world.addRoad(roadPoints, +$('#roadWidth').value);
-  const kind=tool==='fence'?'Fence':'Road';setTool(null);saveLayout();flash(`${kind} saved`);
+  const kind=tool==='fence'?'Fence':'Road';setTool(null);saveLayout(true);flash(`${kind} saved`);
 }
 buildButtons.forEach((b) => { b.onclick = () => {
   if (b.dataset.build === 'hotel') $('#buildFloors').value = 2;
@@ -565,8 +592,8 @@ $('#terrainWorkshop').onclick=()=>{
 };
 document.querySelectorAll('[data-terrain]').forEach(b=>b.onclick=()=>setTool('terrain:'+b.dataset.terrain));
 for(const id of ['terrainRadius','terrainStrength'])$('#'+id).oninput=()=>{$('#'+id).nextElementSibling.textContent=$('#'+id).value;};
-$('#terrainUndo').onclick=()=>{if(world.undoTerrain()){saveLayout();flash('Terrain undone and saved');}};
-$('#terrainReset').onclick=()=>{if(confirm('Reset terrain edits? You can undo this reset.')&&world.resetTerrain()){saveLayout();flash('Terrain reset and saved');}};
+$('#terrainUndo').onclick=()=>{if(world.undoTerrain()){saveLayout();flash('Terrain undone · Save world to keep it');}};
+$('#terrainReset').onclick=()=>{if(confirm('Reset terrain edits? You can undo this reset.')&&world.resetTerrain()){saveLayout();flash('Terrain reset · Save world to keep it');}};
 $('#drawRoad').onclick = () => setTool('road');
 $('#drawFence').onclick = () => setTool('fence');
 $('#finishFence').onclick = finishRoad;
@@ -768,6 +795,13 @@ $('#tlLoop').onchange = () => (timeline.loop = $('#tlLoop').checked);
 renderClips();
 
 // ---------- ready-made videos ----------
+const watchState={playing:false};
+function stopWatch(){
+  if(!watchState.playing)return;
+  timeline.stop();director.auto=false;director.paused=true;fairDay.setActive(false);audio.pauseLive();
+  watchState.playing=false;document.dispatchEvent(new Event('watchchange'));refreshTimeline();
+}
+
 const videoPresetButtons = Object.entries(VIDEO_PRESETS).map(([key, p]) => {
   const b = document.createElement('button');
   b.innerHTML = `<b>${p.label}</b><span>${p.about}</span>`;
@@ -775,8 +809,10 @@ const videoPresetButtons = Object.entries(VIDEO_PRESETS).map(([key, p]) => {
   $('#videoPresets').append(b);
   return [key, b];
 });
-function applyVideoPreset(key) {
+function applyVideoPreset(key, {single=false}={}) {
+  watchState.playing=single;director.paused=false;
   const p = VIDEO_PRESETS[key];
+  fairDay.setActive(!!p?.fair);
   game.exit();
   timeline.stop();
   if ($('#presetStyle').checked) applyStyle(p.style);
@@ -789,13 +825,14 @@ function applyVideoPreset(key) {
   setSlider('audio', 'ambience', p.ambience);
   setLife({ ...BASE_LIFE, ...p.life });
   if (p.train && life.train) life.train.call();
-  timeline.clips = p.clips.map((c) => ({ ...c }));
+  timeline.clips = (single?p.clips.slice(0,1):p.clips).map((c) => ({ ...c }));
   saveTimeline();
   renderClips();
   // preview it, looping, and get the render set up for a long looped video
-  $('#tlLoop').checked = timeline.loop = true;
+  $('#tlLoop').checked = timeline.loop = !single;
   director.auto = false;
   timeline.start();
+  document.dispatchEvent(new Event('watchchange'));
   audio.restartMusic();
   $('#renderWhat').value = 'loop';
   $('#renderWhat').onchange();
@@ -836,6 +873,7 @@ function loadProject(p) {
   director.custom = (p.keys || []).map(([pos, l]) => ({ pos: new THREE.Vector3(...pos), look: new THREE.Vector3(...l) }));
   setTool(null);
   world.loadLayout(p.layout || []);
+  cottage.rebuild();
   saveTimeline();
   saveKeys();
   saveLayout();
@@ -843,6 +881,7 @@ function loadProject(p) {
   refreshCamera();
 }
 $('#projSave').onclick = () => {
+  saveLayout(true);
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(projectData(), null, 2)], { type: 'application/json' }));
   a.download = 'sp-creek-project.json';
@@ -952,7 +991,7 @@ async function renderVideo({ w, h, fps, seconds, useTimeline, loop = false, soun
 }
 window.__renderVideo = renderVideo; // handy for testing from the console
 window.__life = life;
-window.__app = { seasons, setSeason, setWeather, setFestival, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, dreamyLake, dreamyCove, crystalMine, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
+window.__app = { clearTool:()=>setTool(null), watchState, stopWatch, watchVideo:key=>applyVideoPreset(key,{single:true}), seasons, setSeason, setWeather, setFestival, world, camera, life, cafe, townCenter, ghostTown, forest, meadowLake, dreamyLake, dreamyCove, crystalMine, hiddenStars, cottage, rewardBook, setFamilyMode, projectData, loadProject, applyStyle, timeline, director, renderClips, game, audio, listener, atmos, step: (dt) => step(dt) };
 
 // ---------- playable mode ----------
 let helpTimer = 0;
@@ -968,7 +1007,8 @@ game.onChange = () => {
   $('#playBtn').textContent = game.active ? 'Gameplay: On' : 'Gameplay: Off';
   $('#playBtn').setAttribute('aria-pressed',String(game.active));
   $('#playBtn').classList.toggle('on', game.active);
-  document.body.classList.toggle('ui-hidden', game.active);
+  document.body.classList.remove('ui-hidden');
+  if(game.active){const panel=document.querySelector('#kidsPanel');if(panel)panel.hidden=true;document.body.classList.add('kids-world');}
   $('#gameHelp').classList.toggle('hidden', !game.active);
   $('#gameHelp').classList.remove('faded');
   clearTimeout(helpTimer);
@@ -1066,20 +1106,27 @@ function listener() {
 function step(dt) {
   const motionDt=dt*(window.__app?.showcase?.playing?0.4:1);
   time += motionDt;
-  if (timeline.update(dt) === 'ended') refreshTimeline();
+  if (timeline.update(dt) === 'ended') {if(watchState.playing)stopWatch();refreshTimeline();}
   if (game.active) game.update(dt);
   else director.update(dt);
   world.wind=life.settings.wind*(atmos.weather==='windy'?2.2:1);
   atmos.update(motionDt, time, camera);
   seasons.update(time,camera);
   world.update(motionDt, time, camera);
+  const cinematic = exporting || timeline.playing || !!window.__app?.showcase?.playing;
+  const menu = document.querySelector('#kidsPanel');
+  hiddenStars.setVisible(game.active && !cinematic && !document.body.classList.contains('ui-hidden') && (!menu || menu.hidden || document.querySelector('#kidsUI')?.hidden));
+  cottage.setVisible(!cinematic);
+  hiddenStars.update(time);
+  fairDay.update(time,game);
   townCenter.update(time);
   ghostTown.update(time, game.active ? game.pos : null, atmos.cur);
   if (world.areaAnimationVisible(camera,-90,forest.pad.y+10,-204,90)) forest.update(time, camera, atmos.cur);
   if (world.areaAnimationVisible(camera,-225,meadowLake.pad.y+10,0,110)) meadowLake.update(time, camera, atmos.cur, atmos.key);
   if (world.areaAnimationVisible(camera,-240,meadowLake.pad.y+5,-12,40)) dreamyLake.update(time, camera, atmos.cur);
   crystalMine.update(time, atmos.cur);
-  life.player = game.active ? game.pos : null; // townsfolk greet you as you pass
+  if (game.balloon?.valleyStar) rewardBook.seeViewpoint();
+  life.player = game.person.g.visible ? game.pos : null; // townsfolk greet you as you pass
   life.update(motionDt, time, camera);
   sunsetCove.update(time,camera,atmos.cur);
   if (camera.position.x < -280) dreamyCove.update(time, camera, atmos.cur);
@@ -1087,11 +1134,14 @@ function step(dt) {
   camping.update(time,camera,atmos.cur);
   cafe.update(motionDt, time, [game.active ? game.pos : null, camera.position], world.lanternLevel);
   tickCharacters(time);
+  window.__app?.adventureFlow?.update();
+  updateStarVisibility();
   // Gameplay uses the player's avatar; cinematic rides keep their existing pair.
   if(game.balloon)for(const rider of life.balloonRiders||[])rider.g.visible=false;
   audio.tick(listener(), dt);
   if (backdrop) {
-    backdrop.position.set(camera.position.x, 2, camera.position.z);
+    const backdropY=textureSet==='anime'&&!userBackdrop?camera.position.y+backdrop.geometry.parameters.height*.42:2;
+    backdrop.position.set(camera.position.x,backdropY,camera.position.z);
     // the painting is golden hour: tint it toward the current mood, and as the stars come out
     // fade it so the live night sky (stars, moon, mountain silhouettes) takes over
     const c = atmos.cur, day = THREE.MathUtils.clamp(c.sunIntensity / 3.2, 0.28, 1);
@@ -1155,7 +1205,12 @@ function frame() {
 }
 atmos.setPreset('golden', true);
 setupExploreUI(window.__app);
+window.__app.fairDay=fairDay;
+const beforeAnimeBuild=world.onBuildingsChanged;world.onBuildingsChanged=()=>{beforeAnimeBuild?.();setDreamyAnime(scene,styleKey==='anime');};
+window.__app.adventureFlow=setupAdventureFlow(window.__app);
 setupKidsUI(window.__app);
+setupLayoutV2(window.__app);
+setupAdventureLayout(window.__app);
 document.querySelector('#createLaunch')?.remove();
 document.querySelector('#createScreen')?.remove();
 frame();

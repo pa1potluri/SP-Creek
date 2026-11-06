@@ -204,7 +204,25 @@ function joint(parent, x, y, z) {
 // ---------- the body ----------
 const live = new Set(); // WeakRefs, for blinking and idle glances
 
+let starsEnabled = new URLSearchParams(location.search).get('stars') === '1';
+const starAppearances = new Set(), starLayers = new WeakMap();
+export const getStarsEnabled = () => starsEnabled;
+export function updateStarVisibility() {
+  for (const ref of starAppearances) {
+    const group=ref.deref();if(!group){starAppearances.delete(ref);continue;}
+    group.traverse(o=>{if(!starLayers.has(o))starLayers.set(o,o.layers.mask);o.layers.mask=starsEnabled?starLayers.get(o):0;});
+  }
+}
+export function setStarsEnabled(on) { starsEnabled=!!on;updateStarVisibility(); }
 export function makeCharacter(outfit = CAST.cowboy) {
+  const person = buildCharacter(outfit);
+  if (outfit.star === 'brother' || outfit.star === 'sister') {
+    // Render/picking layers keep the single pause switch separate from choreography visibility caches.
+    person.g.userData.storyStar=outfit.star;starAppearances.add(new WeakRef(person.g));updateStarVisibility();
+  }
+  return person;
+}
+function buildCharacter(outfit) {
   const pipelineId=selectCharacterProfile(outfit);
   if(outfit.star&&starSources[outfit.star]&&!pipelineId)return makeStarCharacter(outfit);
   const o = { skin: '#e9b48c', hair: '#5a3a22', eyes: '#4a2c18', shirt: '#efe2c6', pants: '#4a4038', boots: '#4a3020', belt: '#4a2e1a', buckle: GOLD, build: 1, sleeves: 'long', hat: 'none', hairStyle: 'short', ...outfit };

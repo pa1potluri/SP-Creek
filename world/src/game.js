@@ -90,30 +90,22 @@ export class Game {
     addEventListener('keyup', (e) => this.keys.delete(e.code));
     addEventListener('blur', () => this.keys.clear());
     // mouse look: pointer lock after a click, or drag with the button held
-    let dragging = false, last = null;
+    let dragging = false;
     this.canvas.addEventListener('pointerdown', (e) => {
       if (!this.active || e.button !== 0) return;
       dragging = true;
-      last = { x: e.clientX, y: e.clientY };
-      // touch screens have no pointer lock: a finger drag steers instead
-      if (e.pointerType === 'mouse' && document.pointerLockElement !== this.canvas && this.canvas.requestPointerLock) {
+      if (document.pointerLockElement !== this.canvas && this.canvas.requestPointerLock) {
         try {
           const p = this.canvas.requestPointerLock();
           if (p && p.catch) p.catch(() => {});
         } catch { /* drag still works */ }
       }
     });
-    const release = () => { dragging = false; last = null; };
-    addEventListener('pointerup', release);
-    addEventListener('pointercancel', release);
-    // pointermove (not mousemove) so touch drags count too; movementX is only reliable while locked
-    addEventListener('pointermove', (e) => {
-      const locked = document.pointerLockElement === this.canvas;
-      if (!this.active || (!locked && !dragging)) return;
-      const dx = locked || !last ? e.movementX : e.clientX - last.x, dy = locked || !last ? e.movementY : e.clientY - last.y;
-      last = { x: e.clientX, y: e.clientY };
-      this.yaw -= dx * 0.0028;
-      this.pitch = THREE.MathUtils.clamp(this.pitch + dy * 0.0028, -0.25, 1.25);
+    addEventListener('pointerup', () => (dragging = false));
+    addEventListener('mousemove', (e) => {
+      if (!this.active || (document.pointerLockElement !== this.canvas && !dragging)) return;
+      this.yaw -= e.movementX * 0.0028;
+      this.pitch = THREE.MathUtils.clamp(this.pitch + e.movementY * 0.0028, -0.25, 1.25);
     });
     this.canvas.addEventListener('wheel', (e) => {
       if (!this.active) return;
@@ -241,7 +233,7 @@ export class Game {
 
   _boardBalloon() {
     if (!this._canBoardBalloon()) return;
-    this.balloon={t:0,game:true};
+    this.balloon={t:0,game:true,valleyStar:false};
     this.keys.clear();this.vy=0;this.speed=0;this.walk=0;
     stand(this.person);
     this.world.balloonRide.balloon.add(this.person.g);
@@ -261,13 +253,15 @@ export class Game {
     this.balloon.t=Math.min(BALLOON_RIDE_SECONDS,this.balloon.t+dt);
     if(this.balloon.t>=BALLOON_RIDE_SECONDS){this._landBalloon();this._camera(1);return;}
     this.pos.copy(sampleBalloonRide(this.balloon.t));
+    const reward=this.world.balloonRide.viewStar;
+    if(!this.balloon.valleyStar&&reward&&this.pos.distanceTo(reward.position)<3.5){this.balloon.valleyStar=this.world.balloonRide.claimViewStar();}
     animatePerson(this.person,this.balloon.t*.6,0);
     this.person.g.position.set(0,.18,0);this.person.g.rotation.set(0,0,0);
     this._target.copy(this.pos);this._target.y+=5;
     this._cam.set(this.pos.x-12,this.pos.y+7,this.pos.z+18);
     this.camera.position.copy(this._cam);this.camera.lookAt(this._target);
     this.director.state.pos.copy(this._cam);this.director.state.look.copy(this._target);
-    this.prompt='Balloon ride — E to return to the boarding deck';
+    this.prompt=this.balloon.valleyStar?'Balloon ride — valley star found! E to return':'Balloon ride — E to return to the boarding deck';
   }
 
   _mount(g) {

@@ -82,7 +82,7 @@ export function buildLushForest(world,{curve,routeSamples,forest,glade,trailKeys
   for(const c of blockers)take(c.x,c.z);
   const geo=i=>({geometry:world.treeGeos[i],material:world.mat.foliage,source:lowSource});
   const blk=i=>world.blocky?.[i]&&{geometry:world.blocky[i].geometry,material:world.blocky[i].material,source:blockSource};
-  const treeSets=[[painted('oil','pine',true),painted('clean','pine',true),geo(3),blk(3)],[painted('oil','cottonwood',true),painted('clean','cottonwood',true),geo(0),blk(0)]];
+  const treeSets=[[painted('oil','pine',true),painted('clean','pine',true),painted('anime','pine',true),geo(3),blk(3)],[painted('oil','cottonwood',true),painted('clean','cottonwood',true),painted('anime','cottonwood',true),geo(0),blk(0)]];
   const treeBox=treeSets.map(list=>list.filter(Boolean).reduce((b,{geometry})=>{geometry.computeBoundingBox();return b.union(geometry.boundingBox);},new THREE.Box3()));
   for(let tries=0;tries<9000&&taken.length<430;tries++){
     const x=-146+r()*100,z=-264+r()*106;if(!inForest(x,z)||world._reserved(x,z)||Math.hypot(x-CAMP.x,z-CAMP.z)<20)continue;
@@ -104,7 +104,7 @@ export function buildLushForest(world,{curve,routeSamples,forest,glade,trailKeys
   const lowBush=mergeGeometries([[0,0.55,0,0.62],[0.42,0.42,0.18,0.45],[-0.38,0.45,-0.12,0.5],[0.05,0.8,-0.25,0.4]].map(([x,y,z,rad],i)=>mono(new THREE.IcosahedronGeometry(rad,0).translate(x,y,z),new THREE.Color().setHSL(0.27+i*0.012,0.42,0.3+i*0.035))));
   const blockBush=mergeGeometries([[1.3,0.8,1.1,0,0.4,0],[0.8,0.6,0.8,0.25,0.95,-0.1]].map(([w,h,d,x,y,z],i)=>mono(new THREE.BoxGeometry(w,h,d).translate(x,y,z),new THREE.Color().setHSL(0.28,0.45,0.32+i*0.06))));
   const bushes=scatter(380,9000,(x,z)=>openGround(x,z,0.3)&&(near(routeSamples,x,z,6.5)||near(spur,x,z,5)||r()<0.45),(x,z)=>[x,ground(x,z,-0.08),z,0.7+r()*0.6,r()*6.28]);
-  kind(bushes,[painted('oil','bush',true),painted('clean','bush',true),{geometry:lowBush,material:world.mat.foliage,source:lowSource},blockSource&&{geometry:blockBush,material:blockSource.material,source:blockSource}],{range:150,rootRadius:0,groundOffset:-0.08});
+  kind(bushes,[painted('oil','bush',true),painted('clean','bush',true),painted('anime','bush',true),{geometry:lowBush,material:world.mat.foliage,source:lowSource},blockSource&&{geometry:blockBush,material:blockSource.material,source:blockSource}],{range:150,rootRadius:0,groundOffset:-0.08});
 
   // A fern: six arching fronds, dark at the heart, fresh green at the tips (code-made, every style).
   const frond=[];
@@ -125,11 +125,11 @@ export function buildLushForest(world,{curve,routeSamples,forest,glade,trailKeys
   // ---------- ground cover: grass, flowers, mushrooms ----------
   const grass=scatter(2600,16000,(x,z)=>openGround(x,z,-0.9),(x,z)=>[x,ground(x,z),z,0.7+r()*0.8,r()*6.28]);
   const grassCone=new THREE.ConeGeometry(0.09,0.75,3).translate(0,0.37,0),grassMat=new THREE.MeshLambertMaterial({color:'#7d9b54'});
-  kind(grass,[painted('oil','grass',true),painted('clean','grass',true),{geometry:grassCone,material:grassMat,source:lowSource}],{range:60,tint:0.14});
+  kind(grass,[painted('oil','grass',true),painted('clean','grass',true),painted('anime','grass',true),{geometry:grassCone,material:grassMat,source:lowSource}],{range:60,tint:0.14});
   const blooms=['#e7a4c3','#f3d27c','#b7a6e6','#f6efe2','#f2b39a'];
   const flowers=scatter(760,9000,(x,z)=>openGround(x,z,-0.9)&&(Math.hypot(x-BROOK.x,z-BROOK.z)<20||r()<0.5),(x,z)=>[x,ground(x,z),z,0.8+r()*0.6,r()*6.28]);
   const lowFlower=new THREE.IcosahedronGeometry(0.09,0).translate(0,0.45,0),cube=new THREE.BoxGeometry(0.24,0.24,0.24).translate(0,0.4,0),flowerMat=new THREE.MeshLambertMaterial();
-  kind(flowers,[painted('oil','flowers',true),painted('clean','flowers',true)],{range:85});
+  kind(flowers,[painted('oil','flowers',true),painted('clean','flowers',true),painted('anime','flowers',true)],{range:85});
   kind(flowers,[{geometry:lowFlower,material:flowerMat,source:lowSource},blockSource&&{geometry:cube,material:flowerMat,source:blockSource}],{range:85,colors:blooms});
   // Mushrooms: soft coral, peach, lilac and cream caps on cream stems, in little families.
   const shrooms=[];

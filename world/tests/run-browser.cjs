@@ -1,4 +1,4 @@
-const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const { chromium } = require(process.env.PLAYWRIGHT_PATH||'playwright');
 (async () => {
   const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 800, height: 500 } });
@@ -10,8 +10,14 @@ const { chromium } = require('C:/Users/PKP/.cache/codex-runtimes/codex-primary-r
   await page.waitForFunction(() => window.__app, undefined, { timeout: 120000 });
   for (const suite of process.argv.slice(2).filter(a => !a.startsWith('--'))) {
     const result = await page.evaluate(async name => {
-      const m = await import(`/tests/${name}.js`);
-      return await m[Object.keys(m).find(k => k.startsWith('run'))]();
+      const stars = await import('/src/characters.js');
+      const previous = stars.getStarsEnabled();
+      const legacyStars = ['balloon-ride','boat-trip','finish-wip','garden-time-lapse','market-day','kid-moments','rainy-day-fun','snow-day','train-trip'];
+      if (legacyStars.includes(name)) stars.setStarsEnabled(true);
+      try {
+        const m = await import(`/tests/${name}.js`);
+        return await m[Object.keys(m).find(k => k.startsWith('run'))]();
+      } finally { stars.setStarsEnabled(previous); }
     }, suite);
     const {results: details, ...summary} = result;
     console.log(suite, JSON.stringify(summary));

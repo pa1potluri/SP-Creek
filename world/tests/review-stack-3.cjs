@@ -1,5 +1,5 @@
 // Local review capture; no sound, private uploads or publication.
-const fs=require('fs'),{chromium}=require(process.env.PLAYWRIGHT_PATH||'C:/Users/PKP/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const fs=require('fs'),{chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
 (async()=>{
  const publicCopy=process.argv.includes('--public'),browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']}),page=await browser.newPage({viewport:{width:960,height:600}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!m.text().includes('404'))errors.push(m.text());});await page.goto(process.env.DH_URL||'http://127.0.0.1:8811');await page.waitForFunction(()=>window.__app,undefined,{timeout:120000});

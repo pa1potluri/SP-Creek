@@ -4,7 +4,7 @@ import {makeSolidResident} from './solid-residents.js';
 
 // Approved solid residents are the game cast. The old heads are an internal rollback only.
 const faceMode=new URLSearchParams(location.search).get('characterFaces');
-export const profilesEnabled=faceMode!=='original';
+export const profilesEnabled=false;   // public copy: the private character set is not included
 const heroHeadPreview=faceMode==='pipeline';
 const profiles=new Map(),materials=new Map();let nextResident=0;
 if(profilesEnabled){

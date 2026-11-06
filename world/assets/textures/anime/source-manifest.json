@@ -1,0 +1,132 @@
+[
+  {
+    "source": "backdrop.png",
+    "sourceSha256": "7822036f17e6761cfb384d86854055fbd4b90c3c6672b7f017befecd957c7be1",
+    "sourceBytes": 1654081,
+    "width": 1024,
+    "height": 512,
+    "file": "assets/textures/anime/backdrop.png",
+    "bytes": 569930,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "beach_sand.png",
+    "sourceSha256": "51b75b6c8b3095f100d6912b5089b20c537520e275bc16a0c54e590b211c5827",
+    "sourceBytes": 2164436,
+    "width": 1024,
+    "height": 1024,
+    "file": "assets/textures/anime/beach_sand.png",
+    "bytes": 1409638,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "bush.png",
+    "sourceSha256": "6558ea00a87638a55cd1e3fde3927f4032ecc5f95c0dcebfdac4a730ee2ea5f9",
+    "sourceBytes": 1772756,
+    "width": 1024,
+    "height": 683,
+    "file": "assets/foliage/anime/bush.png",
+    "bytes": 616938,
+    "cornerAlpha": 0
+  },
+  {
+    "source": "cobblestones.png",
+    "sourceSha256": "b07f1dc77ae9633c90bb92f51e25c98dd5ad3c7dfb1b5be7b6dc3e2757398e2d",
+    "sourceBytes": 1939506,
+    "width": 1024,
+    "height": 1024,
+    "file": "assets/textures/anime/cobblestones.png",
+    "bytes": 1281082,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "flowers.png",
+    "sourceSha256": "c15be4df78d8a5c05ef98a96c80e1ad4b80556e30639aa36a5bd5a518bd06b9b",
+    "sourceBytes": 1995237,
+    "width": 1024,
+    "height": 683,
+    "file": "assets/foliage/anime/flowers.png",
+    "bytes": 630337,
+    "cornerAlpha": 0
+  },
+  {
+    "source": "grass.png",
+    "sourceSha256": "e2a18a95ea7041d520a05263ce4f374e20d1452ad92e6aec7647b71fda8f9bdc",
+    "sourceBytes": 1271671,
+    "width": 1024,
+    "height": 512,
+    "file": "assets/foliage/anime/grass.png",
+    "bytes": 455440,
+    "cornerAlpha": 0
+  },
+  {
+    "source": "house_boards.png",
+    "sourceSha256": "d05e10122c54642b3e03ad2c3a025503be2aca0d8223bf0fc8ed0f46f77d51b7",
+    "sourceBytes": 1763902,
+    "width": 1024,
+    "height": 1024,
+    "file": "assets/textures/anime/house_boards.png",
+    "bytes": 1100576,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "meadow.png",
+    "sourceSha256": "8d1ed889b390101c24d0281f3e071c8bb4c245aed8ede2704c5257eb1dc90486",
+    "sourceBytes": 2127080,
+    "width": 1024,
+    "height": 1024,
+    "file": "assets/textures/anime/meadow.png",
+    "bytes": 1463628,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "pine.png",
+    "sourceSha256": "6c635d958a81e196af16804e6fc7b0bcfc16fe59ebdaa1d7019c5b009a583de2",
+    "sourceBytes": 1600953,
+    "width": 683,
+    "height": 1024,
+    "file": "assets/foliage/anime/pine.png",
+    "bytes": 461009,
+    "cornerAlpha": 0
+  },
+  {
+    "source": "road.png",
+    "sourceSha256": "53c7115a419f607219c435eb7996f9bede19a91cac7f4190a4be14742d7b67c2",
+    "sourceBytes": 1893203,
+    "width": 1024,
+    "height": 1024,
+    "file": "assets/textures/anime/road.png",
+    "bytes": 1221256,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "roof.png",
+    "sourceSha256": "25491a6ac001784ab29e7b606d37353adce330301f714a55f0185ca3b46696ef",
+    "sourceBytes": 1852241,
+    "width": 1024,
+    "height": 1024,
+    "file": "assets/textures/anime/roof.png",
+    "bytes": 1181377,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "stone.png",
+    "sourceSha256": "ad507ca872b00f64e646827208178bbb11063a31d31452e1992317d760f240e1",
+    "sourceBytes": 1583710,
+    "width": 1024,
+    "height": 1024,
+    "file": "assets/textures/anime/stone.png",
+    "bytes": 976100,
+    "cornerAlpha": 255
+  },
+  {
+    "source": "tree.png",
+    "sourceSha256": "546e8a2af9e18b2290abd8dc008216b4f118a74fe917754b92b93d947f8ffbe4",
+    "sourceBytes": 1271774,
+    "width": 1024,
+    "height": 936,
+    "file": "assets/foliage/anime/cottonwood.png",
+    "bytes": 774859,
+    "cornerAlpha": 0
+  }
+]

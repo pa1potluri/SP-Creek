@@ -1,4 +1,5 @@
 import { gardenViews, GARDEN } from './areas/garden.js';
+import {fairViews} from './areas/fair-day.js';
 // Camera director: slow cinematic shots, smooth flights between them (no cuts, no dissolves),
 // a free-fly camera, and your own key-framed camera moves.
 import * as THREE from 'three';
@@ -204,6 +205,7 @@ export class Director {
     setMeadowOutingCameraReader(()=>this.mode==='shot'&&this.shot?.meadowOuting?{kind:this.shot.meadowOuting,t:Math.min(this.t,this.shot.duration)}:null);
     this.dom = dom;
     this.shots = makeShots();
+    this.shots.push(...fairViews());
     this.speed = 1;
     this.sway = 0.4;
     this.segSeconds = 6;
@@ -360,7 +362,7 @@ export class Director {
 
   _updateFree(dt) {
     const f = this.free, s = this.state, k = f.keys;
-    const v = 6 * (k.has('ShiftLeft') || k.has('ShiftRight') ? 4 : 1) * dt;
+    const v = 6 * (f.speedScale || 1) * (k.has('ShiftLeft') || k.has('ShiftRight') ? 4 : 1) * dt;
     const fwd = V(Math.sin(f.yaw), 0, Math.cos(f.yaw)), right = V(-Math.cos(f.yaw), 0, Math.sin(f.yaw));
     if (k.has('KeyW') || k.has('ArrowUp')) s.pos.addScaledVector(fwd, v);
     if (k.has('KeyS') || k.has('ArrowDown')) s.pos.addScaledVector(fwd, -v);
@@ -402,7 +404,6 @@ export class Director {
       g.y = e.clientY;
     });
     window.addEventListener('pointerup', () => (this.free.drag = null));
-    window.addEventListener('pointercancel', () => (this.free.drag = null));
     window.addEventListener('keydown', (e) => { if (!isTyping(e)) this.free.keys.add(e.code); });
     window.addEventListener('keyup', (e) => this.free.keys.delete(e.code));
     window.addEventListener('blur', () => this.free.keys.clear());

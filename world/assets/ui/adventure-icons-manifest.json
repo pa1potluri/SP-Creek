@@ -1,0 +1,242 @@
+[
+  {
+    "source": "btn_create.png",
+    "sha256": "f0224c68b5d104867fa829791dca0ac6e9ffeaa33bbddc7a96bbe3e06f617771",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1543429,
+    "bytes": 24676
+  },
+  {
+    "source": "btn_fullscreen.png",
+    "sha256": "38a6b2a543e1a4b284755b212d1594f225a9ed26a94735eb48e9517da4c00c49",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1438381,
+    "bytes": 21146
+  },
+  {
+    "source": "btn_help.png",
+    "sha256": "1a99d3f68e0337d4f4e4786dc7ebcbe25f670d405a2cec888bad9a7b50aca4e0",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1543591,
+    "bytes": 23623
+  },
+  {
+    "source": "btn_home.png",
+    "sha256": "d9782a19790814d81546fa03d93c52ac4ae0a0e0ec0383b0eb50d2039c6b6b6f",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1537821,
+    "bytes": 27186
+  },
+  {
+    "source": "btn_map.png",
+    "sha256": "632952118b55a736570b489cda65d50bb9ec8a13f2507d035bd5a7ae7a42d657",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1543480,
+    "bytes": 29040
+  },
+  {
+    "source": "btn_photo.png",
+    "sha256": "80970cb855c213a7da0693ab05b7a07e14b30bfbf7711b9c28773cf7a2e4050e",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1561731,
+    "bytes": 25829
+  },
+  {
+    "source": "btn_play.png",
+    "sha256": "a640f06ab0b9f8b460094b99a383afd23211bbc012bfde0ff19e2cfe5acc1425",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1586122,
+    "bytes": 27628
+  },
+  {
+    "source": "btn_record.png",
+    "sha256": "b6c1537e0b704693926634e2702bb889983673dbadbf863dbc6d0eb784626be2",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1463862,
+    "bytes": 22596
+  },
+  {
+    "source": "btn_settings.png",
+    "sha256": "577176786681a3a4e2ed16bd6b9f66fdc323f18c8852bdcd4ede14f002899b97",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1866916,
+    "bytes": 24416
+  },
+  {
+    "source": "btn_sound_off.png",
+    "sha256": "22168222d5a7e3cec136349519f21b02b105871573ba74a4f5f44ea7a33dad3b",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1468633,
+    "bytes": 20739
+  },
+  {
+    "source": "btn_watch.png",
+    "sha256": "a8052334b0badd4da9e0a1b6b3427e8d5869203569df556db70f32fe6e8f1a4f",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1545664,
+    "bytes": 25684
+  },
+  {
+    "source": "logo.png",
+    "sha256": "86c455ea696fa1c9df9d511c18f0bc2e5435d5159495b8e575f331975cf0acd4",
+    "width": 512,
+    "height": 262,
+    "sourceBytes": 1928497,
+    "bytes": 196770
+  },
+  {
+    "source": "panel_wood.png",
+    "sha256": "da9d974647921425c1c19fb8bdcf726dd764283cb6932241fc51c894b1ec7340",
+    "width": 1024,
+    "height": 683,
+    "sourceBytes": 1493155,
+    "bytes": 686480
+  },
+  {
+    "source": "set_audio.png",
+    "sha256": "eb7315ff3052cec132ca790fe220c70996f3ac8d2c2a60384770df45a9d25645",
+    "width": 128,
+    "height": 85,
+    "sourceBytes": 1285092,
+    "bytes": 11082
+  },
+  {
+    "source": "set_controls.png",
+    "sha256": "8a1e0de8b3891c5dd658cf783ca14461df3c1a6f632b588567983700c4a1751d",
+    "width": 128,
+    "height": 85,
+    "sourceBytes": 1324247,
+    "bytes": 10663
+  },
+  {
+    "source": "set_general.png",
+    "sha256": "251893ed0cc34dc74b032518b80f0ceb30e90b3882084c8bc4570c40a5981825",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1469566,
+    "bytes": 17416
+  },
+  {
+    "source": "set_graphics.png",
+    "sha256": "d69a04e5e635ecc3ae22a9a51541e93214aba7dc6fed1ebc2ca6261ea92f1e9f",
+    "width": 128,
+    "height": 85,
+    "sourceBytes": 1358211,
+    "bytes": 12078
+  },
+  {
+    "source": "set_recording.png",
+    "sha256": "a6dbc84e425d0550462df45adee41e364cb9e39984cf41844b0839b6d9fa9ebb",
+    "width": 128,
+    "height": 85,
+    "sourceBytes": 1294089,
+    "bytes": 10930
+  },
+  {
+    "source": "style_anime.png",
+    "sha256": "a8dcb71408f4036bbdd88a1d9a43eee215b9128aea643cfa2e0c0d43b8ce2801",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1366104,
+    "bytes": 17411
+  },
+  {
+    "source": "style_blocky.png",
+    "sha256": "5606cfdfbb599a72380a9ee9dbf45ac44afcd3976b368257728139e1f99fc4fc",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1453025,
+    "bytes": 22480
+  },
+  {
+    "source": "style_dreamy.png",
+    "sha256": "280e1a2aa059cd8d680bd06f5308d96cbb4de45b33c1e69dfb8163796075f41c",
+    "width": 128,
+    "height": 85,
+    "sourceBytes": 1430447,
+    "bytes": 11793
+  },
+  {
+    "source": "style_oil.png",
+    "sha256": "383c00278dd769322f15a2cad40d2763b81f61682fe849df89e767a4a5eeafcc",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1412657,
+    "bytes": 17525
+  },
+  {
+    "source": "style_paper.png",
+    "sha256": "d8146d24b152d0d0c3273ccee8fe7d92184676db38e9e5db3fbf8f311376a31a",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1486498,
+    "bytes": 22317
+  },
+  {
+    "source": "style_pixel.png",
+    "sha256": "4f19f43e11b2073ce09861dfd4d1dd579686b64c43825fd59980f5fbf8ec9098",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1431735,
+    "bytes": 20045
+  },
+  {
+    "source": "tab_activities.png",
+    "sha256": "e815f843f53be19b624b37b728eb99586070dadc57853db1c6fcb0788fb4297d",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1394894,
+    "bytes": 12891
+  },
+  {
+    "source": "tab_nature.png",
+    "sha256": "c1eadc5c2a04be69778a294d48fe9c14efe0b30d856e5dc23be6d58247331c24",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1456979,
+    "bytes": 21668
+  },
+  {
+    "source": "tab_overview.png",
+    "sha256": "db922ac622e7d9fa40f05efc08fa1ee30144adfd7b383362d521fec0ef53cc0c",
+    "width": 128,
+    "height": 128,
+    "sourceBytes": 1414129,
+    "bytes": 18220
+  },
+  {
+    "source": "tab_places.png",
+    "sha256": "07e521edbfdb25632a9c9341231f29b35cba3b537d8e708b6c3f49520e25a7e3",
+    "width": 128,
+    "height": 85,
+    "sourceBytes": 2110753,
+    "bytes": 23523
+  },
+  {
+    "source": "tab_resources.png",
+    "sha256": "153de02f06941b792deaa889adcbdc71ff9cdefd80bdda63636728c1966d415d",
+    "width": 128,
+    "height": 85,
+    "sourceBytes": 1886488,
+    "bytes": 14499
+  },
+  {
+    "source": "world_map.png",
+    "sha256": "164c929539edb2e34c825c0944a75903bf784d0a817534f22e7655db3ffa170b",
+    "width": 1586,
+    "height": 992,
+    "sourceBytes": 3682936,
+    "bytes": 3854389
+  }
+]

@@ -419,6 +419,7 @@ export class World {
     const sets = { flat: facade({ flat: true, flatFill: s.buildArt && !tint && (img('oil') || img('clean')) ? T.averageCss(img('oil') || img('clean')) : own && this.painted.oil.wall_boards ? T.averageCss(this.painted.oil.wall_boards) : null }) };
     if (img('oil') || (openings && (this.painted.oil.window || this.painted.oil.door))) sets.oil = facade({ base: img('oil'), tint, windowImage: openings && this.painted.oil.window, doorImage: openings && !s.interior && !s.barn && !s.batwing && this.painted.oil.door });
     if (img('clean') || (openings && (this.painted.clean.window || this.painted.clean.door))) sets.clean = facade({ base: img('clean'), tint, windowImage: openings && this.painted.clean.window, doorImage: openings && !s.interior && !s.barn && !s.batwing && this.painted.clean.door });
+    if(this.painted.anime&&img('anime'))sets.anime=facade({base:img('anime'),tint,windowImage:openings&&this.painted.anime.window,doorImage:openings&&!s.interior&&!s.barn&&!s.batwing&&this.painted.anime.door});
     if (!sets.oil && !sets.clean) sets.oil = facade({});
     return sets;
   }
@@ -476,11 +477,12 @@ export class World {
   // A material showing a painted image, in whichever versions exist: `oil` (brushstrokes) and
   // `clean` (smooth cartoon). Null when there is no image of that name at all.
   paintedMaterial(name, rx, ry, extra = {}) {
-    const oil = this.painted.oil[name], clean = this.painted.clean[name];
-    if (!oil && !clean) return null;
+    const oil = this.painted.oil[name], clean = this.painted.clean[name], anime=this.painted.anime?.[name];
+    if (!oil && !clean && !anime) return null;
     const sets = {};
     if (oil) sets.oil = T.imageTexture(oil, rx, ry);
     if (clean) sets.clean = T.imageTexture(clean, rx, ry);
+    if(anime)sets.anime=anime===clean?sets.clean:T.imageTexture(anime,rx,ry);
     const m = new THREE.MeshLambertMaterial({ map: sets.oil || sets.clean, ...extra });
     m.userData.sets = sets;
     this.surfaces.add(m);
@@ -498,7 +500,7 @@ export class World {
       const oldMap = m.map, oldEmissiveMap = m.emissiveMap;
       const u = m.userData;
       u.base ??= { map: m.map, emissiveMap: m.emissiveMap, color: m.color.clone() };
-      const entry = u.sets?.[set] ?? (set === 'flat' && !u.keepMap ? 'none' : u.sets?.oil ?? u.sets?.clean ?? null);
+      const entry = u.sets?.[set] ?? (set==='anime' ? u.sets?.clean ?? u.sets?.oil ?? null : set === 'flat' && !u.keepMap ? 'none' : u.sets?.oil ?? u.sets?.clean ?? null);
       m.color.copy(u.base.color);
       if (entry === 'none') {
         m.map = null;
@@ -557,6 +559,7 @@ export class World {
     const { oil, clean } = this.painted, groundSets = {};
     if (oil.meadow) groundSets.oil = T.groundDetailFromImage(oil.meadow, 90);
     if (clean.meadow) groundSets.clean = T.groundDetailFromImage(clean.meadow, 90);
+    if(this.painted.anime?.meadow)groundSets.anime=T.imageTexture(this.painted.anime.meadow,90,90);
     const groundMat = new THREE.MeshLambertMaterial({ vertexColors: true, map: groundSets.oil || groundSets.clean || T.groundDetailTexture() });
     // Underwater coast ground must not reappear through the distant sea fade.
     groundMat.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <begin_vertex>','#include <begin_vertex>\nvCoastGround=position;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCoastGround;').replace('#include <clipping_planes_fragment>','#include <clipping_planes_fragment>\nfloat edge=-350.0-18.0*exp(-pow((vCoastGround.z-35.0)/115.0,2.0))+8.0*sin(vCoastGround.z*0.007);float river=150.0+sin(vCoastGround.x*0.012)*18.0+sin(vCoastGround.x*0.031)*6.0;if(vCoastGround.x>-159.0 && vCoastGround.x<179.0 && abs(vCoastGround.z-river)<15.0) discard;if(vCoastGround.x < -330.0 && (vCoastGround.y < -1.01 || (vCoastGround.x<edge+8.0 && vCoastGround.z>-115.0 && vCoastGround.z<195.0))) discard;');};
@@ -880,6 +883,7 @@ export class World {
     const sets = {};
     if (this.painted.oil.road) sets.oil = T.roadFromImage(this.painted.oil.road, repeat);
     if (this.painted.clean.road) sets.clean = T.roadFromImage(this.painted.clean.road, repeat);
+    if(this.painted.anime?.road)sets.anime=T.roadFromImage(this.painted.anime.road,repeat);
     mat.userData.sets = sets;
     mat.userData.keepMap = true;
     this.surfaces.add(mat);
@@ -1446,7 +1450,7 @@ export class World {
       mtx.decompose(p, q, s);
       return [p.x, p.y, p.z, s.x];
     });
-    for (const set of ['oil', 'clean']) {
+    for (const set of Object.keys(this.painted)) {
       const imgs = this.painted[set].foliage || {};
       if (!Object.keys(imgs).length) continue;
       const g = new THREE.Group();
@@ -1538,7 +1542,7 @@ export class World {
   // Which plants stand in the world: 'painted' (the cut-outs of the current texture set; the
   // flat set has none, so it falls back to low-poly), 'blocks' or 'lowpoly'.
   setPlants(kind, set) {
-    const painted = kind === 'painted' && set !== 'flat' && this.foliage ? this.foliage[set] || this.foliage.oil || this.foliage.clean || null : null;
+    const painted = (kind === 'painted'||kind==='anime') && set !== 'flat' && this.foliage ? (kind==='anime'?this.foliage.anime||this.foliage.clean:this.foliage[set]) || this.foliage.oil || this.foliage.clean || null : null;
     const blocks = kind === 'blocks';
     for (const g of Object.values(this.foliage || {})) g.visible = g === painted;
     for (const m of this.blocky || []) m.visible = blocks;
@@ -1854,7 +1858,8 @@ export class World {
   layout() {
     return [
       ...this.placed.filter((p) => p.type !== 'cutout').map(({ type, x, z, yaw, order }) => ({ type, x, z, yaw, order })),
-      ...this.buildings.map((e) => ({ kind: 'building', ...e.spec })),
+      // The player's cottage has its own small local save, rather than travelling in shared builds.
+      ...this.buildings.filter((e) => !e.cottage).map((e) => ({ kind: 'building', ...e.spec })),
       ...this.roads.map((e) => ({ kind: 'road', points: e.points, width: e.width, order:e.order })),
       ...(terrainEdits.strokes.length ? [{kind:'terrain',data:terrainEdits.serialize(),order:-1}] : []),
       ...this.fences.map((e) => ({ kind: 'fence', points: e.points, order:e.order })),

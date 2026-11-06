@@ -18,8 +18,6 @@ export { MOMENTS } from './areas/kid-moments.js';
 import { makeCharacter, randomTownsfolk, animatePerson, seat, gesture, CAST, HIP, addCharacterPoseLayer, pointCharacterArm, addRainGear } from './characters.js';
 
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
-// Someone leaving the scene frees their GPU buffers; a geometry still shared by others is simply re-uploaded.
-const freeGeometry = (obj) => obj.traverse((o) => o.geometry?.dispose());
 const C = (h, s, l) => new THREE.Color().setHSL(h / 360, s / 100, l / 100, THREE.SRGBColorSpace);
 const R = Math.random;
 const pick = (a) => a[Math.floor(R() * a.length)];
@@ -293,8 +291,8 @@ class Train {
     this.steam.rate = !visible ? 0 : this.state === 'stopped' ? 0.65 : 1.8 + this.v * 0.18;
   }
   remove(root) {
-    for (const c of this.cars) { root.remove(c.g); freeGeometry(c.g); }
-    for(const p of this.friends){root.remove(p.g);freeGeometry(p.g);}
+    for (const c of this.cars) root.remove(c.g);
+    for(const p of this.friends)root.remove(p.g);
     this.world.trainTripActive=false;
     this.world.emitters = this.world.emitters.filter((e) => e !== this.steam);
   }
@@ -714,8 +712,8 @@ export class Life {
     this.riders = [];
     this.coach = null;
     this.train = null;
-    // your own saddled horse waits at the cafe's hitching rail
-    this.myHorse = new Grazer(V(2.3, 0, 8), 0, { saddled: true, tethered: true, yaw: Math.PI / 2 });
+    // The shop gap keeps both the street and raised boardwalk clear.
+    this.myHorse = new Grazer(V(7, 0, 18), 0, { saddled: true, tethered: true, yaw: Math.PI / 2 });
     this.grazers = [
       this.myHorse,
       ...[0, 1, 2, 3].map(() => new Grazer(V(RANCH.x + 12, 0, RANCH.z + 4), 6)),
@@ -750,7 +748,6 @@ export class Life {
       w.leaveSeat();
       w.endChat();
       this.root.remove(w.p.g);
-      freeGeometry(w.p.g);
     }
     if (this.riders.length !== s.riders) {
       while (this.riders.length < s.riders) {
@@ -837,7 +834,6 @@ export class Life {
 
   _removeTraveller(t) {
     this.root.remove(t.m.g);
-    freeGeometry(t.m.g);
     this.world.emitters = this.world.emitters.filter((e) => e !== t.dust);
   }
 

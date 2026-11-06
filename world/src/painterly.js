@@ -139,6 +139,19 @@ export const LookShader = {
         if (ze > z * 1.12) c = mix(c, vec3(1.0, 0.97, 0.92), 0.4);
         // the far land is laid in a few flat sheets, each a touch paler with distance
         c = mix(c, vec3(0.95, 0.9, 0.82), layerOf(uv) / max(uLayers, 1.0) * 0.18);
+      } else if (uMode == 6) {
+        float z=dist(uv),edge=0.0;
+        for(int i=0;i<4;i++){
+          vec2 dir=vec2(i==0?1.0:i==1?-1.0:0.0,i==2?1.0:i==3?-1.0:0.0);
+          vec2 q=uv+dir*px*max(k,1.0);
+          if(jump(uv,q))edge+=0.25;
+        }
+        // Thin coloured contour, restrained light bloom and layered aerial perspective.
+        c=mix(c,c*vec3(0.64,0.71,0.79),edge*uOutline);
+        vec3 glow=vec3(0.0);
+        for(int i=0;i<8;i++){float a=float(i)*0.785398;glow+=max(texture2D(tDiffuse,uv+vec2(cos(a),sin(a))*px*max(k,1.0)*4.0).rgb-0.78,0.0);}
+        c+=glow/8.0*uBloom;
+        if(z<1500.0){float haze=smoothstep(60.0,220.0,z)*0.05+smoothstep(180.0,650.0,z)*0.10;float light=dot(c,vec3(0.299,0.587,0.114));vec3 air=mix(vec3(0.16,0.23,0.34),vec3(0.69,0.80,0.88),smoothstep(0.08,0.5,light));c=mix(c,air,haze);}
       } else if (uMode == 5) {
         // Screen-fixed paper and blooms have no clock input: frozen frames stay exact.
         vec2 paperPos = uv * uRes / max(k, 1.0);

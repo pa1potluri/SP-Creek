@@ -50,7 +50,7 @@ export function buildForest(world) {
     spots.push([x,world.groundY(x,z)-0.1,z,0.85+r()*0.5]);world.colliders.circles.push({x,z,r:0.45});
   }
   function instances(source,list,visibleSource){if(!source||!list.length)return;const im=new THREE.InstancedMesh(source.geometry,source.material,list.length),matrix=new THREE.Matrix4();list.forEach(([x,h,z,s],i)=>im.setMatrixAt(i,matrix.makeScale(s,s,s).setPosition(x,h,z)));im.castShadow=source.castShadow;im.receiveShadow=true;im.computeBoundingSphere();root.add(im);variants.push({im,source:visibleSource});}
-  for(const set of ['oil','clean']){
+  for(const set of Object.keys(world.foliage||{})){
     const g=world.foliage?.[set];if(!g)continue;
     instances(g.children[1]||g.children[0],spots,g);
     const bushes=spots.filter((_,i)=>i%2===0).map(([x,h,z])=>[x+1,world.groundY(x+1,z+0.7)-0.1,z+0.7,0.8]);

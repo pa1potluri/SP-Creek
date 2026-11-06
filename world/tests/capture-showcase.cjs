@@ -1,6 +1,6 @@
 // Local-only README media. Requires Playwright/Chrome and ffmpeg on PATH (or FFMPEG).
 const fs=require('fs'),path=require('path'),os=require('os'),{execFileSync}=require('child_process');
-const {chromium}=require(process.env.PLAYWRIGHT_PATH||'C:/Users/PKP/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
 const shots=[['sunset-cove',39,20,'golden'],['balloon-ride',54,75,'golden'],['market-day',69,20,'golden'],['rainbow',79,20,'morning'],['garden-growth',76,0,'golden'],['lantern-evening',27,20,'villageDusk']];
 (async()=>{
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'sp-creek-showcase-')),output=path.resolve('docs/media');fs.mkdirSync(output,{recursive:true});

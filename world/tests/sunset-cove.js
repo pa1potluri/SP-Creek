@@ -20,7 +20,7 @@ export async function runSunsetCoveTests(){
   for(const style of Object.keys(STYLES)){a.applyStyle(style);await new Promise(resolve=>requestAnimationFrame(resolve));check(c.root.visible&&(w.textureSet==='flat'?c.palms[0].visible:c.paintedPalms.visible),`${style}: correct cove palm variant renders`);}
   check(['plaster_wall','terracotta_roof','cobblestones','beach_sand'].every(name=>w.painted.oil[name]&&w.painted.clean[name]),'All approved surface texture sets loaded');
   check(c.images.oil.palm&&c.images.clean.bougainvillea,'Approved foliage cutouts loaded');
-  const view=a.camera.clone();view.position.set(-330,12,20);c.update(25,view,a.atmos.cur);check(c.seaBackdrop.visible,'Sea panorama visible at cove');
+  a.applyStyle('film');const view=a.camera.clone();view.position.set(-330,12,20);c.update(25,view,a.atmos.cur);check(!c.seaBackdrop.visible&&c.clouds.visible,'Live sky and clouds replace sea panorama at cove');
   check(Math.abs(c.seaBackdrop.position.y+(0.5-c.horizonRatio)*c.horizonHeight-view.position.y)<1e-6,'Painted sea horizon aligned at 56.5 percent');
   view.position.x=0;c.update(25,view,a.atmos.cur);check(!c.seaBackdrop.visible,'Sea panorama absent from main valley');
   view.position.x=-330;c.update(25,view,a.atmos.cur);for(const style of ['oil','film']){a.applyStyle(style);await Promise.resolve();c.update(25,view,a.atmos.cur);}view.position.x=0;c.update(25,view,a.atmos.cur);const valley=w.root.parent.children.find(o=>o.geometry?.type==='CylinderGeometry'&&o.material?.map&&!o.material.fog);check(valley?.visible,'Main valley panorama restored after switching styles at the cove');

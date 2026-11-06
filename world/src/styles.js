@@ -39,5 +39,13 @@ export const STYLES = {
     paint: { radius: 2, strength: 0.35, wobble: 0, boil: 0, impasto: 0, canvas: 0, sat: 0.9, warmth: 0.02, contrast: 0.94, vignette: 0.08, grain: 0 },
     look: { mode: 5, wash: 0.85, pigment: 0.5, paper: 0.6 }, fxaa: true, weave: 0,
   },
+  anime: {
+    label:'Dreamy Anime',textures:'anime',plants:'anime',
+    paint:{radius:1,strength:0,wobble:0,boil:0,impasto:0,canvas:0,sat:1.08,warmth:0.025,contrast:1.01,vignette:0.08,grain:0},
+    look:{mode:6,outline:0.16,bloom:0.08},fxaa:true,weave:0,
+  },
 };
 
+
+STYLES.dreamy={...STYLES.film,label:'Dreamy',paint:{...STYLES.film.paint,sat:1.06,warmth:.06},look:{...STYLES.film.look,dof:.12,bloom:.22}};
+export const KIDS_STYLES=['oil','dreamy','anime','toy','paper','pixel'];

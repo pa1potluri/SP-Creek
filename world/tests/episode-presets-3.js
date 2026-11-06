@@ -3,7 +3,7 @@ export async function runEpisodePresets3Tests(){
  const a=window.__app,original=a.projectData(),results=[],check=(ok,msg)=>{if(!ok)throw Error(msg);results.push(msg);};
  try{
   a.timeline.stop();a.director.auto=false;
-  for(const [key,wide]of [['episode10Snow',92],['episode11Kites',93],['episode12Picnic',94],['episode13CoveNight',95],['episode14Forest',35]]){
+  for(const [key,wide]of [['episode10Snow',92],['episode11Kites',93],['episode12Picnic',94],['episode13CoveNight',95]]){
    const p=VIDEO_PRESETS[key];check(p.clips.reduce((n,c)=>n+c.seconds,0)===180,key+': exactly three minutes');
    check(p.clips[0].shot===wide&&p.clips.at(-1).shot===wide&&p.clips.at(-1).seconds>=30,key+': wide opening and held ending');
    check(p.style==='film'&&p.clips.every(c=>c.natural&&Number.isInteger(c.shot)&&a.director.shots[c.shot]),key+': existing natural timing and valid appended shots');

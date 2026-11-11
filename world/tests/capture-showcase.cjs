@@ -4,7 +4,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
 const shots=[['sunset-cove',39,20,'golden'],['balloon-ride',54,75,'golden'],['market-day',69,20,'golden'],['rainbow',79,20,'morning'],['garden-growth',76,0,'golden'],['lantern-evening',27,20,'villageDusk']];
 (async()=>{
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'sp-creek-showcase-')),output=path.resolve('docs/media');fs.mkdirSync(output,{recursive:true});
- const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']});
+ const browser=await chromium.launch({headless:true,channel:'chrome',executablePath:process.env.CHROME_PATH,args:['--enable-unsafe-swiftshader']});
  const page=await browser.newPage({viewport:{width:640,height:360}}),errors=[],proof=[];
  page.on('pageerror',e=>errors.push(e.message));
  await page.goto(process.env.DH_URL||'http://127.0.0.1:8811');await page.waitForFunction(()=>window.__app,undefined,{timeout:120000});

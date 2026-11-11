@@ -1,7 +1,7 @@
 // Day (and night) preview of a little scene built from picture-collection pieces.
-const { chromium } = require(process.env.PLAYWRIGHT_PATH||'playwright');
+const { chromium } = require('playwright');
 (async () => {
-  const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ headless: true, channel:'chrome', args: ['--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } }), errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !m.text().includes('404')) errors.push(m.text()); });

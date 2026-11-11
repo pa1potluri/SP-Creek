@@ -1,7 +1,7 @@
-const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
+const {chromium}=require('playwright');
 const fs=require('fs');
 (async()=>{
-  const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']});
+  const browser=await chromium.launch({headless:true,channel:'chrome',args:['--enable-unsafe-swiftshader']});
   const page=await browser.newPage({viewport:{width:1920,height:1080}}),errors=[],frames=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&!m.text().includes('404'))errors.push(m.text());});
   await page.addInitScript(()=>{const raf=window.requestAnimationFrame.bind(window);window.requestAnimationFrame=fn=>raf(t=>{if(!window.__capturePause)fn(t);});});

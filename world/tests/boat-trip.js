@@ -10,7 +10,7 @@ export async function runBoatTripTests(){
   const preset=VIDEO_PRESETS.boatTrip;check(preset.clips.reduce((n,c)=>n+c.seconds,0)===240,'Boat preset is four minutes');
   const seek=(shot,t)=>{d.playShot(shot,{cut:true});d.hold=true;d.t=t;a.step(0);};seek(72,20);
   const lake=w.meadowBoat,cove=w.sunsetCove.rowingBoat;check(!!lake&&!!cove,'Both boats register through existing area modules');
-  check(lake.riders.every(p=>p.g.visible&&p.model.isSkinnedMesh&&p.model.material.map&&p.lifeJacket.children.length===5),'Both original models wear bright life jackets');
+  check(lake.riders.every(p=>p.g.visible&&!p.model&&p.arms.length===2&&p.feet.length===2&&p.lifeJacket.children.length===5),'Both generic children wear bright life jackets');
   check(!Object.values(a.life.stars).some(p=>p.g.visible),'Normal stars hide during boating');
   check(lake.ducks.length===3&&lake.fish.length===3,'Small duck and fish populations');
   let wet=true,near=true,smooth=true,ground=true,fish=false,previous;

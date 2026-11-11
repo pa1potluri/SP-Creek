@@ -1,6 +1,6 @@
-const { chromium } = require(process.env.PLAYWRIGHT_PATH||'playwright');
+const { chromium } = require('playwright');
 (async () => {
-  const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ headless: true, channel:'chrome', args: ['--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 800, height: 500 } });
   const errors = [];
   page.on('console', m => { if (m.type() === 'log') console.log(m.text()); });
@@ -12,7 +12,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_PATH||'playwright');
     const result = await page.evaluate(async name => {
       const stars = await import('/src/characters.js');
       const previous = stars.getStarsEnabled();
-      const legacyStars = ['balloon-ride','boat-trip','finish-wip','garden-time-lapse','market-day','kid-moments','rainy-day-fun','snow-day','train-trip'];
+      const legacyStars = ['balloon-ride','boat-trip','finish-wip','garden-time-lapse','market-day','kid-moments','siblings','rainy-day-fun','snow-day','train-trip'];
       if (legacyStars.includes(name)) stars.setStarsEnabled(true);
       try {
         const m = await import(`/tests/${name}.js`);

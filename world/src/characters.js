@@ -341,17 +341,7 @@ function buildCharacter(outfit) {
 }
 
 // These original meshes/textures are shared; every appearance owns its own skeleton.
-const starSources=Object.fromEntries(await Promise.all([].map(async role=>{
-  try{
-  // This standalone page uses only code-built bodies; do not block it on unused GLBs.
-  if(location.pathname.endsWith('/character-pipeline-test.html'))return [role,null];
-  const url=new URL('../assets/characters/'+role+'.glb',import.meta.url),response=await fetch(url);
-  if(!response.ok)return [role,null];
-  const gltf=await new GLTFLoader().parseAsync(await response.arrayBuffer(),new URL('.',url).href);let source;gltf.scene.updateMatrixWorld(true);gltf.scene.traverse(o=>{if(o.isMesh)source=o;});
-  const geometry=source.geometry.clone().applyMatrix4(source.matrixWorld),material=source.material.clone();material.emissive.set(0xffffff);material.emissiveMap=material.map;material.emissiveIntensity=0.07;
-  return [role,{geometry,material}];
-  }catch{return [role,null];}
-})));
+const starSources={};
 const STAR_BONES=[['hips',null,[0,0.43,0.04]],['spine',0,[0,0.57,0.04]],['chest',1,[0,0.70,0.04]],['neck',2,[0,0.745,0.04]],['head',3,[0,0.79,0.025]],['armR',2,[-0.12,0.70,0.04]],['elbowR',5,[-0.215,0.49,0.055]],['armL',2,[0.12,0.70,0.04]],['elbowL',7,[0.215,0.49,0.055]],['legR',0,[-0.08,0.40,0.05]],['kneeR',9,[-0.09,0.20,0.065]],['footR',10,[-0.09,0.055,0.09]],['legL',0,[0.08,0.40,0.05]],['kneeL',12,[0.09,0.20,0.065]],['footL',13,[0.09,0.055,0.09]],['skirt',0,[0,0.43,0.04]],['Thick side braid',4,[0,0.83,-0.10]]];
 function starRigSpecs(role){
   const specs=STAR_BONES.map(([name,parent,pos])=>[name,parent,[...pos]]);if(role==='sister'){
@@ -456,7 +446,11 @@ export function animatePerson(p, phase, amt) {
   p.upper.rotation.set(0, s * 0.07, 0);
   p.headYaw = -s * 0.06;
   p.headPitch = 0;
-  if (p.skirt) { if(p.model)p.skirt.rotation.x=0; p.skirt.rotation.z = Math.sin(phase) * 0.03 * a; }
+  if (p.skirt) {
+    p.skirt.rotation.x=0;
+    if(!p.model){p.skirt.position.set(0,0,0);p.skirt.scale.set(1,1,1);p.skirt.children.forEach(m=>m.position.y=0);if(p.apron)p.apron.visible=true;}
+    p.skirt.rotation.z = Math.sin(phase) * 0.03 * a;
+  }
   if (p.hat) p.hat.position.y = p.hatRest.y, p.hat.rotation.x = p.hatRest.rx;
 }
 

@@ -4,25 +4,9 @@ import {makeSolidResident} from './solid-residents.js';
 
 // Approved solid residents are the game cast. The old heads are an internal rollback only.
 const faceMode=new URLSearchParams(location.search).get('characterFaces');
-export const profilesEnabled=false;   // public copy: the private character set is not included
+export const profilesEnabled=faceMode!=='original';
 const heroHeadPreview=faceMode==='pipeline';
 const profiles=new Map(),materials=new Map();let nextResident=0;
-if(profilesEnabled){
- try{
-  const base=new URL('../assets/characters/pipeline-game/',import.meta.url),response=await fetch(new URL('manifest.json',base));if(!response.ok)throw Error('Profile manifest unavailable');
-  const manifest=await response.json();
-  await Promise.all(manifest.profiles.map(async entry=>{
-   if(entry.representation==='solid'){profiles.set(entry.id,{...entry,solid:true});return;}
-   if(!heroHeadPreview)return;
-   const response=await fetch(new URL(entry.id+'.bin',base));if(!response.ok)return;
-   const buffer=await response.arrayBuffer();if(buffer.byteLength!==entry.count*20)return;
-   const data=decodePoints(buffer,{scale:.0042,offset:[0,.25,0]}),colors=new Float32Array(data.count*3),color=new THREE.Color();
-   for(let i=0;i<data.count;i++){color.setRGB(data.colors[i*3]/255,data.colors[i*3+1]/255,data.colors[i*3+2]/255,THREE.SRGBColorSpace);color.toArray(colors,i*3);}
-   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.BufferAttribute(data.positions,3));geometry.setAttribute('color',new THREE.BufferAttribute(colors,3));geometry.computeBoundingSphere();
-   profiles.set(entry.id,{...entry,geometry});
-  }));
- }catch(error){console.warn('Approved profile preview unavailable; keeping original heads:',error.message);}
-}
 const residentIds=['town-101','town-202','town-303','town-404','town-505','town-606','town-700','town-701','town-702','town-703','town-704','town-705'];
 export function selectCharacterProfile(outfit){
  if(!profilesEnabled||outfit.star==='sister'||outfit.ghost)return null;

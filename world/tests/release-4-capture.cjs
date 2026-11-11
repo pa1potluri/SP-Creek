@@ -1,6 +1,6 @@
-const { chromium } = require(process.env.PLAYWRIGHT_PATH||'playwright');
+const { chromium } = require('playwright');
 (async()=>{
- const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']});
+ const browser=await chromium.launch({headless:true,channel:'chrome',args:['--enable-unsafe-swiftshader']});
  const page=await browser.newPage({viewport:{width:1440,height:900}});
  await page.goto(process.env.DH_URL||'http://127.0.0.1:8811',{waitUntil:'domcontentloaded',timeout:120000});await page.waitForFunction(()=>window.__app,{timeout:120000});
  for(const mood of ['golden','night']){

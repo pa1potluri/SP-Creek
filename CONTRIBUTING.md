@@ -24,3 +24,7 @@ Write down the place, what a child would see or do, why it fits the calm world, 
 ## Send a change
 
 Keep each change small and focused on one place or feature, and use the existing helpers and local libraries (no new packages, no build step). Check your change in day and night, and in each art style, then open a pull request that says what changed and how you checked it. Every change is reviewed before it is accepted.
+
+## Browser checks
+
+Install Playwright for the test tools and have Google Chrome available. Set `DH_URL` to your local server URL, then run every `.js` suite through `world/tests/run-browser.cjs` (the runner requires suite names). The public tests use generic procedural children; private models and face profiles are intentionally absent.

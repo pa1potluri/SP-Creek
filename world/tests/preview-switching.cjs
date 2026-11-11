@@ -1,8 +1,8 @@
 // Silent, isolated review-session diagnostic; does not touch the user's Chrome profile.
-const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright');
+const {chromium}=require('playwright');
 const fs=require('fs');
 (async()=>{
-  const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--enable-unsafe-swiftshader']});
+  const browser=await chromium.launch({headless:true,channel:'chrome',args:['--enable-unsafe-swiftshader']});
   const report={viewport:[2560,1440],errors:[],contextLosses:0,switches:[]};
   try {
     const page=await browser.newPage({viewport:{width:2560,height:1440}});

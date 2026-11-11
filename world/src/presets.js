@@ -1,4 +1,4 @@
-﻿// Ready-made peaceful videos: a looping timeline (shot numbers as in camera.js), the art style,
+// Ready-made peaceful videos: a looping timeline (shot numbers as in camera.js), the art style,
 // the weather, the sounds and how busy the town is. Shots are slowed down to fill their clips,
 // and each preset's last clip leads gently back into its first, so it loops for hours.
 export const BASE_LIFE = { people: 10, riders: 2, coach: 1, train: 1, chickens: 1, tumbleweeds: 1, wind: 1 };

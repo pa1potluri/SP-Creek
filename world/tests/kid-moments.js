@@ -10,11 +10,11 @@ export async function runMomentTests(){
   for(const [i,kind]of keys.entries()){
    check(a.director.shots[46+i].moment===kind,kind+': stable appended shot');a.director.playShot(46+i,{cut:true});a.life.updateMoments(12);const first=pose();a.life.updateMoments(60);a.life.updateMoments(12);
    check(pose()===first,kind+': world-time seeking restores exact poses');
-   check(Object.values(a.life.stars).every(p=>p.g.visible&&p.model.isSkinnedMesh&&!w.inPond(p.g.position.x,p.g.position.z,0.5)),kind+': both original models on dry ground');
+   check(Object.values(a.life.stars).every(p=>p.g.visible&&!p.model&&p.arms.length===2&&p.feet.length===2&&!w.inPond(p.g.position.x,p.g.position.z,0.5)),kind+': both generic children on dry ground');
    check(Object.values(w.sunsetCove.siblings).every(p=>!p.g.visible),kind+': no duplicate Cove stars');
   }
   a.director.playShot(46,{cut:true});a.life.updateMoments(12);check(a.life.stars.sister.skirt.rotation.x<-.8,'Bench drapes skirt over seated legs');
-  a.director.playShot(52,{cut:true});a.life.updateMoments(12);check(a.life.stars.sister.skirt.rotation.x===0,'Next scene clears seated skirt pose');
+  a.director.playShot(52,{cut:true});a.life.updateMoments(12);check(a.life.stars.sister.skirt.rotation.x===0&&a.life.stars.sister.skirt.position.length()===0&&a.life.stars.sister.skirt.scale.toArray().every(v=>v===1)&&a.life.stars.sister.skirt.children.every(m=>m.position.y===0),'Next scene clears the complete seated skirt pose');
   check(w.momentProps.birds.length===3&&w.momentProps.crumbs.count===16,'Three gentle pond ducks and bounded crumb instances');
   const preset=VIDEO_PRESETS.siblingsLittleDay;check(preset.clips.reduce((n,c)=>n+c.seconds,0)===300&&preset.clips.every((c,i)=>c.shot===46+i),'Five-minute preset covers all seven moments in order');
   a.director.playShot(0,{cut:true});a.life.updateMoments(12);check(w.activeMoment===null&&!w.momentProps.crumbs.visible,'Leaving moment restores normal scene state');

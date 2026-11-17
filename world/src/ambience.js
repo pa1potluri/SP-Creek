@@ -344,7 +344,7 @@ export class Ambience {
     set(this.train.g.gain, g);
     set(this.train.lp.frequency, 1200 + 8000 * near(d, 20, 300));
     set(this.train.pan.pan, this._panTo(s, t.x, t.z));
-    set(this.steam.g.gain, t.state === 'stopped' ? 0.18 * g : 0.04 * g);
+    set(this.steam.g.gain, t.state === 'stopped' ? 0.05 * g : 0.025 * g);
     set(this.steam.pan.pan, this._panTo(s, t.x, t.z));
     // chuffs: faster as the train speeds up
     this.nextChuff -= dt * clamp(t.v * 0.55, 0, 6.5);
